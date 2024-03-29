@@ -1,9 +1,6 @@
 'use client'
 
-import Fancy from '@/components/Fancy'
-import Signin from '@/components/Signin'
 import Screen from '@/components/Screen'
-import Search from '@/components/Search'
 import { useRouter } from 'next/navigation'
 
 function ValueLabelPair({ value, label, className }: { value: string, label: string, className?: string }) {

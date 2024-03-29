@@ -3,8 +3,6 @@
 import { WithYearn } from '@yearn-finance/web-lib/contexts/WithYearn'
 import { mainnet, polygon } from '@wagmi/chains'
 import Header from '@/components/header'
-import SiweProvider from '@/hooks/useSiwe'
-import UserProvider from '@/hooks/useUser'
 import { Cache, SWRConfig } from 'swr'
 
 function localStorageProvider() {
@@ -21,12 +19,10 @@ function localStorageProvider() {
 export default function AppWrapper ({ children }: { children: React.ReactNode }) {
   return <SWRConfig value={{ provider: localStorageProvider }}>
     <WithYearn supportedChains={[mainnet, polygon]}>
-      <SiweProvider>
-        <UserProvider>
-          <Header />
-          {children}
-        </UserProvider>
-      </SiweProvider>
+      <>
+        <Header />
+        {children}
+      </>
     </WithYearn>
   </SWRConfig>
 }

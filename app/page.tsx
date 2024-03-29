@@ -1,28 +1,18 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useUser } from '@/hooks/useUser'
-import Strategies from '@/components/Strategies'
+import Connect from '@/components/Connect'
 import Fancy from '@/components/Fancy'
-import Signin from '@/components/Signin'
 import Screen from '@/components/Screen'
 import Search from '@/components/Search'
 import { useCallback } from 'react'
 
 export default function Home() {
   const router = useRouter()
-  const { hasStrategies } = useUser()
 
   const onSearch = useCallback((q: string) => {
     router.push(`/dash`)
   }, [router])
-
-  if(hasStrategies) return <main className={`
-    relative w-6xl max-w-6xl mx-auto pt-[6rem]
-    flex flex-col items-start justify-start gap-8`}>
-    <h1>Your strategies</h1>
-    <Strategies />
-  </main>
 
   return <main className="relative w-full min-h-screen">
     <div className={`
@@ -36,7 +26,7 @@ export default function Home() {
           </Screen>
         </div>
         <div className="w-full sm:w-1/2 flex flex-col items-center justify-center gap-12">
-          <div className="text-xl"><Signin /></div>
+          <div><Connect className="" /></div>
           <div className="w-[62%] text-orange-1000 text-lg border-b"></div>
           <div className="w-[80%] flex flex-col items-start">
             <Search className="w-full" onSearch={onSearch} />

@@ -1,41 +1,42 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ModalMobileMenu } from '@yearn-finance/web-lib/components/ModalMobileMenu'
 import { LogoPopover } from './HeaderPopover'
 import type { ReactElement } from 'react'
 import { usePathname } from 'next/navigation'
-import Signin from '../Signin'
+import Connect from '../Connect'
 
 type TMenu = { path: string, label: string | ReactElement, target?: string }
 type TNavbar = { nav: TMenu[], currentPathName: string }
 
 function Navbar({ nav, currentPathName }: TNavbar): ReactElement {
-	return (
-		<nav className={'yearn--nav'}>
-			{nav.map(
-				(option): ReactElement => (
-					<Link
-						key={option.path}
-						target={option.target}
-						href={option.path}>
-						<p className={`yearn--header-nav-item ${currentPathName === option.path ? 'active' : ''} hover:text-violet-300`}>
-							{option?.label || 'Unknown'}
-						</p>
-					</Link>
-				)
-			)}
-		</nav>
-	)
+	return <nav className={'yearn--nav'}>
+		{nav.map(
+			(option): ReactElement => (
+				<Link
+					key={option.path}
+					target={option.target}
+					href={option.path}>
+					<p className={`yearn--header-nav-item ${currentPathName === option.path ? 'active' : ''} hover:text-violet-300`}>
+						{option?.label || 'Unknown'}
+					</p>
+				</Link>
+			)
+		)}
+	</nav>
 }
 
-const nav: TMenu[] = [
-	{ path: '/', label: 'Home' },
-	{ path: '/yhaas', label: 'yHaaS' }
-]
+// const nav: TMenu[] = [
+// 	{ path: '/', label: 'Home' },
+// 	{ path: '/yhaas', label: 'yHaaS' }
+// ]
+
+const nav: TMenu[] = []
 
 function Header(): ReactElement {
   const pathname = usePathname()
 	const [isMenuOpen, set_isMenuOpen] = useState<boolean>(false)
+	const showConnect = useMemo(() => pathname !== '/', [pathname])
 
 	return (
 		<div
@@ -43,10 +44,7 @@ function Header(): ReactElement {
 			className={'fixed inset-x-0 top-0 z-50 w-full'}>
 			<div className={'mx-auto max-w-6xl'}>
 				<header className={'yearn--header'}>
-					<Navbar
-						currentPathName={pathname || ''}
-						nav={nav}
-					/>
+					<Navbar currentPathName={pathname || ''} nav={nav} />
 					<div className={'flex w-1/3 md:hidden'}>
 						<button onClick={(): void => set_isMenuOpen(!isMenuOpen)}>
 							<span className={'sr-only'}>{'Open menu'}</span>
@@ -88,7 +86,7 @@ function Header(): ReactElement {
 						<LogoPopover />
 					</div>
 					<div className={'flex w-1/3 items-center justify-end'}>
-						{/* <Signin /> */}
+						{showConnect && <Connect className="py-2 text-sm" />}
 					</div>
 				</header>
 			</div>
