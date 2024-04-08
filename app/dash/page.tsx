@@ -1,7 +1,10 @@
 'use client'
 
 import Screen from '@/components/Screen'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useVaults } from './useVaults'
+import { fEvmAddress, fNumber, fPercent } from '@/lib/format'
+import { Vault, VaultSchema } from './types'
 
 function ValueLabelPair({ value, label, className }: { value: string, label: string, className?: string }) {
   return <div className="flex items-baseline gap-2">
@@ -10,7 +13,7 @@ function ValueLabelPair({ value, label, className }: { value: string, label: str
   </div>
 }
 
-function Vault() {
+function Tile({ vault }: { vault: Vault }) {
   const router = useRouter()
   return <div onClick={() => router.push('/vault')} className={`
     w-full p-12 flex gap-8 border border-neutral-800
@@ -18,10 +21,10 @@ function Vault() {
     active:border-violet-400 active:!text-violet-400
     cursor-pointer rounded`}>
     <div className="w-2/3 flex flex-col gap-2">
-      <div className="text-5xl">USDC yVault-A</div>
+      <div className="text-5xl">{vault.name}</div>
       <div className="flex items-center gap-12">
-        <ValueLabelPair value="1.08M" label="tvl" className="text-3xl" />
-        <ValueLabelPair value="27.03%" label="apy" className="text-3xl" />
+        <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
+        <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
       </div>
     </div>
     <div className="w-1/3 flex flex-col justify-center">
@@ -39,24 +42,29 @@ function Vault() {
 }
 
 export default function Dash() {
+  const searchParams = useSearchParams()
+  const account = searchParams.get('account') as `0x${string}` | null
+  const data = useVaults(account)
+  const vaults = VaultSchema.array().parse(data.data?.accountVaults ?? [])
+  const totalTvl = vaults.reduce((acc, vault) => acc + vault.tvl.close, 0)
+
+  if (!account) return <></>
+
   return <main className={`
     relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
     flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-2/3 h-48 p-4 flex flex-col justify-center gap-2 rounded">
-        <div className="text-5xl">0xA013...EAA0</div>
+        <div className="text-5xl">{fEvmAddress(account)}</div>
         <div className="flex items-center gap-12">
-          <ValueLabelPair value="3.24M" label="tvl" className="text-4xl" />
-          <ValueLabelPair value="3" label="vaults" className="text-4xl" />
+          <ValueLabelPair value={fNumber(totalTvl)} label="tvl" className="text-4xl" />
+          <ValueLabelPair value={String(vaults.length)} label="vaults" className="text-4xl" />
         </div>
       </div>
       <Screen className="w-1/3 h-48 flex items-center justify-center">
         Alerts x Promos
       </Screen>
     </div>
-    <Vault />
-    <Vault />
-    <Vault />
-    <Vault />
+    {vaults.map((vault, i) => <Tile key={i} vault={vault} />)}
   </main>
 }

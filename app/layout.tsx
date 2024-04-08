@@ -22,7 +22,7 @@ const sans = localFont({
 
 export const metadata: Metadata = {
   title: 'Kalani',
-  description: 'Yearn vault automation bots',
+  description: 'Yearn vault manager x automations dash',
 }
 
 export default function RootLayout({
