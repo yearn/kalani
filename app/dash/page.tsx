@@ -35,7 +35,7 @@ function Tile({ vault }: { vault: UserVault }) {
   const latestGain = useMemo(() => {
     const usd = priced(latest.lastReportDetail.profit, vault.asset.decimals, fakePrice(vault.asset.address))
     return fUSD(usd)
-  }, [latest])
+  }, [vault, latest])
 
   return <div onClick={() => router.push('/vault')} className={`
     w-full p-12 flex gap-8 border border-neutral-800
