@@ -16,8 +16,10 @@ function localStorageProvider() {
   return map as Cache<any>
 }
 
+// <SWRConfig value={{ provider: localStorageProvider }}>
+
 export default function AppWrapper ({ children }: { children: React.ReactNode }) {
-  return <SWRConfig value={{ provider: localStorageProvider }}>
+  return <SWRConfig>
     <WithYearn supportedChains={[mainnet, polygon]}>
       <>
         <Header />
