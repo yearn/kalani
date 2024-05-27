@@ -132,7 +132,7 @@ query Query($account: String!, $chainId: Int) {
     }
     strategies
     tvl { close }
-    apy { close }
+    apy { close: net }
   }
 
   accountStrategies(account: $account) {

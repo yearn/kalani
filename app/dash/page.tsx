@@ -37,7 +37,7 @@ function Tile({ vault }: { vault: UserVault }) {
     return fUSD(usd)
   }, [vault, latest])
 
-  return <div onClick={() => router.push('/vault')} className={`
+  return <Screen className={`
     w-full p-12 flex gap-8 border border-neutral-800
     hover:border-violet-300 hover:!text-violet-300 hover:bg-neutral-900
     active:border-violet-400 active:!text-violet-400
@@ -75,7 +75,7 @@ function Tile({ vault }: { vault: UserVault }) {
       )}
       </div>
     </div>
-  </div>
+  </Screen>
 }
 
 export default function Dash() {
@@ -99,7 +99,7 @@ export default function Dash() {
         </div>
       </div>
       <Screen className="w-1/3 h-48 flex items-center justify-center">
-        Alerts x Promos
+        vault x asset composition
       </Screen>
     </div>
     {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} />)}

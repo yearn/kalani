@@ -16,7 +16,7 @@ export default function Search({ onSearch, className }: { onSearch?: (q: string)
   }, [setShowEnter])
 
   return <div className={`relative ${className}`}>
-    <Input ref={ref} type="text" onChange={onChange} placeholder={'Search by address'} className="w-full" />
+    <Input ref={ref} type="text" onChange={onChange} placeholder={'Search accounts by address'} className="w-full" />
     {!showEnter && <div className={`
       absolute top-0 right-4 h-full flex items-center text-neutral-800`}>/</div>}
     {showEnter && <div className={`

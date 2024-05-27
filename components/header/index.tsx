@@ -36,7 +36,6 @@ const nav: TMenu[] = []
 function Header(): ReactElement {
   const pathname = usePathname()
 	const [isMenuOpen, set_isMenuOpen] = useState<boolean>(false)
-	const showConnect = useMemo(() => pathname !== '/', [pathname])
 
 	return (
 		<div
@@ -86,7 +85,7 @@ function Header(): ReactElement {
 						<LogoPopover />
 					</div>
 					<div className={'flex w-1/3 items-center justify-end'}>
-						{showConnect && <Connect className="py-2 text-sm" />}
+					<Connect className="py-2 text-sm" />
 					</div>
 				</header>
 			</div>
