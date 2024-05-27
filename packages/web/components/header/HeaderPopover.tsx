@@ -16,7 +16,6 @@ function LogoPopover(): ReactElement {
 			className={'group relative'}>
 			<Popover.Button className={'flex items-center'}>
 				<Link href={'/'}>
-					<span className={'sr-only'}>{'Back to home'}</span>
           <Y className={`w-9 h-9 
 						border border-transparent 
 						bg-orange-950 text-neutral-0

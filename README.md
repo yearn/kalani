@@ -1,10 +1,10 @@
 # Kalani
-Vault automation droid
+Yearn automations droid
 
 ## lfg
 ```sh
-cp .env.example .env
-# configure .env
+cp packages/web/.env.example packages/web/.env
+# configure packages/web/.env
 bun install
 bun dev
 ```
@@ -12,5 +12,5 @@ Head to [http://localhost:3000](http://localhost:3000)
 
 ## production
 ```sh
-bun run build
+bun production
 ```

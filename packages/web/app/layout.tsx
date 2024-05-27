@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { JetBrains_Mono } from 'next/font/google'
-import AppWrapper from '@/components/AppWrapper'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
-import './yearn.css'
+import '@rainbow-me/rainbowkit/styles.css'
+import Providers from './providers'
 
 const mono = JetBrains_Mono({ subsets: ['latin'] })
 
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.className} ${mono.className}`}>
       <body className="font-mono">
-        <AppWrapper>{children}</AppWrapper>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

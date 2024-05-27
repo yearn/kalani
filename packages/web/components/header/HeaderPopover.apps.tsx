@@ -1,6 +1,6 @@
-import { ImageWithFallback } from '../ImageWithFallback'
 import { YCRV_ADDRESS, YETH_ADDRESS, YPRISMA_ADDRESS } from '@/lib/constants'
 import { LogoYearn } from '../icons/LogoYearn'
+import Image from 'next/image'
 
 export const APPS = {
 	Vaults: {
@@ -18,7 +18,7 @@ export const APPS = {
 		name: 'yCRV',
 		href: 'https://yearn.fi/ycrv',
 		icon: (
-			<ImageWithFallback
+			<Image
 				alt={'yCRV'}
 				className={'h-8 w-8'}
 				width={64}
@@ -55,7 +55,7 @@ export const APPS = {
 		name: 'yETH',
 		href: 'https://yeth.yearn.fi',
 		icon: (
-			<ImageWithFallback
+			<Image
 				alt={'yETH'}
 				className={'h-8 w-8'}
 				width={64}
@@ -70,7 +70,7 @@ export const APPS = {
 		name: 'yPrisma',
 		href: 'https://yprisma.yearn.fi/',
 		icon: (
-			<ImageWithFallback
+			<Image
 				priority
 				src={`${process.env.SMOL_ASSETS_URL}/token/1/${YPRISMA_ADDRESS}/logo-128.png`}
 				className={'h-8 w-8'}
