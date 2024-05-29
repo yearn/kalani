@@ -1,11 +1,16 @@
 {
   "name": "kalani",
+  "version": "0.1.0",
+  "repository": "git@github.com:murderteeth/kalani.git",
+  "author": "murderteeth <murdertxxth@gmail.com>",
+  "license": "MIT",
   "private": true,
-  "scripts": {
-    "dev": "(cd packages/web && next dev)",
-    "production": "(cd packages/web && next build)"
-  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "dev": "(cd packages/web && next dev)",
+    "dev:lib": "(cd packages/lib && next dev)",
+    "build": "(cd packages/web && next build)"
+  }
 }

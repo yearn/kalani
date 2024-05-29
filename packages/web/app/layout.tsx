@@ -3,7 +3,6 @@ import localFont from 'next/font/local'
 import { JetBrains_Mono } from 'next/font/google'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
-import '@rainbow-me/rainbowkit/styles.css'
 import Providers from './providers'
 
 const mono = JetBrains_Mono({ subsets: ['latin'] })
@@ -22,7 +21,7 @@ const sans = localFont({
 
 export const metadata: Metadata = {
   title: 'Kalani',
-  description: 'Yearn vault manager x automations dash',
+  description: 'Yearn vault automations',
 }
 
 export default function RootLayout({

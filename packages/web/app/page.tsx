@@ -1,11 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Connect from '@/components/Connect'
 import Fancy from '@/components/Fancy'
-import Screen from '@/components/Screen'
 import Search from '@/components/Search'
 import { useCallback } from 'react'
+import Screen from '@/components/Screen'
 
 export default function Home() {
   const router = useRouter()
@@ -20,9 +19,11 @@ export default function Home() {
       flex flex-col items-center justify-start gap-8`}>
       <div className="w-full h-full pt-32 flex flex-col sm:flex-row sm:justify-center gap-16">
         <div className="w-full sm:w-1/2 h-full flex flex-col items-center justify-center gap-16">
-          <div className="flex flex-col items-center justify-center gap-0">
-            <Fancy className="w-full font-[900] text-4xl">Kalani</Fancy>
-            <p>Yearn automations droid</p>
+          <div className="flex flex-col items-center justify-end gap-3">
+            <Screen className="px-12 py-2">
+              <Fancy className="tracking-tighter font-[900] text-5xl">Kalani</Fancy>
+            </Screen>
+            <p>Yearn vault automations</p>
           </div>
           <Search className="w-full" onSearch={onSearch} />
         </div>

@@ -12,5 +12,5 @@ Head to [http://localhost:3000](http://localhost:3000)
 
 ## production
 ```sh
-bun production
+bun run build
 ```

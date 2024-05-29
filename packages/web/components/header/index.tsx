@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { LogoPopover } from './HeaderPopover'
 import type { ReactElement } from 'react'
 import Connect from '../Connect'
 
@@ -49,7 +48,7 @@ function Header(): ReactElement {
 						</button>
 					</div>
 					<div className={'flex w-1/3 justify-start'}>
-						<LogoPopover />
+						{/* <LogoPopover /> */}
 					</div>
 					<div className={'flex w-1/3 items-center justify-end'}>
 					<Connect className="py-2 text-sm" />

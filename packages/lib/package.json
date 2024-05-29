@@ -1,7 +1,8 @@
 {
-  "name": "web",
+  "name": "lib",
   "version": "0.1.0",
   "license": "MIT",
+  "main": "index.ts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,12 +11,15 @@
     "test": "mocha"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "2",
-    "@tanstack/react-query": "^5.40.0",
-    "@wagmi/chains": "^1.8.0",
+    "@react-spring/web": "^9.7.3",
+    "@visx/gradient": "^3.3.0",
+    "@visx/group": "^3.3.0",
+    "@visx/mock-data": "^3.3.0",
+    "@visx/responsive": "^3.10.2",
+    "@visx/scale": "^3.5.0",
+    "@visx/shape": "^3.5.0",
     "cross-env": "5.0.5",
     "framer-motion": "^10.16.16",
-    "lib": "0.1.0",
     "next": "14.0.3",
     "pino-pretty": "^10.2.3",
     "react": "^18",

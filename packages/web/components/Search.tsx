@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useRef, useState } from 'react'
 import Input from './controls/Input'
 import { PiKeyReturnFill } from 'react-icons/pi'

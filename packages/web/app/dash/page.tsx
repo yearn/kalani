@@ -7,6 +7,7 @@ import { UserVault, useVaults } from '../../hooks/useVaults'
 import { fEvmAddress, fNumber, fPercent, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 import { priced } from '@/lib/bmath'
+import Pie from 'lib/components/viz/Pie'
 
 function fakePrice(address: `0x${string}`) {
   if (address === '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619') {
@@ -38,10 +39,11 @@ function Tile({ vault }: { vault: UserVault }) {
   }, [vault, latest])
 
   return <Screen className={`
-    w-full p-12 flex gap-8 border border-neutral-800
+    w-full p-12 flex gap-8 border border-neutral-900
     hover:border-violet-300 hover:!text-violet-300 hover:bg-neutral-900
     active:border-violet-400 active:!text-violet-400
-    cursor-pointer rounded`}>
+    bg-neutral-950 text-neutral-300
+    cursor-pointer`}>
     <div className="w-1/2 flex flex-col gap-2">
 
       <div className="text-5xl">{vault.name}</div>
@@ -99,7 +101,7 @@ export default function Dash() {
         </div>
       </div>
       <Screen className="w-1/3 h-48 flex items-center justify-center">
-        vault x asset composition
+        <Pie />
       </Screen>
     </div>
     {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} />)}
