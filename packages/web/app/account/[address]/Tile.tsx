@@ -1,13 +1,11 @@
-'use client'
-
-import Screen from '@/components/Screen'
 import ReactTimeago from 'react-timeago'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { UserVault, useVaults } from '../../hooks/useVaults'
-import { fEvmAddress, fNumber, fPercent, fUSD } from '@/lib/format'
+import { useRouter } from 'next/navigation'
+import { UserVault } from '@/hooks/useVaults'
+import { fNumber, fPercent, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 import { priced } from '@/lib/bmath'
-import Pie from 'lib/components/viz/Pie'
+import Screen from '@/components/Screen'
+import ValueLabelPair from '@/components/ValueLabelPair'
 
 function fakePrice(address: `0x${string}`) {
   if (address === '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619') {
@@ -19,14 +17,7 @@ function fakePrice(address: `0x${string}`) {
   }
 }
 
-function ValueLabelPair({ value, label, className }: { value: string | number, label: string, className?: string }) {
-  return <div className="flex items-baseline gap-2">
-    <div className={`whitespace-nowrap ${className}`}>{value}</div>
-    <div className="text-sm">{label}</div>
-  </div>
-}
-
-function Tile({ vault }: { vault: UserVault }) {
+export default function Tile({ vault }: { vault: UserVault }) {
   const router = useRouter()
 
   const [latest] = useMemo(() => {
@@ -38,7 +29,7 @@ function Tile({ vault }: { vault: UserVault }) {
     return fUSD(usd)
   }, [vault, latest])
 
-  return <Screen className={`
+  return <Screen onClick={() => router.push(`/vault/${vault.chainId}/${vault.address}`)} className={`
     w-full p-12 flex gap-8 border border-neutral-900
     hover:border-violet-300 hover:!text-violet-300 hover:bg-neutral-900
     active:border-violet-400 active:!text-violet-400
@@ -78,32 +69,4 @@ function Tile({ vault }: { vault: UserVault }) {
       </div>
     </div>
   </Screen>
-}
-
-export default function Dash() {
-  const searchParams = useSearchParams()
-  const account = searchParams.get('account') as `0x${string}` | null
-  const user = useVaults(account)
-
-  const aum = user?.vaults.reduce((acc, vault) => acc + vault.tvl.close, 0) ?? 0
-
-  if (!account) return <></>
-
-  return <main className={`
-    relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
-    flex flex-col items-center justify-start gap-8`}>
-    <div className="w-full flex items-center justify-center gap-8">
-      <div className="w-2/3 h-48 p-4 flex flex-col justify-center gap-2 rounded">
-        <div className="text-5xl">{fEvmAddress(account)}</div>
-        <div className="flex items-center gap-12">
-          <ValueLabelPair value={fNumber(aum)} label="aum" className="text-4xl" />
-          <ValueLabelPair value={String(user?.vaults.length ?? 0)} label="vaults" className="text-4xl" />
-        </div>
-      </div>
-      <Screen className="w-1/3 h-48 flex items-center justify-center">
-        <Pie />
-      </Screen>
-    </div>
-    {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} />)}
-  </main>
 }

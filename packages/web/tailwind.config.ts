@@ -11,8 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: colors.blue,
-        secondary: colors.yellow
+        primary: colors.orange,
+        secondary: colors.violet
       },
       borderRadius: {
         primary: Theme.borderRadius.xl

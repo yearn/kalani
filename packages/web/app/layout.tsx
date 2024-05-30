@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.className} ${mono.className}`}>
-      <body className="font-mono">
+      <body className={`font-mono`}>
         <Providers>{children}</Providers>
       </body>
     </html>

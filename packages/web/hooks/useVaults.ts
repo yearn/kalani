@@ -161,7 +161,7 @@ query Query($account: String!, $chainId: Int) {
 export function useVaults(account?: `0x${string}` | null) {
   if(!account) return undefined
 
-  const endpoint = 'https://kong-two.vercel.app/api/gql' // process.env.NEXT_PUBLIC_KONG_GQL || 'http://localhost:3001/api/gql'
+  const endpoint = process.env.NEXT_PUBLIC_KONG_GQL ?? 'http://localhost:3001/api/gql'
 
   const { data } = useSWR(
     `${endpoint}`, (...args) => fetch(...args, {

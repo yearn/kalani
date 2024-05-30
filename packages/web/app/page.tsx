@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter()
 
   const onSearch = useCallback((q: string) => {
-    router.push(`/dash?account=${q}`)
+    router.push(`/account/${q}`)
   }, [router])
 
   return <main className="relative w-full min-h-screen">
