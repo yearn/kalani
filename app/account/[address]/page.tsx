@@ -6,7 +6,7 @@ import { EvmAddressSchema } from '@/lib/types'
 import { useParams } from 'next/navigation'
 import ValueLabelPair from '../../../components/ValueLabelPair'
 import Screen from '@/components/Screen'
-import Pie from 'lib/components/viz/Pie'
+import Pie from './Pie'
 import Tile from './Tile'
 
 export default function Page() {

@@ -134,9 +134,8 @@ function AnimatedPie<Datum>({
               dy=".33em"
               fontSize={9}
               textAnchor="middle"
-              pointerEvents="none"
-            >
-              {arc.data.label}
+              pointerEvents="none">
+              {(arc.data as PieData).label}
             </text>
           </animated.g>
         )}
