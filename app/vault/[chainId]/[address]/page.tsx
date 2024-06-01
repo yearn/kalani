@@ -6,12 +6,21 @@ import ValueLabelPair from '@/components/ValueLabelPair'
 import { useVault } from '@/hooks/useVault'
 import { fEvmAddress, fNumber, fPercent, fTokens } from '@/lib/format'
 import Screen from '@/components/Screen'
+import Pie from './Pie'
 
 export default function Vault() {
   const params = useParams()
   const chainId = Number(params.chainId)
   const address = EvmAddressSchema.parse(params.address)
   const vault = useVault(chainId, address)
+
+  const idle = (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n)
+  const currentDebtPieData = vault?.strategies.map(strategy => ({ label: strategy.name, value: Number(strategy.currentDebt) })) ?? []
+  currentDebtPieData.push({ label: '', value: Number(idle) })
+
+  const allocated = vault?.strategies.reduce((acc, strategy) => acc + Number(strategy.targetDebtRatio), 0) ?? 0
+  const targetDebtPieData = vault?.strategies.map(strategy => ({ label: strategy.name, value: Number(strategy.targetDebtRatio) })) ?? []
+  targetDebtPieData.push({ label: '', value: Number(10_000 - allocated) })
 
   if (!vault) return <></>
 
@@ -33,6 +42,13 @@ export default function Vault() {
       </Screen>
     </div>
     <div className="w-full flex items-center gap-8">
+      <Screen className={`
+        w-1/2 h-48 p-4 
+        border border-neutral-800`}>
+        <table>
+
+        </table>
+      </Screen>
       <div className={`
         w-1/2 h-full p-4 text-primary-200`}>
         <table className="table-auto w-full">
@@ -53,11 +69,11 @@ export default function Vault() {
             <td className="text-right"></td>
           </tr>
           <tr>
-            <td>Utilization</td>
+            <td>Deposit limit</td>
             <td className="text-right"></td>
           </tr>
           <tr>
-            <td>Deposit limit</td>
+            <td>Accountant</td>
             <td className="text-right"></td>
           </tr>
           <tr>
@@ -66,54 +82,33 @@ export default function Vault() {
           </tr>
         </table>
       </div>
-      <Screen className={`
-        w-1/2 h-48 p-4 
-        border border-neutral-800`}>
-        <table>
-
-        </table>
-      </Screen>
     </div>
 
-    <div className="w-full flex items-center gap-8">
-      <Screen className={`
-        w-1/2 h-48 p-4 
-        border border-neutral-800`}>
-        <table>
-        </table>
-      </Screen>
-      <div className={`
-        w-1/2 h-full p-4 text-primary-200`}>
-        <table className="table-auto w-full">
-        </table>
-      </div>
-    </div>
-
-    <div className="w-full flex items-center gap-8">
-    <div className={`
-        w-1/2 h-full p-4 text-primary-200`}>
-        <table className="table-auto w-full">
-        </table>
+    <div className="w-full flex items-start gap-8">
+      <div className={`w-1/2 h-full p-4 text-primary-200`}>
+        <div className="text-xl">Strategies</div>
+        {vault.strategies.map(strategy => <div key={strategy.address}>
+          {strategy.name} {strategy.targetDebtRatio} {strategy.currentDebt.toString()}
+        </div>)}
       </div>
       <Screen className={`
-        w-1/2 h-48 p-4 
+        w-1/2 p-4 flex items-center
         border border-neutral-800`}>
-        <table>
-        </table>
+        <Pie data={currentDebtPieData} size={200} />
+        <Pie data={targetDebtPieData} size={200} />
+        
       </Screen>
     </div>
 
-    <div className="w-full flex items-center gap-8">
+    <div className="w-full flex items-start gap-8">
       <Screen className={`
         w-1/2 h-48 p-4 
         border border-neutral-800`}>
         <table>
         </table>
       </Screen>
-      <div className={`
-        w-1/2 h-full p-4 text-primary-200`}>
-        <table className="table-auto w-full">
-        </table>
+      <div className={`w-1/2 h-full p-4 text-primary-200`}>
+        <div className="text-xl">Roles</div>
       </div>
     </div>
   </main>

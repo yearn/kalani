@@ -14,7 +14,6 @@ export default function Page() {
   const account = EvmAddressSchema.parse(params.address)
   const user = useVaults(account)
   const aum = user?.vaults.reduce((acc, vault) => acc + vault.tvl.close, 0) ?? 0
-  const chains = Array(new Set(user?.vaults.map(vault => vault.chainId) ?? []))
   const pieData = user?.vaults.map(vault => ({ label: vault.asset.symbol, value: vault.tvl.close })) ?? []
 
   if (!account) return <></>

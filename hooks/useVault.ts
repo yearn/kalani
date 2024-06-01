@@ -2,6 +2,15 @@ import { z } from 'zod'
 import useSWR from 'swr'
 import { EvmAddressSchema } from '@/lib/types'
 
+const StrategySchema = z.object({
+  chainId: z.number(),
+  address: EvmAddressSchema,
+  name: z.string(),
+  currentDebt: z.bigint({ coerce: true }),
+  currentDebtUsd: z.number(),
+  targetDebtRatio: z.number()
+})
+
 export const VaultSchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,
@@ -21,9 +30,11 @@ export const VaultSchema = z.object({
   pricePerShare: z.bigint({ coerce: true }),
   lastProfitUpdate: z.number({ coerce: true }),
   totalAssets: z.bigint({ coerce: true }),
+  totalDebt: z.bigint({ coerce: true }),
   fees: z.object({ performanceFee: z.number({ coerce: true }) }),
   tvl: z.object({ close: z.number() }),
   apy: z.object({ close: z.number() }),
+  strategies: StrategySchema.array()
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -50,6 +61,15 @@ query Query($chainId: Int, $address: String) {
     pricePerShare
     lastProfitUpdate
     totalAssets
+    totalDebt
+
+    debts {
+			strategy
+			currentDebt
+			currentDebtUsd
+			targetDebtRatio
+		}
+
     fees {
       performanceFee
     }
@@ -59,6 +79,12 @@ query Query($chainId: Int, $address: String) {
     apy {
       close: net
     }
+  }
+
+  vaultStrategies(chainId: $chainId, vault: $address) {
+    chainId,
+    address,
+    name
   }
 }
 `
@@ -81,6 +107,18 @@ export function useVault(chainId: number, address: `0x${string}`) {
     { refreshInterval: parseInt(process.env.NEXT_PUBLIC_USEVAULTS_REFRESH || '10_000') }
   )
 
-  const result = data?.data?.vault ? VaultSchema.parse(data?.data?.vault) : undefined
-  return result
+  if (!(data?.data?.vault && data?.data?.vaultStrategies)) return undefined
+
+  const vault = data.data.vault
+  const strategies = data.data.vaultStrategies.map((strategy: any) => {
+    const debt = vault.debts.find((debt: any) => debt.strategy === strategy.address)
+    return {
+      ...strategy,
+      currentDebt: debt?.currentDebt ?? 0n,
+      currentDebtUsd: debt?.currentDebtUsd ?? 0,
+      targetDebtRatio: debt?.targetDebtRatio ?? 0
+    }
+  })
+
+  return VaultSchema.parse({ ...vault, strategies })
 }
