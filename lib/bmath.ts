@@ -13,6 +13,19 @@ export function div(a: bigint, b: bigint, precision: number = 18) {
   return sign * Number(wholePart + '.' + fractionalPart.toString().padStart(precision, '0'))
 }
 
+export function mul(a: bigint, b: number, precision: number = 18) {
+  const scaleFactor = 10 ** precision
+  const bigIntB = BigInt(Math.round(b * scaleFactor))
+  return div(a * bigIntB, BigInt(scaleFactor), precision)
+}
+
+export function mulb(a: bigint, b: number, precision: number = 18) {
+  const scaleFactor = 10 ** precision
+  const bigIntB = BigInt(Math.round(b * scaleFactor))
+  const result = (a * bigIntB) / BigInt(scaleFactor)
+  return result
+}
+
 export function min(...args: bigint[]): bigint {
   return args.reduce((a, b) => (a < b ? a : b))
 }

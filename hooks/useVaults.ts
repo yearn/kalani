@@ -68,8 +68,8 @@ export const VaultSchema = z.object({
     decimals: z.number()  
   }),
   strategies: EvmAddressSchema.array().default([]),
-  tvl: z.object({ close: z.number() }),
-  apy: z.object({ close: z.number() }),
+  tvl: z.preprocess(val => val ?? { close: 0 }, z.object({ close: z.number() })),
+  apy: z.preprocess(val => val ?? { close: 0 }, z.object({ close: z.number() }))
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -79,7 +79,7 @@ export const StrategySchema = z.object({
   address: EvmAddressSchema,
   apiVersion: z.string(),
   name: z.string(),
-  lastReport: z.number({ coerce: true }),
+  lastReport: z.number({ coerce: true }).nullish(),
   lastReportDetail: z.object({
     blockNumber: z.bigint({ coerce: true }),
     blockTime: z.string(),
@@ -91,7 +91,7 @@ export const StrategySchema = z.object({
       gross: z.number(),
       net: z.number()
     })
-  })
+  }).nullish()
 })
 
 export type Strategy = z.infer<typeof StrategySchema>

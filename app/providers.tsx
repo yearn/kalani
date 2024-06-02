@@ -12,7 +12,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
-import Header from '@/components/header';
+import Header from '@/components/Header';
 
 const queryClient = new QueryClient();
 

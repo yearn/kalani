@@ -11,7 +11,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: colors.orange,
+        primary: {
+          ...colors.orange, 
+          '1000': '#170602'
+        },
         secondary: colors.violet
       },
       borderRadius: {

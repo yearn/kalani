@@ -1,7 +1,7 @@
 'use client'
 
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import Button from './controls/Button'
+import Button from './elements/Button'
 import Image from 'next/image'
 
 export default function Connect({ className }: { className?: string }) {

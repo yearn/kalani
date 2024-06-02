@@ -4,6 +4,7 @@ import { UserVault } from '@/hooks/useVaults'
 import { fNumber, fPercent, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 import { priced } from '@/lib/bmath'
+import { networks } from '@/lib/networks'
 import Screen from '@/components/Screen'
 import ValueLabelPair from '@/components/ValueLabelPair'
 
@@ -21,11 +22,11 @@ export default function Tile({ vault }: { vault: UserVault }) {
   const router = useRouter()
 
   const [latest] = useMemo(() => {
-    return vault.strategies.sort((a, b) => b.lastReport - a.lastReport)
+    return vault.strategies.sort((a, b) => (b.lastReport ?? 0) - (a.lastReport ?? 0))
   }, [vault])
 
   const latestGain = useMemo(() => {
-    const usd = priced(latest.lastReportDetail.profit, vault.asset.decimals, fakePrice(vault.asset.address))
+    const usd = priced(latest?.lastReportDetail?.profit ?? 0n, vault.asset.decimals, fakePrice(vault.asset.address))
     return fUSD(usd)
   }, [vault, latest])
 
@@ -38,22 +39,26 @@ export default function Tile({ vault }: { vault: UserVault }) {
     <div className="w-1/2 flex flex-col gap-2">
 
       <div className="text-5xl">{vault.name}</div>
-      <div className="flex items-center gap-12">
+      <div className="flex items-center gap-8">
+        [{networks(vault.chainId).name}]
         <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
         <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
       </div>
 
-      <div className="mt-8 flex items-center gap-12">
-        <div className="">Latest harvest</div>
-        <div className="text-orange-300">
-          <ReactTimeago date={Number(latest.lastReport) * 1000} />
+      {latest && <>
+        <div className="mt-8 flex items-center gap-12">
+          <div className="">Latest harvest</div>
+          <div className="text-orange-300">
+            {latest.lastReport && <ReactTimeago date={Number(latest.lastReport) * 1000} />}
+          </div>
         </div>
-      </div>
-      <div className="text-lg">{latest.name}</div>
-      <div className="flex items-center gap-12">
-        <ValueLabelPair value={latestGain} label="gain" className="text-2xl" />
-        <ValueLabelPair value={fPercent(latest.lastReportDetail.apr.net)} label="apr" className="text-2xl" />
-      </div>
+        <div className="text-lg">{latest.name}</div>
+        <div className="flex items-center gap-12">
+          <ValueLabelPair value={latestGain} label="gain" className="text-2xl" />
+          <ValueLabelPair value={fPercent(latest.lastReportDetail?.apr.net ?? NaN)} label="apr" className="text-2xl" />
+        </div>
+      </>}
+
     </div>
     <div className="w-1/2 flex flex-col justify-center gap-4">
       <div className="text-lg">Roles</div>

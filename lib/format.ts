@@ -4,8 +4,12 @@ export function fEvmAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
 
-export function fPercent (amount: number, fixed?: number) {
-  return `${(amount * 100).toFixed(fixed || 2)}%`
+export function fPercent(amount: number, fixed?: number) {
+  return `${(amount * 100).toFixed(fixed ?? 2)}%`
+}
+
+export function fBps(bps: number, fixed?: number) {
+  return fPercent(bps / 10_000, fixed)
 }
 
 export function fUSD(amount: number, options?: { fixed?: number }) {
@@ -15,12 +19,12 @@ export function fUSD(amount: number, options?: { fixed?: number }) {
 export function fTokens(amount: bigint, decimals: number, options?: {
   fixed?: number
 }) {
-  const { fixed } = options || {}
+  const { fixed } = options ?? {}
   const units = formatUnits(amount, decimals)
   const number = Number(units)
   return Intl.NumberFormat(undefined, { 
-    minimumFractionDigits: fixed || 2,
-    maximumFractionDigits: fixed || 2
+    minimumFractionDigits: fixed ?? 2,
+    maximumFractionDigits: fixed ?? 2
   }).format(number)
 }
 
