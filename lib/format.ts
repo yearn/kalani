@@ -1,5 +1,9 @@
 import { formatUnits } from 'viem'
 
+export function fElipsize(text: string, length = 48) {
+  return text.length <= length ? text : `${text.slice(0, length)}...`
+}
+
 export function fEvmAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`
 }

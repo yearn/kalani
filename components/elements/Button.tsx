@@ -1,10 +1,11 @@
-import React, { forwardRef, ButtonHTMLAttributes } from 'react'
+import React, { forwardRef, ButtonHTMLAttributes, useMemo } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string
+  theme?: 'default' | 'sim'
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, children, ...props }, ref) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, children, ...props }, ref) => {
   return <button ref={ref} {...props} className={`
     relative h-8 px-8 py-5 flex items-center justify-center
     border border-transparent bg-orange-950 
@@ -14,6 +15,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, children
     disabled:bg-neutral-950 disabled:text-neutral-600 
     disabled:cursor-default disabled:border-transparent
     cursor-pointer rounded-primary
+    ${`theme-${theme ?? 'default'}`}
     ${className}`}>
     {children}
   </button>
