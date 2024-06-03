@@ -3,8 +3,8 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface Context {
   previous: EvmAddress | undefined
-  next: string | undefined
-  setNext: (next: string | undefined) => void
+  next: string
+  setNext: (next: string) => void
   isValid: boolean
   setIsValid: (isValid: boolean) => void
 }
@@ -18,7 +18,7 @@ export const useInputAddress = () => {
 }
 
 export const InputAddressProvider = ({ previous, children }: { previous?: EvmAddress, children: ReactNode }) => {
-  const [next, setNext] = useState<string | undefined>(previous)
+  const [next, setNext] = useState<string>(previous ?? '')
   const [isValid, setIsValid] = useState(false)
   return (
     <context.Provider value={{ previous, next, setNext, isValid, setIsValid }}>

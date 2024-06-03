@@ -2,7 +2,7 @@ import React, { forwardRef, ButtonHTMLAttributes, useMemo } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string
-  theme?: 'default' | 'sim'
+  theme?: 'default' | 'sim' | 'write' | 'confirm'
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, children, ...props }, ref) => {

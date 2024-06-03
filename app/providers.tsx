@@ -23,7 +23,7 @@ import Header from '@/components/Header'
 
 const DEV = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 
-const testnet = Object.assign({}, mainnet, {
+const testnet = Object.assign({}, polygon, {
   "id": 137,
   "rpcUrls": {
     "default": {

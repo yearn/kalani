@@ -6,10 +6,14 @@ import { useInputAddress } from './provider'
 
 export default function InputAddress({ 
   disabled,
-  onChange 
+  onChange,
+  theme, 
+  className
 }: { 
   disabled?: boolean,
-  onChange?: (next: string, isValid: boolean) => void 
+  onChange?: (next: string, isValid: boolean) => void,
+  theme?: 'default' | 'sim' | 'write' | 'confirm',
+  className?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [hasInput, setHasInput] = useState(false)
@@ -27,7 +31,7 @@ export default function InputAddress({
 
   useEffect(() => setIsValid(EvmAddressSchema.safeParse(next).success), [next])
 
-  return <div className="grow group relative">
+  return <div className={`grow group relative rounded-primary ${className}`}>
     <Input 
       ref={ref} 
       type="text"
@@ -35,6 +39,7 @@ export default function InputAddress({
       onChange={_onChange} 
       placeholder={'Accountant address'}
       disabled={disabled ?? false}
+      theme={theme}
       className="w-full text-base" />
     {hasInput && !isValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-yellow-400`}>

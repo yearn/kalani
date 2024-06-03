@@ -71,3 +71,90 @@ body {
 		border-radius: 0.75rem;
 	}
 }
+
+.theme-write {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -250%;
+		width: 200%;
+		height: 600%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#2e1065 0deg,
+				#2e1065 60deg,
+				#a78bfa 60deg,
+				#a78bfa 120deg,
+				#2e1065 120deg,
+				#2e1065 180deg,
+				#a78bfa 180deg,
+				#a78bfa 240deg,
+				#2e1065 240deg,
+				#2e1065 300deg,
+				#a78bfa 300deg,
+				#a78bfa 360deg
+			);
+		animation: rotate 8s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0.75rem;
+	}
+}
+
+.theme-confirm {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -250%;
+		width: 200%;
+		height: 600%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#ffffff 0deg,
+				#7c3aed 60deg,
+				#ffffff 120deg,
+				#7c3aed 180deg,
+				#ffffff 240deg,
+				#7c3aed 300deg,
+				#ffffff 360deg
+			);
+		animation: rotate 4s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0.75rem;
+	}
+}

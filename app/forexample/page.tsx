@@ -1,16 +1,26 @@
 'use client'
 import Button from '@/components/elements/Button'
 import SetAddress from './SetAddress'
+import abis from '@/lib/abis'
 
 export default function Page() {
   return <main className={`min-h-screen flex items-center justify-center`}>
-    <div className="w-[600px] flex flex-col gap-16">
-      <div className="flex items-center gap-8">
+    <div className="w-[740px] flex flex-col gap-16">
+      <div className="flex items-center gap-6">
         <Button theme={'default'}>default</Button>
-        <Button theme={'sim'}>sim</Button>
-        <Button theme={'sim'} disabled={true}>sim disabled</Button>
+        <Button theme={'sim'}>s</Button>
+        <Button theme={'sim'} disabled={true}>s</Button>
+        <Button theme={'write'}>w</Button>
+        <Button theme={'write'} disabled={true}>w</Button>
+        <Button theme={'confirm'}>c</Button>
+        <Button theme={'confirm'} disabled={true}>c</Button>
       </div>
-      <SetAddress previous={'0xC4ad0000E223E398DC329235e6C497Db5470B626'} />
+      <SetAddress contract={{
+        address: '0x28F53bA70E5c8ce8D03b1FaD41E9dF11Bb646c36',
+        abi: abis.vault,
+        get: 'accountant',
+        set: 'set_accountant'
+      }} />
     </div>
   </main>
 }
