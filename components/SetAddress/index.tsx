@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { springs } from '@/lib/motion'
 import Button from '@/components/elements/Button'
 import { fEvmAddress } from '@/lib/format'
-import { UseSimulateContractParameters, useAccount, useReadContract, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
 import InputAddress from '@/components/InputAddress'
 import { InputAddressProvider, useInputAddress } from '@/components/InputAddress/provider'
@@ -36,9 +36,11 @@ function useContract(
 }
 
 function Component({ 
+  rolemask,
   contract,
   className
 }: {
+  rolemask: number,
   contract: {
     address: EvmAddress,
     abi: any,
@@ -47,15 +49,26 @@ function Component({
   },
   className?: string 
 }) {
-  const { isConnected } = useAccount()
-
+  const { isConnected, address } = useAccount()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
-  const { data: _previous, isFetching: isFetchingPrevious } = useReadContract({
-    address: contract.address,
-    abi: contract.abi,
-    functionName: contract.get
-  })
-  useEffect(() => setPrevious(_previous ? EvmAddressSchema.parse(_previous) : undefined), [_previous])
+  const [roles, setRoles] = useState<number | undefined>(undefined)
+
+  const multicall = useReadContracts({ contracts: [
+    { address: contract.address, abi: contract.abi, functionName: contract.get },
+    { address: contract.address, abi: contract.abi, functionName: 'roles', args: [address ?? zeroAddress] }
+  ], query: { enabled: isConnected }})
+
+  useEffect(() => {
+    if (multicall.isSuccess) {
+      setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
+      setRoles(Number(multicall.data![1].result))
+    } else {
+      setPrevious(undefined)
+      setRoles(undefined)
+    }
+  }, [multicall, setPrevious, setRoles])
+
+  const permitted = useMemo(() => Boolean(roles && (roles & rolemask) === rolemask), [roles, rolemask])
 
   const { 
     next, setNext, 
@@ -94,11 +107,14 @@ function Component({
   }, [simulation, setError])
 
   const inputTheme = useMemo(() => {
-    if (isFetchingPrevious) return 'sim'
+    if (multicall.isFetching) return 'sim'
     return 'default'
-  }, [isFetchingPrevious])
+  }, [multicall])
 
-  const disableInput = useMemo(() => isFetchingPrevious, [isFetchingPrevious])
+  const disableInput = useMemo(() => 
+    !permitted
+    || multicall.isFetching,
+  [multicall])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -108,7 +124,8 @@ function Component({
   }, [simulation, write, confirmation])
 
   const disableButton = useMemo(() => 
-    !isValid 
+    !permitted
+    || !isValid 
     || !changed
     || simulation.isFetching
     || !simulation.isSuccess
@@ -166,6 +183,7 @@ function Component({
 }
 
 export default function SetAddress(props: {
+  rolemask: number,
   contract: {
     address: EvmAddress,
     abi: any,

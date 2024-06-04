@@ -6,7 +6,7 @@ import ValueLabelPair from '@/components/ValueLabelPair'
 import { useVault } from '@/hooks/useVault'
 import { fBps, fEvmAddress, fNumber, fPercent, fTokens } from '@/lib/format'
 import Screen from '@/components/Screen'
-import { networks } from '@/lib/networks'
+import { getChain } from '@/lib/chains'
 import Pie from './Pie'
 import { useMemo } from 'react'
 import { div, mulb } from '@/lib/bmath'
@@ -44,7 +44,7 @@ export default function Vault() {
         <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
         <div className="text-5xl">{vault.name}</div>
         <div className="flex items-center gap-8">
-          [{networks(vault.chainId).name}]
+          [{getChain(vault.chainId).name}]
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
         </div>

@@ -1,5 +1,5 @@
 # Kalani
-Yearn automations droid
+Yearn vault automations
 
 ## lfg
 ```sh

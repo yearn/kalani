@@ -1,10 +1,11 @@
+import { PiCheck } from 'react-icons/pi'
 import ReactTimeago from 'react-timeago'
 import { useRouter } from 'next/navigation'
 import { UserVault } from '@/hooks/useVaults'
 import { fNumber, fPercent, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 import { priced } from '@/lib/bmath'
-import { networks } from '@/lib/networks'
+import { getChain } from '@/lib/chains'
 import Screen from '@/components/Screen'
 import ValueLabelPair from '@/components/ValueLabelPair'
 
@@ -40,7 +41,7 @@ export default function Tile({ vault }: { vault: UserVault }) {
 
       <div className="text-5xl">{vault.name}</div>
       <div className="flex items-center gap-8">
-        [{networks(vault.chainId).name}]
+        [{getChain(vault.chainId).name}]
         <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
         <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
       </div>
@@ -61,16 +62,18 @@ export default function Tile({ vault }: { vault: UserVault }) {
 
     </div>
     <div className="w-1/2 flex flex-col justify-center gap-4">
-      <div className="text-lg">Roles</div>
-      <div className="flex flex-wrap gap-4">
-      {Object.keys(vault.roles).map((role, i) => 
-        <div key={i} className={`
-          py-2 px-4 border border-neutral-800 
-          text-xs rounded 
-          ${vault.roles[role] ? '' : 'text-neutral-800'}`}>
-          {role.replace('_MANAGER', '').replace('_', ' ')}
-        </div>
-      )}
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="text-lg">Roles</div>
+        {Object.keys(vault.roles).map((role, i) => 
+          <div key={i} className={`
+            py-2 px-4 flex items-center gap-2
+            border border-neutral-800
+            text-xs rounded 
+            ${vault.roles[role] ? '' : 'text-neutral-800'}`}>
+            {vault.roles[role] ? <PiCheck /> : <></>}
+            {role.replace('_MANAGER', '').replace('_', ' ')}
+          </div>
+        )}
       </div>
     </div>
   </Screen>

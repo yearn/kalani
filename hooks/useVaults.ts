@@ -4,30 +4,31 @@ import { EvmAddressSchema } from '@/lib/types'
 import { useMemo } from 'react'
 
 export enum Roles {
-  ADD_STRATEGY_MANAGER = 1,
-  REVOKE_STRATEGY_MANAGER = 2,
-  FORCE_REVOKE_MANAGER = 4,
-  ACCOUNTANT_MANAGER = 8,
-  QUEUE_MANAGER = 16,
-  REPORTING_MANAGER = 32,
-  DEBT_MANAGER = 64,
-  MAX_DEBT_MANAGER = 128,
-  DEPOSIT_LIMIT_MANAGER = 256,
-  WITHDRAW_LIMIT_MANAGER = 512,
-  MINIMUM_IDLE_MANAGER = 1024,
-  PROFIT_UNLOCK_MANAGER = 2048,
-  DEBT_PURCHASER = 4096,
-  EMERGENCY_MANAGER = 8192
+  ADD_STRATEGY_MANAGER = 2 ** 0,
+  REVOKE_STRATEGY_MANAGER = 2 ** 1,
+  FORCE_REVOKE_MANAGER = 2 ** 2,
+  ACCOUNTANT_MANAGER = 2 ** 3,
+  QUEUE_MANAGER = 2 ** 4,
+  REPORTING_MANAGER = 2 ** 5,
+  DEBT_MANAGER = 2 ** 6,
+  MAX_DEBT_MANAGER = 2 ** 7,
+  DEPOSIT_LIMIT_MANAGER = 2 ** 8,
+  WITHDRAW_LIMIT_MANAGER = 2 ** 9,
+  MINIMUM_IDLE_MANAGER = 2 ** 10,
+  PROFIT_UNLOCK_MANAGER = 2 ** 11,
+  DEBT_PURCHASER = 2 ** 12,
+  EMERGENCY_MANAGER = 2 ** 13,
+  ROLE_MANAGER_MANAGER = 2 ** 255
 }
 
-function getRoles(roleMask: number): Record<string, boolean> {
+function getRoles(roleMask: bigint): Record<string, boolean> {
   const roles: {
     [key: string]: boolean
   } = {}
 
   for (const role in Roles) {
     if (isNaN(Number(role))) {
-      const roleValue = Roles[role as keyof typeof Roles]
+      const roleValue = BigInt(Roles[role as keyof typeof Roles])
       roles[role] = (roleMask & roleValue) === roleValue
     }
   }
@@ -35,24 +36,11 @@ function getRoles(roleMask: number): Record<string, boolean> {
   return roles
 }
 
-// function getRoles(roleMask: number): string[] {
-//   const roles: string[] = []
-//   for (const role in Roles) {
-//     if (isNaN(Number(role))) {
-//       const roleValue = Roles[role as keyof typeof Roles]
-//       if ((roleMask & roleValue) === roleValue) {
-//         roles.push(role)
-//       }
-//     }
-//   }
-//   return roles
-// }
-
 export const AccountRoleSchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,
   account: z.string(),
-  roleMask: z.number({ coerce: true })
+  roleMask: z.bigint({ coerce: true })
 })
 
 export type AccountRole = z.infer<typeof AccountRoleSchema>
@@ -186,8 +174,8 @@ export function useVaults(account?: `0x${string}` | null) {
       address: account,
       vaults: vaults.map(vault => ({ 
         ...vault, 
-        roleMask: roles.find(role => role.address === vault.address)?.roleMask || 0,
-        roles: getRoles(roles.find(role => role.address === vault.address)?.roleMask || 0),
+        roleMask: roles.find(role => role.address === vault.address)?.roleMask || 0n,
+        roles: getRoles(roles.find(role => role.address === vault.address)?.roleMask || 0n),
         strategies: strategies.filter(strategy => vault.strategies.includes(strategy.address))
       }))
     })
