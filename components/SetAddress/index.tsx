@@ -9,10 +9,11 @@ import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulat
 import { getAddress, zeroAddress } from 'viem'
 import InputAddress from '@/components/InputAddress'
 import { InputAddressProvider, useInputAddress } from '@/components/InputAddress/provider'
-import ExploreHash from './ExploreHash'
+import ExploreHash from '../ExploreHash'
 import { EvmAddress, EvmAddressSchema } from '@/lib/types'
+import { useMounted } from '@/hooks/useMounted'
 
-function useContract(
+function useWrite(
   contract: {
     address: EvmAddress,
     abi: any,
@@ -28,7 +29,7 @@ function useContract(
     abi: contract.abi,
     functionName: contract.set,
     query: { enabled }
-  }), [next, enabled])
+  }), [contract, next, enabled])
   const simulation = useSimulateContract(parameters)
   const write = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -79,12 +80,11 @@ function Component({
 
   const changed = useMemo(() => Boolean(((previous || next) && (previous !== next))), [previous, next])
   const [error, setError] = useState<string | undefined>(undefined)
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
   const { 
     simulation, write, confirmation 
-  } = useContract(contract, next, isConnected && changed && isValid)
+  } = useWrite(contract, next, isConnected && changed && isValid)
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -131,7 +131,7 @@ function Component({
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending),
-  [isValid, changed, simulation, write])
+  [isValid, changed, simulation, write, confirmation])
 
   const onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)
@@ -162,13 +162,13 @@ function Component({
       key: 'default',
       text: <>&nbsp;</>
     }
-  }, [previous, next, simulation, write, confirmation, error])
+  }, [previous, next, write, confirmation, error])
 
   return <div className={`w-full flex flex-col gap-2 ${className}`}>
     <div className="text-neutral-400">Accountant</div>
     <div className="flex items-center gap-4">
       <InputAddress onChange={onChange} theme={inputTheme} disabled={disableInput} />
-      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">{'Set'}</Button>
+      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">Set</Button>
     </div>
     <div className={`pl-3 text-xs text-neutral-400`}>
       <motion.div key={subtext.key}

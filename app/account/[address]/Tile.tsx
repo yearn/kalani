@@ -1,4 +1,4 @@
-import { PiCheck } from 'react-icons/pi'
+import { PiCheck, PiStar } from 'react-icons/pi'
 import ReactTimeago from 'react-timeago'
 import { useRouter } from 'next/navigation'
 import { UserVault } from '@/hooks/useVaults'
@@ -63,12 +63,19 @@ export default function Tile({ vault }: { vault: UserVault }) {
     </div>
     <div className="w-1/2 flex flex-col justify-center gap-4">
       <div className="flex flex-wrap items-center gap-4">
-        <div className="text-lg">Roles</div>
+        <div className="ml-4 text-lg">Roles</div>
+        {vault.roleManager && <div className={`
+          py-2 px-4 flex items-center gap-2
+          border border-neutral-800
+          text-xs rounded-primary`}>
+          <PiStar />
+          ROLE MANAGER
+        </div>}
         {Object.keys(vault.roles).map((role, i) => 
           <div key={i} className={`
             py-2 px-4 flex items-center gap-2
             border border-neutral-800
-            text-xs rounded 
+            text-xs rounded-primary
             ${vault.roles[role] ? '' : 'text-neutral-800'}`}>
             {vault.roles[role] ? <PiCheck /> : <></>}
             {role.replace('_MANAGER', '').replace('_', ' ')}

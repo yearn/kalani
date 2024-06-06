@@ -14,3 +14,6 @@ Head to [http://localhost:3000](http://localhost:3000)
 ```sh
 bun run build
 ```
+
+## dev notes
+- for icons, look under phosphor icons first, https://react-icons.github.io/react-icons/icons/pi

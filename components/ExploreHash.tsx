@@ -1,5 +1,5 @@
 import { useConfig } from 'wagmi'
-import { TfiReceipt } from 'react-icons/tfi'
+import { PiReceipt } from 'react-icons/pi'
 import A from '@/components/elements/A'
 
 export default function ExploreHash({ hash, message }: { hash: `0x${string}`, message: string }) {
@@ -9,7 +9,7 @@ export default function ExploreHash({ hash, message }: { hash: `0x${string}`, me
     rel="noreferrer"
     className="inline">
     <div className="flex items-center gap-2">
-      <TfiReceipt />
+      <PiReceipt />
       <div>{message}</div>
     </div>
   </A>

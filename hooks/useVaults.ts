@@ -2,34 +2,17 @@ import { z } from 'zod'
 import useSWR from 'swr'
 import { EvmAddressSchema } from '@/lib/types'
 import { useMemo } from 'react'
+import { Roles, ROLE_MANAGER_PSEUDO_ROLE } from '@/lib/types'
 
-export enum Roles {
-  ADD_STRATEGY_MANAGER = 2 ** 0,
-  REVOKE_STRATEGY_MANAGER = 2 ** 1,
-  FORCE_REVOKE_MANAGER = 2 ** 2,
-  ACCOUNTANT_MANAGER = 2 ** 3,
-  QUEUE_MANAGER = 2 ** 4,
-  REPORTING_MANAGER = 2 ** 5,
-  DEBT_MANAGER = 2 ** 6,
-  MAX_DEBT_MANAGER = 2 ** 7,
-  DEPOSIT_LIMIT_MANAGER = 2 ** 8,
-  WITHDRAW_LIMIT_MANAGER = 2 ** 9,
-  MINIMUM_IDLE_MANAGER = 2 ** 10,
-  PROFIT_UNLOCK_MANAGER = 2 ** 11,
-  DEBT_PURCHASER = 2 ** 12,
-  EMERGENCY_MANAGER = 2 ** 13,
-  ROLE_MANAGER_MANAGER = 2 ** 255
-}
-
-function getRoles(roleMask: bigint): Record<string, boolean> {
+function getRoles(permittedRolesMask: bigint): Record<string, boolean> {
   const roles: {
     [key: string]: boolean
   } = {}
 
   for (const role in Roles) {
     if (isNaN(Number(role))) {
-      const roleValue = BigInt(Roles[role as keyof typeof Roles])
-      roles[role] = (roleMask & roleValue) === roleValue
+      const rolemask = BigInt(Roles[role as keyof typeof Roles])
+      roles[role] = (permittedRolesMask & rolemask) === rolemask
     }
   }
 
@@ -87,6 +70,7 @@ export type Strategy = z.infer<typeof StrategySchema>
 export const UserVaultSchema = VaultSchema.extend({
   roleMask: z.number({ coerce: true }),
   roles: z.record(z.string(), z.boolean()),
+  roleManager: z.boolean(),
   strategies: StrategySchema.array().default([])
 })
 
@@ -172,12 +156,16 @@ export function useVaults(account?: `0x${string}` | null) {
     const strategies = StrategySchema.array().parse(data?.data?.accountStrategies ?? [])
     return UserSchema.parse({
       address: account,
-      vaults: vaults.map(vault => ({ 
-        ...vault, 
-        roleMask: roles.find(role => role.address === vault.address)?.roleMask || 0n,
-        roles: getRoles(roles.find(role => role.address === vault.address)?.roleMask || 0n),
-        strategies: strategies.filter(strategy => vault.strategies.includes(strategy.address))
-      }))
+      vaults: vaults.map(vault => {
+        const roleMask = roles.find(role => role.address === vault.address)?.roleMask || 0n
+        return { 
+          ...vault, 
+          roleMask,
+          roles: getRoles(roles.find(role => role.address === vault.address)?.roleMask || 0n),
+          roleManager: (ROLE_MANAGER_PSEUDO_ROLE & roleMask) === ROLE_MANAGER_PSEUDO_ROLE,
+          strategies: strategies.filter(strategy => vault.strategies.includes(strategy.address))
+        }
+      })
     })
   }, [data])
 
