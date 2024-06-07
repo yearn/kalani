@@ -10,6 +10,7 @@ import { getChain } from '@/lib/chains'
 import Pie from './Pie'
 import { useMemo } from 'react'
 import { div, mulb } from '@/lib/bmath'
+import { fancy } from '@/lib/fancy'
 
 export default function Vault() {
   const params = useParams()
@@ -42,7 +43,7 @@ export default function Vault() {
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
         <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
-        <div className="text-5xl">{vault.name}</div>
+        <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
           [{getChain(vault.chainId).name}]
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />

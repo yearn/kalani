@@ -4,12 +4,15 @@ import Theme from 'tailwindcss/defaultTheme'
 
 const config = {
   darkMode: ['class'],
+  prefix: '',
   content: [
     '../lib/components/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
-  prefix: '',
+  safelist: [
+    'scrollbar-thumb-pink-500'
+  ],
   theme: {
     container: {
       center: true,
@@ -55,7 +58,10 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'), 
+    require('tailwind-scrollbar')
+  ],
 } satisfies Config
 
 export default config

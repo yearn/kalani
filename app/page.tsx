@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Fancy from '@/components/Fancy'
+import Wordmark from '@/components/Wordmark'
 import Search from '@/components/Search'
 import { useCallback } from 'react'
 import Screen from '@/components/Screen'
@@ -21,7 +21,7 @@ export default function Home() {
         <div className="w-full sm:w-1/2 h-full flex flex-col items-center justify-center gap-16">
           <div className="flex flex-col items-center justify-end gap-3">
             <Screen className="px-12 py-2">
-              <Fancy className="tracking-tighter font-[900] text-5xl">Kalani</Fancy>
+              <Wordmark className="text-5xl">Kalani</Wordmark>
             </Screen>
             <p>Yearn vault automations</p>
           </div>

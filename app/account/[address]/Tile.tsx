@@ -8,6 +8,7 @@ import { priced } from '@/lib/bmath'
 import { getChain } from '@/lib/chains'
 import Screen from '@/components/Screen'
 import ValueLabelPair from '@/components/ValueLabelPair'
+import { fancy } from '@/lib/fancy'
 
 function fakePrice(address: `0x${string}`) {
   if (address === '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619') {
@@ -39,7 +40,7 @@ export default function Tile({ vault }: { vault: UserVault }) {
     cursor-pointer`}>
     <div className="w-1/2 flex flex-col gap-2">
 
-      <div className="text-5xl">{vault.name}</div>
+      <div className={`text-3xl ${fancy.className}`}>{vault.name}</div>
       <div className="flex items-center gap-8">
         [{getChain(vault.chainId).name}]
         <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
