@@ -16,4 +16,5 @@ bun run build
 ```
 
 ## dev notes
-- for icons, look under phosphor icons first, https://react-icons.github.io/react-icons/icons/pi
+- use the phosphor icon set by default, https://react-icons.github.io/react-icons/icons/pi
+
