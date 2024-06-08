@@ -11,6 +11,8 @@ import Pie from './Pie'
 import { useMemo } from 'react'
 import { div, mulb } from '@/lib/bmath'
 import { fancy } from '@/lib/fancy'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
+import { PiCalculator, PiScales, PiTractorFill } from 'react-icons/pi'
 
 export default function Vault() {
   const params = useParams()
@@ -51,11 +53,45 @@ export default function Vault() {
         </div>
       </div>
       <Screen className={`
-        w-1/2 h-48 flex items-center justify-center
+        w-1/2 h-48 flex items-center justify-center gap-10
         bg-violet-400`}>
+        <div className="flex flex-col items-center gap-3 opacity-30">
+          <div className="p-4 border border-8 border-white rounded-primary">
+            <PiScales size={64} />
+          </div>
+          <div>Allocator</div>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 opacity-30">
+          <div className="p-4 border border-8 border-white rounded-primary">
+            <PiCalculator size={64} />
+          </div>
+          <div>Accountant</div>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 opacity-30">
+          <div className="p-4 border border-8 border-white rounded-primary">
+            <PiTractorFill size={64} />
+          </div>
+          <div>yHaaS</div>
+        </div>
       </Screen>
     </div>
-    <div className="w-full flex items-center gap-8">
+
+    <Tabs defaultValue="assets" className="w-full">
+      <TabsList>
+        <TabsTrigger value="assets">Assets</TabsTrigger>
+        <TabsTrigger value="strategies">Strategies</TabsTrigger>
+        <TabsTrigger value="accountant">Accountant</TabsTrigger>
+        <TabsTrigger value="roles">Roles</TabsTrigger>
+      </TabsList>
+      <TabsContent value="assets">assets</TabsContent>
+      <TabsContent value="strategies">strategies</TabsContent>
+      <TabsContent value="accountant">accountant</TabsContent>
+      <TabsContent value="roles">roles</TabsContent>
+    </Tabs>
+
+    {/* <div className="w-full flex items-center gap-8">
       <Screen className={`
         w-1/2 h-48 p-4 
         border border-neutral-800`}>
@@ -128,6 +164,6 @@ export default function Vault() {
       <div className={`w-1/2 h-full p-4 text-primary-200`}>
         <div className="text-xl">Roles</div>
       </div>
-    </div>
+    </div> */}
   </main>
 }

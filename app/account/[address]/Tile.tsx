@@ -40,7 +40,7 @@ export default function Tile({ vault }: { vault: UserVault }) {
     cursor-pointer`}>
     <div className="w-1/2 flex flex-col gap-2">
 
-      <div className={`text-3xl ${fancy.className}`}>{vault.name}</div>
+      <div className={`py-2 text-3xl ${fancy.className}`}>{vault.name}</div>
       <div className="flex items-center gap-8">
         [{getChain(vault.chainId).name}]
         <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />

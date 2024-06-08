@@ -1,7 +1,9 @@
 'use client'
 
 import {
+  darkTheme,
   getDefaultConfig,
+  midnightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import { 
@@ -18,6 +20,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query"
+import colors from 'tailwindcss/colors'
 import Header from '@/components/Header'
 import { chains } from '@/lib/chains'
 
@@ -42,6 +45,11 @@ const config = getDefaultConfig({
 
 const queryClient = new QueryClient()
 
+const theme = midnightTheme({
+  accentColor: colors.violet[400],
+  accentColorForeground: 'black',
+})
+
 export default function Providers ({
   children,
 }: Readonly<{
@@ -50,7 +58,7 @@ export default function Providers ({
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider theme={theme}>
           <Header />
           {children}
         </RainbowKitProvider>
