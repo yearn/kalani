@@ -1,7 +1,7 @@
 import { PiCheck, PiStar } from 'react-icons/pi'
 import ReactTimeago from 'react-timeago'
 import { useRouter } from 'next/navigation'
-import { UserVault } from '@/hooks/useVaults'
+import { UserVault } from '@/hooks/useAccountVaults'
 import { fNumber, fPercent, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 import { priced } from '@/lib/bmath'

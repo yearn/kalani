@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import useSWR from 'swr'
-import { EvmAddressSchema } from '@/lib/types'
+import { AccountRoleSchema, EvmAddressSchema } from '@/lib/types'
+import { useParams } from 'next/navigation'
 
 const StrategySchema = z.object({
   chainId: z.number(),
@@ -23,6 +24,7 @@ export const VaultSchema = z.object({
     decimals: z.number()  
   }),
   accountant: EvmAddressSchema,
+  roleManager: EvmAddressSchema,
   inceptBlock: z.bigint({ coerce: true }),
   inceptTime: z.number({ coerce: true }),
   deposit_limit: z.bigint({ coerce: true }),
@@ -34,7 +36,8 @@ export const VaultSchema = z.object({
   fees: z.object({ performanceFee: z.number({ coerce: true }) }),
   tvl: z.object({ close: z.number() }),
   apy: z.object({ close: z.number() }),
-  strategies: StrategySchema.array()
+  strategies: StrategySchema.array(),
+  accounts: AccountRoleSchema.array()
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -53,6 +56,7 @@ query Query($chainId: Int, $address: String) {
       decimals
     }
     accountant
+    roleManager: role_manager
     inceptBlock
     inceptTime
     depositLimit
@@ -86,10 +90,29 @@ query Query($chainId: Int, $address: String) {
     address,
     name
   }
+
+  accounts: vaultAccounts(chainId: $chainId, vault: $address) {
+    chainId,
+    vault: address
+    address: account
+    roleMask
+  }
 }
 `
 
-export function useVault(chainId: number, address: `0x${string}`) {
+export function useVaultParams() {
+  const params = useParams()
+  const chainId = Number(params.chainId)
+  const address = EvmAddressSchema.parse(params.address)
+  return { chainId, address }
+}
+
+export function useVaultFromParams() {
+  const params = useVaultParams()
+  return useVault(params)
+}
+
+export function useVault({ chainId, address }: { chainId: number, address: `0x${string}` }) {
   const endpoint = process.env.NEXT_PUBLIC_KONG_GQL ?? 'http://localhost:3001/api/gql'
 
   const { data } = useSWR(
@@ -120,5 +143,9 @@ export function useVault(chainId: number, address: `0x${string}`) {
     }
   })
 
-  return VaultSchema.parse({ ...vault, strategies })
+  return VaultSchema.parse({ 
+    ...vault, 
+    strategies,
+    accounts: data.data.accounts,
+  })
 }

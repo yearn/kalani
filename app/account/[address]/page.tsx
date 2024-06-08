@@ -1,6 +1,6 @@
 'use client'
 
-import { useVaults } from '@/hooks/useVaults'
+import { useAccountVaults } from '@/hooks/useAccountVaults'
 import { fEvmAddress, fNumber } from '@/lib/format'
 import { EvmAddressSchema } from '@/lib/types'
 import { useParams } from 'next/navigation'
@@ -12,7 +12,7 @@ import Tile from './Tile'
 export default function Page() {
   const params = useParams()
   const account = EvmAddressSchema.parse(params.address)
-  const user = useVaults(account)
+  const user = useAccountVaults(account)
   const aum = user?.vaults.reduce((acc, vault) => acc + vault.tvl.close, 0) ?? 0
   const pieData = user?.vaults.map(vault => ({ label: vault.asset.symbol, value: vault.tvl.close })) ?? []
 

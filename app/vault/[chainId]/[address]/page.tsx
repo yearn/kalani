@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation'
 import { EvmAddressSchema } from '@/lib/types'
 import ValueLabelPair from '@/components/ValueLabelPair'
-import { useVault } from '@/hooks/useVault'
+import { useVaultFromParams } from '@/hooks/useVault'
 import { fBps, fEvmAddress, fNumber, fPercent, fTokens } from '@/lib/format'
 import Screen from '@/components/Screen'
 import { getChain } from '@/lib/chains'
@@ -13,12 +13,11 @@ import { div, mulb } from '@/lib/bmath'
 import { fancy } from '@/lib/fancy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { PiCalculator, PiScales, PiTractorFill } from 'react-icons/pi'
+import Roles from './tabs/Roles'
+import Badge from './Badge'
 
 export default function Vault() {
-  const params = useParams()
-  const chainId = Number(params.chainId)
-  const address = EvmAddressSchema.parse(params.address)
-  const vault = useVault(chainId, address)
+  const vault = useVaultFromParams()
 
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const currentDebtPieData = useMemo(() => {
@@ -52,30 +51,12 @@ export default function Vault() {
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
         </div>
       </div>
-      <Screen className={`
-        w-1/2 h-48 flex items-center justify-center gap-10
-        bg-violet-400`}>
-        <div className="flex flex-col items-center gap-3 opacity-30">
-          <div className="p-4 border border-8 border-white rounded-primary">
-            <PiScales size={64} />
-          </div>
-          <div>Allocator</div>
-        </div>
-
-        <div className="flex flex-col items-center gap-3 opacity-30">
-          <div className="p-4 border border-8 border-white rounded-primary">
-            <PiCalculator size={64} />
-          </div>
-          <div>Accountant</div>
-        </div>
-
-        <div className="flex flex-col items-center gap-3 opacity-30">
-          <div className="p-4 border border-8 border-white rounded-primary">
-            <PiTractorFill size={64} />
-          </div>
-          <div>yHaaS</div>
-        </div>
-      </Screen>
+      <div className={`
+        w-1/2 h-48 flex items-center justify-center gap-10`}>
+        <Badge label={'Allocator'} icon={PiScales} />
+        <Badge label={'Accountant'} icon={PiCalculator} />
+        <Badge label={'yHaaS'} icon={PiTractorFill} />
+      </div>
     </div>
 
     <Tabs defaultValue="assets" className="w-full">
@@ -84,11 +65,12 @@ export default function Vault() {
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
+        <TabsTrigger value="depositors">Depositors</TabsTrigger>
       </TabsList>
       <TabsContent value="assets">assets</TabsContent>
       <TabsContent value="strategies">strategies</TabsContent>
       <TabsContent value="accountant">accountant</TabsContent>
-      <TabsContent value="roles">roles</TabsContent>
+      <TabsContent value="roles"><Roles /></TabsContent>
     </Tabs>
 
     {/* <div className="w-full flex items-center gap-8">

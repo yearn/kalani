@@ -6,10 +6,11 @@ type InputProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 const A = forwardRef<HTMLAnchorElement, InputProps>(({ className, children, ...props }, ref) => (
   <a ref={ref} {...props} className={`
-    decoration-1 decoration-dashed underline underline-offset-8
+    underline underline-offset-8
     text-pink-100 decoration-pink-100/20
-    hover:text-neutral-0 hover:decoration-neutral-0
-  ${className}`}>{children}</a>
+    hover:text-secondary-300 hover:decoration-secondary-300
+    active:text-secondary-400 active:decoration-secondary-400
+    ${className}`}>{children}</a>
 ))
 
 A.displayName = 'A'

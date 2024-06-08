@@ -1,32 +1,23 @@
 import { z } from 'zod'
 import useSWR from 'swr'
-import { EvmAddressSchema } from '@/lib/types'
+import { AccountRoleSchema, EvmAddressSchema } from '@/lib/types'
 import { useMemo } from 'react'
-import { Roles, ROLE_MANAGER_PSEUDO_ROLE } from '@/lib/types'
+import { ROLES, PSEUDO_ROLES } from '@/lib/types'
 
 function getRoles(permittedRolesMask: bigint): Record<string, boolean> {
   const roles: {
     [key: string]: boolean
   } = {}
 
-  for (const role in Roles) {
+  for (const role in ROLES) {
     if (isNaN(Number(role))) {
-      const rolemask = BigInt(Roles[role as keyof typeof Roles])
-      roles[role] = (permittedRolesMask & rolemask) === rolemask
+      const mask = ROLES[role as keyof typeof ROLES]
+      roles[role] = (permittedRolesMask & mask) === mask
     }
   }
 
   return roles
 }
-
-export const AccountRoleSchema = z.object({
-  chainId: z.number(),
-  address: EvmAddressSchema,
-  account: z.string(),
-  roleMask: z.bigint({ coerce: true })
-})
-
-export type AccountRole = z.infer<typeof AccountRoleSchema>
 
 export const VaultSchema = z.object({
   chainId: z.number(),
@@ -87,8 +78,8 @@ const QUERY = `
 query Query($account: String!, $chainId: Int) {
   accountRoles(account: $account, chainId: $chainId) {
     chainId
-    address
-    account
+    vault: address
+    address: account
     roleMask
   }
 
@@ -130,7 +121,7 @@ query Query($account: String!, $chainId: Int) {
 }
 `
 
-export function useVaults(account?: `0x${string}` | null) {
+export function useAccountVaults(account?: `0x${string}` | null) {
   if(!account) return undefined
 
   const endpoint = process.env.NEXT_PUBLIC_KONG_GQL ?? 'http://localhost:3001/api/gql'
@@ -162,7 +153,7 @@ export function useVaults(account?: `0x${string}` | null) {
           ...vault, 
           roleMask,
           roles: getRoles(roles.find(role => role.address === vault.address)?.roleMask || 0n),
-          roleManager: (ROLE_MANAGER_PSEUDO_ROLE & roleMask) === ROLE_MANAGER_PSEUDO_ROLE,
+          roleManager: (PSEUDO_ROLES.ROLE_MANAGER & roleMask) === PSEUDO_ROLES.ROLE_MANAGER,
           strategies: strategies.filter(strategy => vault.strategies.includes(strategy.address))
         }
       })

@@ -40,6 +40,7 @@ export default function InputAddress({
       placeholder={'Accountant address'}
       disabled={disabled ?? false}
       theme={theme}
+      maxLength={42}
       className="w-full text-base" />
     {hasInput && !isValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-yellow-400`}>

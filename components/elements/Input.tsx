@@ -12,7 +12,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, theme, ...p
       bg-neutral-950 border border-neutral-800
       hover:text-violet-300 hover:bg-neutral-950 hover:border-violet-300
       focus:text-violet-400 focus:border-violet-400 focus:bg-neutral-900
-      disabled:text-neutral-800 disabled:bg-transparent hover:disabled:border-neutral-950 
+      disabled:text-neutral-400 disabled:bg-transparent hover:disabled:border-neutral-950 
       disabled:placeholder-neutral-800 disabled:border-transparent
       outline-none focus:ring-0 focus:outline-none
       rounded-primary`} />
