@@ -13,6 +13,7 @@ import { InputAddressProvider, useInputAddress } from '@/components/InputAddress
 import ExploreHash from '../ExploreHash'
 import { EvmAddress, EvmAddressSchema, PSEUDO_ROLES } from '@/lib/types'
 import { useMounted } from '@/hooks/useMounted'
+import { useIsRoleManager } from '@/hooks/useRoleManager'
 
 function useWrite(
   contract: {
@@ -58,25 +59,24 @@ function Component({
   const { isConnected, address } = useAccount()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
   const [roles, setRoles] = useState<bigint | undefined>(undefined)
+  const isRoleManager = useIsRoleManager(contract.address)
 
   const multicall = useReadContracts({ contracts: [
     { address: contract.address, abi: contract.abi, functionName: contract.get },
-    { address: contract.address, abi: contract.abi, functionName: 'role_manager' },
     { address: contract.address, abi: contract.abi, functionName: 'roles', args: [address ?? zeroAddress] }
-  ], query: { enabled: isConnected }})
+  ]})
 
   useEffect(() => {
-    if (address && multicall.isSuccess) {
+    if (multicall.isSuccess) {
       setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
-      const roleManager = EvmAddressSchema.parse(multicall.data![1].result)
-      let mask = z.bigint({ coerce: true }).parse(multicall.data![2].result)
-      if (roleManager === address) { mask |= PSEUDO_ROLES.ROLE_MANAGER }
+      let mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
+      if (isRoleManager) { mask |= PSEUDO_ROLES.ROLE_MANAGER }
       setRoles(mask)
     } else {
       setPrevious(undefined)
       setRoles(undefined)
     }
-  }, [address, multicall, setPrevious, setRoles])
+  }, [isRoleManager, multicall, setPrevious, setRoles])
 
   const permitted = useMemo(() => Boolean(roles && (roles & roleMask) === roleMask), [roles, roleMask])
 

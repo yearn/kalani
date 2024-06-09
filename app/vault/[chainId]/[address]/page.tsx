@@ -51,11 +51,10 @@ export default function Vault() {
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
         </div>
       </div>
-      <div className={`
-        w-1/2 h-48 flex items-center justify-center gap-10`}>
-        <Badge label={'Allocator'} icon={PiScales} />
-        <Badge label={'Accountant'} icon={PiCalculator} />
-        <Badge label={'yHaaS'} icon={PiTractorFill} />
+      <div className="w-1/2 h-48 flex items-center justify-center gap-10">
+        <Badge label="Allocator" icon={PiScales} enabled={true} />
+        <Badge label="Accountant" icon={PiCalculator} enabled={true} />
+        <Badge label="yHaaS" icon={PiTractorFill} />
       </div>
     </div>
 

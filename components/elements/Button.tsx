@@ -1,8 +1,9 @@
+import { ThemeName } from '@/lib/types'
 import React, { forwardRef, ButtonHTMLAttributes, useMemo } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string
-  theme?: 'default' | 'sim' | 'write' | 'confirm'
+  theme?: ThemeName
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, children, ...props }, ref) => {

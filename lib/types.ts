@@ -1,6 +1,8 @@
 import { getAddress } from 'viem'
 import { z } from 'zod'
 
+export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active'
+
 export const zevmaddressstring = z.custom<`0x${string}`>((val: any) => /^0x[a-fA-F0-9]{40}$/.test(val))
 export const zvaultType = z.enum(['vault', 'strategy'])
 

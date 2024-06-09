@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { springs } from '@/lib/motion'
 import { EvmAddress, ROLES, enumerateEnum } from '@/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { UseSimulateContractParameters, UseWaitForTransactionReceiptReturnType, UseWriteContractReturnType, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { UseSimulateContractParameters, UseWaitForTransactionReceiptReturnType, UseWriteContractReturnType, useAccount, useReadContract, useReadContracts, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import Toggle from './Toggle'
 import Button from '@/components/elements/Button'
 import { useMounted } from '@/hooks/useMounted'
@@ -14,15 +14,19 @@ import Dot from './Dot'
 import { PiStar, PiStarFill } from 'react-icons/pi'
 import InputAddress from '@/components/InputAddress'
 import { InputAddressProvider } from '@/components/InputAddress/provider'
+import { useIsRoleManager, useRoleManager } from '@/hooks/useRoleManager'
+import { zeroAddress } from 'viem'
+import Link from '@/components/elements/Link'
 
-function usePrevious({ vault, account }: { vault: EvmAddress, account: EvmAddress }) {
-  const multicall = useReadContracts({ contracts: [
-    { address: vault, abi: abis.vault, functionName: 'roles', args: [account] }, 
-    { address: vault, abi: abis.vault, functionName: 'role_manager' }
-  ] })
-
-  const permittedRolesMask = useMemo(() => multicall.data?.[0]?.result ?? 0n, [multicall])
-  const roleManager = useMemo(() => multicall.data?.[1]?.result, [multicall])
+function usePrevious({ 
+  vault, account 
+}: { 
+  vault: EvmAddress, account?: EvmAddress 
+}) {
+  const { data: roleMask, refetch } = useReadContract({
+    address: vault, abi: abis.vault, functionName: 'roles', args: [account ?? zeroAddress],
+    query: { enabled: !!account }
+  })
 
   const roles = useMemo(() => {
     const result: {
@@ -30,14 +34,14 @@ function usePrevious({ vault, account }: { vault: EvmAddress, account: EvmAddres
     } = {}
 
     for (const role of enumerateEnum(ROLES)) {
-      const rolemask = BigInt(ROLES[role as keyof typeof ROLES])
-      result[role] = ((permittedRolesMask || 0n) & rolemask) === rolemask
+      const mask = BigInt(ROLES[role as keyof typeof ROLES])
+      result[role] = ((roleMask || 0n) & mask) === mask
     }
 
     return result
-  }, [permittedRolesMask])
+  }, [roleMask])
 
-  return { roles, roleManager, refetch: multicall.refetch }
+  return { roles, refetch }
 }
 
 function useWrite({ 
@@ -96,24 +100,21 @@ function useSubtext({
 }
 
 export default function SetRoles({
-  vault, account, isRoleManager, editAddress, className
+  vault, account, editAddress, className
 }: { 
   vault: EvmAddress, 
-  account: EvmAddress, 
-  isRoleManager: boolean,
+  account?: EvmAddress,
   editAddress?: boolean,
   className?: string 
 }) {
-
-  const { isConnected, address } = useAccount()
   const mounted = useMounted()
-  const { roles: previous, roleManager, refetch } = usePrevious({ vault, account })
+  const _isRoleManager = useIsRoleManager(vault)
+  const { roles: previous, refetch } = usePrevious({ vault, account })
   const [next, setNext] = useState<{ [key: string]: boolean }>({})
   const [error, setError] = useState<string | undefined>(undefined)
 
   const changed = useMemo(() => JSON.stringify(previous) !== JSON.stringify(next), [previous, next])
   const rolemask = useMemo(() => Object.keys(next).reduce((acc, role) => next[role] ? acc + BigInt(ROLES[role as keyof typeof ROLES]) : acc, 0n), [next])
-  const permitted = useMemo(() => isConnected && address === roleManager, [isConnected, address, roleManager])
   const gestureLabel = useMemo(() => Object.values(next).some(value => value) ? 'Clear' : 'All', [next])
 
   const reset = useCallback(() => setNext(previous), [setNext, previous])
@@ -127,7 +128,12 @@ export default function SetRoles({
 
   const {
     simulation, write, confirmation 
-  } = useWrite({ vault, account, rolemask, enabled: permitted && changed })
+  } = useWrite({ 
+    vault, 
+    account: account ?? zeroAddress, 
+    rolemask, 
+    enabled: (_isRoleManager ?? false) && !!account && changed 
+  })
 
   useEffect(() => setNext(previous), [previous])
 
@@ -142,17 +148,18 @@ export default function SetRoles({
     if (confirmation.isSuccess) refetch()
   }, [confirmation, refetch])
 
-  const disableReset = useMemo(() => !(permitted && changed), [permitted, changed])
-  const disableGesture = useMemo(() => !permitted, [permitted])
+  const disableReset = useMemo(() => !(_isRoleManager && changed), [_isRoleManager, changed])
+  const disableGesture = useMemo(() => !_isRoleManager, [_isRoleManager])
 
   const disableSave = useMemo(() => 
-    !permitted
+    ! account
+    || !_isRoleManager
     || !changed
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending),
-  [permitted, changed, simulation, write, confirmation])
+  [account, _isRoleManager, changed, simulation, write, confirmation])
 
   const saveTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -167,12 +174,17 @@ export default function SetRoles({
 
   const subtext = useSubtext({ write, confirmation, error })
 
+  const roleManager = useRoleManager(vault)
+  const isRoleManager = useCallback((address: EvmAddress) => {
+    return roleManager === address
+  }, [roleManager])
+
   return <Accordion type="single" className={className} collapsible>
     <AccordionItem value="item-1" className="flex flex-col gap-4">
       <AccordionTrigger>
-        <div className="flex items-center gap-6">
-          <div>{fEvmAddress(account)}</div>
-          <div>{isRoleManager ? <PiStarFill className="fill-primary-300" /> : <PiStar className="fill-neutral-900" />}</div>
+        <div className="flex items-center gap-8">
+          <div>{fEvmAddress(account ?? zeroAddress)}</div>
+          <div>{isRoleManager(account ?? zeroAddress) ? <PiStarFill className="fill-primary-300" /> : <PiStar className="fill-neutral-900" />}</div>
           <div className="flex items-cemter gap-2">
             {Object.keys(next).map((role, i) => 
               <Dot key={i} role={role} checked={next[role]} />
@@ -181,12 +193,15 @@ export default function SetRoles({
         </div>
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-8">
-        {editAddress && <div className="text-neutral-400">{account}</div>}
-        {!editAddress && <InputAddressProvider><InputAddress /></InputAddressProvider>}
+        {!editAddress && <div className="text-neutral-400">
+          <Link href={`/account/${account ?? zeroAddress}`}>{account ?? zeroAddress}</Link>
+        </div>}
+
+        {editAddress && <InputAddressProvider><InputAddress /></InputAddressProvider>}
 
         <div className="flex flex-wrap items-center gap-4">
           {Object.keys(next).map((role, i) => 
-            <Toggle key={i} role={role} checked={next[role]} disabled={!permitted} onClick={() => toggle(role)} />
+            <Toggle key={i} role={role} checked={next[role]} disabled={!_isRoleManager} onClick={() => toggle(role)} />
           )}
         </div>
         <div className="flex items-center justify-end gap-4">

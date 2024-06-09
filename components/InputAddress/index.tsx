@@ -5,11 +5,13 @@ import { PiWarningCircle } from 'react-icons/pi'
 import { useInputAddress } from './provider'
 
 export default function InputAddress({ 
+  placeholder,
   disabled,
   onChange,
   theme, 
   className
 }: { 
+  placeholder?: string,
   disabled?: boolean,
   onChange?: (next: string, isValid: boolean) => void,
   theme?: 'default' | 'sim' | 'write' | 'confirm',
@@ -32,12 +34,12 @@ export default function InputAddress({
   useEffect(() => setIsValid(EvmAddressSchema.safeParse(next).success), [next])
 
   return <div className={`grow group relative rounded-primary ${className}`}>
-    <Input 
-      ref={ref} 
+    <Input
+      ref={ref}
       type="text"
       value={next}
-      onChange={_onChange} 
-      placeholder={'Accountant address'}
+      onChange={_onChange}
+      placeholder={placeholder ?? '0x'}
       disabled={disabled ?? false}
       theme={theme}
       maxLength={42}

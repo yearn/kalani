@@ -4,12 +4,16 @@ type InputProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   className?: string
 }
 
+export const AnchorClassName = `
+underline underline-offset-8
+text-neutral-100 decoration-neutral-100/20
+hover:text-secondary-300 hover:decoration-secondary-300
+active:text-secondary-400 active:decoration-secondary-400
+`
+
 const A = forwardRef<HTMLAnchorElement, InputProps>(({ className, children, ...props }, ref) => (
   <a ref={ref} {...props} className={`
-    underline underline-offset-8
-    text-pink-100 decoration-pink-100/20
-    hover:text-secondary-300 hover:decoration-secondary-300
-    active:text-secondary-400 active:decoration-secondary-400
+    ${AnchorClassName}
     ${className}`}>{children}</a>
 ))
 
