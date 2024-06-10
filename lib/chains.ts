@@ -1,6 +1,6 @@
 import { mainnet, polygon, gnosis, arbitrum } from '@wagmi/chains'
 
-const DEV = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+const TESTNET = process.env.NEXT_PUBLIC_TESTNET === 'true'
 
 export const testnet = Object.assign({}, polygon, {
   "id": 137,
@@ -12,7 +12,7 @@ export const testnet = Object.assign({}, polygon, {
 })
 
 export const chains = [
-  ...(DEV ? [testnet] : []), 
+  ...(TESTNET ? [testnet] : []), 
   mainnet, gnosis, polygon, arbitrum
 ] as const
 
