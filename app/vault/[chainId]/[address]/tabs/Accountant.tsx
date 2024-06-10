@@ -1,3 +1,12 @@
+import { useVaultFromParams } from '@/hooks/useVault'
+import SetAccountant from '../SetAccountant'
+
 export default function Accountant() {
-  return <div>accountant</div> 
+  const vault = useVaultFromParams()
+
+  if (!vault) return <></>
+
+  return <div>
+    <SetAccountant vault={vault.address} />
+  </div> 
 }

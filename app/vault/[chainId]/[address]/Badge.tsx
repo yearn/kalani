@@ -1,6 +1,6 @@
-import { ThemeName } from '@/lib/types'
 import { useMemo } from 'react'
 import { IconType } from 'react-icons/lib'
+import { PiCheck, PiX } from 'react-icons/pi'
 
 export default function Badge({
   label,
@@ -11,17 +11,15 @@ export default function Badge({
   icon: IconType,
   enabled?: boolean
 }) {
-  const bgClassName = useMemo(() => enabled ? 'bg-secondary-400' : 'bg-neutral-900', [enabled])
-  const fillClassName = useMemo(() => enabled ? 'fill-neutral-200/30' : 'fill-neutral-800', [enabled])
+  const fillClassName = useMemo(() => enabled ? 'fill-secondary-400' : 'fill-neutral-800', [enabled])
   const labelClassName = useMemo(() => enabled ? 'text-secondary-400' : 'text-neutral-700', [enabled])
-
-  return <div className="flex flex-col items-center gap-2">
-    <div className={`relative p-[1px] rounded-primary`}>
-      <div className={`p-4 rounded-primary ${bgClassName}`}>
-        <Icon size={64} className={fillClassName} />
-      </div>
+  return <div className="flex flex-col items-center">
+    <div className={`p-3 rounded-primary`}>
+      <Icon size={64} className={fillClassName} />
     </div>
     <div className="flex items-center gap-2 text-sm">
+      {enabled && <PiCheck size={16} className={fillClassName} />}
+      {!enabled && <PiX size={16} className={fillClassName} />}
       <div className={labelClassName}>{label}</div>
     </div>
   </div>

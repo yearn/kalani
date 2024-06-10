@@ -41,7 +41,7 @@ export default function Vault() {
 
   return <main className={`
     relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
-    flex flex-col items-center justify-start`}>
+    flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
         <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
@@ -52,7 +52,9 @@ export default function Vault() {
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
         </div>
       </div>
-      <div className="w-1/2 h-48 flex items-center justify-center gap-10">
+      <div className={`
+        w-1/2 h-48 flex items-center justify-center justify-center gap-12
+        bg-neutral-950 border border-neutral-900 rounded-primary`}>
         <Badge label="Accountant" icon={PiCalculator} enabled={true} />
         <Badge label="Allocator" icon={PiScales} enabled={true} />
         <Badge label="yHaaS" icon={PiTractorFill} />

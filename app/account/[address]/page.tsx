@@ -30,11 +30,11 @@ export default function Page() {
           <ValueLabelPair value={String(user?.vaults.length ?? 0)} label="vaults" className="text-4xl" />
         </div>
       </div>
-      <Screen className={`
+      <div className={`
         w-1/2 h-48 flex items-center justify-center
-        bg-violet-400`}>
+        bg-neutral-950 border border-neutral-900 rounded-primary`}>
         <Pie data={pieData} size={200} />
-      </Screen>
+      </div>
     </div>
     {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} />)}
   </main>
