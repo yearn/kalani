@@ -1,13 +1,9 @@
 'use client'
 
-import { useParams } from 'next/navigation'
-import { EvmAddressSchema } from '@/lib/types'
 import ValueLabelPair from '@/components/ValueLabelPair'
 import { useVaultFromParams } from '@/hooks/useVault'
-import { fBps, fEvmAddress, fNumber, fPercent, fTokens } from '@/lib/format'
-import Screen from '@/components/Screen'
+import { fEvmAddress, fNumber, fPercent } from '@/lib/format'
 import { getChain } from '@/lib/chains'
-import Pie from './Pie'
 import { useMemo } from 'react'
 import { div, mulb } from '@/lib/bmath'
 import { fancy } from '@/lib/fancy'
@@ -15,6 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 import { PiCalculator, PiScales, PiTractorFill } from 'react-icons/pi'
 import Roles from './tabs/Roles'
 import Badge from './Badge'
+import Assets from './tabs/Assets'
+import Strategies from './tabs/Strategies'
+import Accountant from './tabs/Accountant'
+import Allocator from './tabs/Allocator'
+import Yhaas from './tabs/Yhaas'
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -40,7 +41,7 @@ export default function Vault() {
 
   return <main className={`
     relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
-    flex flex-col items-center justify-start gap-8`}>
+    flex flex-col items-center justify-start`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
         <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
@@ -52,8 +53,8 @@ export default function Vault() {
         </div>
       </div>
       <div className="w-1/2 h-48 flex items-center justify-center gap-10">
-        <Badge label="Allocator" icon={PiScales} enabled={true} />
         <Badge label="Accountant" icon={PiCalculator} enabled={true} />
+        <Badge label="Allocator" icon={PiScales} enabled={true} />
         <Badge label="yHaaS" icon={PiTractorFill} />
       </div>
     </div>
@@ -63,12 +64,15 @@ export default function Vault() {
         <TabsTrigger value="assets">Assets</TabsTrigger>
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
+        <TabsTrigger value="allocator">Allocator</TabsTrigger>
+        <TabsTrigger value="yhaas">yHaaS</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
-        <TabsTrigger value="depositors">Depositors</TabsTrigger>
       </TabsList>
-      <TabsContent value="assets">assets</TabsContent>
-      <TabsContent value="strategies">strategies</TabsContent>
-      <TabsContent value="accountant">accountant</TabsContent>
+      <TabsContent value="assets"><Assets /></TabsContent>
+      <TabsContent value="strategies"><Strategies /></TabsContent>
+      <TabsContent value="accountant"><Accountant /></TabsContent>
+      <TabsContent value="allocator"><Allocator /></TabsContent>
+      <TabsContent value="yhaas"><Yhaas /></TabsContent>
       <TabsContent value="roles"><Roles /></TabsContent>
     </Tabs>
 

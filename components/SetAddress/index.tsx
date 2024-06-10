@@ -8,7 +8,6 @@ import { getAddress, zeroAddress } from 'viem'
 import InputAddress from '@/components/InputAddress'
 import { InputAddressProvider, useInputAddress } from '@/components/InputAddress/provider'
 import { EvmAddress, EvmAddressSchema, PSEUDO_ROLES } from '@/lib/types'
-import { useMounted } from '@/hooks/useMounted'
 import { useIsRoleManager } from '@/hooks/useRoleManager'
 import { useWriteContract } from '@/hooks/useWriteContract'
 
@@ -82,11 +81,10 @@ function Component({
     isValid, setIsValid 
   } = useInputAddress()
 
-  useEffect(() => setNext(previous ?? ''), [previous])
+  useEffect(() => setNext(previous ?? ''), [setNext, previous])
 
   const changed = useMemo(() => Boolean(((previous || next) && (previous !== next))), [previous, next])
   const [error, setError] = useState<string | undefined>(undefined)
-  const mounted = useMounted()
 
   const { 
     simulation, write, confirmation, resolveToast
@@ -121,7 +119,7 @@ function Component({
   const disableInput = useMemo(() => 
     !permitted
     || multicall.isFetching,
-  [multicall])
+  [permitted, multicall])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -138,7 +136,7 @@ function Component({
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending),
-  [isValid, changed, simulation, write, confirmation])
+  [permitted, isValid, changed, simulation, write, confirmation])
 
   const onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)

@@ -17,10 +17,7 @@ export default function Page() {
       {
         loading: `Confirming transaction...`,
         success: () => `Transaction confirmed!`,
-        action: { 
-          label: 'View', 
-          onClick: () => window.open(`https://etherscan.io/tx/${txn_hash}`, '_blank') 
-        }
+        action: { label: 'View', onClick: () => {} }
       }
     )
   }, [toaston, setToaston, setResolveToast])

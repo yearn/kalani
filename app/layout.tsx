@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import Providers from './providers'
-import ScrollArea from '@/components/ScrollArea'
 import { Toaster } from '@/components/shadcn/sonner'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
@@ -20,11 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${mono.className}`}>
-      <body className={`font-mono`}>
+      <body className={`w-full h-screen overflow-x-hidden overflow-y-auto font-mono`}>
         <Providers>
-          <ScrollArea>{children}</ScrollArea>
-          <Toaster />
+          {children}
         </Providers>
+        <Toaster />
       </body>
     </html>
   )

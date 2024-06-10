@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import Toggle from './Toggle'
 import Button from '@/components/elements/Button'
-import { useMounted } from '@/hooks/useMounted'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../components/shadcn/accordion'
 import { fEvmAddress } from '@/lib/format'
 import Dot from './Dot'
@@ -72,7 +71,6 @@ export default function SetRoles({
   editAddress?: boolean,
   className?: string 
 }) {
-  const mounted = useMounted()
   const _isRoleManager = useIsRoleManager(vault)
   const { roles: previous, refetch } = usePrevious({ vault, account })
   const [next, setNext] = useState<{ [key: string]: boolean }>({})

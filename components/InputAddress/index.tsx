@@ -31,7 +31,7 @@ export default function InputAddress({
     onChange?.(e.target.value, EvmAddressSchema.safeParse(e.target.value).success)
   }, [setHasInput, setNext, setIsValid, onChange])
 
-  useEffect(() => setIsValid(EvmAddressSchema.safeParse(next).success), [next])
+  useEffect(() => setIsValid(EvmAddressSchema.safeParse(next).success), [setIsValid, next])
 
   return <div className={`grow group relative rounded-primary ${className}`}>
     <Input
