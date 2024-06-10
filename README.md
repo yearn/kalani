@@ -1,10 +1,10 @@
 # Kalani
-Vault automation droid
+Yearn vault automations
 
 ## lfg
 ```sh
-cp .env.example .env
-# configure .env
+cp packages/web/.env.example packages/web/.env
+# configure packages/web/.env
 bun install
 bun dev
 ```
@@ -14,3 +14,7 @@ Head to [http://localhost:3000](http://localhost:3000)
 ```sh
 bun run build
 ```
+
+## dev notes
+- use the phosphor icon set by default, https://react-icons.github.io/react-icons/icons/pi
+

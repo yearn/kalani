@@ -1,61 +1,65 @@
-import { join } from 'path'
 import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
+import Theme from 'tailwindcss/defaultTheme'
 
-const config: Config = {
-	presets: [require('@yearn-finance/web-lib/tailwind.config.cjs')],
+const config = {
+  darkMode: ['class'],
+  prefix: '',
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-		join(__dirname, 'node_modules', '@yearn-finance', 'web-lib', 'components', '**', '*.{js,ts,jsx,tsx}'),
-		join(__dirname, 'node_modules', '@yearn-finance', 'web-lib', 'contexts', '**', '*.{js,ts,jsx,tsx}'),
-		join(__dirname, 'node_modules', '@yearn-finance', 'web-lib', 'hooks', '**', '*.{js,ts,jsx,tsx}'),
-		join(__dirname, 'node_modules', '@yearn-finance', 'web-lib', 'icons', '**', '*.{js,ts,jsx,tsx}'),
-		join(__dirname, 'node_modules', '@yearn-finance', 'web-lib', 'utils', '**', '*.{js,ts,jsx,tsx}')
+    './app/**/*.{js,ts,jsx,tsx,mdx}'
+  ],
+  safelist: [
+    'scrollbar-thumb-pink-500'
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
-			borderRadius: {
-				DEFAULT: 'var(--default-rounded)'
-			},
-			colors: {
-				'orange': {
-					'50': '#fff1ed',
-					'100': '#ffded5',
-					'200': '#febcaa',
-					'300': '#fd9274',
-					'400': '#fb653c',
-					'500': '#f94716',
-					'600': '#ea3c0c',
-					'700': '#c2330c',
-					'800': '#9a2f12',
-					'900': '#7c2912',
-					'950': '#431407',
-					'1000': '#210903',
-					'2000': '#170602'
-				},
-				'violet': {
-					'50': '#f7f3ff',
-					'100': '#efe9fe',
-					'200': '#e2d6fe',
-					'300': '#cbb5fd',
-					'400': '#ad8bfa',
-					'500': '#8b5cf6',
-					'600': '#713aed',
-					'700': '#5e28d9',
-					'800': '#4e21b6',
-					'900': '#421d95',
-					'950': '#2a1065',
-				},
-			},
-			dropShadow: {
+      colors: {
+        primary: {
+          ...colors.orange, 
+          '1000': '#170602'
+        },
+        secondary: colors.violet
+      },
+
+      borderRadius: {
+        primary: Theme.borderRadius.xl
+      },
+
+      dropShadow: {
 				'fancy': [
 					'0 0 16px rgba(255, 255, 255, 0.16)',
 					'0 0 4px rgba(255, 255, 255, 0.1)'
 				]
-			}
+			},
+
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+
+      animation: {
+        'accordion-down': 'accordion-down 0.1s ease-out',
+        'accordion-up': 'accordion-up 0s ease-out',
+      },
     },
-	},
-  plugins: []
-}
+  },
+  plugins: [
+    require('tailwindcss-animate')
+  ],
+} satisfies Config
+
 export default config
