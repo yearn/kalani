@@ -175,11 +175,9 @@ body {
 			conic-gradient(
 				from 0deg at 50% 50%,
 				#7c3aed 0deg,
-				#f97316 60deg,
-				#f97316 120deg,
-				#c4b5fd 180deg,
-				#c4b5fd 240deg,
-				#7c3aed 300deg,
+				#c4b5fd 90deg,
+				#7c3aed 180deg,
+				#c4b5fd 270deg,
 				#7c3aed 360deg
 			);
 		animation: rotate 2s linear infinite;

@@ -5,8 +5,8 @@ type InputProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 }
 
 export const AnchorClassName = `
-underline underline-offset-8
-text-neutral-100 decoration-neutral-100/20
+underline decoration-neutral-900
+text-neutral-100 
 hover:text-secondary-300 hover:decoration-secondary-300
 active:text-secondary-400 active:decoration-secondary-400
 `

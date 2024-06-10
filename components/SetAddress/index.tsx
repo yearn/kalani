@@ -2,18 +2,15 @@
 
 import { z } from 'zod'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
-import { motion } from 'framer-motion'
-import { springs } from '@/lib/motion'
 import Button from '@/components/elements/Button'
-import { fEvmAddress } from '@/lib/format'
-import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
 import InputAddress from '@/components/InputAddress'
 import { InputAddressProvider, useInputAddress } from '@/components/InputAddress/provider'
-import ExploreHash from '../ExploreHash'
 import { EvmAddress, EvmAddressSchema, PSEUDO_ROLES } from '@/lib/types'
 import { useMounted } from '@/hooks/useMounted'
 import { useIsRoleManager } from '@/hooks/useRoleManager'
+import { useWriteContract } from '@/hooks/useWriteContract'
 
 function useWrite(
   contract: {
@@ -33,9 +30,9 @@ function useWrite(
     query: { enabled }
   }), [contract, next, enabled])
   const simulation = useSimulateContract(parameters)
-  const write = useWriteContract()
+  const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
-  return { simulation, write, confirmation }
+  return { simulation, write, confirmation, resolveToast }
 }
 
 function Component({
@@ -92,14 +89,15 @@ function Component({
   const mounted = useMounted()
 
   const { 
-    simulation, write, confirmation 
+    simulation, write, confirmation, resolveToast
   } = useWrite(contract, next, isConnected && changed && isValid)
 
   useEffect(() => {
     if (confirmation.isSuccess) {
       setPrevious(EvmAddressSchema.parse(next))
+      resolveToast()
     }
-  }, [confirmation, setPrevious, next])
+  }, [confirmation, setPrevious, next, resolveToast])
 
   const onChange = useCallback((next: string, isValid: boolean) => {
     setNext(next)
@@ -146,47 +144,11 @@ function Component({
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  const subtext = useMemo(() => {
-    if (error) return {
-      key: 'error',
-      text: <div className="text-red-400">{error}</div>
-    }
-
-    if (confirmation.isSuccess) return {
-      key: 'confirmed',
-      text: <ExploreHash hash={write.data!} message="Confirmed!" />
-    }
-
-    if (write.isSuccess && confirmation.isPending) return {
-      key: 'confirmation',
-      text: <ExploreHash hash={write.data!} message="Confirming..." />
-    }
-
-    if (previous && previous !== next) return {
-      key: 'next',
-      text: <div onClick={() => setNext(previous)} className="inline cursor-pointer">{`previously ${fEvmAddress(previous)}`}</div>
-    }
-
-    return {
-      key: 'default',
-      text: <>&nbsp;</>
-    }
-  }, [previous, next, write, confirmation, error])
-
   return <div className={`w-full flex flex-col gap-2 ${className}`}>
     <div className="text-neutral-400">{label}</div>
     <div className="flex items-center gap-4">
       <InputAddress onChange={onChange} theme={inputTheme} disabled={disableInput} />
       <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">{verb}</Button>
-    </div>
-    <div className={`pl-3 text-xs text-neutral-400`}>
-      <motion.div key={subtext.key}
-        transition={springs.roll}
-        initial={mounted ? { x: 40, opacity: 0 } : false}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: -40, opacity: 0 }}>
-        {subtext.text}
-      </motion.div>
     </div>
   </div>
 }

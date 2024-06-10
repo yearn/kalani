@@ -1,13 +1,10 @@
 import abis from '@/lib/abis'
-import { motion } from 'framer-motion'
-import { springs } from '@/lib/motion'
 import { EvmAddress, ROLES, enumerateEnum } from '@/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { UseSimulateContractParameters, UseWaitForTransactionReceiptReturnType, UseWriteContractReturnType, useAccount, useReadContract, useReadContracts, useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import Toggle from './Toggle'
 import Button from '@/components/elements/Button'
 import { useMounted } from '@/hooks/useMounted'
-import ExploreHash from '@/components/ExploreHash'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../components/shadcn/accordion'
 import { fEvmAddress } from '@/lib/format'
 import Dot from './Dot'
@@ -17,6 +14,7 @@ import { InputAddressProvider } from '@/components/InputAddress/provider'
 import { useIsRoleManager, useRoleManager } from '@/hooks/useRoleManager'
 import { zeroAddress } from 'viem'
 import Link from '@/components/elements/Link'
+import { useWriteContract } from '@/hooks/useWriteContract'
 
 function usePrevious({ 
   vault, account 
@@ -52,7 +50,6 @@ function useWrite({
   rolemask: bigint,
   enabled: boolean
 }) {
-
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     address: vault,
     abi: abis.vault,
@@ -62,41 +59,9 @@ function useWrite({
   }), [vault, account, rolemask, enabled])
 
   const simulation = useSimulateContract(parameters)
-  const write = useWriteContract()
+  const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
-  return { simulation, write, confirmation }
-}
-
-function useSubtext({
-  write,
-  confirmation,
-  error
-}: {
-  write: UseWriteContractReturnType,
-  confirmation: UseWaitForTransactionReceiptReturnType,
-  error?: string
-}) {
-  return useMemo(() => {
-    if (error) return {
-      key: 'error',
-      text: <div className="text-red-400">{error}</div>
-    }
-
-    if (confirmation.isSuccess) return {
-      key: 'confirmed',
-      text: <ExploreHash hash={write.data!} message="Confirmed!" />
-    }
-
-    if (write.isSuccess && confirmation.isPending) return {
-      key: 'confirmation',
-      text: <ExploreHash hash={write.data!} message="Confirming..." />
-    }
-
-    return {
-      key: 'default',
-      text: <>&nbsp;</>
-    }
-  }, [error, confirmation, write])
+  return { simulation, write, confirmation, resolveToast }
 }
 
 export default function SetRoles({
@@ -127,7 +92,7 @@ export default function SetRoles({
   }, [])
 
   const {
-    simulation, write, confirmation 
+    simulation, write, confirmation, resolveToast
   } = useWrite({ 
     vault, 
     account: account ?? zeroAddress, 
@@ -145,8 +110,11 @@ export default function SetRoles({
   }, [simulation, setError])
  
   useEffect(() => {
-    if (confirmation.isSuccess) refetch()
-  }, [confirmation, refetch])
+    if (confirmation.isSuccess) {
+      resolveToast()
+      refetch()
+    }
+  }, [confirmation, resolveToast, refetch])
 
   const disableReset = useMemo(() => !(_isRoleManager && changed), [_isRoleManager, changed])
   const disableGesture = useMemo(() => !_isRoleManager, [_isRoleManager])
@@ -171,8 +139,6 @@ export default function SetRoles({
   const save = useCallback(() => {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
-
-  const subtext = useSubtext({ write, confirmation, error })
 
   const roleManager = useRoleManager(vault)
   const isRoleManager = useCallback((address: EvmAddress) => {
@@ -208,15 +174,6 @@ export default function SetRoles({
           <Button disabled={disableReset} onClick={reset}>Reset</Button>
           <Button disabled={disableGesture} onClick={gesture} className="w-32">{gestureLabel}</Button>
           <Button disabled={disableSave} theme={saveTheme} onClick={save}>Save</Button>
-        </div>
-        <div className={`pl-3 flex justify-end text-xs text-neutral-400`}>
-          <motion.div key={subtext.key}
-            transition={springs.roll}
-            initial={mounted ? { x: 40, opacity: 0 } : false}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -40, opacity: 0 }}>
-            {subtext.text}
-          </motion.div>
         </div>
       </AccordionContent>
     </AccordionItem>
