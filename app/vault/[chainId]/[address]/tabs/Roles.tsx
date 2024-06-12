@@ -46,8 +46,8 @@ export default function Roles() {
 
   return <div className="flex flex-col gap-8">
     <div>
-      {accounts.map(account => <SetRoles 
-        key={account.address} 
+      {accounts.map((account, index) => <SetRoles 
+        key={index} 
         vault={account.vault} 
         account={account.address}
         editAddress={account.editAddress}

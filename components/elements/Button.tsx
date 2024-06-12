@@ -1,5 +1,5 @@
 import { ThemeName } from '@/lib/types'
-import React, { forwardRef, ButtonHTMLAttributes, useMemo } from 'react'
+import React, { forwardRef, ButtonHTMLAttributes } from 'react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string
