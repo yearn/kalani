@@ -64,7 +64,8 @@ function Component({
   ]})
 
   useEffect(() => {
-    if (multicall.isSuccess) {
+    if (multicall.data?.every(d => d.status === 'success')) {
+      console.log('multicall', multicall)
       setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
       let mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
       if (isRoleManager) { mask |= PSEUDO_ROLES.ROLE_MANAGER }

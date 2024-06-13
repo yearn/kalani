@@ -8,6 +8,8 @@ import abis from '@/lib/abis'
 import { z } from 'zod'
 import { getAddress, zeroAddress } from 'viem'
 import { useWriteContract } from '@/hooks/useWriteContract'
+import { Vault, withVault } from '@/hooks/useVault'
+import Manage from './Manage'
 
 function useWrite(
   contract: {
@@ -32,7 +34,7 @@ function useWrite(
   return { simulation, write, confirmation, resolveToast }
 }
 
-export default function SetAccountant({ vault }: { vault: EvmAddress }) {
+function Accountant({ vault }: { vault: Vault }) {
   const { isConnected, chainId, address } = useAccount()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
   const [next, setNext] = useState<string | undefined>(undefined)
@@ -47,12 +49,12 @@ export default function SetAccountant({ vault }: { vault: EvmAddress }) {
   }, [isConnected, chainId])
 
   const multicall = useReadContracts({ contracts: [
-    { address: vault, abi: abis.vault, functionName: 'accountant' },
-    { address: vault, abi: abis.vault, functionName: 'roles', args: [address ?? zeroAddress] }
+    { address: vault.address, abi: abis.vault, functionName: 'accountant' },
+    { address: vault.address, abi: abis.vault, functionName: 'roles', args: [address ?? zeroAddress] }
   ]})
 
   useEffect(() => {
-    if (multicall.isSuccess) {
+    if (multicall.data?.every(d => d.status === 'success')) {
       setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
       let mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
       setRoles(mask)
@@ -71,7 +73,7 @@ export default function SetAccountant({ vault }: { vault: EvmAddress }) {
     simulation, write, confirmation, resolveToast
   } = useWrite({
     abi: abis.vault,
-    address: vault,
+    address: vault.address,
     get: 'accountant',
     set: 'set_accountant'
   }, next, isConnected && changed && isNextValid)
@@ -116,7 +118,6 @@ export default function SetAccountant({ vault }: { vault: EvmAddress }) {
   }, [write, simulation])
 
   return <div className="w-full flex flex-col gap-2">
-    <div className="text-neutral-400">Accountant</div>
     <div className="flex items-center gap-2">
       <div className={`grow theme-${inputTheme} p-1 rounded-primary`}>
         <Combo 
@@ -130,5 +131,8 @@ export default function SetAccountant({ vault }: { vault: EvmAddress }) {
       </div>
       <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">Set</Button>
     </div>
+    {next && <Manage address={next} />}
   </div>
 }
+
+export default withVault(Accountant)

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Transition } from '@headlessui/react'
 import { InputClassName } from '@/components/elements/Input'
 import { CheckIcon, ChevronDown, CircleAlert } from 'lucide-react'
-import { EvmAddress, EvmAddressSchema, ThemeName } from '@/lib/types'
+import { EvmAddress, EvmAddressSchema } from '@/lib/types'
 
 export function Combo({ 
   previous,

@@ -1,7 +1,5 @@
 'use client'
 
-// import SetAccountant from '@/app/vault/[chainId]/[address]/SetAccountant'
-import SetAccountant from '@/app/forexample/SetAccountant'
 import Button from '@/components/elements/Button'
 import SetRoles from '@/app/vault/[chainId]/[address]/SetRoles'
 import { useCallback, useEffect, useState } from 'react'
@@ -30,9 +28,6 @@ export default function Page() {
 
   return <main className={`min-h-screen pt-32 pb-48 flex items-center justify-center`}>
     <div className="w-[740px] flex flex-col gap-16">
-      <div>
-        <SetAccountant vault={'0x28F53bA70E5c8ce8D03b1FaD41E9dF11Bb646c36'} />
-      </div>
       <div>
         <Button onClick={onClick} theme={toaston ? 'confirm' : 'default'}>toast</Button>
       </div>

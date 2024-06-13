@@ -48,13 +48,12 @@ export default function Vault() {
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
           [{getChain(vault.chainId).name}]
-          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-3xl" />
-          <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-3xl" />
+          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
+          <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />
         </div>
       </div>
       <div className={`
-        w-1/2 h-48 flex items-center justify-center justify-center gap-12
-        bg-neutral-950 border border-neutral-900 rounded-primary`}>
+        w-1/2 h-48 flex items-center justify-center justify-center gap-12`}>
         <Badge label="Accountant" icon={PiCalculator} enabled={true} />
         <Badge label="Allocator" icon={PiScales} enabled={true} />
         <Badge label="yHaaS" icon={PiTractorFill} />

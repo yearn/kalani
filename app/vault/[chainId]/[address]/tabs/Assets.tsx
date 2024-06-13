@@ -1,18 +1,15 @@
-import { useVaultFromParams } from '@/hooks/useVault'
+import { Vault, withVault } from '@/hooks/useVault'
 import { div, mulb } from '@/lib/bmath'
 import { fBps, fPercent, fTokens } from '@/lib/format'
 import { useMemo } from 'react'
 
-export default function Assets() {
-  const vault = useVaultFromParams()
+function Assets({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const allocated = useMemo(() => vault?.strategies.reduce((acc, strategy) => acc + Number(strategy.targetDebtRatio), 0) ?? 0, [vault])
   const deployed = useMemo(() => {
     const totalAllocated = mulb(vault?.totalAssets ?? 0n, allocated / 10_000)
     return div(vault?.totalDebt ?? 0n, totalAllocated)
   }, [vault, allocated])
-
-  if (!vault) return <></>
 
   return <div>
     <div className={`
@@ -48,3 +45,5 @@ export default function Assets() {
     </div>
   </div>
 }
+
+export default withVault(Assets)

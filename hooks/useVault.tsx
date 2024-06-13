@@ -149,3 +149,11 @@ export function useVault({ chainId, address }: { chainId: number, address: `0x${
     accounts: data.data.accounts,
   })
 }
+
+export function withVault(WrappedComponent: React.ComponentType<{ vault: Vault }>) {
+  return function ComponentWithVault(props: any) {
+    const vault = useVaultFromParams()
+    if (!vault) return <></>
+    return <WrappedComponent vault={vault} {...props} />
+  }
+}

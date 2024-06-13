@@ -31,8 +31,7 @@ export default function Page() {
         </div>
       </div>
       <div className={`
-        w-1/2 h-48 flex items-center justify-center
-        bg-neutral-950 border border-neutral-900 rounded-primary`}>
+        w-1/2 h-48 flex items-center justify-center`}>
         <Pie data={pieData} size={200} />
       </div>
     </div>

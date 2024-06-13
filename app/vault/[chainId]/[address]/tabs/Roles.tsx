@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { useVaultFromParams } from '@/hooks/useVault'
+import { Vault, withVault } from '@/hooks/useVault'
 import TransferRoleManager from '../TransferRoleManager'
 import Button from '@/components/elements/Button'
 import { PiPlus } from 'react-icons/pi'
@@ -18,10 +18,9 @@ const AccountRoleItemSchema = z.object({
 
 type AccountRoleItem = z.infer<typeof AccountRoleItemSchema>
 
-export default function Roles() {
+function Roles({ vault }: { vault: Vault }) {
   const [newAccounts, setNewAccounts] = useState<AccountRoleItem[]>([])
-  const vault = useVaultFromParams()
-  const isRoleManager = useIsRoleManager(vault?.address)
+  const isRoleManager = useIsRoleManager(vault.address)
 
   const accounts = useMemo<AccountRoleItem[]>(() => {
     const previousAccounts = AccountRoleItemSchema.array().parse(
@@ -42,8 +41,6 @@ export default function Roles() {
     }
   }, [vault, setNewAccounts])
 
-  if (!vault) return <></>
-
   return <div className="flex flex-col gap-8">
     <div>
       {accounts.map((account, index) => <SetRoles 
@@ -61,3 +58,5 @@ export default function Roles() {
     </div>
   </div>
 }
+
+export default withVault(Roles)
