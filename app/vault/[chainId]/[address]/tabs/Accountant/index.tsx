@@ -1,4 +1,4 @@
-import { EvmAddress, EvmAddressSchema, ROLES } from '@/lib/types'
+import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses } from '@/lib/types'
 import accountants, { TaggedAccountant } from './accountants'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { getAddress, zeroAddress } from 'viem'
 import { useWriteContract } from '@/hooks/useWriteContract'
 import { Vault, withVault } from '@/hooks/useVault'
-import Manage from './Manage'
+import Details from './Details'
 
 function useWrite(
   contract: {
@@ -66,8 +66,12 @@ function Accountant({ vault }: { vault: Vault }) {
 
   const permitted = useMemo(() => Boolean(roles && (roles & ROLES.ACCOUNTANT_MANAGER) === ROLES.ACCOUNTANT_MANAGER), [roles])
 
-  useEffect(() => setNext(previous ?? ''), [setNext, previous])
-  const changed = useMemo(() => Boolean(((previous || next) && (previous !== next))), [previous, next])
+  useEffect(() => {
+    setNext(previous ?? '')
+    setIsNextValid(!!previous)
+  }, [setNext, setIsNextValid, previous])
+
+  const changed = useMemo(() => Boolean(((previous || next) && !compareEvmAddresses(previous, next))), [previous, next])
 
   const { 
     simulation, write, confirmation, resolveToast
@@ -120,7 +124,7 @@ function Accountant({ vault }: { vault: Vault }) {
   return <div className="w-full flex flex-col gap-2">
     <div className="flex items-center gap-2">
       <div className={`grow theme-${inputTheme} p-1 rounded-primary`}>
-        <Combo 
+        <Combo
           previous={previous}
           next={next}
           setNext={setNext}
@@ -131,7 +135,7 @@ function Accountant({ vault }: { vault: Vault }) {
       </div>
       <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">Set</Button>
     </div>
-    {next && <Manage address={next} />}
+    {isNextValid && <Details accountant={EvmAddressSchema.parse(next)} />}
   </div>
 }
 

@@ -126,7 +126,7 @@ export default function SetRoles({
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending),
-  [account, _isRoleManager, changed, simulation, write, confirmation])
+  [account, _isRoleManager, changed, isNewAccountValid, simulation, write, confirmation])
 
   const saveTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'

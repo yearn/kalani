@@ -8,6 +8,15 @@ export const zvaultType = z.enum(['vault', 'strategy'])
 
 export const EvmAddressSchema = zevmaddressstring.transform(s => getAddress(s))
 export type EvmAddress = z.infer<typeof EvmAddressSchema>
+export function compareEvmAddresses(a?: string, b?: string) {
+  if (!a || !b) return false
+
+  try {
+    return EvmAddressSchema.parse(getAddress(a)) === EvmAddressSchema.parse(getAddress(b))
+  } catch {
+    return false
+  }
+}
 
 export const ROLES = {
   ADD_STRATEGY_MANAGER: 2n ** 0n,

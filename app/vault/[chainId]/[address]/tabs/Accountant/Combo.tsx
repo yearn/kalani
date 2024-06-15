@@ -37,7 +37,7 @@ export function Combo({
       setHasInput(value.length > 0)
       setIsValid(EvmAddressSchema.safeParse(value).success)
     }
-  }, [setNext])
+  }, [setNext, setIsValid])
 
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -45,16 +45,17 @@ export function Combo({
     setNext(value)
     setHasInput(value.length > 0)
     setIsValid(EvmAddressSchema.safeParse(value).success)
-  }, [setNext])
+  }, [setNext, setIsValid])
 
   useEffect(() => {
     setIsValid(EvmAddressSchema.safeParse(query).success)
-  }, [query])
+  }, [setIsValid, query])
 
   return <Combobox disabled={disabled} value={next ?? previous ?? ''} onChange={onSelect}>
     <div className="relative">
       <ComboboxInput
         placeholder="0x"
+        maxLength={42}
         className={InputClassName}
         value={next ?? previous ?? ''}
         displayValue={(option: EvmAddress | null | undefined) => option ?? ''}

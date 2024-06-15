@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Input from '../elements/Input'
+import Input from './elements/Input'
 import { EvmAddress, EvmAddressSchema, ThemeName } from '@/lib/types'
 import { PiWarningCircle } from 'react-icons/pi'
 

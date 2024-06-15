@@ -1,13 +1,11 @@
 'use client'
 
-import { z } from 'zod'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '@/components/elements/Button'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
 import InputAddress from '@/components/InputAddress'
-import { EvmAddress, EvmAddressSchema, PSEUDO_ROLES } from '@/lib/types'
-import { useIsRoleManager } from '@/hooks/useRoleManager'
+import { EvmAddress, EvmAddressSchema, compareEvmAddresses } from '@/lib/types'
 import { useWriteContract } from '@/hooks/useWriteContract'
 
 function useWrite(
@@ -16,7 +14,7 @@ function useWrite(
     abi: any,
     get: string,
     set: string
-  }, 
+  },
   next: string | undefined, 
   enabled: boolean
 ) {
@@ -33,16 +31,14 @@ function useWrite(
   return { simulation, write, confirmation, resolveToast }
 }
 
-function Component({
-  label,
+export default function SetAddress({
   verb,
-  roleMask,
+  permitted,
   contract,
   className
 }: {
-  label: ReactNode,
   verb: string,
-  roleMask: bigint,
+  permitted: boolean,
   contract: {
     address: EvmAddress,
     abi: any,
@@ -51,36 +47,26 @@ function Component({
   },
   className?: string 
 }) {
-  const { isConnected, address } = useAccount()
+  const { isConnected } = useAccount()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
   const [next, setNext] = useState<string | undefined>(undefined)
   const [isNextValid, setIsNextValid] = useState<boolean>(false)
-  const [roles, setRoles] = useState<bigint | undefined>(undefined)
-  const isRoleManager = useIsRoleManager(contract.address)
 
   const multicall = useReadContracts({ contracts: [
     { address: contract.address, abi: contract.abi, functionName: contract.get },
-    { address: contract.address, abi: contract.abi, functionName: 'roles', args: [address ?? zeroAddress] }
   ]})
 
   useEffect(() => {
     if (multicall.data?.every(d => d.status === 'success')) {
-      console.log('multicall', multicall)
       setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
-      let mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
-      if (isRoleManager) { mask |= PSEUDO_ROLES.ROLE_MANAGER }
-      setRoles(mask)
     } else {
       setPrevious(undefined)
-      setRoles(undefined)
     }
-  }, [isRoleManager, multicall, setPrevious, setRoles])
-
-  const permitted = useMemo(() => Boolean(roles && (roles & roleMask) === roleMask), [roles, roleMask])
+  }, [multicall, setPrevious])
 
   useEffect(() => setNext(previous ?? ''), [setNext, previous])
 
-  const changed = useMemo(() => Boolean(((previous || next) && (previous !== next))), [previous, next])
+  const changed = useMemo(() => Boolean(((previous || next) && !compareEvmAddresses(previous, next))), [previous, next])
   const [error, setError] = useState<string | undefined>(undefined)
 
   const { 
@@ -140,7 +126,6 @@ function Component({
   }, [write, simulation])
 
   return <div className={`w-full flex flex-col gap-2 ${className}`}>
-    <div className="text-neutral-400">{label}</div>
     <div className="flex items-center gap-4">
       <InputAddress 
         previous={previous}
@@ -154,20 +139,4 @@ function Component({
       <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">{verb}</Button>
     </div>
   </div>
-}
-
-export default function SetAddress(props: {
-  label: ReactNode,
-  verb: string,
-  roleMask: bigint,
-  contract: {
-    address: EvmAddress,
-    abi: any,
-    get: string,
-    set: string
-  },
-  disabled?: boolean,
-  className?: string 
-}) {
-  return <Component {...props} />
 }
