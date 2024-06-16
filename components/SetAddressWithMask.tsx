@@ -150,7 +150,7 @@ export default function SetAddress({
         onChange={onChange} 
         theme={inputTheme} 
         disabled={disableInput} />
-      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">{verb}</Button>
+      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">{verb}</Button>
     </div>
   </div>
 }

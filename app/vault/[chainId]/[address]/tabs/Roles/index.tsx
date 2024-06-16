@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { Vault, withVault } from '@/hooks/useVault'
-import TransferRoleManager from '../TransferRoleManager'
+import TransferRoleManager from './TransferRoleManager'
 import Button from '@/components/elements/Button'
 import { PiPlus } from 'react-icons/pi'
 import { useIsRoleManager } from '@/hooks/useRoleManager'
-import SetRoles from '../SetRoles'
+import SetRoles from './SetRoles'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmAddressSchema } from '@/lib/types'
 

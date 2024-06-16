@@ -1,5 +1,5 @@
 import abis from '@/lib/abis'
-import SetAddress from '../../../../components/SetAddress'
+import SetAddress from '../../../../../../components/SetAddress'
 import { EvmAddress, PSEUDO_ROLES } from '@/lib/types'
 import { PiStarFill } from 'react-icons/pi'
 

@@ -47,7 +47,9 @@ export default function Vault() {
         <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
-          [{getChain(vault.chainId).name}]
+          <div>
+            <div>[{getChain(vault.chainId).name}]</div>
+          </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />
         </div>

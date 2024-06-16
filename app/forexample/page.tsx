@@ -1,7 +1,7 @@
 'use client'
 
 import Button from '@/components/elements/Button'
-import SetRoles from '@/app/vault/[chainId]/[address]/SetRoles'
+import SetRoles from '@/app/vault/[chainId]/[address]/tabs/Roles/SetRoles'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import TransferFeeManager from '../vault/[chainId]/[address]/tabs/Accountant/TransferFeeManager'

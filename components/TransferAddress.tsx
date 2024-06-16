@@ -188,7 +188,7 @@ export default function TransferAddress({
         onChange={onChange} 
         theme={inputTheme} 
         disabled={disableInput} />
-      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="py-6">
+      <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">
         {verb}
       </Button>
     </div>
