@@ -12,6 +12,8 @@ const StrategySchema = z.object({
   targetDebtRatio: z.number()
 })
 
+export type Strategy = z.infer<typeof StrategySchema>
+
 export const VaultSchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,

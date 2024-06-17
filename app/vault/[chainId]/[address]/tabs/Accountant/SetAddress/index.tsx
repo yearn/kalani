@@ -11,6 +11,9 @@ import abis from '@/lib/abis'
 import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
 import { useWriteContract } from '@/hooks/useWriteContract'
+import { PiArrowRight } from 'react-icons/pi'
+import Link from '@/components/elements/Link'
+import { fEvmAddress } from '@/lib/format'
 
 function useWrite(
   contract: {
@@ -37,12 +40,15 @@ function useWrite(
 
 function SetAddress({ 
   next, setNext,
-  isNextValid, setIsNextValid
-}: { 
+  isNextValid, setIsNextValid,
+  changed, setChanged
+}: {
   next: string | undefined,
   setNext: (next: string | undefined) => void,
   isNextValid: boolean,
-  setIsNextValid: (isNextValid: boolean) => void
+  setIsNextValid: (isNextValid: boolean) => void,
+  changed: boolean,
+  setChanged: (changed: boolean) => void
 }) {
   const { isConnected, chainId, address } = useAccount()
   const vault = useVaultFromParams()
@@ -79,7 +85,9 @@ function SetAddress({
     setIsNextValid(!!previous)
   }, [setNext, setIsNextValid, previous])
 
-  const changed = useMemo(() => Boolean(((previous || next) && !compareEvmAddresses(previous, next))), [previous, next])
+  useEffect(() => {
+    setChanged(Boolean(((previous || next) && !compareEvmAddresses(previous, next))))
+  }, [previous, next, setChanged])
 
   const { 
     simulation, write, confirmation, resolveToast
@@ -129,22 +137,28 @@ function SetAddress({
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  if (!vault) return <></>
-
   return <Section>
     <FieldLabelPair label="Accountant">
-      <div className="flex items-center gap-2">
-        <div className={`grow theme-${inputTheme} p-1 rounded-primary`}>
-          <Combo
-            previous={previous}
-            next={next}
-            setNext={setNext}
-            isValid={isNextValid}
-            setIsValid={setIsNextValid}
-            options={filter.map(o => o.address)} 
-            disabled={disableInput} />
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <div className={`grow theme-${inputTheme} p-1 rounded-primary`}>
+            <Combo
+              previous={previous}
+              next={next}
+              setNext={setNext}
+              isValid={isNextValid}
+              setIsValid={setIsNextValid}
+              options={filter.map(o => o.address)}
+              disabled={disableInput} />
+          </div>
+          <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">Set</Button>
         </div>
-        <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">Set</Button>
+        <div className="pl-3">
+          {isNextValid && <Link href={`/accountant/${chainId}/${next}`} className="inline-flex items-center gap-2">
+            Manage {fEvmAddress(EvmAddressSchema.parse(next))}
+          </Link>}
+          {!isNextValid && <div>&nbsp;</div>}
+        </div>
       </div>
     </FieldLabelPair>
   </Section>

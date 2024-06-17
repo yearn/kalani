@@ -15,7 +15,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, c
     active:text-violet-400 active:border-violet-400
     disabled:bg-neutral-950 disabled:text-neutral-600 
     disabled:cursor-default disabled:border-transparent
-    cursor-pointer rounded-primary
+    cursor-pointer rounded-primary whitespace-nowrap
     ${`theme-${theme ?? 'default'}`}
     ${className}`}>
     {children}
