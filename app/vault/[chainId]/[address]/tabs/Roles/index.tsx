@@ -7,6 +7,7 @@ import { useIsRoleManager } from '@/hooks/useRoleManager'
 import SetRoles from './SetRoles'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmAddressSchema } from '@/lib/types'
+import FieldLabelPair from '@/components/FieldLabelPair'
 
 const AccountRoleItemSchema = z.object({
   chainId: z.number(),
@@ -54,7 +55,9 @@ function Roles({ vault }: { vault: Vault }) {
       <Button onClick={addAccount} disabled={!isRoleManager}><PiPlus /></Button>
     </div>
     <div className="p-8 border border-neutral-900 rounded-primary">
-      <TransferRoleManager vault={vault.address} />
+      <FieldLabelPair label="Role Manager">
+        <TransferRoleManager vault={vault.address} />
+      </FieldLabelPair>
     </div>
   </div>
 }

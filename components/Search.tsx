@@ -33,7 +33,7 @@ export default function Search({ onSearch, className }: { onSearch?: (q: string)
   }, [setHasInput, setIsValid])
 
   return <div className={`group relative ${className}`}>
-    <Input ref={ref} type="text" onChange={onChange} placeholder={'Search accounts by address'} className="w-full" />
+    <Input ref={ref} type="text" onChange={onChange} maxLength={42} placeholder={'Search by address'} className="w-full" />
     {!hasInput && <div className={`
       absolute top-0 right-4 h-full flex items-center text-neutral-800`}>/</div>}
 

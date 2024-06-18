@@ -2,7 +2,7 @@ import { EvmAddressSchema } from '@/lib/types'
 import { useState } from 'react'
 import { Vault, withVault } from '@/hooks/useVault'
 import SetAddress from './SetAddress'
-import Admins from './Admins'
+import Admins from '../../../../../accountant/[chainId]/[address]/Admins'
 import Fees from './Fees'
 import { useReadContract } from 'wagmi'
 import abis from '@/lib/abis'
@@ -32,8 +32,7 @@ function Accountant({ vault }: { vault: Vault }) {
       <Button className="w-field-btn h-field-btn">Add</Button>
     </Section>}
 
-    {/* {accounted.data && <Fees vault={vault} accountant={EvmAddressSchema.parse(next)} />}
-    {isNextValid && <Admins accountant={EvmAddressSchema.parse(next)} />} */}
+    {accounted.data && <Fees vault={vault} accountant={EvmAddressSchema.parse(next)} />}
   </div>
 }
 

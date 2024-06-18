@@ -68,7 +68,7 @@ export default function Vault() {
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
         <TabsTrigger value="allocator">Allocator</TabsTrigger>
-        <TabsTrigger value="yhaas">yHaaS</TabsTrigger>
+        <TabsTrigger value="yhaas">Reports</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
       </TabsList>
       <TabsContent value="assets"><Assets /></TabsContent>

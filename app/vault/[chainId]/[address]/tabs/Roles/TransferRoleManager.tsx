@@ -1,29 +1,32 @@
 import abis from '@/lib/abis'
-import SetAddress from '../../../../../../components/SetAddress'
-import { EvmAddress, PSEUDO_ROLES } from '@/lib/types'
-import { PiStarFill } from 'react-icons/pi'
-
-// export default function TransferRoleManager({ vault }: { vault: EvmAddress }) {
-//   return <SetAddress 
-//     label={<div className="flex items-center gap-2"><PiStarFill className="fill-primary-300" /><div>Role Manager</div></div>} 
-//     verb={'Transfer'}
-//     roleMask={PSEUDO_ROLES.ROLE_MANAGER}
-//     contract={{
-//       address: vault,
-//       abi: abis.vault,
-//       get: 'role_manager',
-//       set: 'transfer_role_manager'
-//   }}/>
-// }
+import TransferAddress from '@/components/TransferAddress'
+import { EvmAddress } from '@/lib/types'
+import { useAccount, useReadContract } from 'wagmi'
+import { useMemo } from 'react'
 
 export default function TransferRoleManager({ vault }: { vault: EvmAddress }) {
-  return <SetAddress 
-    verb={'Transfer'}
-    permitted={true}
+  const { address } = useAccount()
+
+  const roleManager = useReadContract({
+    address: vault,
+    abi: abis.vault,
+    functionName: 'role_manager'
+  })
+
+  const permitted = useMemo(() => {
+    return roleManager.data === address
+  }, [address, roleManager])
+
+  return <TransferAddress 
+    transferPermitted={permitted}
+    refetchTransferPermitted={roleManager.refetch}
     contract={{
       address: vault,
       abi: abis.vault,
-      get: 'role_manager',
-      set: 'transfer_role_manager'
-  }}/>
+      current: 'role_manager',
+      propose: 'transfer_role_manager',
+      proposal: 'future_role_manager',
+      accept: 'accept_role_manager'
+    }}
+  />
 }

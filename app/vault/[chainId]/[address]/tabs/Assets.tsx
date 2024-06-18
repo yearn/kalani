@@ -14,7 +14,7 @@ function Assets({ vault }: { vault: Vault }) {
   return <div>
     <div className={`
       w-1/2 h-full p-4`}>
-      <table className="table-auto w-full">
+      <table className="table-auto w-full border-separate border-spacing-2">
         <tbody>
           <tr>
             <td className="text-xl">Total assets</td>

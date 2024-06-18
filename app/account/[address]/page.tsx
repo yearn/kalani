@@ -5,7 +5,6 @@ import { fEvmAddress, fNumber } from '@/lib/format'
 import { EvmAddressSchema } from '@/lib/types'
 import { useParams } from 'next/navigation'
 import ValueLabelPair from '../../../components/ValueLabelPair'
-import Screen from '@/components/Screen'
 import Pie from './Pie'
 import Tile from './Tile'
 
@@ -35,6 +34,6 @@ export default function Page() {
         <Pie data={pieData} size={200} />
       </div>
     </div>
-    {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} />)}
+    {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} account={account} />)}
   </main>
 }
