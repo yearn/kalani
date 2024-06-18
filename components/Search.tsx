@@ -27,7 +27,6 @@ export default function Search({ onSearch, className }: { onSearch?: (q: string)
   }, [ref, isConnected, address, setHasInput, setIsValid])
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('onChange', e.target.value)
     setHasInput(e.target.value.length > 0)
     setIsValid(EvmAddressSchema.safeParse(e.target.value).success)
   }, [setHasInput, setIsValid])

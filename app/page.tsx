@@ -5,13 +5,21 @@ import Wordmark from '@/components/Wordmark'
 import Search from '@/components/Search'
 import { useCallback } from 'react'
 import Screen from '@/components/Screen'
+import { useThings } from '@/hooks/useThings'
+import { compareEvmAddresses } from '@/lib/types'
 
 export default function Home() {
   const router = useRouter()
+  const things = useThings()
 
   const onSearch = useCallback((q: string) => {
-    router.push(`/account/${q}`)
-  }, [router])
+    const [first] = things.filter(t => compareEvmAddresses(t.address, q))
+    if (first) {
+      return router.push(`/${first.label}/${first.chainId}/${first.address}`)
+    } else {
+      router.push(`/account/${q}`)
+    }
+  }, [router, things])
 
   return <main className="relative w-full min-h-screen">
     <div className={`
