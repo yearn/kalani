@@ -106,8 +106,8 @@ function FeesPerStrategy({
       </FieldLabelPair>
     </div>
     <div className="flex justify-end gap-4">
-      <Button className="h-field-btn">Remove custom config</Button>
-      <Button className="h-field-btn">Update default config</Button>
+      <Button className="h-field-btn" h={'secondary'}>Remove custom config</Button>
+      <Button className="h-field-btn" h={'secondary'}>Update default config</Button>
       <Button className="h-field-btn">Create custom config</Button>
     </div>
   </Section>

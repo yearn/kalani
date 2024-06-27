@@ -52,7 +52,7 @@ function Roles({ vault }: { vault: Vault }) {
       />)}
     </div>
     <div className="flex justify-end">
-      <Button onClick={addAccount} disabled={!isRoleManager}><PiPlus /></Button>
+      <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
     </div>
     <div className="p-8 border border-neutral-900 rounded-primary">
       <FieldLabelPair label="Role Manager">

@@ -1,7 +1,7 @@
 import { getAddress } from 'viem'
 import { z } from 'zod'
 
-export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active'
+export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active' | 'secondary'
 
 export const zevmaddressstring = z.custom<`0x${string}`>((val: any) => /^0x[a-fA-F0-9]{40}$/.test(val))
 export const zvaultType = z.enum(['vault', 'strategy'])
@@ -55,3 +55,24 @@ export const AccountRoleSchema = z.object({
 })
 
 export type AccountRole = z.infer<typeof AccountRoleSchema>
+
+export const IndexedItemSchema = z.object({
+  label: z.enum(["vault", "strategy", "erc4626", "accountant"]),
+  chainId: z.number(),
+  address: z.string(),
+  name: z.string().optional(),
+  nameLower: z.string().optional(),
+  strategies: z.preprocess(
+    (val) => (val === null ? undefined : val),
+    z.array(z.string()).optional()
+  ),
+  token: z.object({
+    address: z.string(),
+    name: z.string(),
+    symbol: z.string()
+  }).optional(),
+  tvl: z.number().optional(),
+  addressIndex: z.string()
+})
+
+export type IndexedItem = z.infer<typeof IndexedItemSchema>

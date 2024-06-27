@@ -175,8 +175,8 @@ export default function SetRoles({
           )}
         </div>
         <div className="flex items-center justify-end gap-4">
-          <Button disabled={disableReset} onClick={reset}>Reset</Button>
-          <Button disabled={disableGesture} onClick={gesture} className="w-32">{gestureLabel}</Button>
+          <Button disabled={disableReset} onClick={reset} h={'secondary'}>Reset</Button>
+          <Button disabled={disableGesture} onClick={gesture}  h={'secondary'} className="w-32">{gestureLabel}</Button>
           <Button disabled={disableSave} theme={saveTheme} onClick={save}>Save</Button>
         </div>
       </AccordionContent>

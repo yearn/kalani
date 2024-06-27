@@ -4,7 +4,7 @@ import Providers from './providers'
 import { Toaster } from '@/components/shadcn/sonner'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
-import Bg from './Bg'
+import Bg from '../components/Bg'
 
 const mono = JetBrains_Mono({ subsets: ['latin'] })
 
