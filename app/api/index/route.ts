@@ -38,7 +38,6 @@ function isIterable(obj: any): boolean {
   return obj != null && typeof obj[Symbol.iterator] === 'function'
 }
 
-
 function toIndexedItems(gqlResult: any): IndexedItem[] {
   const items: IndexedItem[] = []
 
@@ -48,7 +47,9 @@ function toIndexedItems(gqlResult: any): IndexedItem[] {
   // Process vaults
   gqlResult.data.vaults.forEach((vault: any) => {
     const item: IndexedItem = {
-      label: vault.yearn ? 'vault' : 'erc4626',
+      label: vault.yearn 
+      ? strategyAddresses.has(vault.address.toLowerCase()) ? 'strategy' : 'vault'
+      : 'erc4626',
       chainId: parseInt(vault.chainId),
       address: vault.address,
       name: vault.name,

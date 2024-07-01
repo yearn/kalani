@@ -3,8 +3,8 @@ export default function FieldLabelPair({
 }: { 
   label: React.ReactNode, className?: string, children: React.ReactNode
 }) {
-  return <div className={`flex flex-col gap-2 ${className}`}>
-    <div className="px-2 text-neutral-400">{label}</div>
+  return <div className={`flex flex-col gap-3 ${className}`}>
+    <div className="px-2 text-neutral-500">{label}</div>
     {children}
   </div>
 }

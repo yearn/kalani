@@ -1,17 +1,14 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import Wordmark from '@/components/Wordmark'
-import { useCallback } from 'react'
-import { IndexedItem } from '@/lib/types'
 import Finder from '@/components/Finder'
+import { useAccount } from 'wagmi'
+import Account from './account/[address]/Account'
 
 export default function Home() {
-  const router = useRouter()
+  const { address } = useAccount()
 
-  const onFind = useCallback((item: IndexedItem) => {
-    return router.push(`/${item.label}/${item.chainId}/${item.address}`)
-  }, [router])
+  if (address) return <Account address={address} />
 
   return <main className="relative w-full min-h-screen">
     <div className={`
@@ -23,7 +20,7 @@ export default function Home() {
             <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
             <p>Yearn vault automations</p>
           </div>
-          <Finder className="w-full" onFind={onFind} placeholder='Search by address / vault / token' />
+          <Finder className="w-full" placeholder='Search by address / vault / token' />
         </div>
       </div>
     </div>

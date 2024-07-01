@@ -25,7 +25,7 @@ function Roles({ vault }: { vault: Vault }) {
 
   const accounts = useMemo<AccountRoleItem[]>(() => {
     const previousAccounts = AccountRoleItemSchema.array().parse(
-      vault?.accounts.map(account => ({ ...account, editAddress: false })) ?? []
+      vault?.accounts.filter(a => a.roleMask !== 0n ).map(account => ({ ...account, editAddress: false })) ?? []
     )
     return [...previousAccounts, ...newAccounts]
   }, [vault, newAccounts])

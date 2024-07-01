@@ -78,9 +78,9 @@ function FeesPerStrategy({
     })
   }, [])
 
-  return <Section className="flex flex-col gap-6">
+  return <Section className="flex flex-col gap-12">
     <h2>{isCustomConfig ? 'Custom' : 'Default'} Fees, {strategy.name}</h2>
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid grid-cols-3 gap-12">
       <FieldLabelPair label="Management Fee">
         <FeeInput name={String(FIELDS.managementFee)} value={previous[FIELDS.managementFee] ?? ''} onChange={onChange} />
       </FieldLabelPair>
@@ -105,7 +105,7 @@ function FeesPerStrategy({
         <FeeInput name={String(FIELDS.maxLoss)} value={previous[FIELDS.maxLoss] ?? ''} onChange={onChange} />
       </FieldLabelPair>
     </div>
-    <div className="flex justify-end gap-4">
+    <div className="pt-8 flex justify-end gap-6">
       <Button className="h-field-btn" h={'secondary'}>Remove custom config</Button>
       <Button className="h-field-btn" h={'secondary'}>Update default config</Button>
       <Button className="h-field-btn">Create custom config</Button>
@@ -120,7 +120,7 @@ export default function Fees({
   vault: Vault,
   accountant: EvmAddress
 }) {
-  return <div>
+  return <div className="flex flex-col gap-8">
     {vault.strategies.map((strategy, i) => (
       <FeesPerStrategy
         key={i}

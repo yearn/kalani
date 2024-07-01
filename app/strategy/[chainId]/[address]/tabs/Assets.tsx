@@ -32,10 +32,6 @@ function Assets({ vault }: { vault: Vault }) {
             <td>Idle assets</td>
             <td className="text-right">{fTokens(idle, vault.asset.decimals)}</td>
           </tr>
-          {vault.label === 'vault' && <tr>
-            <td>Deposit limit</td>
-            <td className="text-right">{fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0 })}</td>
-          </tr>}
           <tr>
             <td>Performance fee</td>
             <td className="text-right">{fBps(vault.fees.performanceFee)}</td>

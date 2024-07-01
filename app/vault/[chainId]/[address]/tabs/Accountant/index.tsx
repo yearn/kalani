@@ -2,7 +2,6 @@ import { EvmAddressSchema } from '@/lib/types'
 import { useState } from 'react'
 import { Vault, withVault } from '@/hooks/useVault'
 import SetAddress from './SetAddress'
-import Admins from '../../../../../accountant/[chainId]/[address]/Admins'
 import Fees from './Fees'
 import { useReadContract } from 'wagmi'
 import abis from '@/lib/abis'
@@ -24,6 +23,7 @@ function Accountant({ vault }: { vault: Vault }) {
 
   return <div className="flex flex-col gap-8">
     <SetAddress {...{ vault, next, setNext, isNextValid, setIsNextValid, changed, setChanged }} />
+
     {!changed && !accounted.data && <Section className="flex items-center justify-between border-red-600/40">
       <div className="pl-8 flex items-center gap-6 text-red-300">
         <PiWarning />

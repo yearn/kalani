@@ -6,26 +6,27 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import useKeypress from 'react-use-keypress'
 import { fEvmAddress } from '@/lib/format'
 import { isNothing } from '@/lib/strings'
-import { IndexedItem, IndexedItemSchema } from '@/lib/types'
-import { useQuery } from '@tanstack/react-query'
+import { IndexedItem } from '@/lib/types'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
+import { useRouter } from 'next/navigation'
+import { useIndexedItems } from '@/hooks/useIndexedItems'
 
 const MAX_ITEMS = 100
 
 interface FinderProps {
-  onFind?: (item: IndexedItem) => void,
   placeholder?: string,
   className?: string
   inputClassName?: string
 }
 
-const Finder: React.FC<FinderProps> = ({ onFind, placeholder, className, inputClassName }) => {
-  const { data } = useQuery({
-    queryKey: ['index'],
-    queryFn: () => fetch('/api/index').then((res) => res.json())
-  })
+const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName }) => {
+  const router = useRouter()
 
-  const items = useMemo(() => IndexedItemSchema.array().parse(data ?? []), [data])
+  const onFind = useCallback((item: IndexedItem) => {
+    return router.push(`/${item.label}/${item.chainId}/${item.address}`)
+  }, [router])
+
+  const items = useIndexedItems()
 
   const [inputValue, setInputValue] = useState('')
   const [filteredItems, setFilteredItems] = useState<IndexedItem[]>([])
@@ -101,56 +102,54 @@ const Finder: React.FC<FinderProps> = ({ onFind, placeholder, className, inputCl
     }
   }
 
-  return (
-    <div className={`relative ${className}`}>
-      <Input
-        ref={inputRef}
-        type="text"
-        value={inputValue}
-        placeholder={placeholder}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        className={inputClassName}
-      />
+  return <div className={`relative ${className}`}>
+    <Input
+      ref={inputRef}
+      type="text"
+      value={inputValue}
+      placeholder={placeholder}
+      onChange={handleInputChange}
+      onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      className={inputClassName}
+    />
 
-      <div className={`
-        absolute top-0 right-4 h-full flex items-center text-neutral-800`}>/
-      </div>
-
-      {showSuggestions && filteredItems.length > 0 && (
-        <GlowGroup className="absolute w-full mt-3">
-          <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-400 rounded-primary">
-            <table className="table-fixed w-full text-neutral-200">
-              <tbody>
-                {filteredItems.map((item, index) => (
-                  <tr
-                    key={`${index}-${item.address}`}
-                    onClick={() => handleItemClick(item)}
-                    onMouseOver={() => setSelectedIndex(index)}
-                    className={`
-                      cursor-pointer
-                      hover:bg-black hover:text-secondary-400
-                      ${index === selectedIndex ? 'bg-black text-secondary-400' : ''}
-                      ${index === 0 ? 'rounded-t-primary' : ''}
-                      ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
-                    `}
-                  >
-                    <td className="w-20 px-4 py-4 text-xs text-center">{item.chainId}</td>
-                    <td className="w-20 py-4 text-xs">{item.label}</td>
-                    <td className="w-36 py-4">{fEvmAddress(item.address)}</td>
-                    <td className="max-w-0 px-4 py-4 truncate">
-                      {isNothing(item.name) ? item.label : item.name}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </ScrollArea>
-        </GlowGroup>
-      )}
+    <div className={`
+      absolute top-0 right-4 h-full flex items-center text-neutral-800`}>/
     </div>
-  )
+
+    {showSuggestions && filteredItems.length > 0 && (
+      <GlowGroup className="absolute w-full mt-3">
+        <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-400 rounded-primary">
+          <table className="table-fixed w-full text-neutral-200">
+            <tbody>
+              {filteredItems.map((item, index) => (
+                <tr
+                  key={`${index}-${item.address}`}
+                  onClick={() => handleItemClick(item)}
+                  onMouseOver={() => setSelectedIndex(index)}
+                  className={`
+                    cursor-pointer
+                    hover:bg-black hover:text-secondary-400
+                    ${index === selectedIndex ? 'bg-black text-secondary-400' : ''}
+                    ${index === 0 ? 'rounded-t-primary' : ''}
+                    ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
+                  `}
+                >
+                  <td className="w-20 px-4 py-4 text-xs text-center">{item.chainId}</td>
+                  <td className="w-20 py-4 text-xs">{item.label}</td>
+                  <td className="w-36 py-4">{fEvmAddress(item.address)}</td>
+                  <td className="max-w-0 px-4 py-4 truncate">
+                    {isNothing(item.name) ? item.label : item.name}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ScrollArea>
+      </GlowGroup>
+    )}
+  </div>
 }
 
 export default Finder

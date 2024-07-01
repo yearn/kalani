@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation'
 import Connect from '../Connect'
 import Home from './Home'
 import Finder from '../Finder'
-import Button from '../elements/Button'
+import { useAccount } from 'wagmi'
 
 function Header() {
+  const { isConnected } = useAccount()
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
 
@@ -26,7 +27,7 @@ function Header() {
       <div className="mx-auto max-w-6xl h-20 flex items-center justify-between">
         <div className="grow flex items-center justify-start gap-12">
           <Home />
-					{pathname !== '/' && 
+					{(isConnected || pathname !== '/') && 
             <Finder 
               className="w-[32rem]" 
               inputClassName="px-4 py-2 border-transparent" 

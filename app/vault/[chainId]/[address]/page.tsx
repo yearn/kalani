@@ -44,7 +44,7 @@ export default function Vault() {
     flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
-        <div className="text-sm">vault {fEvmAddress(vault.address)}</div>
+        <div className="text-sm">{vault.label} {fEvmAddress(vault.address)}</div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
           <div>
@@ -57,7 +57,7 @@ export default function Vault() {
       <div className={`
         w-1/2 h-48 flex items-center justify-center justify-center gap-12`}>
         <Badge label="Accountant" icon={PiCalculator} enabled={true} />
-        <Badge label="Allocator" icon={PiScales} enabled={true} />
+        {vault.strategies.length > 0 && <Badge label="Allocator" icon={PiScales} enabled={true} />}
         <Badge label="yHaaS" icon={PiTractorFill} />
       </div>
     </div>
@@ -67,7 +67,7 @@ export default function Vault() {
         <TabsTrigger value="assets">Assets</TabsTrigger>
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
-        <TabsTrigger value="allocator">Allocator</TabsTrigger>
+        {vault.strategies.length > 0 && <TabsTrigger value="allocator">Allocator</TabsTrigger>}
         <TabsTrigger value="yhaas">Reports</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
       </TabsList>

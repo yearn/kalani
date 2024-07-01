@@ -4,7 +4,7 @@ export default function Section({
   className?: string,
   children: React.ReactNode
 }) {
-  return <div className={`p-8 border border-neutral-900 rounded-primary ${className}`}>
+  return <div className={`px-10 py-12 border border-neutral-900 rounded-primary ${className}`}>
     {children}
   </div>
 }

@@ -11,9 +11,9 @@ import abis from '@/lib/abis'
 import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
 import { useWriteContract } from '@/hooks/useWriteContract'
-import { PiArrowRight } from 'react-icons/pi'
 import Link from '@/components/elements/Link'
 import { fEvmAddress } from '@/lib/format'
+import Sticker from '@/components/elements/Sticker'
 
 function useWrite(
   contract: {
@@ -139,7 +139,7 @@ function SetAddress({
 
   return <Section>
     <FieldLabelPair label="Accountant">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-6">
         <div className="flex items-center gap-2">
           <div className={`grow theme-${inputTheme} p-1 rounded-primary`}>
             <Combo
@@ -153,10 +153,10 @@ function SetAddress({
           </div>
           <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">Set</Button>
         </div>
-        <div className="pl-3">
-          {isNextValid && <Link href={`/accountant/${chainId}/${next}`} className="inline-flex items-center gap-2">
+        <div className="flex">
+          {isNextValid && <Sticker href={`/accountant/${chainId}/${next}`} className="inline-flex items-center gap-2">
             Manage {fEvmAddress(EvmAddressSchema.parse(next))}
-          </Link>}
+          </Sticker>}
           {!isNextValid && <div>&nbsp;</div>}
         </div>
       </div>
