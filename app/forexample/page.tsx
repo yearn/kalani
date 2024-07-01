@@ -12,8 +12,6 @@ export default function Page() {
   const [toaston, setToaston] = useState(false)
   const [resolveToast, setResolveToast] = useState<(() => (value: unknown) => void)>(() => () => {})
 
-  const [item, setItem] = useState<IndexedItem | undefined>()
-
   const onClick = useCallback(() => {
     setToaston(t => !t)
     if (toaston) return
@@ -34,8 +32,7 @@ export default function Page() {
   return <main className={`min-h-screen pt-32 pb-48 flex items-center justify-center`}>
     <div className="w-[740px] flex flex-col gap-16">
       <div className="flex flex-col gap-4">
-        <Finder onFind={item => setItem(item)} />
-        <p className="pl-2 text-xs text-neutral-600">{item?.address}</p>
+        <Finder />
       </div>
 
       {/* <TransferFeeManager accountant="0x54483f1592ab0aDea2757Ae0d62e6393361d4CEe" />
