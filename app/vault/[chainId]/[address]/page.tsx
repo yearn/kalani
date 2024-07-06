@@ -15,7 +15,7 @@ import Assets from './tabs/Assets'
 import Strategies from './tabs/Strategies'
 import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
-import Yhaas from './tabs/Yhaas'
+import Reports from './tabs/Reports'
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -68,14 +68,14 @@ export default function Vault() {
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
         {vault.strategies.length > 0 && <TabsTrigger value="allocator">Allocator</TabsTrigger>}
-        <TabsTrigger value="yhaas">Reports</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
       </TabsList>
       <TabsContent value="assets"><Assets /></TabsContent>
       <TabsContent value="strategies"><Strategies /></TabsContent>
       <TabsContent value="accountant"><Accountant /></TabsContent>
       <TabsContent value="allocator"><Allocator /></TabsContent>
-      <TabsContent value="yhaas"><Yhaas /></TabsContent>
+      <TabsContent value="reports"><Reports /></TabsContent>
       <TabsContent value="roles"><Roles /></TabsContent>
     </Tabs>
 

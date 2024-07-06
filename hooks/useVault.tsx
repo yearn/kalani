@@ -21,7 +21,7 @@ export const VaultSchema = z.object({
   address: EvmAddressSchema,
   label: z.enum(['vault', 'strategy', 'erc4626']),
   name: z.string(),
-  apiVersion: z.string(),
+  apiVersion: z.string().optional(),
   asset: z.object({
     address: EvmAddressSchema,
     symbol: z.string(),
@@ -34,11 +34,11 @@ export const VaultSchema = z.object({
   inceptTime: z.number({ coerce: true }),
   deposit_limit: z.bigint({ coerce: true }).optional(),
   deposit_limit_module: EvmAddressSchema.optional(),
-  pricePerShare: z.bigint({ coerce: true }),
+  pricePerShare: z.bigint({ coerce: true }).optional(),
   lastProfitUpdate: z.number({ coerce: true }).optional(),
   totalAssets: z.bigint({ coerce: true }),
-  totalDebt: z.bigint({ coerce: true }),
-  fees: z.object({ performanceFee: z.number({ coerce: true }) }),
+  totalDebt: z.bigint({ coerce: true }).optional(),
+  fees: z.object({ performanceFee: z.number({ coerce: true }) }).optional(),
   tvl: z.object({ close: z.number() }),
   apy: z.object({ close: z.number() }),
   strategies: StrategySchema.array(),
@@ -151,7 +151,6 @@ export function useVault({ chainId, address }: { chainId: number, address: `0x${
   })
 
   const item = items.find(item => item.chainId === vault.chainid && compareEvmAddresses(item.address, vault.address))
-
   return VaultSchema.parse(nullsToUndefined({
     label: item?.label ?? 'vault',
     ...vault,

@@ -4,10 +4,11 @@ import { EvmAddress } from '@/lib/types'
 import { useAccount, useReadContract } from 'wagmi'
 import { useMemo } from 'react'
 
-export default function TransferRoleManager({ vault }: { vault: EvmAddress }) {
+export default function TransferRoleManager({ chainId, vault }: { chainId: number, vault: EvmAddress }) {
   const { address } = useAccount()
 
   const roleManager = useReadContract({
+    chainId,
     address: vault,
     abi: abis.vault,
     functionName: 'role_manager'
@@ -21,6 +22,7 @@ export default function TransferRoleManager({ vault }: { vault: EvmAddress }) {
     transferPermitted={permitted}
     refetchTransferPermitted={roleManager.refetch}
     contract={{
+      chainId,
       address: vault,
       abi: abis.vault,
       current: 'role_manager',

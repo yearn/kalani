@@ -20,26 +20,6 @@ function Assets({ vault }: { vault: Vault }) {
             <td className="text-xl">Total assets</td>
             <td className="text-right text-xl">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>
           </tr>
-          <tr>
-            <td>Allocated</td>
-            <td className="text-right">{fBps(allocated)}</td>
-          </tr>
-          <tr>
-            <td>Deployed</td>
-            <td className="text-right">{fPercent(deployed)}</td>
-          </tr>
-          <tr>
-            <td>Idle assets</td>
-            <td className="text-right">{fTokens(idle, vault.asset.decimals)}</td>
-          </tr>
-          {vault.label === 'vault' && <tr>
-            <td>Deposit limit</td>
-            <td className="text-right">{fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0 })}</td>
-          </tr>}
-          <tr>
-            <td>Performance fee</td>
-            <td className="text-right">{fBps(vault.fees?.performanceFee!)}</td>
-          </tr>
         </tbody>
       </table>
     </div>

@@ -46,6 +46,7 @@ function Roles({ vault }: { vault: Vault }) {
     <div>
       {accounts.map((account, index) => <SetRoles 
         key={index} 
+        chainId={account.chainId}
         vault={account.vault} 
         account={account.address}
         editAddress={account.editAddress}

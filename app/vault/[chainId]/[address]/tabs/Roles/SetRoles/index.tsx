@@ -14,13 +14,13 @@ import { zeroAddress } from 'viem'
 import Link from '@/components/elements/Link'
 import { useWriteContract } from '@/hooks/useWriteContract'
 
-function usePrevious({ 
-  vault, account 
+function usePrevious({
+  chainId, vault, account 
 }: { 
-  vault: EvmAddress, account?: EvmAddress 
+  chainId: number, vault: EvmAddress, account?: EvmAddress 
 }) {
   const { data: roleMask, refetch } = useReadContract({
-    address: vault, abi: abis.vault, functionName: 'roles', args: [account ?? zeroAddress],
+    chainId, address: vault, abi: abis.vault, functionName: 'roles', args: [account ?? zeroAddress],
     query: { enabled: !!account }
   })
 
@@ -41,14 +41,16 @@ function usePrevious({
 }
 
 function useWrite({ 
-  vault, account, rolemask, enabled 
+  chainId, vault, account, rolemask, enabled 
 }: { 
+  chainId: number,
   vault: EvmAddress,
   account: EvmAddress,
   rolemask: bigint,
   enabled: boolean
 }) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
+    chainId,
     address: vault,
     abi: abis.vault,
     functionName: 'set_role',
@@ -63,15 +65,16 @@ function useWrite({
 }
 
 export default function SetRoles({
-  vault, account, editAddress, className
+  chainId, vault, account, editAddress, className
 }: { 
+  chainId: number,
   vault: EvmAddress, 
   account?: EvmAddress,
   editAddress?: boolean,
   className?: string 
 }) {
   const _isRoleManager = useIsRoleManager(vault)
-  const { roles: previous, refetch } = usePrevious({ vault, account })
+  const { roles: previous, refetch } = usePrevious({ chainId, vault, account })
   const [next, setNext] = useState<{ [key: string]: boolean }>({})
   const [error, setError] = useState<string | undefined>(undefined)
   const [newAccount, setNewAccount] = useState<string | undefined>(undefined)
@@ -93,6 +96,7 @@ export default function SetRoles({
   const {
     simulation, write, confirmation, resolveToast
   } = useWrite({ 
+    chainId,
     vault, 
     account: account ?? (isNewAccountValid ? EvmAddressSchema.parse(newAccount) : zeroAddress), 
     rolemask, 

@@ -9,6 +9,7 @@ import { EvmAddress, EvmAddressSchema, compareEvmAddresses } from '@/lib/types'
 import { useWriteContract } from '@/hooks/useWriteContract'
 
 function useWrite(
+  chainId: number,
   address: EvmAddress,
   abi: any,
   functionName: string,
@@ -16,7 +17,7 @@ function useWrite(
   enabled: boolean
 ) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    address, abi, functionName, args,
+    chainId, address, abi, functionName, args,
     query: { enabled }
   }), [address, abi, functionName, args, enabled])
   const simulation = useSimulateContract(parameters)
@@ -32,6 +33,7 @@ export default function TransferAddress({
   className
 }: {
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     current: string,
@@ -51,8 +53,8 @@ export default function TransferAddress({
   const [isNextValid, setIsNextValid] = useState<boolean>(false)
 
   const multicall = useReadContracts({ contracts: [
-    { address: contract.address, abi: contract.abi, functionName: contract.current },
-    { address: contract.address, abi: contract.abi, functionName: contract.proposal }
+    { chainId: contract.chainId, address: contract.address, abi: contract.abi, functionName: contract.current },
+    { chainId: contract.chainId, address: contract.address, abi: contract.abi, functionName: contract.proposal }
   ]})
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export default function TransferAddress({
   const verb = useMemo(() => accepting ? 'Accept' : 'Transfer', [accepting])
 
   const propose = useWrite(
+    contract.chainId,
     contract.address,
     contract.abi,
     contract.propose,

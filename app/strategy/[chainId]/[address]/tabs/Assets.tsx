@@ -34,7 +34,7 @@ function Assets({ vault }: { vault: Vault }) {
           </tr>
           <tr>
             <td>Performance fee</td>
-            <td className="text-right">{fBps(vault.fees.performanceFee)}</td>
+            <td className="text-right">{fBps(vault.fees?.performanceFee!)}</td>
           </tr>
         </tbody>
       </table>
