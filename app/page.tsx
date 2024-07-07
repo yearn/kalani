@@ -18,7 +18,7 @@ export default function Home() {
         <div className="w-full sm:w-1/2 h-full flex flex-col items-center justify-center gap-16">
           <div className="flex flex-col items-center justify-end gap-3">
             <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
-            <p>Yearn vault automations</p>
+            <p>Yearn vault automator</p>
           </div>
           <Finder className="w-full" placeholder='Search by address / vault / token' />
         </div>

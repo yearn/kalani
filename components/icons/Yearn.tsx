@@ -1,6 +1,6 @@
 import type {ReactElement} from 'react';
 
-export function LogoYearn(props: React.SVGProps<SVGSVGElement> & {back?: string; front?: string}): ReactElement {
+export function Yearn(props: React.SVGProps<SVGSVGElement> & {back?: string; front?: string}): ReactElement {
 	return (
 		<svg
 			{...props}

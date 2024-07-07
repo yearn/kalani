@@ -22,7 +22,7 @@ function Header() {
     <header
       className={`
       fixed inset-x-0 top-0 z-50 w-full
-      ${isScrolled ? 'bg-primary-900/40 backdrop-blur' : ''}`}
+      ${isScrolled ? 'bg-neutral-950/60 backdrop-blur' : ''}`}
     >
       <div className="mx-auto max-w-6xl h-20 flex items-center justify-between">
         <div className="grow flex items-center justify-start gap-12">

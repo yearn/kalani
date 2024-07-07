@@ -10,7 +10,7 @@ const mono = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Kalani',
-  description: 'Yearn vault automations',
+  description: 'Yearn vault automator',
 }
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={`relative w-full h-screen overflow-x-hidden overflow-y-auto font-mono bg-black`}>
         <Bg />
         <Providers>
-          {children}
+          <div className="isolate">{children}</div>
         </Providers>
         <Toaster />
       </body>

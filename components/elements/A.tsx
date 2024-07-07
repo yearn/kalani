@@ -1,6 +1,6 @@
 import React, { AnchorHTMLAttributes, forwardRef } from 'react'
 
-type InputProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   className?: string
 }
 
@@ -11,7 +11,7 @@ hover:text-secondary-300 hover:decoration-secondary-300
 active:text-secondary-400 active:decoration-secondary-400
 `
 
-const A = forwardRef<HTMLAnchorElement, InputProps>(({ className, children, ...props }, ref) => (
+const A = forwardRef<HTMLAnchorElement, AnchorProps>(({ className, children, ...props }, ref) => (
   <a ref={ref} {...props} className={`
     ${AnchorClassName}
     ${className}`}>{children}</a>
