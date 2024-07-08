@@ -13,7 +13,7 @@ export default function RetroGrid({ className }: { className?: string }) {
 
     const animate = (timestamp: number) => {
       if (!start) start = timestamp
-      const duration = 240_000
+      const duration = 360_000
       const y_step = 50
       const progress = (timestamp - start) % duration
       const translateY = (progress / duration) * y_step
@@ -33,19 +33,16 @@ export default function RetroGrid({ className }: { className?: string }) {
       className={cn(
         "isolate pointer-events-none fixed h-full w-full overflow-hidden opacity-100 [perspective:200px]",
         className,
-      )}
-    >
+      )}>
       <div className="absolute inset-0 [transform:rotateX(65deg)]">
-        <div
-          ref={gridRef}
+        <div ref={gridRef}
           className={cn(
             "will-change-transform",
             "[background-repeat:repeat] [background-size:30px_30px] [height:200vh] [inset:0%_0px] [margin-left:-25%] [transform-origin:100%_0_0] [width:300vw]",
-            `[background-image:linear-gradient(to_right,rgb(23,23,23)_1px,transparent_0),linear-gradient(to_bottom,rgb(23,23,23)_1px,transparent_0)]`,
+            `[background-image:linear-gradient(to_right,rgb(23,23,23)_2px,transparent_0),linear-gradient(to_bottom,rgb(23,23,23)_2px,transparent_0)]`,
           )}
         />
       </div>
-      {/* <div className="absolute w-full h-[27rem] bg-black shadow-lg"></div> */}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { IndexedItem } from '@/lib/types'
 import { ScrollArea } from '@/components/shadcn/scroll-area'
 import { useRouter } from 'next/navigation'
 import { useIndexedItems } from '@/hooks/useIndexedItems'
+import { ChainImage } from './ChainImage'
 
 const MAX_ITEMS = 100
 
@@ -136,7 +137,9 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
                     ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
                   `}
                 >
-                  <td className="w-20 px-4 py-4 text-xs text-center">{item.chainId}</td>
+                  <td className="w-20 px-4 py-4 text-xs text-center">
+                    <ChainImage chainId={item.chainId} />
+                  </td>
                   <td className="w-20 py-4 text-xs">{item.label}</td>
                   <td className="w-36 py-4">{fEvmAddress(item.address)}</td>
                   <td className="max-w-0 px-4 py-4 truncate">

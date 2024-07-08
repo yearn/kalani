@@ -10,6 +10,7 @@ import { PiTractorFill } from 'react-icons/pi'
 import Badge from './Badge'
 import Assets from './tabs/Assets'
 import Reports from './tabs/Reports'
+import { ChainImage } from '@/components/ChainImage'
 
 export default function Strategy() {
   const vault = useVaultFromParams()
@@ -24,8 +25,9 @@ export default function Strategy() {
         <div className="text-sm">tokenized strategy {fEvmAddress(vault.address)}</div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
-          <div>
-            <div>[{getChain(vault.chainId).name}]</div>
+          <div className="flex items-center gap-4">
+            <ChainImage chainId={vault.chainId} />
+            {getChain(vault.chainId).name}
           </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />

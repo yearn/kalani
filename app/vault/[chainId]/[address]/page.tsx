@@ -16,6 +16,7 @@ import Strategies from './tabs/Strategies'
 import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
+import { ChainImage } from '@/components/ChainImage'
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -47,8 +48,9 @@ export default function Vault() {
         <div className="text-sm">{vault.label} {fEvmAddress(vault.address)}</div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
-          <div>
-            <div>[{getChain(vault.chainId).name}]</div>
+          <div className="flex items-center gap-4">
+            <ChainImage chainId={vault.chainId} />
+            {getChain(vault.chainId).name}
           </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
           <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />
