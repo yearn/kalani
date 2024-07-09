@@ -40,7 +40,7 @@ export const VaultSchema = z.object({
   totalDebt: z.bigint({ coerce: true }).optional(),
   fees: z.object({ performanceFee: z.number({ coerce: true }) }).optional(),
   tvl: z.object({ close: z.number() }),
-  apy: z.object({ close: z.number() }),
+  apy: z.object({ close: z.number() }).optional(),
   strategies: StrategySchema.array(),
   accounts: AccountRoleSchema.array()
 })

@@ -4,14 +4,17 @@ import { EvmAddress } from '@/lib/types'
 import { useAccount, useReadContract } from 'wagmi'
 import { useMemo } from 'react'
 
-export default function TransferFeeManager({ 
+export default function TransferFeeManager({
+  chainId,
   accountant
 }: {
+  chainId: number,
   accountant: EvmAddress
 }) {
   const { address } = useAccount()
 
   const feeManager = useReadContract({
+    chainId,
     address: accountant,
     abi: abis.accountant,
     functionName: 'feeManager'
@@ -25,6 +28,7 @@ export default function TransferFeeManager({
     transferPermitted={permitted}
     refetchTransferPermitted={feeManager.refetch}
     contract={{
+      chainId,
       address: accountant,
       abi: abis.accountant,
       current: 'feeManager',

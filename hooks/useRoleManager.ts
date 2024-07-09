@@ -3,16 +3,16 @@ import { EvmAddress } from '@/lib/types'
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 
-export function useRoleManager(vault?: EvmAddress) {
+export function useRoleManager(vault: { chainId: number, address: EvmAddress }) {
   const result = useReadContract({ 
-    address: vault, abi: abis.vault, functionName: 'role_manager',
+    ...vault, abi: abis.vault, functionName: 'role_manager',
     query: { enabled: !!vault }
    })
   return result.data
 }
 
-export function useIsRoleManager(vault?: EvmAddress) {
-  const { isConnected, address } = useAccount()
+export function useIsRoleManager(vault: { chainId: number, address: EvmAddress }) {
+  const { isConnected, chainId:_chainId, address } = useAccount()
   const roleManager = useRoleManager(vault)
   return useMemo(() => 
     isConnected && address && address === roleManager, 

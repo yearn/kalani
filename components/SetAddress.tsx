@@ -10,6 +10,7 @@ import { useWriteContract } from '@/hooks/useWriteContract'
 
 function useWrite(
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     get: string,
@@ -19,6 +20,7 @@ function useWrite(
   enabled: boolean
 ) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
+    chainId: contract.chainId,
     address: contract.address,
     args: [getAddress(enabled ? next! : zeroAddress)],
     abi: contract.abi,
@@ -40,6 +42,7 @@ export default function SetAddress({
   verb: string,
   permitted: boolean,
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     get: string,
@@ -53,7 +56,7 @@ export default function SetAddress({
   const [isNextValid, setIsNextValid] = useState<boolean>(false)
 
   const multicall = useReadContracts({ contracts: [
-    { address: contract.address, abi: contract.abi, functionName: contract.get },
+    { chainId: contract.chainId, address: contract.address, abi: contract.abi, functionName: contract.get },
   ]})
 
   useEffect(() => {

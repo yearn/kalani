@@ -11,12 +11,12 @@ import abis from '@/lib/abis'
 import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
 import { useWriteContract } from '@/hooks/useWriteContract'
-import Link from '@/components/elements/Link'
 import { fEvmAddress } from '@/lib/format'
 import Sticker from '@/components/elements/Sticker'
 
 function useWrite(
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     get: string,
@@ -26,6 +26,7 @@ function useWrite(
   enabled: boolean
 ) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
+    chainId: contract.chainId,
     address: contract.address,
     args: [getAddress(enabled ? next! : zeroAddress)],
     abi: contract.abi,
@@ -63,9 +64,9 @@ function SetAddress({
   }, [isConnected, chainId])
 
   const multicall = useReadContracts({ contracts: [
-    { address: vault?.address ?? zeroAddress, abi: abis.vault, functionName: 'accountant' },
-    { address: vault?.address ?? zeroAddress, abi: abis.vault, functionName: 'roles', args: [address ?? zeroAddress] }
-  ]})
+    { chainId: vault?.chainId, address: vault?.address ?? zeroAddress, abi: abis.vault, functionName: 'accountant' },
+    { chainId: vault?.chainId, address: vault?.address ?? zeroAddress, abi: abis.vault, functionName: 'roles', args: [address ?? zeroAddress] }
+  ], query: { enabled: Boolean(vault?.chainId) } })
 
   useEffect(() => {
     if (multicall.data?.every(d => d.status === 'success')) {
@@ -76,7 +77,7 @@ function SetAddress({
       setPrevious(undefined)
       setRoles(undefined)
     }
-  }, [multicall, setPrevious, setRoles])
+  }, [multicall, setPrevious, setRoles, vault])
 
   const permitted = useMemo(() => Boolean(roles && (roles & ROLES.ACCOUNTANT_MANAGER) === ROLES.ACCOUNTANT_MANAGER), [roles])
 
@@ -93,6 +94,7 @@ function SetAddress({
     simulation, write, confirmation, resolveToast
   } = useWrite({
     abi: abis.vault,
+    chainId: vault?.chainId ?? 0,
     address: vault?.address ?? zeroAddress,
     get: 'accountant',
     set: 'set_accountant'
@@ -154,8 +156,8 @@ function SetAddress({
           <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">Set</Button>
         </div>
         <div className="flex">
-          {isNextValid && <Sticker href={`/accountant/${chainId}/${next}`} className="inline-flex items-center gap-2">
-            Manage {fEvmAddress(EvmAddressSchema.parse(next))}
+          {isNextValid && <Sticker href={`/accountant/${vault?.chainId}/${next}`} className="inline-flex items-center gap-2">
+            {EvmAddressSchema.parse(next)}
           </Sticker>}
           {!isNextValid && <div>&nbsp;</div>}
         </div>

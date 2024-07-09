@@ -17,6 +17,8 @@ import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import { ChainImage } from '@/components/ChainImage'
+import { compareEvmAddresses } from '@/lib/types'
+import { zeroAddress } from 'viem'
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -53,13 +55,13 @@ export default function Vault() {
             {getChain(vault.chainId).name}
           </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />
+          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
         </div>
       </div>
       <div className={`
         w-1/2 h-48 flex items-center justify-center justify-center gap-12`}>
-        <Badge label="Accountant" icon={PiCalculator} enabled={true} />
-        {vault.strategies.length > 0 && <Badge label="Allocator" icon={PiScales} enabled={true} />}
+        <Badge label="Accountant" icon={PiCalculator} enabled={!compareEvmAddresses(vault.accountant, zeroAddress)} />
+        <Badge label="Allocator" icon={PiScales} enabled={vault.strategies.length > 1} />
         <Badge label="yHaaS" icon={PiTractorFill} />
       </div>
     </div>
@@ -69,7 +71,7 @@ export default function Vault() {
         <TabsTrigger value="assets">Assets</TabsTrigger>
         <TabsTrigger value="strategies">Strategies</TabsTrigger>
         <TabsTrigger value="accountant">Accountant</TabsTrigger>
-        {vault.strategies.length > 0 && <TabsTrigger value="allocator">Allocator</TabsTrigger>}
+        {vault.strategies.length > 1 && <TabsTrigger value="allocator">Allocator</TabsTrigger>}
         <TabsTrigger value="reports">Reports</TabsTrigger>
         <TabsTrigger value="roles">Roles</TabsTrigger>
       </TabsList>

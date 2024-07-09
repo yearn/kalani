@@ -54,9 +54,9 @@ function FeesPerStrategy({
   const changed = useMemo(() => previous !== next, [previous, next])
 
   const multicall = useReadContracts({ contracts: [
-    { address: accountant, abi: abis.accountant, functionName: 'defaultConfig' },
-    { address: accountant, abi: abis.accountant, functionName: 'customConfig', args: [vault.address, strategy.address] },
-    { address: accountant, abi: abis.accountant, functionName: 'useCustomConfig', args: [vault.address, strategy.address] }
+    { chainId: vault.chainId, address: accountant, abi: abis.accountant, functionName: 'defaultConfig' },
+    { chainId: vault.chainId, address: accountant, abi: abis.accountant, functionName: 'customConfig', args: [vault.address, strategy.address] },
+    { chainId: vault.chainId, address: accountant, abi: abis.accountant, functionName: 'useCustomConfig', args: [vault.address, strategy.address] }
   ] })
 
   useEffect(() => {

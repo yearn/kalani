@@ -1,5 +1,5 @@
 import abis from '@/lib/abis'
-import { EvmAddress, EvmAddressSchema, ROLES, enumerateEnum } from '@/lib/types'
+import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses, enumerateEnum } from '@/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import Toggle from './Toggle'
@@ -11,8 +11,8 @@ import { PiStar, PiStarFill } from 'react-icons/pi'
 import InputAddress from '@/components/InputAddress'
 import { useIsRoleManager, useRoleManager } from '@/hooks/useRoleManager'
 import { zeroAddress } from 'viem'
-import Link from '@/components/elements/Link'
 import { useWriteContract } from '@/hooks/useWriteContract'
+import Sticker from '@/components/elements/Sticker'
 
 function usePrevious({
   chainId, vault, account 
@@ -73,7 +73,7 @@ export default function SetRoles({
   editAddress?: boolean,
   className?: string 
 }) {
-  const _isRoleManager = useIsRoleManager(vault)
+  const _isRoleManager = useIsRoleManager({ chainId, address: vault })
   const { roles: previous, refetch } = usePrevious({ chainId, vault, account })
   const [next, setNext] = useState<{ [key: string]: boolean }>({})
   const [error, setError] = useState<string | undefined>(undefined)
@@ -143,9 +143,9 @@ export default function SetRoles({
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  const roleManager = useRoleManager(vault)
+  const roleManager = useRoleManager({ chainId, address: vault })
   const isRoleManager = useCallback((address: EvmAddress) => {
-    return roleManager === address
+    return compareEvmAddresses(roleManager, address)
   }, [roleManager])
 
   return <Accordion type="single" className={className} collapsible>
@@ -162,8 +162,8 @@ export default function SetRoles({
         </div>
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-8">
-        {!editAddress && <div className="text-neutral-400">
-          <Link href={`/account/${account ?? zeroAddress}`}>{account ?? zeroAddress}</Link>
+        {!editAddress && <div>
+          <Sticker href={`/account/${account ?? zeroAddress}`}>{account ?? zeroAddress}</Sticker>
         </div>}
 
         {editAddress && <InputAddress 

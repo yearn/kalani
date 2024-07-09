@@ -99,6 +99,7 @@ export default function TransferAddress({
   }, [propose, setError])
 
   const accept = useWrite(
+    contract.chainId,
     contract.address,
     contract.abi,
     contract.accept,

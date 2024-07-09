@@ -16,7 +16,7 @@ function Accountant({ vault }: { vault: Vault }) {
   const [changed, setChanged] = useState<boolean>(false)
 
   const accounted = useReadContract({
-    address: isNextValid ? EvmAddressSchema.parse(next) : zeroAddress,
+    chainId: vault.chainId, address: isNextValid ? EvmAddressSchema.parse(next) : zeroAddress,
     abi: abis.accountant, functionName: 'vaults', args: [vault.address],
     query: { enabled: isNextValid }
   })

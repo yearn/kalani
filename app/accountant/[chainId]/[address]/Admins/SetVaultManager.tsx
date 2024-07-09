@@ -4,10 +4,17 @@ import { EvmAddress } from '@/lib/types'
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 
-export default function SetVaultManager({ accountant }: { accountant: EvmAddress }) {
+export default function SetVaultManager({ 
+  chainId,
+  accountant
+}: { 
+  chainId: number,
+  accountant: EvmAddress 
+}) {
   const { address } = useAccount()
 
   const feeManager = useReadContract({
+    chainId,
     address: accountant,
     abi: abis.accountant,
     functionName: 'feeManager'
@@ -21,6 +28,7 @@ export default function SetVaultManager({ accountant }: { accountant: EvmAddress
     verb="Set" 
     permitted={permitted} 
     contract={{
+      chainId,
       address: accountant,
       abi: abis.accountant,
       get: 'vaultManager',

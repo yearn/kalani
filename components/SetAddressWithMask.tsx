@@ -12,15 +12,17 @@ import { useWriteContract } from '@/hooks/useWriteContract'
 
 function useWrite(
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     get: string,
     set: string
-  }, 
-  next: string | undefined, 
+  },
+  next: string | undefined,
   enabled: boolean
 ) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
+    chainId: contract.chainId,
     address: contract.address,
     args: [getAddress(enabled ? next! : zeroAddress)],
     abi: contract.abi,
@@ -44,23 +46,24 @@ export default function SetAddress({
   verb: string,
   roleMask: bigint,
   contract: {
+    chainId: number,
     address: EvmAddress,
     abi: any,
     get: string,
     set: string
   },
-  className?: string 
+  className?: string
 }) {
   const { isConnected, address } = useAccount()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
   const [next, setNext] = useState<string | undefined>(undefined)
   const [isNextValid, setIsNextValid] = useState<boolean>(false)
   const [roles, setRoles] = useState<bigint | undefined>(undefined)
-  const isRoleManager = useIsRoleManager(contract.address)
+  const isRoleManager = useIsRoleManager(contract)
 
   const multicall = useReadContracts({ contracts: [
-    { address: contract.address, abi: contract.abi, functionName: contract.get },
-    { address: contract.address, abi: contract.abi, functionName: 'roles', args: [address ?? zeroAddress] }
+    { chainId: contract.chainId, address: contract.address, abi: contract.abi, functionName: contract.get },
+    { chainId: contract.chainId, address: contract.address, abi: contract.abi, functionName: 'roles', args: [address ?? zeroAddress] }
   ]})
 
   useEffect(() => {

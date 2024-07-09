@@ -8,6 +8,7 @@ import SetRoles from './SetRoles'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmAddressSchema } from '@/lib/types'
 import FieldLabelPair from '@/components/FieldLabelPair'
+import Section from '@/components/Section'
 
 const AccountRoleItemSchema = z.object({
   chainId: z.number(),
@@ -21,7 +22,7 @@ type AccountRoleItem = z.infer<typeof AccountRoleItemSchema>
 
 function Roles({ vault }: { vault: Vault }) {
   const [newAccounts, setNewAccounts] = useState<AccountRoleItem[]>([])
-  const isRoleManager = useIsRoleManager(vault.address)
+  const isRoleManager = useIsRoleManager(vault)
 
   const accounts = useMemo<AccountRoleItem[]>(() => {
     const previousAccounts = AccountRoleItemSchema.array().parse(
@@ -55,11 +56,11 @@ function Roles({ vault }: { vault: Vault }) {
     <div className="flex justify-end">
       <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
     </div>
-    <div className="p-8 border border-neutral-900 rounded-primary">
+    <Section>
       <FieldLabelPair label="Role Manager">
-        <TransferRoleManager vault={vault.address} />
+        <TransferRoleManager chainId={vault.chainId} vault={vault.address} />
       </FieldLabelPair>
-    </div>
+    </Section>
   </div>
 }
 

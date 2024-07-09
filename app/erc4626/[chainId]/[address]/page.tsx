@@ -27,7 +27,7 @@ export default function Erc4626() {
             {getChain(vault.chainId).name}
           </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy.close)} label="apy" className="text-4xl" />
+          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
         </div>
       </div>
       <div className={`
