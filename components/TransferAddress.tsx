@@ -19,7 +19,7 @@ function useWrite(
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     chainId, address, abi, functionName, args,
     query: { enabled }
-  }), [address, abi, functionName, args, enabled])
+  }), [chainId, address, abi, functionName, args, enabled])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })

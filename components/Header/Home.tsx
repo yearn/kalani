@@ -25,6 +25,8 @@ const MenuButton = forwardRef<HTMLAnchorElement, MenuButtonProps>(({ className, 
   <a ref={ref} {...props} className={cn(MenuButtonClassName, className)}>{children}</a>
 ))
 
+MenuButton.displayName = 'MenuButton'
+
 const V3ButtonClassName = `group
 flex items-center justify-center
 text-transparent bg-gradient-to-r from-black to-black
@@ -46,9 +48,13 @@ const V3Button = forwardRef<HTMLAnchorElement, MenuButtonProps>(({ className, ch
   </a>
 ))
 
+V3Button.displayName = 'V3Button'
+
 const MenuIconButton = forwardRef<HTMLAnchorElement, MenuButtonProps>(({ className, children, ...props }, ref) => (
   <a ref={ref} {...props} className={cn(`group/button w-24 flex flex-col items-center justify-center gap-1 text-xs`, MenuButtonClassName, className)}>{children}</a>
 ))
+
+MenuIconButton.displayName = 'MenuIconButton'
 
 export default function Home() {
 	const router = useRouter()

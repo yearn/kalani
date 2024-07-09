@@ -9,13 +9,13 @@ function Admins({ accountant }: { accountant: Accountant }) {
   return <Section className="w-full">
     <div className="flex flex-col gap-8">
       <FieldLabelPair label="Fee Manager">
-        <TransferFeeManager accountant={accountant.address} />
+        <TransferFeeManager chainId={accountant.chainId} accountant={accountant.address} />
       </FieldLabelPair>
       <FieldLabelPair label="Fee Recipient">
-        <SetFeeRecipient accountant={accountant.address} />
+        <SetFeeRecipient chainId={accountant.chainId} accountant={accountant.address} />
       </FieldLabelPair>
       <FieldLabelPair label="Vault Manager">
-        <SetVaultManager accountant={accountant.address} />
+        <SetVaultManager chainId={accountant.chainId} accountant={accountant.address} />
       </FieldLabelPair>
     </div>
   </Section>

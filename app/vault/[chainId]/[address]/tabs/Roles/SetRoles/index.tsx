@@ -56,7 +56,7 @@ function useWrite({
     functionName: 'set_role',
     args: [account, rolemask],
     query: { enabled }
-  }), [vault, account, rolemask, enabled])
+  }), [chainId, vault, account, rolemask, enabled])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
