@@ -39,7 +39,7 @@ export default function RetroGrid({ className }: { className?: string }) {
           className={cn(
             "will-change-transform",
             "[background-repeat:repeat] [background-size:30px_30px] [height:200vh] [inset:0%_0px] [margin-left:-25%] [transform-origin:100%_0_0] [width:300vw]",
-            `[background-image:linear-gradient(to_right,rgb(23,23,23)_2px,transparent_0),linear-gradient(to_bottom,rgb(23,23,23)_2px,transparent_0)]`,
+            `[background-image:linear-gradient(to_right,rgb(12,12,12)_2px,transparent_0),linear-gradient(to_bottom,rgb(12,12,12)_2px,transparent_0)]`,
           )}
         />
       </div>

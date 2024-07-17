@@ -11,8 +11,8 @@ export default function Badge({
   icon: IconType,
   enabled?: boolean
 }) {
-  const fillClassName = useMemo(() => enabled ? 'fill-secondary-400' : 'fill-neutral-800', [enabled])
-  const labelClassName = useMemo(() => enabled ? 'text-secondary-400' : 'text-neutral-700', [enabled])
+  const fillClassName = useMemo(() => enabled ? 'fill-secondary-100' : 'fill-neutral-800', [enabled])
+  const labelClassName = useMemo(() => enabled ? 'text-secondary-100' : 'text-neutral-700', [enabled])
   return <div className="flex flex-col items-center">
     <div className={`p-3 rounded-primary`}>
       <Icon size={64} className={fillClassName} />

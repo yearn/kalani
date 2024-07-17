@@ -17,7 +17,7 @@ type MenuButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 const MenuButtonClassName = `
 px-6 py-3 flex items-center justify-center
 bg-black rounded-primary
-hover:bg-secondary-400 hover:text-black
+hover:bg-secondary-100 hover:text-black
 active:bg-secondary-500
 `
 
@@ -62,8 +62,8 @@ export default function Home() {
     <div className="py-4">
       <GlowGroup className="rounded-full">
         <div onClick={() => router.push('/')} className={`
-          border border-transparent group-hover:border-secondary-300
-          group-active:border-secondary-400
+          border border-transparent group-hover:border-secondary-50
+          group-active:border-secondary-100
           p-2 bg-neutral-950 rounded-full cursor-pointer`}>
           <Yearn className="size-8" back="text-transparent" front="text-neutral-200" />
         </div>
@@ -71,8 +71,8 @@ export default function Home() {
     </div>
     <GlowGroup className={`absolute p-4
       hidden group-hover:flex flex-col gap-4
-      border border-transparent group-hover:border-secondary-300
-      group-active:border-secondary-400
+      border border-transparent group-hover:border-secondary-50
+      group-active:border-secondary-100
       bg-neutral-900 text-neutral-400 rounded-primary`}>
       <MenuButton href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</MenuButton>
       <V3Button href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>

@@ -22,7 +22,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           icon: 'group-[.toast]:hidden',
           actionButton: `
             group-[.toast]:!bg-neutral-950 
-            group-[.toast]:!text-secondary-400 hover:group-[.toast]:!text-white
+            group-[.toast]:!text-secondary-100 hover:group-[.toast]:!text-white
             group-[.toast]:cursor-pointer`,
           success: 'theme-default',
           loading: 'theme-confirm'

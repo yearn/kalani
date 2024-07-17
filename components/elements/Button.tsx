@@ -20,8 +20,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, h
     <button ref={ref} {...props} className={cn(`
       relative h-8 px-8 py-5 flex items-center justify-center
       border ${border} ${bg} text-lg ${text}
-      group-hover:text-violet-300 group-hover:bg-neutral-900 group-hover:border-violet-300
-      group-active:text-violet-400 group-active:border-violet-400
+      group-hover:text-secondary-50 group-hover:bg-neutral-900 group-hover:border-secondary-50
+      group-active:text-secondary-100 group-active:border-secondary-100
       disabled:bg-neutral-950 disabled:text-neutral-600 
       disabled:group-hover:border-primary-950 disabled:group-hover:text-primary-950
       disabled:group-hover:bg-neutral-950

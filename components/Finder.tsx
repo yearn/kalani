@@ -2,7 +2,7 @@
 
 import GlowGroup from '@/components/elements/GlowGroup'
 import Input from '@/components/elements/Input'
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import useKeypress from 'react-use-keypress'
 import { fEvmAddress } from '@/lib/format'
 import { isNothing } from '@/lib/strings'
@@ -121,7 +121,7 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
 
     {showSuggestions && filteredItems.length > 0 && (
       <GlowGroup className="absolute w-full mt-3">
-        <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-400 rounded-primary">
+        <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-100 rounded-primary">
           <table className="table-fixed w-full text-neutral-200">
             <tbody>
               {filteredItems.map((item, index) => (
@@ -131,8 +131,8 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
                   onMouseOver={() => setSelectedIndex(index)}
                   className={`
                     cursor-pointer
-                    hover:bg-black hover:text-secondary-400
-                    ${index === selectedIndex ? 'bg-black text-secondary-400' : ''}
+                    hover:bg-black hover:text-secondary-100
+                    ${index === selectedIndex ? 'bg-black text-secondary-100' : ''}
                     ${index === 0 ? 'rounded-t-primary' : ''}
                     ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
                   `}

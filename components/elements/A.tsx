@@ -7,8 +7,8 @@ type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 export const AnchorClassName = `
 underline decoration-neutral-900
 text-neutral-100 
-hover:text-secondary-300 hover:decoration-secondary-300
-active:text-secondary-400 active:decoration-secondary-400
+hover:text-secondary-50 hover:decoration-secondary-50
+active:text-secondary-100 active:decoration-secondary-100
 `
 
 const A = forwardRef<HTMLAnchorElement, AnchorProps>(({ className, children, ...props }, ref) => (

@@ -43,7 +43,7 @@ export default function Search({ onSearch, className }: { onSearch?: (q: string)
 
     {showEnter && <div onClick={onEnter} className={`
       absolute top-0 right-4 h-full flex items-center 
-      text-white group-hover:text-violet-300 group-has-[:focus]:text-violet-400
+      text-white group-hover:text-secondary-50 group-has-[:focus]:text-secondary-100
       cursor-pointer`}>
       <PiKeyReturnFill />
     </div>}
