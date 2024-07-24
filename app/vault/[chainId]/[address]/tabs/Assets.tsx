@@ -1,6 +1,7 @@
+import Section from '@/components/Section'
 import { Vault, withVault } from '@/hooks/useVault'
 import { div, mulb } from '@/lib/bmath'
-import { fBps, fPercent, fTokens } from '@/lib/format'
+import { fBps, fPercent, fTokens, fUSD } from '@/lib/format'
 import { useMemo } from 'react'
 
 function Assets({ vault }: { vault: Vault }) {
@@ -11,14 +12,18 @@ function Assets({ vault }: { vault: Vault }) {
     return div(vault?.totalDebt ?? 0n, totalAllocated)
   }, [vault, allocated])
 
-  return <div>
+  return <Section className="w-full flex items-start gap-8">
     <div className={`
-      w-1/2 h-full p-4`}>
+      w-1/2 h-full`}>
       <table className="table-auto w-full border-separate border-spacing-2">
         <tbody>
           <tr>
             <td className="text-xl">Total assets</td>
-            <td className="text-right text-xl">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>
+            <td className="text-right text-4xl">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>
+          </tr>
+          <tr>
+            <td>TVL</td>
+            <td className="text-right">{fUSD(vault.tvl.close)}</td>
           </tr>
           <tr>
             <td>Allocated</td>
@@ -43,7 +48,7 @@ function Assets({ vault }: { vault: Vault }) {
         </tbody>
       </table>
     </div>
-  </div>
+  </Section>
 }
 
 export default withVault(Assets)

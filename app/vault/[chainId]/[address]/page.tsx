@@ -19,6 +19,7 @@ import Reports from './tabs/Reports'
 import { ChainImage } from '@/components/ChainImage'
 import { compareEvmAddresses } from '@/lib/types'
 import { zeroAddress } from 'viem'
+import EvmAddressLayout from '@/components/EvmAddress'
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -47,7 +48,10 @@ export default function Vault() {
     flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
-        <div className="text-sm">{vault.label} {fEvmAddress(vault.address)}</div>
+        <div className="flex items-center gap-3 text-sm">
+          {vault.label}
+          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
+        </div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">

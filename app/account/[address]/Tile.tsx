@@ -41,7 +41,7 @@ export default function Tile({
   return <Screen onClick={() => router.push(`/vault/${vault.chainId}/${vault.address}`)} className={`
     w-full p-12 flex gap-8 border border-neutral-900
     hover:border-secondary-50 hover:!text-secondary-50
-    active:border-secondary-100 active:!text-secondary-100
+    active:border-secondary-200 active:!text-secondary-200
     bg-neutral-950 text-neutral-300
     cursor-pointer`}>
     <div className="w-1/2 flex flex-col gap-2">

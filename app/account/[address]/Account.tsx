@@ -31,10 +31,10 @@ export default function Account({ address }: { address: EvmAddress }) {
     </div>
     {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} account={address} />)}
 
-    {((user?.vaults.length ?? 0) === 0) && <div className="">
+    {/* {((user?.vaults.length ?? 0) === 0) && <div className="">
       <div className="flex items-center justify-center size-48 border border-neutral-900 bg-neutral-950 text-neutral-700 rounded-primary">
         Add vault
       </div>
-    </div>}
+    </div>} */}
   </main>
 }

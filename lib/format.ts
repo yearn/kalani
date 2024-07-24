@@ -4,8 +4,12 @@ export function fElipsize(text: string, length = 48) {
   return text.length <= length ? text : `${text.slice(0, length)}...`
 }
 
+export function fHexString(hex: string) {
+  return `${hex.slice(0, 6)}...${hex.slice(-4)}`
+}
+
 export function fEvmAddress(address: string) {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`
+  return fHexString(address)
 }
 
 export function fPercent(amount: number, fixed?: number) {

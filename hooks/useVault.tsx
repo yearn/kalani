@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import useSWR from 'swr'
-import { AccountRoleSchema, EvmAddressSchema, compareEvmAddresses } from '@/lib/types'
+import { AccountRoleSchema, EvmAddressSchema, compareEvmAddresses, HexStringSchema } from '@/lib/types'
 import { useParams } from 'next/navigation'
 import { nullsToUndefined } from '@/lib/object'
 import { useIndexedItems } from './useIndexedItems'
@@ -11,10 +11,30 @@ const StrategySchema = z.object({
   name: z.string(),
   currentDebt: z.bigint({ coerce: true }),
   currentDebtUsd: z.number(),
-  targetDebtRatio: z.number()
+  targetDebtRatio: z.number(),
+  lastReportDetail: z.object({
+    blockTime: z.bigint({ coerce: true }),
+    transactionHash: HexStringSchema
+  }).optional(),
+  keeper: EvmAddressSchema.optional()
 })
 
 export type Strategy = z.infer<typeof StrategySchema>
+
+export const VaultReportSchema = z.object({
+  chainId: z.number(),
+  strategy: EvmAddressSchema,
+  blockNumber: z.bigint({ coerce: true }),
+  blockTime: z.bigint({ coerce: true }),
+  transactionHash: HexStringSchema,
+  profit: z.bigint({ coerce: true }),
+  profitUsd: z.number().optional(),
+  loss: z.bigint({ coerce: true }),
+  lossUsd: z.number().optional(),
+  apr: z.object({ gross: z.number(), net: z.number() })
+})
+
+export type VaultReport = z.infer<typeof VaultReportSchema>
 
 export const VaultSchema = z.object({
   chainId: z.number(),
@@ -42,7 +62,8 @@ export const VaultSchema = z.object({
   tvl: z.object({ close: z.number() }),
   apy: z.object({ close: z.number() }).optional(),
   strategies: StrategySchema.array(),
-  accounts: AccountRoleSchema.array()
+  accounts: AccountRoleSchema.array(),
+  reports: VaultReportSchema.array()
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -93,7 +114,12 @@ query Query($chainId: Int, $address: String) {
   vaultStrategies(chainId: $chainId, vault: $address) {
     chainId,
     address,
-    name
+    name,
+    keeper,
+    lastReportDetail {
+      blockTime,
+      transactionHash
+    }
   }
 
   accounts: vaultAccounts(chainId: $chainId, vault: $address) {
@@ -101,6 +127,22 @@ query Query($chainId: Int, $address: String) {
     vault: address
     address: account
     roleMask
+  }
+
+  reports: vaultReports(chainId: $chainId, address: $address) {
+    chainId
+    strategy
+    blockNumber
+    blockTime
+    transactionHash
+    profit: gain
+    profitUsd: gainUsd
+    loss
+    lossUsd
+    apr {
+      gross
+      net
+    }
   }
 }
 `
@@ -156,6 +198,7 @@ export function useVault({ chainId, address }: { chainId: number, address: `0x${
     ...vault,
     strategies,
     accounts: data.data.accounts,
+    reports: data.data.reports
   }))
 }
 

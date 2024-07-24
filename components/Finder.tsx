@@ -121,7 +121,7 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
 
     {showSuggestions && filteredItems.length > 0 && (
       <GlowGroup className="absolute w-full mt-3">
-        <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-100 rounded-primary">
+        <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-200 rounded-primary">
           <table className="table-fixed w-full text-neutral-200">
             <tbody>
               {filteredItems.map((item, index) => (
@@ -131,8 +131,8 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
                   onMouseOver={() => setSelectedIndex(index)}
                   className={`
                     cursor-pointer
-                    hover:bg-black hover:text-secondary-100
-                    ${index === selectedIndex ? 'bg-black text-secondary-100' : ''}
+                    hover:bg-black hover:text-secondary-200
+                    ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
                     ${index === 0 ? 'rounded-t-primary' : ''}
                     ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
                   `}

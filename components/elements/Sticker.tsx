@@ -13,7 +13,7 @@ px-8 py-2
 border border-transparent
 bg-neutral-950 text-neutral-400
 group-hover:bg-black group-hover:border-secondary-50 group-hover:text-secondary-50
-group-active:text-secondary-100 group-active:border-secondary-100
+group-active:text-secondary-200 group-active:border-secondary-200
 rounded-primary`
 
 const Sticker: React.FC<StickerProps> = ({ className, children, href, ...props }) => (

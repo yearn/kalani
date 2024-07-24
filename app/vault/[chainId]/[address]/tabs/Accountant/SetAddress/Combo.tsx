@@ -72,7 +72,7 @@ export function Combo({
     </div>
     <ComboboxOptions
       anchor="bottom"
-      className="w-[var(--input-width)] rounded-primary border border-secondary-100 border-t-0 bg-neutral-900 [--anchor-gap:var(--spacing-1)] empty:hidden"
+      className="w-[var(--input-width)] rounded-primary border border-secondary-200 border-t-0 bg-neutral-900 [--anchor-gap:var(--spacing-1)] empty:hidden"
     >
       {filter.map(option => (
         <ComboboxOption

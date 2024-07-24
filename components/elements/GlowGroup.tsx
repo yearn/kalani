@@ -8,8 +8,8 @@ type Props = BaseHTMLAttributes<HTMLDivElement> & {
 const glowGroupClassName = cn(`
 absolute -z-[1] -inset-1 rounded-primary blur-lg
 opacity-0 bg-gradient-to-r from-secondary-800 via-secondary-900 to-secondary-800
-group-hover:opacity-100 
-group-active-within:opacity-100
+group-hover:opacity-80
+group-active-within:opacity-80
 group-[&:has(:disabled)]:opacity-0
 `)
 

@@ -3,22 +3,13 @@ import colors from 'tailwindcss/colors'
 import Theme from 'tailwindcss/defaultTheme'
 
 export const primary = {
-  ...colors.orange, 
-  '1000': '#170602'
+  ...colors.orange,
+  '1000': '#281004',
+  '1500': '#170602'
 }
 
 export const secondary = {
-  '50': '#fdfdf1',
-  '100': '#f7f7ce',
-  '200': '#efee98',
-  '300': '#e6e163',
-  '400': '#e0d33f',
-  '500': '#d8ba28',
-  '600': '#bf9520',
-  '700': '#9f701e',
-  '800': '#82581e',
-  '900': '#6b491c',
-  '950': '#3d260b'
+  ...colors.violet
 }
 
 const config = {
@@ -54,7 +45,7 @@ const config = {
       },
 
       borderRadius: {
-        primary: Theme.borderRadius.xl
+        primary: Theme.borderRadius.none
       },
 
       dropShadow: {
