@@ -61,7 +61,7 @@ body {
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		background: #0a0a0a;
-		border-radius: 0.75rem;
+		border-radius: 0;
 	}
 }
 
@@ -107,7 +107,7 @@ body {
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		background: #0a0a0a;
-		border-radius: 0.75rem;
+		border-radius: 0;
 	}
 }
 
@@ -153,7 +153,7 @@ body {
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		background: #0a0a0a;
-		border-radius: 0.75rem;
+		border-radius: 0;
 	}
 }
 
@@ -192,6 +192,6 @@ body {
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		background: #0a0a0a;
-		border-radius: 0.75rem;
+		border-radius: 0;
 	}
 }

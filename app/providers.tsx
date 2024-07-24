@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  darkTheme,
   getDefaultConfig,
   midnightTheme,
   RainbowKitProvider,
@@ -20,9 +19,9 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query"
-import colors from 'tailwindcss/colors'
 import Header from '@/components/Header'
 import { chains } from '@/lib/chains'
+import { secondary } from '@/tailwind.config'
 
 const config = getDefaultConfig({
   appName: process.env.WALLETCONNECT_PROJECT_NAME ?? 'appName',
@@ -46,7 +45,7 @@ const config = getDefaultConfig({
 const queryClient = new QueryClient()
 
 const theme = midnightTheme({
-  accentColor: colors.violet[400],
+  accentColor: secondary[400],
   accentColorForeground: 'black',
 })
 

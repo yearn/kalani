@@ -2,6 +2,16 @@ import type { Config } from 'tailwindcss'
 import colors from 'tailwindcss/colors'
 import Theme from 'tailwindcss/defaultTheme'
 
+export const primary = {
+  ...colors.orange,
+  '1000': '#281004',
+  '1500': '#170602'
+}
+
+export const secondary = {
+  ...colors.violet
+}
+
 const config = {
   darkMode: ['class'],
   prefix: '',
@@ -22,15 +32,20 @@ const config = {
     },
     extend: {
       colors: {
-        primary: {
-          ...colors.orange, 
-          '1000': '#170602'
-        },
-        secondary: colors.violet
+        primary,
+        secondary
+      },
+
+      width: {
+        'field-btn': '8rem',
+      },
+
+      height: {
+        'field-btn': '54px',
       },
 
       borderRadius: {
-        primary: Theme.borderRadius.xl
+        primary: Theme.borderRadius.none
       },
 
       dropShadow: {
@@ -49,11 +64,19 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+
+        grid: {
+          '0%': { transform: 'translateY(-50%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
       },
 
       animation: {
+        'atmospheric-pulse': 'pulse 30s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'accordion-down': 'accordion-down 0.1s ease-out',
         'accordion-up': 'accordion-up 0s ease-out',
+
+        'grid': 'grid 120s linear infinite',
       },
     },
   },

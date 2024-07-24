@@ -1,5 +1,5 @@
 # Kalani
-Yearn vault automations
+Yearn vault automator
 
 ## lfg
 ```sh
