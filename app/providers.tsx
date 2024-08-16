@@ -19,7 +19,6 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query"
-import Header from '@/components/Header'
 import { chains } from '@/lib/chains'
 import { secondary } from '@/tailwind.config'
 
@@ -58,7 +57,6 @@ export default function Providers ({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={theme}>
-          <Header />
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>

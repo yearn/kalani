@@ -11,10 +11,10 @@ interface CopyProps {
   size?: number
 }
 
-function Motion({ key, children }: { key: string, children: React.ReactNode }) {
+function Motion({ _key, children }: { _key: string, children: React.ReactNode }) {
   const mounted = useMounted()
   const initial = useMemo(() => mounted ? { y: 8, opacity: 0 } : false, [mounted])
-  return <motion.div key={`motion-${key}`}
+  return <motion.div key={`motion-${_key}`}
     transition={springs.glitch}
     initial={initial}
     animate={{ y: 0, opacity: 1 }} >
@@ -32,9 +32,9 @@ const Copy: React.FC<CopyProps> = ({ text, size = 16 }) => {
     setTimeout(() => setIsCopied(false), 3000)
   }
 
-  if (isCopied) return <Motion key={`copied-${id}`}><PiCheck size={size} /></Motion>
+  if (isCopied) return <Motion _key={`copied-${id}`}><PiCheck size={size} /></Motion>
 
-  return <Motion key={`ready-${id}`}><PiCopy size={size} onClick={handleCopy} style={{ cursor: 'pointer' }} /></Motion>
+  return <Motion _key={`ready-${id}`}><PiCopy size={size} onClick={handleCopy} style={{ cursor: 'pointer' }} /></Motion>
 }
 
 export default Copy

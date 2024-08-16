@@ -1,7 +1,7 @@
 import { useAccountVaults } from '@/hooks/useAccountVaults'
 import { fEvmAddress, fNumber } from '@/lib/format'
 import { EvmAddress } from '@/lib/types'
-import ValueLabelPair from '../../../components/ValueLabelPair'
+import ValueLabelPair from '../../../../components/ValueLabelPair'
 import Pie from './Pie'
 import Tile from './Tile'
 

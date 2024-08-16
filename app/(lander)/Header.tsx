@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import Connect from '../Connect'
-import Home from './Home'
-import Finder from '../Finder'
+import Connect from '@/components/Connect'
+import Launcher from '@/components/Launcher'
 import { useAccount } from 'wagmi'
+import Button from '@/components/elements/Button'
+import { PiWalletFill } from 'react-icons/pi'
+import Link from '@/components/elements/Link'
 
 function Header() {
   const { isConnected } = useAccount()
   const [isScrolled, setIsScrolled] = useState(false)
-  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 60)
@@ -26,16 +26,13 @@ function Header() {
     >
       <div className="mx-auto max-w-6xl h-20 flex items-center justify-between">
         <div className="grow flex items-center justify-start gap-12">
-          <Home />
-					{(isConnected || pathname !== '/') && 
-            <Finder 
-              className="w-[32rem]" 
-              inputClassName="px-4 py-2 border-transparent" 
-              placeholder="address / vault / token" />
-          }
+          {isConnected && <Link className="border-transparent" href="/account">
+            <PiWalletFill size={26} />
+          </Link>}
         </div>
-        <div className={`flex items-center justify-end`}>
+        <div className={`flex items-center justify-end gap-4`}>
           <Connect />
+          <Launcher alignRight={true} />
         </div>
       </div>
     </header>

@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/shadcn'
-import RetroGrid from './magicui/retro-grid-claude'
+import RetroGrid from '../../components/magicui/retro-grid-claude'
 
 function PlaneteryDisc({ className }: { className: string }) {
   return <div className={cn('absolute rounded-full', className)}></div>
@@ -16,7 +16,7 @@ function Planet({ planeteryClassName, className }: { planeteryClassName: string,
 
 export default function Bg() {
   return <div className={`
-    isolate fixed z-0 inset-0`}>
+    isolate fixed z-0 inset-0 bg-primary-950`}>
     <div className="relative h-full w-full flex items-start justify-start overflow-hidden">
       <RetroGrid />
       <div className="absolute w-full h-[50%] bg-black shadow-lg overflow-hidden">

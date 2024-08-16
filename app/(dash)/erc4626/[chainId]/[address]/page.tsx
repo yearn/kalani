@@ -2,12 +2,13 @@
 
 import ValueLabelPair from '@/components/ValueLabelPair'
 import { useVaultFromParams } from '@/hooks/useVault'
-import { fEvmAddress, fNumber, fPercent } from '@/lib/format'
+import { fNumber, fPercent } from '@/lib/format'
 import { getChain } from '@/lib/chains'
 import { fancy } from '@/lib/fancy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import Assets from './tabs/Assets'
 import { ChainImage } from '@/components/ChainImage'
+import EvmAddressLayout from '@/components/EvmAddress'
 
 export default function Erc4626() {
   const vault = useVaultFromParams()
@@ -19,7 +20,10 @@ export default function Erc4626() {
     flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
-        <div className="text-sm">erc4626 {fEvmAddress(vault.address)}</div>
+        <div className="flex items-center gap-3 text-sm">
+          erc4626 
+          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
+        </div>
         <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">

@@ -9,7 +9,7 @@ import { getChain } from '@/lib/chains'
 import Screen from '@/components/Screen'
 import ValueLabelPair from '@/components/ValueLabelPair'
 import { fancy } from '@/lib/fancy'
-import { roleClassNames } from '@/app/vault/[chainId]/[address]/tabs/Roles/SetRoles/roleClassNames'
+import { roleClassNames } from '@/app/(dash)/vault/[chainId]/[address]/tabs/Roles/SetRoles/roleClassNames'
 import { EvmAddress } from '@/lib/types'
 
 function fakePrice(address: `0x${string}`) {

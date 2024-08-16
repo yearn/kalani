@@ -4,7 +4,7 @@ import ValueLabelPair from '@/components/ValueLabelPair'
 import { useVaultFromParams } from '@/hooks/useVault'
 import { fEvmAddress, fNumber, fPercent } from '@/lib/format'
 import { getChain } from '@/lib/chains'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { div, mulb } from '@/lib/bmath'
 import { fancy } from '@/lib/fancy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
@@ -20,8 +20,16 @@ import { ChainImage } from '@/components/ChainImage'
 import { compareEvmAddresses } from '@/lib/types'
 import { zeroAddress } from 'viem'
 import EvmAddressLayout from '@/components/EvmAddress'
+import { useAside } from '@/app/(dash)/layout'
+
+function Aside() {
+  return <div>ASIDE</div>
+}
 
 export default function Vault() {
+  const { setAside } = useAside()
+  useEffect(() => setAside(<Aside />), [setAside])
+
   const vault = useVaultFromParams()
 
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])

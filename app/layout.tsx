@@ -4,7 +4,6 @@ import Providers from './providers'
 import { Toaster } from '@/components/shadcn/sonner'
 import '@rainbow-me/rainbowkit/styles.css'
 import './globals.css'
-import Bg from '../components/Bg'
 
 const mono = JetBrains_Mono({ subsets: ['latin'] })
 
@@ -21,9 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${mono.className}`}>
       <body className={`relative w-full h-screen overflow-x-hidden overflow-y-auto font-mono bg-black`}>
-        <Bg />
         <Providers>
-          <div className="isolate">{children}</div>
+          {children}
         </Providers>
         <Toaster />
       </body>
