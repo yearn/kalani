@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Connect from '@/components/Connect'
 import Launcher from '@/components/Launcher'
 import { useAccount } from 'wagmi'
-import Button from '@/components/elements/Button'
 import { PiWalletFill } from 'react-icons/pi'
 import Link from '@/components/elements/Link'
 

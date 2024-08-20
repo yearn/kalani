@@ -16,7 +16,7 @@ export default function Erc4626() {
   if (!vault) return <></>
 
   return <main className={`
-    relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
+    relative w-6xl max-w-6xl mx-auto
     flex flex-col items-center justify-start gap-8`}>
     <div className="w-full flex items-center justify-center gap-8">
       <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">

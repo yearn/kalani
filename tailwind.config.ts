@@ -45,7 +45,7 @@ const config = {
       },
 
       borderRadius: {
-        primary: Theme.borderRadius.none
+        primary: Theme.borderRadius['xl']
       },
 
       dropShadow: {

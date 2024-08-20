@@ -8,8 +8,8 @@ import './globals.css'
 const mono = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Kalani',
-  description: 'Yearn vault automator',
+  title: 'Zookeeper',
+  description: 'Yearn vault control center',
 }
 
 export default function RootLayout({

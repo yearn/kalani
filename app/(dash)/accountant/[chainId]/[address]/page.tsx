@@ -4,24 +4,24 @@ import { fEvmAddress } from '@/lib/format'
 import { getChain } from '@/lib/chains'
 import { Accountant, withAccountant } from '@/hooks/useAccountant'
 import Admins from './Admins'
+import EvmAddressLayout from '@/components/EvmAddress'
+import { ChainImage } from '@/components/ChainImage'
 
 function Page({ accountant }: { accountant: Accountant }) {
   if (!accountant) return <></>
 
-  return <main className={`
-    relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
-    flex flex-col items-center justify-start gap-8`}>
-    <div className="w-full flex items-center justify-center gap-8">
-      <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2 rounded">
-        <div className="text-sm">accountant</div>
-        <div className="text-5xl">{fEvmAddress(accountant.address)}</div>
-        <div className="flex items-center gap-12">
-          <div>
-            <div>[{getChain(accountant.chainId).name}]</div>
-          </div>
-        </div>
+  return <main className={`relative flex flex-col items-start justify-start gap-8`}>
+    <div className="flex flex-col justify-center gap-2">
+      <div className="flex items-center gap-3 text-sm">
+        accountant
+        <EvmAddressLayout chainId={accountant.chainId} address={accountant.address} />
       </div>
-      <div className={`w-1/2 h-48 flex items-center justify-center`}>      
+      <div className="text-5xl">{fEvmAddress(accountant.address)}</div>
+      <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4">
+          <ChainImage chainId={accountant.chainId} />
+          {getChain(accountant.chainId).name}
+        </div>
       </div>
     </div>
     <Admins />

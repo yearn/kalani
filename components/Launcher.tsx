@@ -64,11 +64,11 @@ export default function Launcher({
 	const router = useRouter()
   return <div className="isolate relative group">
     <div className="py-4">
-      <GlowGroup className="rounded-none">
+      <GlowGroup className="rounded-primary">
         <div className={`
           border border-transparent group-hover:border-secondary-50
           group-active:border-secondary-200
-          p-2 bg-neutral-950 rounded-none`}>
+          p-2 bg-neutral-950 rounded-primary`}>
           <PiDotsNineBold size={24} />
         </div>
       </GlowGroup>

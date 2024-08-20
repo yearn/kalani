@@ -23,7 +23,16 @@ import EvmAddressLayout from '@/components/EvmAddress'
 import { useAside } from '@/app/(dash)/layout'
 
 function Aside() {
-  return <div>ASIDE</div>
+  const vault = useVaultFromParams()
+  if (!vault) return <></>
+
+  return <div>
+    <div className="flex flex-col items-center justify-center gap-12">
+      <Badge label="Accountant" icon={PiCalculator} enabled={!compareEvmAddresses(vault.accountant, zeroAddress)} />
+      <Badge label="Allocator" icon={PiScales} enabled={vault.strategies.length > 1} />
+      <Badge label="yHaaS" icon={PiTractorFill} />
+    </div>
+  </div>
 }
 
 export default function Vault() {
@@ -51,30 +60,20 @@ export default function Vault() {
 
   if (!vault) return <></>
 
-  return <main className={`
-    relative w-6xl max-w-6xl mx-auto pt-[6rem] pb-96
-    flex flex-col items-center justify-start gap-8`}>
-    <div className="w-full flex items-center justify-center gap-8">
-      <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
-        <div className="flex items-center gap-3 text-sm">
-          {vault.label}
-          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
-        </div>
-        <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-            <ChainImage chainId={vault.chainId} />
-            {getChain(vault.chainId).name}
-          </div>
-          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
-        </div>
+  return <main className={"relative flex flex-col items-start justify-start gap-8"}>
+    <div className="flex flex-col justify-center gap-2">
+      <div className="flex items-center gap-3 text-sm">
+        {vault.label}
+        <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
       </div>
-      <div className={`
-        w-1/2 h-48 flex items-center justify-center justify-center gap-12`}>
-        <Badge label="Accountant" icon={PiCalculator} enabled={!compareEvmAddresses(vault.accountant, zeroAddress)} />
-        <Badge label="Allocator" icon={PiScales} enabled={vault.strategies.length > 1} />
-        <Badge label="yHaaS" icon={PiTractorFill} />
+      <div className={`text-4xl ${fancy.className}`}>{vault.name}</div>
+      <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4">
+          <ChainImage chainId={vault.chainId} />
+          {getChain(vault.chainId).name}
+        </div>
+        <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
+        <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
       </div>
     </div>
 
