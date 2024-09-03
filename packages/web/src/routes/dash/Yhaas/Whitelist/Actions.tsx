@@ -3,6 +3,7 @@ import Button from '../../../../components/elements/Button'
 import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
 import { useAccount } from 'wagmi'
+import { useApplyToWhitelist } from './useApplyToWhitelist'
 
 export default function Actions() {
   const { chainId, address } = useAccount()
@@ -19,18 +20,10 @@ export default function Actions() {
     w.setFrequency(undefined)
   }, [w])
 
+  // const apply = useApplyToWhitelist()
+
   const onApply = useCallback(() => {
-    const data = {
-      chainId,
-      manager: address,
-      target: w.targetOrUndefined,
-      targetType: targetType,
-      name,
-      frequency: w.frequency,
-      repo: w.repo
-    }
-    console.log(data)
-  }, [chainId, address, w])
+  }, [])
 
   return <div className="flex items-center justify-end gap-6">
     <Button onClick={onReset} h={'secondary'}>Reset</Button>

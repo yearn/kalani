@@ -32,7 +32,7 @@ query Query {
     address
     vaults
   }
-  vaults(apiVersion: "3") {
+  vaults(erc4626: true) {
     chainId
     address
     name
@@ -50,7 +50,7 @@ query Query {
       close
     }
   }
-  strategies(apiVersion: "3") {
+  strategies(erc4626: true) {
     chainId
     address
   }
