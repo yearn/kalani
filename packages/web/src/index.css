@@ -1,0 +1,262 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+@font-face {
+  font-family: 'Venus Rising';
+  src: url('./assets/fonts/VenusRisingRegular/font.woff2') format('woff2'),
+       url('./assets/fonts/VenusRisingRegular/font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Venus Rising';
+  src: url('./assets/fonts/VenusRisingBold/font.woff2') format('woff2'),
+       url('./assets/fonts/VenusRisingBold/font.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Venus Rising';
+  src: url('./assets/fonts/VenusRisingHeavy/font.woff2') format('woff2'),
+       url('./assets/fonts/VenusRisingHeavy/font.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #fafafa;
+  --background: #040200;
+
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--foreground);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(1turn);
+	}
+}
+
+.theme-disabled {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#404040 0deg,
+				#0a0a0a 90deg,
+				#404040 180deg,
+				#0a0a0a 270deg,
+				#404040 360deg
+			);
+		animation: rotate 24s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0;
+	}
+}
+
+.theme-cta {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#494440 0deg,
+				#0f0a0a 90deg,
+				#494440 180deg,
+				#0f0a0a 270deg,
+				#494440 360deg
+			);
+		animation: rotate 24s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0;
+	}
+}
+
+.theme-sim {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#0a0a0a 0deg,
+				#0a0a0a 60deg,
+				#2e1065 60deg,
+				#2e1065 120deg,
+				#0a0a0a 120deg,
+				#0a0a0a 180deg,
+				#2e1065 180deg,
+				#2e1065 240deg,
+				#0a0a0a 240deg,
+				#0a0a0a 300deg,
+				#2e1065 300deg,
+				#2e1065 360deg
+			);
+		animation: rotate 8s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0;
+	}
+}
+
+.theme-write {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#2e1065 0deg,
+				#2e1065 60deg,
+				#a78bfa 60deg,
+				#a78bfa 120deg,
+				#2e1065 120deg,
+				#2e1065 180deg,
+				#a78bfa 180deg,
+				#a78bfa 240deg,
+				#2e1065 240deg,
+				#2e1065 300deg,
+				#a78bfa 300deg,
+				#a78bfa 360deg
+			);
+		animation: rotate 8s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0;
+	}
+}
+
+.theme-confirm {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#7c3aed 0deg,
+				#c4b5fd 90deg,
+				#7c3aed 180deg,
+				#c4b5fd 270deg,
+				#7c3aed 360deg
+			);
+		animation: rotate 2s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 1px;
+		top: 1px;
+		width: calc(100% - 2px);
+		height: calc(100% - 2px);
+		background: #0a0a0a;
+		border-radius: 0;
+	}
+}
