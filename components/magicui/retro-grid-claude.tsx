@@ -31,7 +31,7 @@ export default function RetroGrid({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "isolate pointer-events-none fixed h-full w-full overflow-hidden opacity-100 [perspective:200px]",
+        "pointer-events-none fixed h-full w-full overflow-hidden opacity-100 [perspective:200px]",
         className,
       )}>
       <div className="absolute inset-0 [transform:rotateX(65deg)]">

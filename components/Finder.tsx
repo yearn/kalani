@@ -120,7 +120,7 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
     </div>
 
     {showSuggestions && filteredItems.length > 0 && (
-      <GlowGroup className="absolute w-full mt-3">
+      <GlowGroup className="absolute z-50 w-full mt-3">
         <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-200 rounded-primary">
           <table className="table-fixed w-full text-neutral-200">
             <tbody>

@@ -10,35 +10,16 @@ import { fancy } from '@/lib/fancy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
 import { PiCalculator, PiScales, PiTractorFill } from 'react-icons/pi'
 import Roles from './tabs/Roles'
-import Badge from './Badge'
+import Badge from '../../../../@aside/(dash)/vault/[chainId]/[address]/Badge'
 import Assets from './tabs/Assets'
 import Strategies from './tabs/Strategies'
 import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import { ChainImage } from '@/components/ChainImage'
-import { compareEvmAddresses } from '@/lib/types'
-import { zeroAddress } from 'viem'
 import EvmAddressLayout from '@/components/EvmAddress'
-import { useAside } from '@/app/(dash)/layout'
-
-function Aside() {
-  const vault = useVaultFromParams()
-  if (!vault) return <></>
-
-  return <div>
-    <div className="flex flex-col items-center justify-center gap-12">
-      <Badge label="Accountant" icon={PiCalculator} enabled={!compareEvmAddresses(vault.accountant, zeroAddress)} />
-      <Badge label="Allocator" icon={PiScales} enabled={vault.strategies.length > 1} />
-      <Badge label="yHaaS" icon={PiTractorFill} />
-    </div>
-  </div>
-}
 
 export default function Vault() {
-  const { setAside } = useAside()
-  useEffect(() => setAside(<Aside />), [setAside])
-
   const vault = useVaultFromParams()
 
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])

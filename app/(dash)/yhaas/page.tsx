@@ -2,8 +2,6 @@
 
 import { fancy } from '@/lib/fancy'
 import { PiRabbitFill } from 'react-icons/pi'
-import { useAside } from '../layout'
-import { useEffect } from 'react'
 
 function Brand() {
   return <div className="flex items-center gap-6 pl-4">
@@ -59,8 +57,6 @@ function Aside() {
 }
 
 export default function Page() {
-  const { setAside } = useAside()
-  useEffect(() => setAside(<Aside />), [setAside])
   return <div className="flex flex-col gap-8">
     <div className="flex items-center justify-between">
       <Brand />

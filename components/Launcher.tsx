@@ -62,7 +62,7 @@ export default function Launcher({
   alignRight?: boolean
 }) {
 	const router = useRouter()
-  return <div className="isolate relative group">
+  return <div className="relative group">
     <div className="py-4">
       <GlowGroup className="rounded-primary">
         <div className={`

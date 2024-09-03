@@ -33,11 +33,6 @@ query Query {
 }
 `
 
-function isIterable(obj: any): boolean {
-  // Check if the object is not null and has a Symbol.iterator method
-  return obj != null && typeof obj[Symbol.iterator] === 'function'
-}
-
 function toIndexedItems(gqlResult: any): IndexedItem[] {
   const items: IndexedItem[] = []
 

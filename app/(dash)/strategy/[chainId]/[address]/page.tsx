@@ -6,29 +6,12 @@ import { fNumber, fPercent } from '@/lib/format'
 import { getChain } from '@/lib/chains'
 import { fancy } from '@/lib/fancy'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs'
-import { PiTractorFill } from 'react-icons/pi'
 import Assets from './tabs/Assets'
 import Reports from './tabs/Reports'
 import { ChainImage } from '@/components/ChainImage'
 import EvmAddressLayout from '@/components/EvmAddress'
-import Badge from '@/app/(dash)/vault/[chainId]/[address]/Badge'
-import { useEffect } from 'react'
-import { useAside } from '@/app/(dash)/layout'
-
-function Aside() {
-  const vault = useVaultFromParams()
-  if (!vault) return <></>
-
-  return <div>
-    <div className="flex flex-col items-center justify-center gap-12">
-      <Badge label="yHaaS" icon={PiTractorFill} />
-    </div>
-  </div>
-}
 
 export default function Strategy() {
-  const { setAside } = useAside()
-  useEffect(() => setAside(<Aside />), [setAside])
   const vault = useVaultFromParams()
 
   if (!vault) return <></>

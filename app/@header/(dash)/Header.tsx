@@ -1,15 +1,11 @@
 import Launcher from '@/components/Launcher'
 import Finder from '@/components/Finder'
 import Connect from '@/components/Connect'
-import { cn } from '@/lib/shadcn'
-
-function Header({
-  className,
-}: {
-  className?: string
-}) {
+ 
+export default function Header() {
   return <header
-    className={cn(`bg-black/60 backdrop-blur border-b border-primary-1000`, className)}>
+    className={`sticky z-50 inset-x-0 top-0 w-full
+    bg-black/60 backdrop-blur border-b border-primary-1000`}>
     <div className="mx-auto w-full h-20 pl-32 pr-6 flex items-center justify-between">
       <div className="grow flex items-center justify-start gap-12">
         <Finder
@@ -24,5 +20,3 @@ function Header({
     </div>
   </header>
 }
-
-export default Header
