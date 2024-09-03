@@ -1,7 +1,7 @@
 import GlowGroup from '../elements/GlowGroup'
 import Input from '../elements/Input'
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import useKeypress from 'react-use-keypress'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { fEvmAddress } from '../../lib/format'
 import { isNothing } from '../../lib/strings'
 import { ScrollArea } from '../shadcn/scroll-area'
@@ -32,9 +32,17 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [showSuggestions, setShowSuggestions] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const isMac = useMemo(() => /Mac|iPod|iPhone|iPad/.test(navigator.userAgent), [])
 
-  const onSlash = useCallback(() => setTimeout(() => inputRef.current?.focus(), 0), [inputRef])
-  useKeypress('/', onSlash)
+  const onHotkey = useCallback(() => {
+    inputRef.current?.focus()
+    setShowSuggestions(true)
+  }, [inputRef])
+
+  useHotkeys(['ctrl+k', 'meta+k'], (event: KeyboardEvent) => {
+    event.preventDefault()
+    onHotkey()
+  }, { enableOnFormTags: true })
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent): void => {
@@ -118,8 +126,8 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
       autoCorrect="off"
     />
 
-    <div className={`
-      absolute top-0 right-4 h-full flex items-center text-neutral-800`}>/
+    <div className="absolute top-0 right-6 h-full flex items-center text-xs text-neutral-700 pointer-events-none">
+      {isMac ? '⌘' : 'Ctrl'}+K
     </div>
 
     {showSuggestions && filteredItems.length > 0 && (

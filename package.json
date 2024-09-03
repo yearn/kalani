@@ -4,7 +4,7 @@
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {
-    "clean": "rm -R node_modules && rm -R packages/**/dist && rm -R packages/**/.next",
+    "clean": "rm -rf node_modules packages/**/node_modules packages/**/dist packages/**/.next",
     "dev": "(cd packages/web && vite --port 3000)",
     "build": "(cd packages/web && tsc -b && vite build)"
   }
