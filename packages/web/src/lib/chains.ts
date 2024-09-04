@@ -1,11 +1,11 @@
 import { mainnet, polygon, gnosis, arbitrum } from '@wagmi/chains'
 
 function rpc(chainId: number) {
-  if(import.meta.env.VITE_PUBLIC_TESTNET === 'true') {
-    const testnet = import.meta.env[`VITE_PUBLIC_TESTNET_RPC_${chainId}`]
+  if(import.meta.env.VITE_TESTNET === 'true') {
+    const testnet = import.meta.env[`VITE_TESTNET_RPC_${chainId}`]
     if(testnet) return testnet
   }
-  return import.meta.env[`VITE_PUBLIC_RPC_${chainId}`]
+  return import.meta.env[`VITE_RPC_${chainId}`]
 }
 
 export const _mainnet = Object.assign({}, mainnet, {

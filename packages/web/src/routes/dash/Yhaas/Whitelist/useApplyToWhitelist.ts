@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi'
 import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
 
-const API = import.meta.env.VITE_PUBLIC_TESTNET ?? 'http://localhost:3001'
+const API = import.meta.env.VITE_API ?? 'http://localhost:3001'
 
 export function useApplyToWhitelist() {
   const { address, chainId } = useAccount()
