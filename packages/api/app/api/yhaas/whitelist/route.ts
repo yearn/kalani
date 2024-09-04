@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   const issues = await fetchAllOpenIssues()
   const issueExists = issues.some(issue => issue.title === name)
   if (issueExists) {
-    return NextResponse.json({ message: `Issue already exists, ${name}` }, { status: 500, headers })
+    return NextResponse.json({ message: `An application for "${name}" already exists` }, { status: 500, headers })
   }
 
   const md = makeIssueMarkdown(name, parseInt(chainId), [target], repo, frequency)

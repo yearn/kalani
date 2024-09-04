@@ -1,5 +1,5 @@
 export default function Yhaas() {
-  return <div className="flex flex-col items-start justify-center gap-6">
+  return <div className="hidden flex flex-col items-start justify-center gap-6">
     <div>
       <p>Unregistered</p>
       <div className="flex flex-col items-center justify-center gap-12"></div>

@@ -21,7 +21,7 @@ export default function StrategyForm() {
       </Suspense>
     </FlyInFromBottom>}
 
-    {isWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
+    {isRelayed && isWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
       <Suspense>
         <SetRepoAndFrequency />
       </Suspense>

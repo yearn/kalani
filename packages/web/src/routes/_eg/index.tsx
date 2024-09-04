@@ -8,7 +8,7 @@ export default function Eg() {
   const [toaston, setToaston] = useState(false)
   const [resolveToast, setResolveToast] = useState<(() => (value: unknown) => void)>(() => () => {})
 
-  const onClick = useCallback(() => {
+  const onToastAndWait = useCallback(() => {
     setToaston(t => !t)
     if (toaston) return
     toast.promise(
@@ -21,6 +21,18 @@ export default function Eg() {
     )
   }, [toaston, setToaston, setResolveToast])
 
+  const onToast = useCallback(() => {
+    toast('This is a toast')
+  }, [])
+
+  const onWarn = useCallback(() => {
+    toast.warning('This is a warning')
+  }, [])
+
+  const onError = useCallback(() => {
+    toast.error('This is an error')
+  }, [])
+
   useEffect(() => {
     if (!toaston) resolveToast()
   }, [toaston, resolveToast])
@@ -31,8 +43,11 @@ export default function Eg() {
       w-[740px] flex flex-col gap-16`}>
 
       <TransferFeeManager chainId={137} accountant="0x54483f1592ab0aDea2757Ae0d62e6393361d4CEe" />
-      <div>
-        <Button onClick={onClick} theme={toaston ? 'confirm' : 'default'}>toast</Button>
+      <div className="flex items-center gap-6">
+        <Button onClick={onToastAndWait} theme={toaston ? 'confirm' : 'default'}>toast and wait</Button>
+        <Button onClick={onToast}>toast</Button>
+        <Button onClick={onWarn}>warn</Button>
+        <Button onClick={onError}>error</Button>
       </div>
       <div className="flex items-center gap-6">
         <Button theme={'default'}>default</Button>
