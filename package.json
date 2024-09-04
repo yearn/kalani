@@ -2,12 +2,12 @@
   "name": "kalani-monorepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": ["packages/*"],
   "scripts": {
     "clean": "rm -rf node_modules packages/**/node_modules packages/**/dist packages/**/.next",
     "dev": "(cd packages/web && vite --port 3000)",
     "build": "(cd packages/web && tsc -b && vite build)",
     "dev:api": "(cd packages/api && PORT=3001 next dev)",
     "build:api": "(cd packages/api && next build)"
-  }
+  },
+  "workspaces": ["packages/*"]
 }

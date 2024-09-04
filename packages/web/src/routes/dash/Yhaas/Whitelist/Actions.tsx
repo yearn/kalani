@@ -1,18 +1,14 @@
 import { useCallback, useMemo } from 'react'
+import { useSignMessage } from 'wagmi'
 import Button from '../../../../components/elements/Button'
 import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
-import { useAccount } from 'wagmi'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
+import { toast } from 'sonner'
 
 export default function Actions() {
-  const { chainId, address } = useAccount()
   const w = useWhitelist()
-  const { data: targetType, name } = useTargetType(w.targetOrUndefined)
-
-  const disabled = useMemo(() => {
-    return !(targetType && w.repo && w.frequency)
-  }, [w, targetType])
+  const { data: targetType } = useTargetType(w.targetOrUndefined)
 
   const onReset = useCallback(() => {
     w.setTarget(undefined)
@@ -20,13 +16,36 @@ export default function Actions() {
     w.setFrequency(undefined)
   }, [w])
 
-  // const apply = useApplyToWhitelist()
+  const apply = useApplyToWhitelist()
 
-  const onApply = useCallback(() => {
-  }, [])
+  const { signMessageAsync } = useSignMessage()
+
+  const onApply = useCallback(async () => {
+    try {
+      const signature = await signMessageAsync({ message: `I manage contract ${w.target}` })
+      const response = await apply.mutateAsync({ signature })
+      if (response.status === 200) {
+        toast.success('yHaaS application submitted!')
+      } else {
+        toast.error((await response.json()).message)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }, [apply, signMessageAsync, w])
+
+  const theme = useMemo(() => {
+    if (apply.isPending) return 'confirm'
+    return 'default'
+  }, [apply])
+
+  const disabled = useMemo(() => 
+    !(targetType && w.repo && w.frequency) 
+    || apply.isPending, 
+  [w, targetType, apply])
 
   return <div className="flex items-center justify-end gap-6">
     <Button onClick={onReset} h={'secondary'}>Reset</Button>
-    <Button onClick={onApply} disabled={disabled}>Apply for Whitelist</Button>
+    <Button onClick={onApply} theme={theme} disabled={disabled}>Apply for Whitelist</Button>
   </div>
 }

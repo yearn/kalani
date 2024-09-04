@@ -4,6 +4,8 @@ import { useAccount } from 'wagmi'
 import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
 
+const API = import.meta.env.VITE_PUBLIC_TESTNET ?? 'http://localhost:3001'
+
 export function useApplyToWhitelist() {
   const { address, chainId } = useAccount()
   const w = useWhitelist()
@@ -20,12 +22,12 @@ export function useApplyToWhitelist() {
   }), [chainId, address, w])
 
   return useMutation({
-    mutationFn: () => {
-      return fetch('http://localhost:3001/api/yhaas/whitelist', {
+    mutationFn: ({ signature }: { signature: string }) => {
+      return fetch(`${API}/api/yhaas/whitelist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, signature })
       })
-    },
+    }
   })
 }
