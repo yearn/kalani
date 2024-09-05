@@ -3,6 +3,8 @@ import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
+import { fEvmAddress } from '../../../../lib/format'
+import { zeroAddress } from 'viem'
 
 const API = import.meta.env.VITE_API ?? 'http://localhost:3001'
 
@@ -12,6 +14,7 @@ export function useApplyToWhitelist() {
   const { data: targetType, name } = useTargetType(w.targetOrUndefined)
 
   const data = useMemo(() => ({
+    title: `${name} [${fEvmAddress(w.targetOrUndefined ?? zeroAddress)}] [${fEvmAddress(address ?? zeroAddress)}]`,
     chainId,
     manager: address,
     target: w.targetOrUndefined,

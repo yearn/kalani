@@ -1,32 +1,26 @@
 import { chains } from './chains'
+import { Application } from './types'
+import { capitalize } from '@/lib/strings'
 
-export default function makeIssueMarkdown(
-  name: string, 
-  chainId: number, 
-  addresses: `0x${string}`[], 
-  repo: string, 
-  frequency: string
-) {
-  const network = chains[chainId]
-
-  const addressBlock = addresses.map(address => 
-    `[${network.blockExplorers?.default.url}/address/${address}](${network.blockExplorers?.default.url}/address/${address})\n\n`
-  ).join('')
+export default function makeIssueMarkdown(application: Application) {
+  const { chainId, target, targetType, name, repo, frequency } = application
+  const chain = chains[chainId]
+  const targetTypeCapitalized = capitalize(targetType)
 
   return `
 **Strategy name**
 ${name}
 
 **Network**
-${network?.name}
+${chain?.name}
 
-**Strategy repo**
+**Link to ${targetType} repository/issue**
 ${repo}
 
-**Strategy\\factory addresses**
-${addressBlock}
+**${targetTypeCapitalized} address**
+${`[${chain.blockExplorers?.default.url}/address/${target}](${chain.blockExplorers?.default.url}/address/${target})`}
 
 **Automation frequency**
-${frequency}
+${frequency} ${frequency === 1 ? 'day' : 'days'}
 `
 }

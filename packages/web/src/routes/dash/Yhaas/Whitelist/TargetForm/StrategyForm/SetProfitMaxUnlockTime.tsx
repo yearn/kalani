@@ -127,7 +127,7 @@ export default function SetProfitMaxUnlockTime() {
   }, [confirmation, resolveToast])
 
   return <div className="flex flex-col gap-6">
-    <p>Set profit max unlock time in seconds</p>
+    <p>Set profit max unlock time (seconds)</p>
     <div className="flex items-center gap-4">
       <div className="grow" >
         <SecondsInput disabled={!permitted} seconds={(next ?? Number(profitMaxUnlockTime))} onChange={onChange} />

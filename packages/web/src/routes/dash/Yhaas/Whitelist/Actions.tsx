@@ -5,6 +5,7 @@ import { useWhitelist } from './provider'
 import { useTargetType } from './useTargetType'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
 import { toast } from 'sonner'
+import A from '../../../../components/elements/A'
 
 export default function Actions() {
   const w = useWhitelist()
@@ -25,7 +26,11 @@ export default function Actions() {
       const signature = await signMessageAsync({ message: `I manage contract ${w.target}` })
       const response = await apply.mutateAsync({ signature })
       if (response.status === 200) {
-        toast.success('yHaaS application submitted!')
+        const info = await response.json()
+        toast.success(<div className="flex flex-col gap-2">
+          <div>yHaaS application submitted!</div>
+          <A href={info.html_url} target="_blank">View on GitHub</A>
+        </div>)
       } else {
         toast.error((await response.json()).message)
       }

@@ -14,7 +14,7 @@ export default function SetTargetAddress({
   useEffect(() => {
     if (target && isNextValid) {
       onValidAddress?.(EvmAddressSchema.parse(target))
-      setFrequency(259200)
+      setFrequency(3)
     }
   }, [target, isNextValid, setTarget, onValidAddress, setFrequency])
 
