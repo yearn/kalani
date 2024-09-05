@@ -1,5 +1,5 @@
 import { createPublicClient, http, CustomTransport } from 'viem'
-import { EvmAddress } from '../lib/types'
+import { EvmAddress } from './types'
 import { PublicClient, Chain } from 'viem'
 
 export type TestnetClient = PublicClient<CustomTransport, Chain> & {

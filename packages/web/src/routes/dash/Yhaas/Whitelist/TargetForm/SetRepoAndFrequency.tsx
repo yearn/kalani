@@ -3,7 +3,7 @@ import Input from '../../../../../components/elements/Input'
 import { useWhitelist } from '../provider'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { PiCheckFatFill } from 'react-icons/pi'
-import { isNothing } from '../../../../../lib/strings'
+import { isNothing } from '@kalani/lib/strings'
 import { useTargetType } from '../useTargetType'
 
 function DaysInput({

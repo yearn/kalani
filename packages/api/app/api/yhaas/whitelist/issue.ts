@@ -1,6 +1,6 @@
 import { chains } from './chains'
 import { Application } from './types'
-import { capitalize } from '@/lib/strings'
+import { capitalize } from '@kalani/lib/strings'
 
 export default function makeIssueMarkdown(application: Application) {
   const { chainId, target, targetType, name, repo, frequency } = application

@@ -1,7 +1,7 @@
 import { fetchAllOpenIssues, postIssue } from '@/lib/gh'
 import { NextResponse } from 'next/server'
 import { createPublicClient, http, parseAbi } from 'viem'
-import { chains, getRpc } from './chains'
+import { chains, getRpc } from '@kalani/lib/chains'
 import makeIssueMarkdown from './issue'
 import { ApplicationSchema } from './types'
 
@@ -18,6 +18,7 @@ export async function OPTIONS() {
 
 export async function POST(req: Request) {
   const application = ApplicationSchema.parse(await req.json())
+
   const {
     title,
     chainId,
@@ -25,8 +26,6 @@ export async function POST(req: Request) {
     target,
     signature
   } = application
-
-  console.log(application)
 
   const chain = chains[chainId]
   const client = createPublicClient({ chain, transport: http(getRpc(chainId)) })
