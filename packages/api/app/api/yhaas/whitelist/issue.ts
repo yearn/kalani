@@ -1,4 +1,4 @@
-import { chains } from './chains'
+import { chains } from '@kalani/lib/chains' 
 import { Application } from './types'
 import { capitalize } from '@kalani/lib/strings'
 
