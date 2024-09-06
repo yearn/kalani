@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi'
 import { fEvmAddress } from '../../../lib/format'
 import { zeroAddress } from 'viem'
 
-const API = import.meta.env.VITE_API ?? 'http://localhost:3001'
+const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 export const GithubIssueSchema = z.object({
   url: z.string(),
