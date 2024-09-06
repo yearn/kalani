@@ -1,20 +1,25 @@
 # Kalani
-Yearn vault automator
+Yearn vault control center
 
 ## lfg
 ```sh
-cp packages/web/.env.example packages/web/.env
-# configure packages/web/.env
-bun install
+cp .env.example .env
+# configure .env
+bun i
 bun dev
 ```
-Head to [http://localhost:3000](http://localhost:3000)
 
-## production
-```sh
-bun run build
-```
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `bun i` | Install project dependencies |
+| `bun dev` | Start frontend dev server |
+| `bun dev:api` | Start API dev server |
+| `bun test` | Run tests |
+| `bun run build` | Build for production |
+
 
 ## dev notes
-- use the phosphor icon set by default, https://react-icons.github.io/react-icons/icons/pi
-
+frontend uses the phosphor icon set, 
+https://react-icons.github.io/react-icons/icons/pi
