@@ -1,10 +1,10 @@
-import { PiRabbitFill } from 'react-icons/pi'
+import { PiRobot } from 'react-icons/pi'
 import Whitelist from './Whitelist'
 import { WhitelistProvider } from './Whitelist/provider'
 
 function Brand() {
   return <div className="flex items-center gap-6 pl-4">
-    <PiRabbitFill size={64} />
+    <PiRobot size={64} />
     <div className="flex flex-col gap-0">
       <div className="flex items-end gap-1">
         <div className="text-4xl font-fancy">y</div>

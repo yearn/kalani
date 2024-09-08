@@ -1,5 +1,5 @@
 # Kalani
-Yearn vault control center
+Yearn vault super center
 
 ## lfg
 ```sh

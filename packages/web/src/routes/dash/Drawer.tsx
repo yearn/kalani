@@ -1,5 +1,5 @@
 import { AnchorHTMLAttributes, ReactNode } from 'react'
-import { PiRabbitFill, PiWalletFill } from 'react-icons/pi'
+import { PiRobot, PiVault } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
 import { Link } from 'react-router-dom'
 import { Yearn } from '../../assets/icons/Yearn'
@@ -42,11 +42,11 @@ export default function Drawer({
     </DrawerButton>
 
     <DrawerButton to="/account" title="Account dash">
-      <PiWalletFill size={26} />
+      <PiVault size={26} />
     </DrawerButton>
 
     <DrawerButton to="/yhaas" title="yHaaS dash">
-      <PiRabbitFill size={26} />
+      <PiRobot size={26} />
     </DrawerButton>
   </div>
 }
