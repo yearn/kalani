@@ -7,7 +7,7 @@ import { useProfitMaxUnlockTime } from './useProfitMaxUnlockTime'
 import SetRepoAndFrequency from '../SetRepoAndFrequency'
 
 export default function StrategyForm() {
-  const { data: isRelayed } = useIsRelayed()
+  const { data: isRelayed } = useIsRelayed({})
   const { isWithinGuidelines } = useProfitMaxUnlockTime()
 
   return <div className="flex flex-col gap-16">

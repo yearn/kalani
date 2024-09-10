@@ -1,3 +1,4 @@
+import { useAccount } from 'wagmi'
 import { EvmAddress } from '../../../../lib/types'
 
 export const RELAYERS: Record<number, EvmAddress> = {
@@ -9,6 +10,7 @@ export const RELAYERS: Record<number, EvmAddress> = {
   10: '0x21BB199ab3be9E65B1E60b51ea9b0FE9a96a480a',
 }
 
-export function getRelayer(chainId?: number) {
+export function useRelayer() {
+  const { chainId } = useAccount()
   return chainId ? RELAYERS[chainId] : undefined
 }

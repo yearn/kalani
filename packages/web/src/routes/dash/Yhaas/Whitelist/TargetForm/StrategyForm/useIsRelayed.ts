@@ -1,17 +1,18 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { useAccount, useConfig } from 'wagmi'
+import { useConfig } from 'wagmi'
 import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '../../../../../../lib/abis'
-import { compareEvmAddresses } from '../../../../../../lib/types'
 import { useWhitelist } from '../../provider'
-import { getRelayer } from '../../relayers'
+import { useRelayer } from '../../relayers'
+import { EvmAddress } from '@kalani/lib/types'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
-export function useIsRelayed() {
+export function useIsRelayed({ strategy }: { strategy?: EvmAddress }) {
   const config = useConfig()
-  const { chainId } = useAccount()
-  const { targets } = useWhitelist()
-  const relayer = getRelayer(chainId)
+  const { targets: _targets } = useWhitelist()
+  const targets = useMemo(() => strategy !== undefined ? [strategy] : _targets, [strategy, _targets])
+  const relayer = useRelayer()
 
   const contracts = useMemo(() => targets.map(target => ({
     abi: abis.strategy, address: target, functionName: 'keeper'

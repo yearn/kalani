@@ -27,7 +27,7 @@ function TargetInfo({
   }, [address, name, targetType, chain])
   const icon = useMemo(() => targetType !== undefined ? <PiCheck /> : <PiWarning />, [targetType])
   return <FlyInFromLeft _key={_key}>
-    <div className={cn('flex items-center justify-end gap-3 text-sm', textColor)}>
+    <div className={cn('flex items-center justify-end text-sm', textColor)}>
       <div className="grow">{text}</div>{icon}
     </div>
   </FlyInFromLeft>
