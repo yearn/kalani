@@ -2,14 +2,14 @@ import { useCallback, useMemo } from 'react'
 import { useSignMessage } from 'wagmi'
 import Button from '../../../../components/elements/Button'
 import { useWhitelist } from './provider'
-import { useTargetType } from './useTargetType'
+import { useTargetInfos } from './useTargetInfos'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
 import { toast } from 'sonner'
 import A from '../../../../components/elements/A'
 
 export default function Actions() {
   const w = useWhitelist()
-  const { data: targetType } = useTargetType(w.targets[0] || undefined)
+  const { targetInfos } = useTargetInfos(w.targets)
 
   const onReset = useCallback(() => {
     w.setTargets([])
@@ -23,7 +23,8 @@ export default function Actions() {
 
   const onApply = useCallback(async () => {
     try {
-      const signature = await signMessageAsync({ message: `I manage contract ${w.target}` })
+      const contracts = targetInfos.map(address => address).join('\n')
+      const signature = await signMessageAsync({ message: `I manage these contracts:\n ${contracts}` })
       const response = await apply.mutateAsync({ signature })
       if (response.status === 200) {
         const info = await response.json()
@@ -45,9 +46,9 @@ export default function Actions() {
   }, [apply])
 
   const disabled = useMemo(() => 
-    !(targetType && w.repo && w.frequency) 
+    !(targetInfos.length > 0 && w.repo && w.frequency) 
     || apply.isPending, 
-  [w, targetType, apply])
+  [w, targetInfos, apply])
 
   return <div className="flex items-center justify-end gap-6">
     <Button onClick={onReset} h={'secondary'}>Reset</Button>

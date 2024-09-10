@@ -4,7 +4,7 @@ import { useWhitelist } from '../provider'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { PiCheckFatFill } from 'react-icons/pi'
 import { isNothing } from '@kalani/lib/strings'
-import { useTargetType } from '../useTargetType'
+import { useTargetInfos } from '../useTargetInfos'
 
 function DaysInput({
   disabled, days, onChange, className
@@ -34,7 +34,7 @@ function DaysInput({
 
 export default function SetRepoAndFrequency() {
   const w = useWhitelist()
-  const { data: targetType } = useTargetType(w.targetOrUndefined)
+  const { targetInfos } = useTargetInfos(w.targets)
 
   return <div className="flex flex-col gap-16">
     <div className="flex flex-col gap-6">
@@ -53,7 +53,7 @@ export default function SetRepoAndFrequency() {
       </div>
     </div>
     <div className="flex flex-col gap-6">
-    <p>Set your {targetType}'s github repo</p>
+    <p>Set your {targetInfos[0].targetType ?? 'target'}'s github repo</p>
       <div className="w-full flex items-center gap-4">
         <div className="grow">
           <Input placeholder='Github repo url' onChange={(e) => w.setRepo(e.target.value)} />

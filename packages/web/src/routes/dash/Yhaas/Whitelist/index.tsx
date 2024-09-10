@@ -1,9 +1,9 @@
 import Input from '../../../../components/elements/Input'
 import { useAccount } from 'wagmi'
 import Connect from '../../../../components/Connect'
-import SetTargetAddress from './SetTargetAddress'
+import SetTargetAddresses from './SetTargetAddresses'
 import { Suspense } from 'react'
-import TargetType from './TargetType'
+import TargetInfos from './TargetInfos'
 import TargetForm from './TargetForm'
 import Actions from './Actions'
 import { useWhitelist } from './provider'
@@ -26,9 +26,9 @@ export default function Whitelist() {
 
     <div className="flex flex-col gap-6">
       <p>What addresses do you want to automate?</p>
-      <SetTargetAddress />
+      <SetTargetAddresses />
       <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
-        <TargetType />
+        <TargetInfos />
       </Suspense>
     </div>
 

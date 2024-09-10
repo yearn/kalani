@@ -1,6 +1,6 @@
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { useWhitelist } from '../provider'
-import { useTargetType } from '../useTargetType'
+import { useTargetInfos } from '../useTargetInfos'
 import AllocatorForm from './AllocatorForm'
 import StrategyForm from './StrategyForm'
 import VaultForm from './VaultForm'
@@ -14,10 +14,10 @@ const FORMS: {
 }
 
 export default function TargetForm() {
-  const { targetOrUndefined: target } = useWhitelist()
-  const { data: targetType } = useTargetType(target)
-  if (targetType === undefined) return <></>
-  const Form = FORMS[targetType]
+  const { targets } = useWhitelist()
+  const { targetInfos } = useTargetInfos(targets)
+  if (targetInfos.length === 0 || targetInfos[0].targetType === undefined) return <></>
+  const Form = FORMS[targetInfos[0].targetType!]
   return <FlyInFromBottom _key="target-form">
     <Form />
   </FlyInFromBottom>

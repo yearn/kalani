@@ -3,7 +3,7 @@ import { useWhitelist } from './provider'
 import Addresses from '../../../../components/elements/Addresses'
 import { EvmAddress } from '@kalani/lib/types'
 
-export default function SetTargetAddress() {
+export default function SetTargetAddresses() {
   const { targets, setTargets, setFrequency } = useWhitelist()
 
   const onChange = useCallback((addresses: EvmAddress[], isValid: boolean) => {
