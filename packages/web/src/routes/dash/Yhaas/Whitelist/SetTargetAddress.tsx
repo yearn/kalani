@@ -1,22 +1,17 @@
-import { useEffect, useState } from 'react'
-import { EvmAddress, EvmAddressSchema } from '../../../../lib/types'
-import InputAddress from '../../../../components/InputAddress'
+import { useCallback } from 'react'
 import { useWhitelist } from './provider'
+import Addresses from '../../../../components/elements/Addresses'
+import { EvmAddress } from '@kalani/lib/types'
 
-export default function SetTargetAddress({
-  onValidAddress
-}: {
-  onValidAddress?: (address: EvmAddress) => void
-}) {
-  const { target, setTarget, setFrequency } = useWhitelist()
-  const [isNextValid, setIsNextValid] = useState<boolean>(false)
+export default function SetTargetAddress() {
+  const { targets, setTargets, setFrequency } = useWhitelist()
 
-  useEffect(() => {
-    if (target && isNextValid) {
-      onValidAddress?.(EvmAddressSchema.parse(target))
+  const onChange = useCallback((addresses: EvmAddress[], isValid: boolean) => {
+    if (isValid) {
+      setTargets(addresses)
       setFrequency(3)
     }
-  }, [target, isNextValid, setTarget, onValidAddress, setFrequency])
+  }, [setTargets, setFrequency])
 
-  return <InputAddress next={target} setNext={setTarget} isNextValid={isNextValid} setIsNextValid={setIsNextValid} />
+  return <Addresses onChange={onChange} initialAddresses={targets} />
 }

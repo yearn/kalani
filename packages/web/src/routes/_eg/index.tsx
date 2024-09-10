@@ -3,6 +3,10 @@ import Button from '../../components/elements/Button'
 import TransferFeeManager from '../dash/Accountant/Admins/TransferFeeManager'
 import Bg from '../lander/Bg'
 import { toast } from 'sonner'
+import Addresses from '../../components/elements/Addresses'
+import TextArea from '../../components/elements/TextArea'
+import Input from '../../components/elements/Input'
+import TextGrow from '../../components/elements/TextGrow'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -50,15 +54,25 @@ export default function Eg() {
         <Button onClick={onError}>error</Button>
       </div>
       <div className="flex items-center gap-6">
-        <Button theme={'default'}>default</Button>
+        <Button theme={'default'}>d</Button>
+        <Button theme={'default'} disabled={true}>d</Button>
+        <Button theme={'cta'}>c</Button>
+        <Button theme={'cta'} disabled={true}>c</Button>
         <Button theme={'sim'}>s</Button>
         <Button theme={'sim'} disabled={true}>s</Button>
+      </div>
+      <div className="flex items-center gap-6">
         <Button theme={'write'}>w</Button>
         <Button theme={'write'} disabled={true}>w</Button>
         <Button theme={'confirm'}>c</Button>
         <Button theme={'confirm'} disabled={true}>c</Button>
       </div>
-
+      <div className="flex items-center gap-6">
+        <Addresses placeholder="0x addresses" />
+      </div>
+      <div className="flex items-center gap-6">
+        <TextGrow className="grow w-full" placeholder="text grow" />
+      </div>
     </section>
   </div>
 }

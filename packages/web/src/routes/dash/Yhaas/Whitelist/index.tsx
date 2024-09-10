@@ -11,7 +11,7 @@ import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
 
 export default function Whitelist() {
   const { address, chain } = useAccount()
-  const { target } = useWhitelist()
+  const { targets } = useWhitelist()
 
   if (!(address && chain)) return <div className="flex gap-4">
     <Connect label="Connect your wallet to get started" />
@@ -25,7 +25,7 @@ export default function Whitelist() {
     </div>
 
     <div className="flex flex-col gap-6">
-      <p>What address do you want to automate?</p>
+      <p>What addresses do you want to automate?</p>
       <SetTargetAddress />
       <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
         <TargetType />
@@ -37,7 +37,7 @@ export default function Whitelist() {
     </Suspense>
 
     <Suspense>
-      {target && <FlyInFromBottom _key="whitelist-actions">
+      {targets.length > 0 && <FlyInFromBottom _key="whitelist-actions">
         <Actions />
       </FlyInFromBottom>}      
     </Suspense>

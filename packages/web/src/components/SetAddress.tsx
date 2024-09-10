@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from './elements/Button'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
-import InputAddress from './InputAddress'
+import Address from './elements/Address'
 import { EvmAddress, EvmAddressSchema, compareEvmAddresses } from '../lib/types'
 import { useWriteContract } from '../hooks/useWriteContract'
 import { PiCheckFatFill } from 'react-icons/pi'
@@ -110,10 +110,10 @@ export default function SetAddress({
     }
   }, [simulation, setError])
 
-  const inputTheme = useMemo(() => {
-    if (multicall.isFetching) return 'sim'
-    return 'default'
-  }, [multicall])
+  // const inputTheme = useMemo(() => {
+  //   if (multicall.isFetching) return 'sim'
+  //   return 'default'
+  // }, [multicall])
 
   const disableInput = useMemo(() => 
     !permitted
@@ -150,14 +150,13 @@ export default function SetAddress({
 
   return <div className={`w-full flex flex-col gap-2 ${className}`}>
     <div className="flex items-center gap-4">
-      <InputAddress 
+      <Address 
         previous={previous}
         next={toNextOrDefault}
         setNext={setNext}
         isNextValid={isNextValid}
         setIsNextValid={setIsNextValid}
         onChange={onChange} 
-        theme={inputTheme} 
         frozen={to !== undefined}
         disabled={disableInput} />
       <div className="relative isolate">

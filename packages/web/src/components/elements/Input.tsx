@@ -1,11 +1,8 @@
 import { cn } from '../../lib/shadcn'
-import { ThemeName } from '../../lib/types'
 import { forwardRef, InputHTMLAttributes } from 'react'
-import GlowGroup from './GlowGroup'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string
-  theme?: ThemeName
 }
 
 export const InputClassName = cn(`
@@ -21,12 +18,10 @@ group-hover:disabled:text-neutral-400 group-hover:disabled:border-black
 disabled:placeholder-neutral-800 disabled:border-transparent
 
 outline-none focus:ring-0 focus:outline-none
-rounded-primary`)
+rounded-primary saber-glow`)
 
-const Input = forwardRef<HTMLInputElement, InputProps>(({ className, theme, ...props }, ref) => {
-  return <GlowGroup className={`rounded-primary theme-${theme ?? 'default'}`}>
-    <input ref={ref} {...props} className={cn(InputClassName, className)} />
-  </GlowGroup>
+const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
+  return <input ref={ref} {...props} className={cn(InputClassName, className)} />
 })
 
 Input.displayName = 'Input'

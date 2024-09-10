@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Input from './elements/Input'
-import { EvmAddress, EvmAddressSchema, ThemeName } from '../lib/types'
+import Input from './Input'
+import { EvmAddress, EvmAddressSchema } from '../../lib/types'
 import { PiCheckCircle, PiWarningCircle } from 'react-icons/pi'
 
-export default function InputAddress({ 
+export default function Address({ 
   placeholder,
   disabled,
   frozen,
@@ -13,7 +13,6 @@ export default function InputAddress({
   setNext,
   isNextValid,
   setIsNextValid,
-  theme,
   className
 }: { 
   placeholder?: string,
@@ -25,7 +24,6 @@ export default function InputAddress({
   setNext?: (next: string) => void,
   isNextValid?: boolean,
   setIsNextValid?: (isValid: boolean) => void,
-  theme?: ThemeName,
   className?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
@@ -37,7 +35,7 @@ export default function InputAddress({
     setNext?.(e.target.value)
     setIsNextValid?.(EvmAddressSchema.safeParse(e.target.value).success)
     onChange?.(e.target.value, EvmAddressSchema.safeParse(e.target.value).success)
-  }, [frozen,setHasNext, setNext, setIsNextValid, onChange])
+  }, [frozen, setHasNext, setNext, setIsNextValid, onChange])
 
   useEffect(() => setIsNextValid?.(EvmAddressSchema.safeParse(next).success), [setIsNextValid, next])
 
@@ -49,7 +47,6 @@ export default function InputAddress({
       onChange={_onChange}
       placeholder={placeholder ?? '0x'}
       disabled={disabled ?? false}
-      theme={theme}
       maxLength={42}
       className="w-full text-base" />
     {hasNext && !isNextValid && <div className={`

@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
-import { EvmAddress, EvmAddressSchema } from '../../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
+import React, { createContext, useContext, useState } from 'react'
 
 type Context = {
-  target?: string,
-  setTarget: React.Dispatch<React.SetStateAction<string | undefined>>,
-  targetOrUndefined: EvmAddress | undefined,
+  targets: EvmAddress[],
+  setTargets: React.Dispatch<React.SetStateAction<EvmAddress[]>>,
   repo?: string,
   setRepo: React.Dispatch<React.SetStateAction<string | undefined>>,
   frequency?: number,
@@ -14,18 +13,12 @@ type Context = {
 export const WhitelistContext = createContext<Context>({} as Context)
 
 export function WhitelistProvider({ children }: { children: React.ReactNode }) {
-  const [target, setTarget] = useState<string | undefined>()
-  const targetOrUndefined = useMemo(() => {
-    const parsed = EvmAddressSchema.safeParse(target)
-    if (parsed.success) return parsed.data
-    return undefined
-  }, [target])
-
+  const [targets, setTargets] = useState<EvmAddress[]>([])
   const [repo, setRepo] = useState<string | undefined>()
   const [frequency, setFrequency] = useState<number | undefined>()
 
   return <WhitelistContext.Provider value={{
-    target, setTarget, targetOrUndefined,
+    targets, setTargets,
     repo, setRepo,
     frequency, setFrequency
     }}>

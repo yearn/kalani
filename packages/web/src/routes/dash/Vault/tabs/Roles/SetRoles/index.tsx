@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { fEvmAddress } from '../../../../../../lib/format'
 import Dot from './Dot'
 import { PiStar, PiStarFill } from 'react-icons/pi'
-import InputAddress from '../../../../../../components/InputAddress'
+import Address from '../../../../../../components/elements/Address'
 import { useIsRoleManager, useRoleManager } from '../../../../../../hooks/useRoleManager'
 import { zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
@@ -166,7 +166,7 @@ export default function SetRoles({
           <Sticker to={`/account/${account ?? zeroAddress}`}>{account ?? zeroAddress}</Sticker>
         </div>}
 
-        {editAddress && <InputAddress 
+        {editAddress && <Address 
           previous={undefined}
           next={newAccount}
           setNext={setNewAccount}

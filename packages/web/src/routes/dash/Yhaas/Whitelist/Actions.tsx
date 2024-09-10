@@ -9,10 +9,10 @@ import A from '../../../../components/elements/A'
 
 export default function Actions() {
   const w = useWhitelist()
-  const { data: targetType } = useTargetType(w.targetOrUndefined)
+  const { data: targetType } = useTargetType(w.targets[0] || undefined)
 
   const onReset = useCallback(() => {
-    w.setTarget(undefined)
+    w.setTargets([])
     w.setRepo(undefined)
     w.setFrequency(undefined)
   }, [w])
