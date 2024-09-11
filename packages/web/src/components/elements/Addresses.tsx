@@ -24,37 +24,35 @@ export default function Addresses({
   disabled,
   frozen,
   onChange,
-  initialAddresses,
+  previous,
+  next,
+  setNext,
   className
 }: { 
   placeholder?: string,
   disabled?: boolean,
   frozen?: boolean,
   onChange?: (addresses: EvmAddress[], isValid: boolean) => void,
-  initialAddresses?: EvmAddress[],
+  previous?: string,
+  next?: string,
+  setNext?: (next: string) => void,
   className?: string
 }) {
-  const [value, setValue] = useState<string>('')
   const [addresses, setAddresses] = useState<string[]>([])
-
-  useEffect(() => {
-    setValue(initialAddresses?.join('\n') ?? '')
-    setAddresses(initialAddresses || [])
-  }, [initialAddresses, setValue, setAddresses])
 
   const _onChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (frozen) return
-    setValue(e.target.value)
+    setNext?.(e.target.value)
     const _addresses = e.target.value.split(/\n/)
     setAddresses(_addresses)
     const isValid = validateAddresses(_addresses)
-    const changed = isValid ? _addresses.map(address => EvmAddressSchema.parse(address)) : []
-    onChange?.(changed, isValid)
-  }, [frozen, onChange, validateAddresses, setValue, setAddresses])
+    const nextAddresses = isValid ? _addresses.map(address => EvmAddressSchema.parse(address)) : []
+    onChange?.(nextAddresses, isValid)
+  }, [frozen, onChange, validateAddresses, setNext, setAddresses])
 
   return <div className={`grow group relative rounded-primary ${className}`}>
     <TextGrow
-      value={value}
+      value={next ?? previous ?? ''}
       onChange={_onChange}
       placeholder={placeholder ?? '0x'}
       disabled={disabled ?? false}

@@ -16,7 +16,7 @@ const FORMS: {
 export default function TargetForm() {
   const { targets } = useWhitelist()
   const { targetInfos } = useTargetInfos(targets)
-  if (targetInfos.length === 0 || targetInfos[0].targetType === undefined) return <></>
+  if (targetInfos.length === 0 || targetInfos.some(info => info.targetType === undefined)) return <></>
   const Form = FORMS[targetInfos[0].targetType!]
   return <FlyInFromBottom _key="target-form">
     <Form />

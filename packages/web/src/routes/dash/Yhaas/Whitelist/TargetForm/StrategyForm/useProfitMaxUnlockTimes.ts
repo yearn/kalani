@@ -4,11 +4,13 @@ import abis from '../../../../../../lib/abis'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useWhitelist } from '../../provider'
 import { useMemo } from 'react'
+import { EvmAddress } from '@kalani/lib/types'
 
-export function useProfitMaxUnlockTime() {
+export function useProfitMaxUnlockTimes({ strategy }: { strategy?: EvmAddress }) {
   const config = useConfig()
   const { chainId } = useAccount()
-  const { targets } = useWhitelist()
+  const { targets: _targets } = useWhitelist()
+  const targets = useMemo(() => strategy !== undefined ? [strategy] : _targets, [strategy, _targets])
 
   const contracts = useMemo(() => targets.map(target => ({
     abi: abis.strategy, address: target, functionName: 'profitMaxUnlockTime' 
@@ -19,6 +21,14 @@ export function useProfitMaxUnlockTime() {
   // @ts-ignore "Type instantiation is excessively deep and possibly infinite. ts(2589)"
   const query = useSuspenseQuery(options)
 
+  const profitMaxUnlockTimes = useMemo(() => {
+    if (!query.isSuccess) return []
+    return query.data.map(result => {
+      if (result.status !== 'success') return undefined
+      return Number(result.result)
+    })
+  }, [query])
+
   const isWithinGuidelines = useMemo(() => {
     if (!query.isSuccess) return false
     return query.data.every(result => {
@@ -26,12 +36,12 @@ export function useProfitMaxUnlockTime() {
       const profitMaxUnlockTime = Number(result.result)
       if (profitMaxUnlockTime === 0) return false
       if (chainId === 1) {
-        return profitMaxUnlockTime >= 3 * 24 * 60 * 60
+        return profitMaxUnlockTime >= 4 * 24 * 60 * 60
       } else {
         return profitMaxUnlockTime >= 2 * 24 * 60 * 60
       }
     })
   }, [query, chainId])
 
-  return { ...query, isWithinGuidelines }
+  return { ...query, profitMaxUnlockTimes, isWithinGuidelines }
 }

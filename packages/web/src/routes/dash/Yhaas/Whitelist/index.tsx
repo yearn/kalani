@@ -17,7 +17,7 @@ export default function Whitelist() {
     <Connect label="Connect your wallet to get started" />
   </div>
 
-  return <div className="pb-96 flex flex-col gap-16">
+  return <div className="pb-96 flex flex-col gap-20">
     <div className="flex flex-col gap-6">
       <p>Let's go!</p>
       <Input value={`Network: ${chain?.name}`} disabled />
@@ -25,7 +25,7 @@ export default function Whitelist() {
     </div>
 
     <div className="flex flex-col gap-6">
-      <p>What addresses do you want to automate?</p>
+      <p className="text-xl">· What addresses do you want to automate?</p>
       <SetTargetAddresses />
       <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
         <TargetInfos />

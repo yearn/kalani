@@ -33,8 +33,8 @@
     "react-router-dom": "^6.26.1",
     "react-timeago": "^7.2.0",
     "sonner": "^1.5.0",
-    "viem": "2.21.2",
-    "wagmi": "2.12.8",
+    "viem": "2.21.5",
+    "wagmi": "2.12.10",
     "zod": "^3.23.8"
   },
   "devDependencies": {

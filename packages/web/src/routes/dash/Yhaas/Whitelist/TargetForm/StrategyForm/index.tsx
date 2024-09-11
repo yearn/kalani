@@ -1,23 +1,23 @@
 import { Suspense } from 'react'
 import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
-import SetKeeper from './SetKeeper'
-import SetProfitMaxUnlockTime from './SetProfitMaxUnlockTime'
+import SetKeepers from './SetKeepers'
+import SetProfitMaxUnlockTimes from './SetProfitMaxUnlockTimes'
 import { useIsRelayed } from './useIsRelayed'
-import { useProfitMaxUnlockTime } from './useProfitMaxUnlockTime'
+import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
 import SetRepoAndFrequency from '../SetRepoAndFrequency'
 
 export default function StrategyForm() {
   const { data: isRelayed } = useIsRelayed({})
-  const { isWithinGuidelines } = useProfitMaxUnlockTime()
+  const { isWithinGuidelines } = useProfitMaxUnlockTimes({})
 
-  return <div className="flex flex-col gap-16">
+  return <div className="flex flex-col gap-20">
     <FlyInFromBottom _key="target-form-keeper">
-      <SetKeeper />
+      <SetKeepers />
     </FlyInFromBottom>
 
     {isRelayed && <FlyInFromBottom _key="target-form-profit-unlock">
       <Suspense>
-        <SetProfitMaxUnlockTime />
+        <SetProfitMaxUnlockTimes />
       </Suspense>
     </FlyInFromBottom>}
 

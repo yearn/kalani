@@ -12,6 +12,7 @@ export default function Actions() {
   const { targetInfos } = useTargetInfos(w.targets)
 
   const onReset = useCallback(() => {
+    w.setTargetsRaw('')
     w.setTargets([])
     w.setRepo(undefined)
     w.setFrequency(undefined)
