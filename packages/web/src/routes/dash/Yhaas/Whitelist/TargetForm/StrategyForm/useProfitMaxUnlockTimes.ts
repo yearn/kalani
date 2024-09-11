@@ -1,16 +1,18 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { useAccount, useConfig } from 'wagmi'
+import { useConfig } from 'wagmi'
 import abis from '../../../../../../lib/abis'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useWhitelist } from '../../provider'
 import { useMemo } from 'react'
 import { EvmAddress } from '@kalani/lib/types'
+import { useAutomationGuidelines } from './useAutomationGuidelines'
 
-export function useProfitMaxUnlockTimes({ strategy }: { strategy?: EvmAddress }) {
+export function useProfitMaxUnlockTimes(o?: { strategy?: EvmAddress }) {
+  const { strategy } = o ?? {}
   const config = useConfig()
-  const { chainId } = useAccount()
   const { targets: _targets } = useWhitelist()
   const targets = useMemo(() => strategy !== undefined ? [strategy] : _targets, [strategy, _targets])
+  const { isUnlockWithinGuidelines } = useAutomationGuidelines()
 
   const contracts = useMemo(() => targets.map(target => ({
     abi: abis.strategy, address: target, functionName: 'profitMaxUnlockTime' 
@@ -29,19 +31,13 @@ export function useProfitMaxUnlockTimes({ strategy }: { strategy?: EvmAddress })
     })
   }, [query])
 
-  const isWithinGuidelines = useMemo(() => {
+  const areWithinGuidelines = useMemo(() => {
     if (!query.isSuccess) return false
     return query.data.every(result => {
       if (result.status !== 'success') return false
-      const profitMaxUnlockTime = Number(result.result)
-      if (profitMaxUnlockTime === 0) return false
-      if (chainId === 1) {
-        return profitMaxUnlockTime >= 4 * 24 * 60 * 60
-      } else {
-        return profitMaxUnlockTime >= 2 * 24 * 60 * 60
-      }
+      return isUnlockWithinGuidelines(Number(result.result))
     })
-  }, [query, chainId])
+  }, [query, isUnlockWithinGuidelines])
 
-  return { ...query, profitMaxUnlockTimes, isWithinGuidelines }
+  return { ...query, profitMaxUnlockTimes, areWithinGuidelines }
 }

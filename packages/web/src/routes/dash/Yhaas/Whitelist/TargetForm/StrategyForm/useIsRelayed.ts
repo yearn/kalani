@@ -8,7 +8,8 @@ import { useRelayer } from '../../relayers'
 import { EvmAddress } from '@kalani/lib/types'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 
-export function useIsRelayed({ strategy }: { strategy?: EvmAddress }) {
+export function useIsRelayed(o?: { strategy?: EvmAddress }) {
+  const { strategy } = o ?? {}
   const config = useConfig()
   const { targets: _targets } = useWhitelist()
   const targets = useMemo(() => strategy !== undefined ? [strategy] : _targets, [strategy, _targets])

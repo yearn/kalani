@@ -1,7 +1,8 @@
 import { cn } from '../../lib/shadcn'
-import { forwardRef, InputHTMLAttributes } from 'react'
+import { forwardRef, InputHTMLAttributes, useMemo } from 'react'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  theme?: 'default' | 'warn' | 'error'
   className?: string
 }
 
@@ -21,7 +22,12 @@ outline-none focus:ring-0 focus:outline-none
 rounded-primary saber-glow`)
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
-  return <input ref={ref} {...props} className={cn(InputClassName, className)} />
+  const borderClassName = useMemo(() => {
+    if (props.theme === 'warn') return '!border-warn-300'
+    if (props.theme === 'error') return '!border-error-300'
+    return ''
+  }, [props])
+  return <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName)} />
 })
 
 Input.displayName = 'Input'

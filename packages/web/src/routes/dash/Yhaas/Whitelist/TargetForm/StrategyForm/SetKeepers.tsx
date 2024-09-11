@@ -29,6 +29,7 @@ function useWrite(
 }
 
 function ExecButton({ target }: { target: EvmAddress }) {
+  const { refetch: refetchAreAllRelayed } = useIsRelayed()
   const { data: isRelayed, refetch: refetchIsRelayed } = useIsRelayed({ strategy: target })
   const { simulation, write, confirmation, resolveToast } = useWrite(target, true)
 
@@ -53,9 +54,10 @@ function ExecButton({ target }: { target: EvmAddress }) {
   useEffect(() => {
     if (confirmation.isSuccess) {
       resolveToast()
+      refetchAreAllRelayed()
       refetchIsRelayed()
     }
-  }, [confirmation, resolveToast, refetchIsRelayed])
+  }, [confirmation, resolveToast, refetchAreAllRelayed, refetchIsRelayed])
 
   if (isRelayed) return <div className="h-[42px] py-3 flex items-center justify-center text-green-400 text-sm"><PiCheck /></div>
 

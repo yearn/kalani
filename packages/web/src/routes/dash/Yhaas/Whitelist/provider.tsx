@@ -1,15 +1,16 @@
 import { EvmAddress } from '@kalani/lib/types'
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 
 type Context = {
   targetsRaw: string,
   setTargetsRaw: React.Dispatch<React.SetStateAction<string>>,
   targets: EvmAddress[],
   setTargets: React.Dispatch<React.SetStateAction<EvmAddress[]>>,
+  frequency?: number,
+  setFrequency: React.Dispatch<React.SetStateAction<number | undefined>>,
   repo?: string,
   setRepo: React.Dispatch<React.SetStateAction<string | undefined>>,
-  frequency?: number,
-  setFrequency: React.Dispatch<React.SetStateAction<number | undefined>>
+  isRepoValid: boolean
 }
 
 export const WhitelistContext = createContext<Context>({} as Context)
@@ -17,14 +18,20 @@ export const WhitelistContext = createContext<Context>({} as Context)
 export function WhitelistProvider({ children }: { children: React.ReactNode }) {
   const [targetsRaw, setTargetsRaw] = useState<string>('')
   const [targets, setTargets] = useState<EvmAddress[]>([])
-  const [repo, setRepo] = useState<string | undefined>()
   const [frequency, setFrequency] = useState<number | undefined>()
+  const [repo, setRepo] = useState<string | undefined>()
+
+  const githubRepoRegex = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
+  const isRepoValid = useMemo(() => {
+    if (!repo) return false
+    return githubRepoRegex.test(repo)
+  }, [repo])
 
   return <WhitelistContext.Provider value={{
     targetsRaw, setTargetsRaw,
     targets, setTargets,
-    repo, setRepo,
-    frequency, setFrequency
+    frequency, setFrequency,
+    repo, setRepo, isRepoValid
     }}>
     {children}
   </WhitelistContext.Provider>

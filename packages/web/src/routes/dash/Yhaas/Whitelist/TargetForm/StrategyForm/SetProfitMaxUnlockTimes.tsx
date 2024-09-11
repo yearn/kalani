@@ -2,7 +2,7 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import Input from '../../../../../../components/elements/Input'
 import Button from '../../../../../../components/elements/Button'
 import { PiCheck, PiLink } from 'react-icons/pi'
-import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
 import { cn } from '../../../../../../lib/shadcn'
@@ -11,14 +11,16 @@ import { useWhitelist } from '../../provider'
 import { fEvmAddress } from '../../../../../../lib/format'
 import { isNothing } from '@kalani/lib/strings'
 import { EvmAddress } from '@kalani/lib/types'
+import { useAutomationGuidelines } from './useAutomationGuidelines'
 
 function DaysInput({
-  disabled, days, onChange, className
+  disabled, days, onChange, className, theme
 }: {
   disabled?: boolean,
   days?: number | string | undefined,
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  className?: string
+  className?: string,
+  theme?: 'warn'
 }) {
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === '.' || event.key === ',') {
@@ -31,6 +33,7 @@ function DaysInput({
       disabled={disabled}
       value={days ?? ''} 
       type="number"
+      theme={theme}
       onChange={onChange}
       onKeyDown={onKeyDown}
       className={className}
@@ -99,6 +102,7 @@ function useWrite(
 }
 
 function ExecButton({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMaxUnlockTime: number }) {
+  const { refetch: refetchAll } = useProfitMaxUnlockTimes()
   const { profitMaxUnlockTimes: _previous, refetch: refetchPrevious } = useProfitMaxUnlockTimes({ strategy: target })
   const previous = useMemo(() => _previous[0] ?? 0, [_previous])
   const isSet = useMemo(() => profitMaxUnlockTime === previous, [profitMaxUnlockTime, previous])
@@ -126,9 +130,10 @@ function ExecButton({ target, profitMaxUnlockTime }: { target: EvmAddress, profi
   useEffect(() => {
     if (confirmation.isSuccess) {
       resolveToast()
+      refetchAll()
       refetchPrevious()
     }
-  }, [confirmation, resolveToast, refetchPrevious])
+  }, [confirmation, resolveToast, refetchAll, refetchPrevious])
 
   if (isSet) return <div className="h-[42px] py-3 flex items-center justify-center text-green-400 text-sm"><PiCheck /></div>
 
@@ -154,16 +159,19 @@ function Target({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMax
 }
 
 export default function SetProfitMaxUnlockTimes() {
-  const { targets } = useWhitelist()
-  const { profitMaxUnlockTimes } = useProfitMaxUnlockTimes({})
+  const { chain } = useAccount()
+  const { targets, frequency, setFrequency } = useWhitelist()
+  const { profitMaxUnlockTimes } = useProfitMaxUnlockTimes()
+  const { recommendedFrequency, isWithinGuidelines: _isWithinGuidelines } = useAutomationGuidelines()
 
-  const maxFrequency = useMemo(() => {
-    if (profitMaxUnlockTimes.length === 0) return 3
+  const initialFrequency = useMemo(() => {
+    if (profitMaxUnlockTimes.length === 0) return recommendedFrequency
     const maxUnlock = Math.max(...profitMaxUnlockTimes.map(time => time ?? 0))
     return maxUnlock / (24 * 60 * 60)
-  }, [profitMaxUnlockTimes])
+  }, [recommendedFrequency, profitMaxUnlockTimes])
 
-  const [frequency, setFrequency] = useState<number | undefined>(maxFrequency)
+  useEffect(() => setFrequency(initialFrequency), [initialFrequency, setFrequency])
+
   const [profitMaxUnlockTime, setProfitMaxUnlockTime] = useState<number | undefined>()
 
   useEffect(() => {
@@ -176,16 +184,24 @@ export default function SetProfitMaxUnlockTimes() {
 
   const onChangeFrequency = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (isNothing(e.target.value)) return setFrequency(undefined)
-    setFrequency(Math.max(Number(e.target.value), 0))
+    const nextFrequency = Math.max(Number(e.target.value), 0)
+    setFrequency(nextFrequency)
   }, [setFrequency])
+
+  const isWithinGuidelines = useMemo(() => {
+    if (frequency === undefined) return false
+    return _isWithinGuidelines(frequency)
+  }, [frequency, _isWithinGuidelines])
 
   return <div className="flex flex-col gap-6">
     <p className="text-xl">· Set automation frequency and profit max unlock time</p>
+    <p className={cn('text-xl', isWithinGuidelines ? undefined : 'text-warn-400')}>· {recommendedFrequency} days or more recommended on {chain?.name}</p>
+
     <div className="mt-8 px-6 flex items-center justify-end gap-6">
 
       <div className="grid grid-cols-2 gap-6">
         <div className="flex items-center justify-end">Automation frequency</div>
-        <DaysInput days={frequency} onChange={onChangeFrequency} />
+        <DaysInput days={frequency} onChange={onChangeFrequency} theme={isWithinGuidelines ? undefined : 'warn'} />
         <div className="flex items-center justify-end">Profit max unlock time</div>
         <SecondsInput disabled={true} seconds={profitMaxUnlockTime} />
       </div>
@@ -197,7 +213,7 @@ export default function SetProfitMaxUnlockTimes() {
       </div>
     </div>
 
-    {(profitMaxUnlockTime !== undefined) && <div className="mt-8 flex flex-col gap-2">
+    {isWithinGuidelines && (profitMaxUnlockTime !== undefined) && <div className="mt-8 flex flex-col gap-2">
       {targets.map((target, index) => <Target key={index} target={target} profitMaxUnlockTime={profitMaxUnlockTime} />)}
     </div>}    
   </div>

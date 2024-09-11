@@ -47,11 +47,11 @@ export default function Actions() {
   }, [apply])
 
   const disabled = useMemo(() => 
-    !(targetInfos.length > 0 && w.repo && w.frequency) 
+    !(targetInfos.length > 0 && w.frequency && w.isRepoValid)
     || apply.isPending, 
   [w, targetInfos, apply])
 
-  return <div className="flex items-center justify-end gap-6">
+  return <div className="mt-8 flex items-center justify-end gap-6">
     <Button onClick={onReset} h={'secondary'}>Reset</Button>
     <Button onClick={onApply} theme={theme} disabled={disabled}>Apply for Whitelist</Button>
   </div>

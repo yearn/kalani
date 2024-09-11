@@ -33,7 +33,8 @@ export default {
       colors: {
         primary,
         secondary,
-        warn: colors.yellow
+        warn: colors.yellow,
+        error: colors.red,
       },
 
       width: {

@@ -4,26 +4,26 @@ import SetKeepers from './SetKeepers'
 import SetProfitMaxUnlockTimes from './SetProfitMaxUnlockTimes'
 import { useIsRelayed } from './useIsRelayed'
 import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
-import SetRepoAndFrequency from '../SetRepoAndFrequency'
+import SetRepo from '../SetRepo'
 
 export default function StrategyForm() {
-  const { data: isRelayed } = useIsRelayed({})
-  const { isWithinGuidelines } = useProfitMaxUnlockTimes({})
+  const { data: areRelayed } = useIsRelayed()
+  const { areWithinGuidelines } = useProfitMaxUnlockTimes()
 
   return <div className="flex flex-col gap-20">
     <FlyInFromBottom _key="target-form-keeper">
       <SetKeepers />
     </FlyInFromBottom>
 
-    {isRelayed && <FlyInFromBottom _key="target-form-profit-unlock">
+    {areRelayed && <FlyInFromBottom _key="target-form-profit-unlock">
       <Suspense>
         <SetProfitMaxUnlockTimes />
       </Suspense>
     </FlyInFromBottom>}
 
-    {isRelayed && isWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
+    {areRelayed && areWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
       <Suspense>
-        <SetRepoAndFrequency />
+        <SetRepo />
       </Suspense>
     </FlyInFromBottom>}
   </div>
