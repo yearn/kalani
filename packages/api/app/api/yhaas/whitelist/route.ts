@@ -1,9 +1,11 @@
-import { fetchAllOpenIssues, postIssue } from '@/lib/gh'
+import { postIssue } from '@/lib/gh'
+import { fEvmAddress } from '@kalani/lib/format'
 import { NextResponse } from 'next/server'
-import { createPublicClient, http, parseAbi } from 'viem'
+import { createPublicClient, http } from 'viem'
 import { chains, getRpc } from '@kalani/lib/chains'
 import makeIssueMarkdown from './issue'
 import { ApplicationSchema } from './types'
+import { generateTitle } from './title'
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -20,53 +22,35 @@ export async function POST(req: Request) {
   const application = ApplicationSchema.parse(await req.json())
 
   const {
-    title,
     chainId,
     manager,
-    target,
+    targets,
     signature
   } = application
 
   const chain = chains[chainId]
   const client = createPublicClient({ chain, transport: http(getRpc(chainId)) })
 
+  const targetList = targets.map(target => target.address).join('\n')
   const verified = await client.verifyMessage({
-    message: `I manage contract ${target}`,
+    message: `I manage these contracts:\n${targetList}`,
     signature,
     address: manager
   })
 
   if (!verified) {
-    return NextResponse.json({ message: 'Bad signature' }, { status: 500, headers })
+    return NextResponse.json({ message: 'Bad signature!' }, { status: 500, headers })
   }
 
-  const multicall = await client.multicall({
-    contracts: [
-      {
-        abi: parseAbi(['function management() view returns (address)']),
-        address: target, functionName: 'management'
-      },
-      {
-        abi: parseAbi(['function role_manager() view returns (address)']),
-        address: target, functionName: 'role_manager'
-      }
-    ]
-  })
-
-  const isManager = multicall[0].result === manager || multicall[1].result === manager
-
-  if (!isManager) {
-    return NextResponse.json({ message: `${manager} is not the manager of ${target}` }, { status: 500, headers })
-  }
-
-  const issues = await fetchAllOpenIssues()
-  const issueExists = issues.some(issue => issue.title === title)
-  if (issueExists) {
-    return NextResponse.json({ message: `An application for "${title}" already exists` }, { status: 500, headers })
+  const title = await generateTitle(targets.map(target => target.name))
+  if (!title) {
+    return NextResponse.json({ message: 'No title!' }, { status: 500, headers })
   }
 
   const md = makeIssueMarkdown(application)
-  const { url, html_url, labels, state } = await postIssue(title, md, [chain.name.toLowerCase()])
+  const { url, html_url, labels, state } = await postIssue(
+    `${title} [${fEvmAddress(manager)}]`, md, [chain.name.toLowerCase()]
+  )
 
   await new Promise(resolve => setTimeout(resolve, 3000))
   return NextResponse.json({ message: 'OK', url, html_url, labels, state }, { headers })

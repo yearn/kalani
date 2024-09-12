@@ -17,7 +17,7 @@ export const GithubIssueSchema = z.object({
 
 export type GithubIssue = z.infer<typeof GithubIssueSchema>
 
-export function useYHaaSIssues() {
+export function useYhaasIssues() {
   const { address } = useAccount()
   const formattedAddress = fEvmAddress(address ?? zeroAddress)
 

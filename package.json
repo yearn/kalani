@@ -9,8 +9,5 @@
     "dev:api": "(cd packages/api && PORT=3001 next dev)",
     "build:api": "(cd packages/api && next build)"
   },
-  "workspaces": ["packages/*"],
-  "dependencies": {
-    "react-textarea-autosize": "^8.5.3"
-  }
+  "workspaces": ["packages/*"]
 }

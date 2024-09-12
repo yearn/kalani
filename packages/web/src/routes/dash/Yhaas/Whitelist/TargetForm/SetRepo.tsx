@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import Input from '../../../../../components/elements/Input'
 import { useWhitelist } from '../provider'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'

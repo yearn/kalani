@@ -4,8 +4,6 @@ import TransferFeeManager from '../dash/Accountant/Admins/TransferFeeManager'
 import Bg from '../lander/Bg'
 import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
-import TextArea from '../../components/elements/TextArea'
-import Input from '../../components/elements/Input'
 import TextGrow from '../../components/elements/TextGrow'
 
 export default function Eg() {

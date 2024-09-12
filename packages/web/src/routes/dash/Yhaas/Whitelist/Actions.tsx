@@ -6,10 +6,12 @@ import { useTargetInfos } from './useTargetInfos'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
 import { toast } from 'sonner'
 import A from '../../../../components/elements/A'
+import { useYhaasIssues } from '../useYhaasIssues'
 
 export default function Actions() {
   const w = useWhitelist()
   const { targetInfos } = useTargetInfos(w.targets)
+  const { refetch: refetchYhaasIssues } = useYhaasIssues()
 
   const onReset = useCallback(() => {
     w.setTargetsRaw('')
@@ -24,10 +26,11 @@ export default function Actions() {
 
   const onApply = useCallback(async () => {
     try {
-      const contracts = targetInfos.map(address => address).join('\n')
-      const signature = await signMessageAsync({ message: `I manage these contracts:\n ${contracts}` })
+      const contracts = targetInfos.map(target => target.address).join('\n')
+      const signature = await signMessageAsync({ message: `I manage these contracts:\n${contracts}` })
       const response = await apply.mutateAsync({ signature })
       if (response.status === 200) {
+        refetchYhaasIssues()
         const info = await response.json()
         toast.success(<div className="flex flex-col gap-2">
           <div>yHaaS application submitted!</div>
@@ -39,7 +42,7 @@ export default function Actions() {
     } catch (error) {
       console.error(error)
     }
-  }, [apply, signMessageAsync, w])
+  }, [apply, signMessageAsync, w, refetchYhaasIssues])
 
   const theme = useMemo(() => {
     if (apply.isPending) return 'confirm'
