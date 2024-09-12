@@ -2,12 +2,13 @@ import { z } from 'zod'
 import { EvmAddressSchema, HexStringSchema } from '@/lib/types'
 
 export const ApplicationSchema = z.object({
-  title: z.string(),
   chainId: z.number(),
   manager: EvmAddressSchema,
-  target: EvmAddressSchema,
-  targetType: z.string(),
-  name: z.string(),
+  targets: z.object({
+    address: EvmAddressSchema,
+    name: z.string(),
+    targetType: z.string()
+  }).array(),
   frequency: z.number(),
   repo: z.string(),
   signature: HexStringSchema

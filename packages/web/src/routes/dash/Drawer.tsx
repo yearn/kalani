@@ -3,7 +3,6 @@ import { PiRobot, PiVault } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
 import { Link } from 'react-router-dom'
 import { Yearn } from '../../assets/icons/Yearn'
-import GlowGroup from '../../components/elements/GlowGroup'
 
 type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   to: string,
@@ -16,14 +15,13 @@ p-3 flex items-center justify-center
 bg-black border border-transparent rounded-primary
 hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
 active:text-secondary-200 active:border-secondary-200
+saber-glow
 `
 
 const DrawerButton: React.FC<DrawerButtonProps> = ({ className, children, ...props }) => (
-  <GlowGroup>
-    <Link {...props} className={cn(DrawerButtonClassName, className)}>
-      {children}
-    </Link>
-  </GlowGroup>
+  <Link {...props} className={cn(DrawerButtonClassName, className)}>
+    {children}
+  </Link>
 )
 
 DrawerButton.displayName = 'DrawerButton'

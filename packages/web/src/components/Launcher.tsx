@@ -1,5 +1,4 @@
 import { Yearn } from '../assets/icons/Yearn'
-import GlowGroup from './elements/GlowGroup'
 import { PiDotsNineBold, PiGithubLogoFill } from 'react-icons/pi'
 import { AnchorHTMLAttributes, forwardRef } from 'react'
 import { cn } from '../lib/shadcn'
@@ -59,20 +58,18 @@ export default function Launcher({
 }) {
   return <div className="relative group">
     <div className="py-4">
-      <GlowGroup className="rounded-primary">
-        <div className={`
-          border border-transparent group-hover:border-secondary-50
-          group-active:border-secondary-200
-          p-2 bg-neutral-950 rounded-primary`}>
-          <PiDotsNineBold size={24} />
-        </div>
-      </GlowGroup>
+      <div className={`
+        border border-transparent group-hover:border-secondary-50
+        group-active:border-secondary-200
+        p-2 bg-neutral-950 rounded-primary saber-glow`}>
+        <PiDotsNineBold size={24} />
+      </div>
     </div>
-    <GlowGroup className={cn(`absolute p-4
+    <div className={cn(`absolute p-4
       hidden group-hover:flex flex-col gap-4
       border border-transparent group-hover:border-secondary-50
       group-active:border-secondary-200
-      bg-neutral-900 text-neutral-400 rounded-primary`, 
+      bg-neutral-900 text-neutral-400 rounded-primary saber-glow`,
       alignRight ? 'right-0' : '')}>
       <LauncherButton href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</LauncherButton>
       <V3Button href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>
@@ -118,6 +115,6 @@ export default function Launcher({
           Github
         </LauncherIconButton>
       </div>
-    </GlowGroup>
+    </div>
   </div>
 }

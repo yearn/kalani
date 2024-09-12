@@ -2,24 +2,19 @@ import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useWhitelist } from './provider'
-import { useTargetType } from './useTargetType'
-import { fEvmAddress } from '../../../../lib/format'
-import { zeroAddress } from 'viem'
+import { useTargetInfos } from './useTargetInfos'
 
 const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
 export function useApplyToWhitelist() {
   const { address, chainId } = useAccount()
   const w = useWhitelist()
-  const { data: targetType, name } = useTargetType(w.targetOrUndefined)
+  const { targetInfos } = useTargetInfos(w.targets)
 
   const data = useMemo(() => ({
-    title: `${name} [${fEvmAddress(w.targetOrUndefined ?? zeroAddress)}] [${fEvmAddress(address ?? zeroAddress)}]`,
     chainId,
     manager: address,
-    target: w.targetOrUndefined,
-    targetType: targetType,
-    name,
+    targets: targetInfos,
     frequency: w.frequency,
     repo: w.repo
   }), [chainId, address, w])

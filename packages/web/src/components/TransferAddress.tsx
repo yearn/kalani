@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from './elements/Button'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
-import InputAddress from './InputAddress'
+import Address from './elements/Address'
 import { EvmAddress, EvmAddressSchema, compareEvmAddresses } from '../lib/types'
 import { useWriteContract } from '../hooks/useWriteContract'
 
@@ -127,10 +127,10 @@ export default function TransferAddress({
     propose.write.reset()
   }, [setNext, setIsNextValid, setError, propose])
 
-  const inputTheme = useMemo(() => {
-    if (multicall.isFetching) return 'sim'
-    return 'default'
-  }, [multicall])
+  // const inputTheme = useMemo(() => {
+  //   if (multicall.isFetching) return 'sim'
+  //   return 'default'
+  // }, [multicall])
 
   const disableInput = useMemo(() => 
     multicall.isFetching
@@ -181,14 +181,13 @@ export default function TransferAddress({
 
   return <div className={`w-full flex flex-col gap-2 ${className}`}>
     <div className="flex items-center gap-4">
-      <InputAddress 
+      <Address 
         previous={previous}
         next={next}
         setNext={setNext}
         isNextValid={isNextValid}
         setIsNextValid={setIsNextValid}
         onChange={onChange} 
-        theme={inputTheme} 
         disabled={disableInput} />
       <Button onClick={onClick} theme={buttonTheme} disabled={disableButton} className="w-field-btn h-field-btn">
         {verb}

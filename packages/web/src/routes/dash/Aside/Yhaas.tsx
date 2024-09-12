@@ -1,5 +1,5 @@
 import A from '../../../components/elements/A'
-import { useYHaaSIssues } from '../Yhaas/useYhaasIssues'
+import { useYhaasIssues } from '../Yhaas/useYhaasIssues'
 
 function fIssueTitle(title: string) {
   const [result] = title.split(' [')
@@ -7,7 +7,7 @@ function fIssueTitle(title: string) {
 }
 
 export default function Yhaas() {
-  const { accountsIssues } = useYHaaSIssues()
+  const { accountsIssues } = useYhaasIssues()
 
   return <div className="flex flex-col items-start justify-center gap-12">
     <div>

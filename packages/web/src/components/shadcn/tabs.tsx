@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import { cn } from '../../lib/shadcn'
-import GlowGroup from '../elements/GlowGroup'
 
 const Tabs = TabsPrimitive.Root
 
@@ -26,24 +25,23 @@ const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
-  <GlowGroup>
-    <TabsPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        `px-3 py-1.5 inline-flex items-center justify-center whitespace-nowrap 
-        border border-transparent
-        text-sm font-medium ring-offset-white rounded-primary
-        focus-visible:outline-none focus-visible:ring-2 
-        focus-visible:ring-neutral-950 focus-visible:ring-offset-2 
-        disabled:pointer-events-none disabled:opacity-50
-        hover:border-secondary-50 hover:text-secondary-50
-        data-[state=active]:border-secondary-100 data-[state=active]:text-secondary-100
-        hover:data-[state=active]:border-secondary-100 hover:data-[state=active]:text-secondary-100`,
-        className
-      )}
-      {...props}
-    />
-  </GlowGroup>
+  <TabsPrimitive.Trigger
+    ref={ref}
+    {...props}
+    className={cn(
+      `px-3 py-1.5 inline-flex items-center justify-center whitespace-nowrap 
+      border border-transparent
+      text-sm font-medium ring-offset-white rounded-primary
+      focus-visible:outline-none focus-visible:ring-2 
+      focus-visible:ring-neutral-950 focus-visible:ring-offset-2 
+      disabled:pointer-events-none disabled:opacity-50
+      hover:border-secondary-50 hover:text-secondary-50
+      data-[state=active]:border-secondary-100 data-[state=active]:text-secondary-100
+      hover:data-[state=active]:border-secondary-100 hover:data-[state=active]:text-secondary-100
+      saber-glow`,
+      className
+    )}
+  />
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 

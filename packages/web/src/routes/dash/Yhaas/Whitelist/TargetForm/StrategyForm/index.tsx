@@ -1,29 +1,29 @@
 import { Suspense } from 'react'
 import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
-import SetKeeper from './SetKeeper'
-import SetProfitMaxUnlockTime from './SetProfitMaxUnlockTime'
+import SetKeepers from './SetKeepers'
+import SetProfitMaxUnlockTimes from './SetProfitMaxUnlockTimes'
 import { useIsRelayed } from './useIsRelayed'
-import { useProfitMaxUnlockTime } from './useProfitMaxUnlockTime'
-import SetRepoAndFrequency from '../SetRepoAndFrequency'
+import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
+import SetRepo from '../SetRepo'
 
 export default function StrategyForm() {
-  const { data: isRelayed } = useIsRelayed()
-  const { isWithinGuidelines } = useProfitMaxUnlockTime()
+  const { data: areRelayed } = useIsRelayed()
+  const { areWithinGuidelines } = useProfitMaxUnlockTimes()
 
-  return <div className="flex flex-col gap-16">
+  return <div className="flex flex-col gap-20">
     <FlyInFromBottom _key="target-form-keeper">
-      <SetKeeper />
+      <SetKeepers />
     </FlyInFromBottom>
 
-    {isRelayed && <FlyInFromBottom _key="target-form-profit-unlock">
+    {areRelayed && <FlyInFromBottom _key="target-form-profit-unlock">
       <Suspense>
-        <SetProfitMaxUnlockTime />
+        <SetProfitMaxUnlockTimes />
       </Suspense>
     </FlyInFromBottom>}
 
-    {isRelayed && isWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
+    {areRelayed && areWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
       <Suspense>
-        <SetRepoAndFrequency />
+        <SetRepo />
       </Suspense>
     </FlyInFromBottom>}
   </div>

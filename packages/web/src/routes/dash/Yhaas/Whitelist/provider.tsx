@@ -1,33 +1,37 @@
+import { EvmAddress } from '@kalani/lib/types'
 import React, { createContext, useContext, useMemo, useState } from 'react'
-import { EvmAddress, EvmAddressSchema } from '../../../../lib/types'
 
 type Context = {
-  target?: string,
-  setTarget: React.Dispatch<React.SetStateAction<string | undefined>>,
-  targetOrUndefined: EvmAddress | undefined,
+  targetsRaw: string,
+  setTargetsRaw: React.Dispatch<React.SetStateAction<string>>,
+  targets: EvmAddress[],
+  setTargets: React.Dispatch<React.SetStateAction<EvmAddress[]>>,
+  frequency?: number,
+  setFrequency: React.Dispatch<React.SetStateAction<number | undefined>>,
   repo?: string,
   setRepo: React.Dispatch<React.SetStateAction<string | undefined>>,
-  frequency?: number,
-  setFrequency: React.Dispatch<React.SetStateAction<number | undefined>>
+  isRepoValid: boolean
 }
 
 export const WhitelistContext = createContext<Context>({} as Context)
 
 export function WhitelistProvider({ children }: { children: React.ReactNode }) {
-  const [target, setTarget] = useState<string | undefined>()
-  const targetOrUndefined = useMemo(() => {
-    const parsed = EvmAddressSchema.safeParse(target)
-    if (parsed.success) return parsed.data
-    return undefined
-  }, [target])
-
-  const [repo, setRepo] = useState<string | undefined>()
+  const [targetsRaw, setTargetsRaw] = useState<string>('')
+  const [targets, setTargets] = useState<EvmAddress[]>([])
   const [frequency, setFrequency] = useState<number | undefined>()
+  const [repo, setRepo] = useState<string | undefined>()
+
+  const githubRepoRegex = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
+  const isRepoValid = useMemo(() => {
+    if (!repo) return false
+    return githubRepoRegex.test(repo)
+  }, [repo])
 
   return <WhitelistContext.Provider value={{
-    target, setTarget, targetOrUndefined,
-    repo, setRepo,
-    frequency, setFrequency
+    targetsRaw, setTargetsRaw,
+    targets, setTargets,
+    frequency, setFrequency,
+    repo, setRepo, isRepoValid
     }}>
     {children}
   </WhitelistContext.Provider>
