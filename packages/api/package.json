@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@kalani/lib": "workspace:*",
+    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
+    "moralis": "^2.27.2",
     "next": "14.2.6",
     "openai": "^4.59.0",
     "react": "^18",
