@@ -1,26 +1,12 @@
+import { NextResponse } from 'next/server'
 import z from 'zod'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { EvmChain } from '@moralisweb3/common-evm-utils'
 import Redis from 'ioredis'
 import Moralis from 'moralis'
 
-// 150 CU usage
-// https://docs.moralis.io/web3-data-api/evm/reference/wallet-api/get-wallet-history?address=0xcB1C1FdE09f811B294172696404e88E658659905&chain=eth&order=DESC
-// https://docs.moralis.io/web3-data-api/evm/reference/pagination
-
 const REDIS_KEY = 'yhaas:automations'
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
-
-async function getRedisMemoryMB(redis: Redis): Promise<number> {
-  const memoryInfo = await redis.info('memory')
-  const usedMemory = parseInt(memoryInfo.match(/used_memory:(\d+)/)?.[1] ?? '0')
-  const maxMemory = parseInt(memoryInfo.match(/maxmemory:(\d+)/)?.[1] ?? '0')
-  if (maxMemory > 0) {
-    return Number(((maxMemory - usedMemory) / 1024 / 1024).toFixed(2))
-  } else {
-    return Infinity // Indicates unlimited memory
-  }
-}
 
 const ExecutorSchema = z.object({
   address: z.string(),
@@ -127,31 +113,37 @@ async function getExecutorAutomations(chain: EvmChain, executor: Executor): Prom
   }
 }
 
-async function main() {
-  await Moralis.start({ apiKey: MORALIS_API_KEY })
-  const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
-  const memory = await getRedisMemoryMB(redis)
-  console.log('📀', 'redis memory', memory)
-
-  const stats = await getAutomationStats(redis)
-
-  for (const chain of Object.values(chains)) {
-    const chainId = parseInt(chain.hex, 16)
-    const updatedExecutors = []
-    for (const executor of stats[chainId].executors) {
-      const update = await getExecutorAutomations(chain, executor)
-      updatedExecutors.push(update)
-    }
-    stats[chainId].executors = updatedExecutors
+export async function GET(request: Request) {
+  const auth = request.headers.get('authorization')
+  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  await redis.set(REDIS_KEY, JSON.stringify(stats))
-  // await redis.del(REDIS_KEY)
-  console.log('💾', 'update automation stats', stats)
-  await redis.quit()
+  await Moralis.start({ apiKey: MORALIS_API_KEY })
+  const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
 
-  const totalAutomations = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
-  console.log('🏆', 'total automations', totalAutomations)
+  try {
+    const stats = await getAutomationStats(redis)
+
+    for (const chain of Object.values(chains)) {
+      const chainId = parseInt(chain.hex, 16)
+      const updatedExecutors = []
+      for (const executor of stats[chainId].executors) {
+        const update = await getExecutorAutomations(chain, executor)
+        updatedExecutors.push(update)
+      }
+      stats[chainId].executors = updatedExecutors
+    }
+
+    await redis.set(REDIS_KEY, JSON.stringify(stats))
+    const total = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
+    console.log('🤖', 'total automations', total)
+
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json({ error: 'Failed to fetch open issues' }, { status: 500 })
+  } finally {
+    await redis.quit()
+  }
 }
-
-main()
