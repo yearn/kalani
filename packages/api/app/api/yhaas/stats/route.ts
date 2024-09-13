@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import Redis from 'ioredis'
-import { getAutomationStats } from '../measure/route'
+import { getAutomationStats } from '../measure/lib'
 
 const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
 
