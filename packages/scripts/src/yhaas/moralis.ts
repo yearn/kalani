@@ -31,9 +31,9 @@ async function getRedisMemoryMB(redis: Redis): Promise<number> {
 
 const ExecutorSchema = z.object({
   address: z.string(),
-  block: z.bigint(),
-  automations: z.number(),
-  gas: z.bigint()
+  block: z.bigint({ coerce: true }),
+  automations: z.number({ coerce: true }),
+  gas: z.bigint({ coerce: true })
 })
 
 type Executor = z.infer<typeof ExecutorSchema>
