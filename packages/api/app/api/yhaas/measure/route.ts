@@ -5,22 +5,33 @@ import { EvmChain } from '@moralisweb3/common-evm-utils'
 import Redis from 'ioredis'
 import Moralis from 'moralis'
 
+Object.defineProperty(BigInt.prototype, 'toJSON', {
+  get() {
+    'use strict'
+    return () => String(this)
+  }
+})
+
 const REDIS_KEY = 'yhaas:automations'
 const MORALIS_API_KEY = process.env.MORALIS_API_KEY
 
-const ExecutorSchema = z.object({
+await Moralis.start({ apiKey: MORALIS_API_KEY })
+const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
+
+export const ExecutorSchema = z.object({
   address: z.string(),
-  block: z.number(),
-  automations: z.number()
+  block: z.bigint(),
+  automations: z.number(),
+  gas: z.bigint()
 })
 
-type Executor = z.infer<typeof ExecutorSchema>
+export type Executor = z.infer<typeof ExecutorSchema>
 
-const AutomationStatsSchema = z.record(
+export const AutomationStatsSchema = z.record(
   z.string(), z.object({ executors: ExecutorSchema.array() })
 )
 
-type AutomationStats = z.infer<typeof AutomationStatsSchema>
+export type AutomationStats = z.infer<typeof AutomationStatsSchema>
 
 const chains = {
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: EvmChain.ETHEREUM,
@@ -30,35 +41,40 @@ const chains = {
   [parseInt(EvmChain.BASE.hex, 16)]: EvmChain.BASE
 }
 
-const defaultAutomationStats = AutomationStatsSchema.parse({
+export const defaultAutomationStats = AutomationStatsSchema.parse({
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-      block: 19483613,
-      automations: 0
+      block: 19483613n,
+      automations: 0,
+      gas: 0n
     }] },
   [parseInt(EvmChain.POLYGON.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-      block: 58788062,
-      automations: 0
+      block: 58788062n,
+      automations: 0,
+      gas: 0n
     }] },
     [parseInt(EvmChain.GNOSIS.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-      block: 35097929,
-      automations: 0
+      block: 35097929n,
+      automations: 0,
+      gas: 0n
     }] },
     [parseInt(EvmChain.ARBITRUM.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-      block: 226203220,
-      automations: 0
+      block: 226203220n,
+      automations: 0,
+      gas: 0n
     }] },
     [parseInt(EvmChain.BASE.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-      block: 19170746,
-      automations: 0
+      block: 19170746n,
+      automations: 0,
+      gas: 0n
     }] }
 })
 
-async function getAutomationStats(redis: Redis): Promise<AutomationStats> {
+export async function getAutomationStats(redis: Redis): Promise<AutomationStats> {
   const value = await redis.get(REDIS_KEY)
   if (value) {
     const parsedValue = AutomationStatsSchema.parse(JSON.parse(value))
@@ -72,12 +88,12 @@ async function getAutomationStats(redis: Redis): Promise<AutomationStats> {
   }
 }
 
-
 async function getExecutorAutomations(chain: EvmChain, executor: Executor): Promise<Executor> {
   console.log('# getExecutorAutomations', chain.name, executor.address, executor.block)
 
   let cursor: string | undefined = undefined
   let automations = executor.automations
+  let gas = executor.gas
   let block = executor.block
   let hasNext = true
 
@@ -87,7 +103,7 @@ async function getExecutorAutomations(chain: EvmChain, executor: Executor): Prom
       chain,
       address: executor.address,
       includeInternalTransactions: false,
-      fromBlock: executor.block,
+      fromBlock: Number(executor.block),
       order: 'ASC',
       cursor
     })
@@ -98,10 +114,11 @@ async function getExecutorAutomations(chain: EvmChain, executor: Executor): Prom
         && tx.category === 'contract interaction'
       ) {
         automations++
+        gas += BigInt(tx.gasPrice) * BigInt(tx.receiptGasUsed)
       }
     }
 
-    block = Number(response.result[response.result.length - 1].blockNumber)
+    block = response.result[response.result.length - 1].blockNumber.toBigInt()
     cursor = response.pagination.cursor
     hasNext = response.hasNext()
   }
@@ -109,6 +126,7 @@ async function getExecutorAutomations(chain: EvmChain, executor: Executor): Prom
   return {
     ...executor,
     automations,
+    gas,
     block
   }
 }
@@ -118,9 +136,6 @@ export async function GET(request: Request) {
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-
-  await Moralis.start({ apiKey: MORALIS_API_KEY })
-  const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
 
   try {
     const stats = await getAutomationStats(redis)
@@ -136,14 +151,14 @@ export async function GET(request: Request) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(stats))
-    const total = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
-    console.log('🤖', 'total automations', total)
+    const totalAutomations = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
+    const totalGas = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.gas, 0n), 0n)
+    console.log('🤖', 'total automations', totalAutomations)
+    console.log('⛽️', 'total gas', totalGas)
 
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error(error)
     return NextResponse.json({ error: 'Failed to fetch open issues' }, { status: 500 })
-  } finally {
-    await redis.quit()
   }
 }

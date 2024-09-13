@@ -91,7 +91,7 @@ export default function Lander() {
           <Feature href="/account" 
             icon={<PiVault size={96} />} 
             title="Build" 
-            description=<>Compose your own 4626 vaults using <span className="font-bold text-primary-400">Yearn V3</span> protocol</>
+            description=<>Build your own 4626 vaults using <span className="font-bold text-primary-400">Yearn V3</span> protocol</>
           />
           <Feature href="/yhaas" 
             icon={<PiRobot size={96} />} 
