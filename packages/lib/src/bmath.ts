@@ -38,5 +38,5 @@ export function priced(amount: bigint, decimals: bigint|number, priceUsd: number
   return priceUsd * Number(amount * BigInt(precision) / BigInt(10 ** Number(decimals))) / precision
 }
 
-const bmath = { div, min, max, priced }
+const bmath = { div, min, max, priced, mul, mulb }
 export default bmath

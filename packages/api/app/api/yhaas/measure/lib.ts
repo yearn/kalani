@@ -3,23 +3,9 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { EvmChain } from '@moralisweb3/common-evm-utils'
 import Redis from 'ioredis'
 import Moralis from 'moralis'
+import { AutomationStats, AutomationStatsSchema, YhaasExecutor } from '@kalani/lib/types'
 
 export const REDIS_KEY = 'yhaas:automations'
-
-export const ExecutorSchema = z.object({
-  address: z.string(),
-  block: z.bigint({ coerce: true }),
-  automations: z.number({ coerce: true }),
-  gas: z.bigint({ coerce: true })
-})
-
-export type Executor = z.infer<typeof ExecutorSchema>
-
-export const AutomationStatsSchema = z.record(
-  z.string(), z.object({ executors: ExecutorSchema.array() })
-)
-
-export type AutomationStats = z.infer<typeof AutomationStatsSchema>
 
 export const chains = {
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: EvmChain.ETHEREUM,
@@ -76,7 +62,7 @@ export async function getAutomationStats(redis: Redis): Promise<AutomationStats>
   }
 }
 
-export async function getExecutorAutomations(chain: EvmChain, executor: Executor): Promise<Executor> {
+export async function getExecutorAutomations(chain: EvmChain, executor: YhaasExecutor): Promise<YhaasExecutor> {
   console.log('# getExecutorAutomations', chain.name, executor.address, executor.block)
 
   let cursor: string | undefined = undefined

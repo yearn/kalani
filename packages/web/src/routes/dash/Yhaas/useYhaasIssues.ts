@@ -3,6 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
 import { fEvmAddress } from '../../../lib/format'
 import { zeroAddress } from 'viem'
+import { useMemo } from 'react'
 
 const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 
@@ -26,7 +27,7 @@ export function useYhaasIssues() {
     queryFn: () => fetch(`${API}/api/yhaas/issues`).then(r => r.json())
   })
 
-  const issues = GithubIssueSchema.array().parse(query.data)
-  const accountsIssues = issues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`))
+  const issues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
+  const accountsIssues = useMemo(() => issues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`)), [issues])
   return { ...query, accountsIssues }
 }

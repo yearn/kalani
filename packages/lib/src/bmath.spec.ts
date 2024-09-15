@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import { div, max, min, mul, mulb } from './bmath'
+import { div, max, min, mul, mulb } from '@kalani/lib'
 
-describe('math', function() {
+describe('bmath', function() {
   describe('div', function() {
     it('NaN on zero denominator', async function() {
       expect(div(1n, 0n)).to.be.NaN
