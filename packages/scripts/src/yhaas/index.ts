@@ -1,7 +1,7 @@
 import z from 'zod'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { EvmChain } from '@moralisweb3/common-evm-utils'
-import bmath from '@kalani/lib/src/bmath'
+import bmath from '@kalani/lib/bmath'
 import Redis from 'ioredis'
 import Moralis from 'moralis'
 import { formatEther } from 'viem'
@@ -47,16 +47,44 @@ const AutomationStatsSchema = z.record(
 type AutomationStats = z.infer<typeof AutomationStatsSchema>
 
 const chains = {
-  [parseInt(EvmChain.ETHEREUM.hex, 16)]: EvmChain.ETHEREUM
+  [parseInt(EvmChain.ETHEREUM.hex, 16)]: EvmChain.ETHEREUM,
+  [parseInt(EvmChain.POLYGON.hex, 16)]: EvmChain.POLYGON,
+  [parseInt(EvmChain.GNOSIS.hex, 16)]: EvmChain.GNOSIS,
+  [parseInt(EvmChain.ARBITRUM.hex, 16)]: EvmChain.ARBITRUM,
+  [parseInt(EvmChain.BASE.hex, 16)]: EvmChain.BASE
 }
 
 const defaultAutomationStats = AutomationStatsSchema.parse({
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: { executors: [{
-      address: '0x52605BbF54845f520a3E94792d019f62407db2f8',
-      block: 19709837n,
+      address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+      block: 19483613n,
       automations: 0,
       gas: 0n
-    }] }
+    }] },
+  [parseInt(EvmChain.POLYGON.hex, 16)]: { executors: [{
+      address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+      block: 58788062n,
+      automations: 0,
+      gas: 0n
+    }] },
+  [parseInt(EvmChain.GNOSIS.hex, 16)]: { executors: [{
+    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+    block: 35097929n,
+    automations: 0,
+    gas: 0n
+  }] },
+  [parseInt(EvmChain.ARBITRUM.hex, 16)]: { executors: [{
+    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+    block: 226203220n,
+    automations: 0,
+    gas: 0n
+  }] },
+  [parseInt(EvmChain.BASE.hex, 16)]: { executors: [{
+    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+    block: 19170746n,
+    automations: 0,
+    gas: 0n
+  }] }
 })
 
 async function getAutomationStats(redis: Redis): Promise<AutomationStats> {

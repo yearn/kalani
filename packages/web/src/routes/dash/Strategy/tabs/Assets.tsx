@@ -1,5 +1,5 @@
 import { Vault, withVault } from '../../../../hooks/useVault'
-import { div, mulb } from '@kalani/lib/src/bmath'
+import { div, mulb } from '@kalani/lib/bmath'
 import { fBps, fPercent, fTokens } from '../../../../lib/format'
 import { useMemo } from 'react'
 

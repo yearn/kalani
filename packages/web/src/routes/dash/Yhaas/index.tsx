@@ -3,8 +3,10 @@ import Whitelist from './Whitelist'
 import { WhitelistProvider } from './Whitelist/provider'
 import { useYhaasStats } from './useYhaasStats'
 import { useMemo } from 'react'
-import bmath from '@kalani/lib/src/bmath'
+import bmath from '@kalani/lib/bmath'
 import { formatEther } from 'viem'
+import usePrices from '../../../hooks/usePrices'
+import { fUSD } from '../../../lib/format'
 
 function Brand() {
   return <div className="flex items-center gap-6 pl-4">
@@ -21,6 +23,11 @@ function Brand() {
   </div>
 }
 
+function useWethPrice() {
+  const prices = usePrices(1, ['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'])
+  return { ...prices, price: prices.data['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'] }
+}
+
 function Metrics() {
   const { stats } = useYhaasStats()
 
@@ -32,8 +39,15 @@ function Metrics() {
     const c = 1.715
     const gasSpent = stats[1].executors.reduce((acc, executor) => acc + executor.gas, 0n)
     const gasThatWouldHaveBeenSpent = bmath.mulb(gasSpent, c)
-    return gasThatWouldHaveBeenSpent - gasSpent
+    const wei = gasThatWouldHaveBeenSpent - gasSpent
+    return parseFloat(formatEther(wei))
   }, [stats])
+
+  const { price: wethPrice } = useWethPrice()
+
+  const gasSavedUsd = useMemo(() => {
+    return gasSaved * wethPrice
+  }, [gasSaved, wethPrice])
 
   return <div className="flex items-center gap-20">
     <div className="hidden 2xl:block flex flex-col items-start">
@@ -48,10 +62,9 @@ function Metrics() {
 
     <div className="flex flex-col items-start">
       <div className="text-xs text-nowrap">gas saved with yHaaS</div>
-      <div className="text-6xl text-nowrap">3.4303 Ξ</div>
-      <div className="text-sm text-nowrap">$ 11,619 ({formatEther(gasSaved)})</div>
+      <div className="text-6xl text-nowrap">{gasSaved.toFixed(4)} Ξ</div>
+      <div className="text-sm text-nowrap">{fUSD(gasSavedUsd, { full: true })}</div>
     </div>
-   
   </div>
 }
 

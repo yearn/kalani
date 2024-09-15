@@ -16,7 +16,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@kalani/lib/*": ["../lib/src/*"]
+    }
   },
   "include": ["vite.config.ts"]
 }

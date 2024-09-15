@@ -54,7 +54,15 @@ export async function getAutomationStats(redis: Redis): Promise<AutomationStats>
     const parsedValue = AutomationStatsSchema.parse(JSON.parse(value))
     const mergedValue: AutomationStats = {}
     for (const key of Object.keys(defaultAutomationStats)) {
-      mergedValue[key] = key in parsedValue ? parsedValue[key] : defaultAutomationStats[key]
+      mergedValue[key] = { executors: [] }
+      for (const defaultExecutor of defaultAutomationStats[key].executors) {
+        const parsedExecutor = parsedValue[key].executors.find(e => e.address === defaultExecutor.address)
+        if (parsedExecutor) {
+          mergedValue[key].executors.push(parsedExecutor)
+        } else {
+          mergedValue[key].executors.push(defaultExecutor)
+        }
+      }
     }
     return mergedValue
   } else {
