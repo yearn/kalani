@@ -7,6 +7,7 @@ import bmath from '@kalani/lib/bmath'
 import { formatEther } from 'viem'
 import usePrices from '../../../hooks/usePrices'
 import { fUSD } from '../../../lib/format'
+import Odometer from 'react-odometerjs'
 
 function Brand() {
   return <div className="flex items-center gap-6 pl-4">
@@ -62,8 +63,12 @@ function Metrics() {
 
     <div className="flex flex-col items-start">
       <div className="text-xs text-nowrap">gas saved with yHaaS</div>
-      <div className="text-6xl text-nowrap">{gasSaved.toFixed(4)} Ξ</div>
-      <div className="text-sm text-nowrap">{fUSD(gasSavedUsd, { full: true })}</div>
+      <div className="text-6xl text-nowrap">
+        <Odometer value={gasSaved} format="(,ddd).dddd" /> Ξ
+      </div>
+      <div className="text-sm text-nowrap">
+        $ <Odometer value={gasSavedUsd} format="(,ddd).dd" />
+      </div>
     </div>
   </div>
 }

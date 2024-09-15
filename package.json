@@ -9,5 +9,8 @@
     "dev:api": "(cd packages/api && PORT=3001 next dev)",
     "build:api": "(cd packages/api && next build)"
   },
-  "workspaces": ["packages/*"]
+  "workspaces": ["packages/*"],
+  "dependencies": {
+    "react-odometerjs": "^3.1.3"
+  }
 }

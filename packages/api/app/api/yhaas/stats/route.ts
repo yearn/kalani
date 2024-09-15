@@ -2,13 +2,6 @@ import { NextResponse } from 'next/server'
 import Redis from 'ioredis'
 import { getAutomationStats } from '../measure/lib'
 
-Object.defineProperty(BigInt.prototype, 'toJSON', {
-  get() {
-    'use strict'
-    return () => String(this)
-  }
-})
-
 const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
 
 const headers = {
