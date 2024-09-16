@@ -1,14 +1,8 @@
+import '@/lib/global'
 import { NextResponse } from 'next/server'
 import Redis from 'ioredis'
 import Moralis from 'moralis'
 import { chains, getAutomationStats, getExecutorAutomations, REDIS_KEY } from './lib'
-
-Object.defineProperty(BigInt.prototype, 'toJSON', {
-  get() {
-    'use strict'
-    return () => String(this)
-  }
-})
 
 await Moralis.start({ apiKey: process.env.MORALIS_API_KEY })
 const redis = new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379')
