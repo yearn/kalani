@@ -24,15 +24,16 @@ export async function GET(request: Request) {
 
     for (const chain of Object.values(chains)) {
       const chainId = parseInt(chain.hex, 16)
-      const updatedExecutors = []
+      const updates = []
       for (const executor of stats[chainId].executors) {
         const update = await getExecutorAutomations(chain, executor)
-        updatedExecutors.push(update)
+        updates.push(update)
       }
-      stats[chainId].executors = updatedExecutors
+      stats[chainId].executors = updates
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(stats))
+
     const totalAutomations = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
     const totalGas = Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.gas, 0n), 0n)
     console.log('🤖', 'total automations', totalAutomations)

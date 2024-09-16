@@ -25,7 +25,7 @@ export default function Whitelist() {
     </div>
 
     <div className="flex flex-col gap-6">
-      <p className="text-xl">· What addresses do you want to automate?</p>
+      <p className="text-xl">· What address(es) do you want to automate?</p>
       <SetTargetAddresses />
       <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
         <TargetInfos />

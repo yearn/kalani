@@ -20,7 +20,7 @@ export function fBps(bps: number, fixed?: number) {
   return fPercent(bps / 10_000, fixed)
 }
 
-export function fUSD(amount: number, options?: { fixed?: number }) {
+export function fUSD(amount: number, options?: { fixed?: number, full?: boolean }) {
   return fNumber(amount, { ...options, prefix: '$' })
 }
 
