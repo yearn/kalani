@@ -1,3 +1,4 @@
+import '@/lib/global'
 import { NextResponse } from 'next/server'
 import Redis from 'ioredis'
 import { getAutomationStats } from '../measure/lib'
