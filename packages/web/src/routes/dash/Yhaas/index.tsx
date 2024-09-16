@@ -6,7 +6,6 @@ import { useMemo } from 'react'
 import bmath from '@kalani/lib/bmath'
 import { formatEther } from 'viem'
 import usePrices from '../../../hooks/usePrices'
-import { fUSD } from '../../../lib/format'
 import Odometer from 'react-odometerjs'
 
 function Brand() {
