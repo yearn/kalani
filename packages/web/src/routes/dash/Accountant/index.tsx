@@ -1,4 +1,4 @@
-import { fEvmAddress } from '../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { getChain } from '../../../lib/chains'
 import { Accountant, withAccountant } from './useAccountant'
 import Admins from './Admins'

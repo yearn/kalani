@@ -1,4 +1,4 @@
-import { fHexString } from '../lib/format'
+import { fHexString } from '@kalani/lib/format'
 import { HexString } from '@kalani/lib/types'
 import Copy from './Copy'
 import { cn } from '../lib/shadcn'

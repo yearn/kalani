@@ -5,7 +5,7 @@ import { UseSimulateContractParameters, useReadContract, useSimulateContract, us
 import Toggle from './Toggle'
 import Button from '../../../../../../components/elements/Button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../../components/shadcn/accordion'
-import { fEvmAddress } from '../../../../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import Dot from './Dot'
 import { PiStar, PiStarFill } from 'react-icons/pi'
 import Address from '../../../../../../components/elements/Address'

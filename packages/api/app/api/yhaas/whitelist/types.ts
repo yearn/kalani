@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EvmAddressSchema, HexStringSchema } from '@/lib/types'
+import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 
 export const ApplicationSchema = z.object({
   chainId: z.number(),

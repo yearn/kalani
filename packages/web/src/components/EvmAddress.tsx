@@ -1,4 +1,4 @@
-import { fEvmAddress } from '../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { EvmAddress } from '@kalani/lib/types'
 import Copy from './Copy'
 import { cn } from '../lib/shadcn'

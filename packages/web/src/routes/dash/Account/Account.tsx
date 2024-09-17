@@ -1,5 +1,5 @@
 import { useAccountVaults } from './useAccountVaults'
-import { fEvmAddress, fNumber } from '../../../lib/format'
+import { fEvmAddress, fNumber } from '@kalani/lib/format'
 import { EvmAddress } from '@kalani/lib/types'
 import ValueLabelPair from '../../../components/ValueLabelPair'
 import Pie from './Pie'

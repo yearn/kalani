@@ -4,7 +4,7 @@ import { TargetType, useTargetInfos } from './useTargetInfos'
 import { useWhitelist } from './provider'
 import { useAccount } from 'wagmi'
 import { EvmAddress } from '@kalani/lib/types'
-import { fEvmAddress } from '../../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { useMemo } from 'react'
 import { cn } from '../../../../lib/shadcn'
 

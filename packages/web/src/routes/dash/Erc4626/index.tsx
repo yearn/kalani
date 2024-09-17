@@ -1,6 +1,6 @@
 import ValueLabelPair from '../../../components/ValueLabelPair'
 import { useVaultFromParams } from '../../../hooks/useVault'
-import { fNumber, fPercent } from '../../../lib/format'
+import { fNumber, fPercent } from '@kalani/lib/format'
 import { getChain } from '../../../lib/chains'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/shadcn/tabs'
 import Assets from './tabs/Assets'

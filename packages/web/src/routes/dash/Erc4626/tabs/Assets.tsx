@@ -1,5 +1,5 @@
 import { Vault, withVault } from '../../../../hooks/useVault'
-import { fTokens } from '../../../../lib/format'
+import { fTokens } from '@kalani/lib/format'
 
 function Assets({ vault }: { vault: Vault }) {
   return <div>

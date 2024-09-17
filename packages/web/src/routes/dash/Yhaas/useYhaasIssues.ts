@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
-import { fEvmAddress } from '../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { zeroAddress } from 'viem'
 import { useMemo } from 'react'
 

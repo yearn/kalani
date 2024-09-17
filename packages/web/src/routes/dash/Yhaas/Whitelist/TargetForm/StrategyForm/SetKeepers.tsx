@@ -7,7 +7,7 @@ import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../provider'
 import { EvmAddress } from '@kalani/lib/types'
 import Button from '../../../../../../components/elements/Button'
-import { fEvmAddress } from '../../../../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
 
