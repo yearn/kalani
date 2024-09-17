@@ -9,7 +9,7 @@ function fIssueTitle(title: string) {
 export default function Yhaas() {
   const { accountsIssues } = useYhaasIssues()
 
-  return <div className="flex flex-col items-start justify-center gap-12">
+  return <div className="w-full flex flex-col items-start justify-center gap-12">
     <div>
       <p className="text-neutral-500">Unregistered</p>
       <div className="flex flex-col items-center justify-center gap-12"></div>
