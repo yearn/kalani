@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useConfig } from 'wagmi'
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useWhitelist } from '../../provider'
 import { useMemo } from 'react'

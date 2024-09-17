@@ -6,7 +6,7 @@ import { useAccount, useSimulateContract, UseSimulateContractParameters, useWait
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
 import { cn } from '../../../../../../lib/shadcn'
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { useWhitelist } from '../../provider'
 import { fEvmAddress } from '../../../../../../lib/format'
 import { isNothing } from '@kalani/lib/strings'

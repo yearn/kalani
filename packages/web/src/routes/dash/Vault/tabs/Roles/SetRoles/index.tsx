@@ -1,4 +1,4 @@
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses, enumerateEnum } from '../../../../../../lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'

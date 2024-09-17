@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAccount, useConfig } from 'wagmi'
 import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { compareEvmAddresses } from '../../../../../../lib/types'
 import { useWhitelist } from '../../provider'
 

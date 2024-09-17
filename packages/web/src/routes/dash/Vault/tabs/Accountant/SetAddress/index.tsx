@@ -7,7 +7,7 @@ import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses } from '../../
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import accountants, { TaggedAccountant } from './accountants'
 import { useVaultFromParams } from '../../../../../../hooks/useVault'
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'

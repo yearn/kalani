@@ -1,5 +1,5 @@
 import SetAddress from '../../../../components/SetAddress'
-import abis from '../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { EvmAddress } from '../../../../lib/types'
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
