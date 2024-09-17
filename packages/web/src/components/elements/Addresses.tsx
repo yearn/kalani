@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { EvmAddressSchema } from '../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import { PiCheckCircle, PiWarningCircle } from 'react-icons/pi'
 import TextGrow from './TextGrow'
 import { EvmAddress } from '@kalani/lib/types'

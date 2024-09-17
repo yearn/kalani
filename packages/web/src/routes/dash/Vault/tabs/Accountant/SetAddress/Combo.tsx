@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
 import { InputClassName } from '../../../../../../components/elements/Input'
 import { PiCheck, PiCaretDown, PiWarningCircle } from 'react-icons/pi'
-import { EvmAddress, EvmAddressSchema } from '../../../../../../lib/types'
+import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 
 export function Combo({ 
   previous,

@@ -1,4 +1,4 @@
-import { EvmAddressSchema } from '../../../../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import { useState } from 'react'
 import { Vault, withVault } from '../../../../../hooks/useVault'
 import SetAddress from './SetAddress'

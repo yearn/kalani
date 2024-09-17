@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi'
-import { EvmAddress } from '../../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 
 export const RELAYERS: Record<number, EvmAddress> = {
   1: '0x604e586F17cE106B64185A7a0d2c1Da5bAce711E',

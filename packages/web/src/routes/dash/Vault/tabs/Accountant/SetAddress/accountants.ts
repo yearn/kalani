@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EvmAddressSchema } from '../../../../../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 
 export const TaggedAccountantSchema = z.object({
   chainId: z.number(),

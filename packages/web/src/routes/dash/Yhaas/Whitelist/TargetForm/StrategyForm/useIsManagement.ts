@@ -3,7 +3,7 @@ import { useAccount, useConfig } from 'wagmi'
 import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '@kalani/lib/abis'
-import { compareEvmAddresses } from '../../../../../../lib/types'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useWhitelist } from '../../provider'
 
 export function useIsManagement() {

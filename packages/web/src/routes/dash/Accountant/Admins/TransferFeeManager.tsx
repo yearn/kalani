@@ -1,6 +1,6 @@
 import abis from '@kalani/lib/abis'
 import TransferAddress from '../../../../components/TransferAddress'
-import { EvmAddress } from '../../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import { useAccount, useReadContract } from 'wagmi'
 import { useMemo } from 'react'
 

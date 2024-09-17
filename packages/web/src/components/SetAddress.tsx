@@ -3,10 +3,11 @@ import Button from './elements/Button'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { getAddress, zeroAddress } from 'viem'
 import Address from './elements/Address'
-import { EvmAddress, EvmAddressSchema, compareEvmAddresses } from '../lib/types'
+import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useWriteContract } from '../hooks/useWriteContract'
 import { PiCheckFatFill } from 'react-icons/pi'
 import FlyInFromBottom from './motion/FlyInFromBottom'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 function useWrite(
   contract: {

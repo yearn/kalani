@@ -1,6 +1,6 @@
 import SetAddress from '../../../../components/SetAddress'
 import abis from '@kalani/lib/abis'
-import { EvmAddress } from '../../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 

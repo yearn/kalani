@@ -1,5 +1,5 @@
 import abis from '@kalani/lib/abis'
-import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses, enumerateEnum } from '../../../../../../lib/types'
+import { EvmAddress, EvmAddressSchema, ROLES, enumerateEnum } from '@kalani/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import Toggle from './Toggle'
@@ -13,6 +13,7 @@ import { useIsRoleManager, useRoleManager } from '../../../../../../hooks/useRol
 import { zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import Sticker from '../../../../../../components/elements/Sticker'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 function usePrevious({
   chainId, vault, account 

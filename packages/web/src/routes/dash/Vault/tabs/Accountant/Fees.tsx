@@ -6,7 +6,7 @@ import { Strategy, Vault } from '../../../../../hooks/useVault'
 import abis from '@kalani/lib/abis'
 import { greatSuccess } from '../../../../../lib/multicall'
 import { isNothing } from '@kalani/lib/strings'
-import { EvmAddress } from '../../../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useReadContracts } from 'wagmi'
 

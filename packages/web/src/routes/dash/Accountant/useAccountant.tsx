@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EvmAddressSchema } from '../../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 

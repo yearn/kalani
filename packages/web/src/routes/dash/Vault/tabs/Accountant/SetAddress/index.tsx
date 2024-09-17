@@ -3,7 +3,7 @@ import Section from '../../../../../../components/Section'
 import { Combo } from './Combo'
 import Button from '../../../../../../components/elements/Button'
 import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
-import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses } from '../../../../../../lib/types'
+import { EvmAddress, EvmAddressSchema, ROLES } from '@kalani/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import accountants, { TaggedAccountant } from './accountants'
 import { useVaultFromParams } from '../../../../../../hooks/useVault'
@@ -12,6 +12,7 @@ import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import Sticker from '../../../../../../components/elements/Sticker'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 function useWrite(
   contract: {

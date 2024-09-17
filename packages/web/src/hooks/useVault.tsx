@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { AccountRoleSchema, EvmAddressSchema, compareEvmAddresses, HexStringSchema, EvmAddress } from '../lib/types'
+import { AccountRoleSchema, EvmAddressSchema, HexStringSchema, EvmAddress } from '@kalani/lib/types'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useParams } from 'react-router-dom'
 import { nullsToUndefined } from '../lib/object'
 import { useFinderItems } from '../components/Finder/useFinderItems'

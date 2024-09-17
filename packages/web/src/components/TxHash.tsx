@@ -1,5 +1,5 @@
 import { fHexString } from '../lib/format'
-import { HexString } from '../lib/types'
+import { HexString } from '@kalani/lib/types'
 import Copy from './Copy'
 import { cn } from '../lib/shadcn'
 import { getChain } from '../lib/chains'

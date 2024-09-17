@@ -1,6 +1,6 @@
 import { useAccountVaults } from './useAccountVaults'
 import { fEvmAddress, fNumber } from '../../../lib/format'
-import { EvmAddress } from '../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import ValueLabelPair from '../../../components/ValueLabelPair'
 import Pie from './Pie'
 import Tile from './Tile'

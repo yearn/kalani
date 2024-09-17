@@ -9,7 +9,7 @@ import { getChain } from '../../../lib/chains'
 import Screen from '../../../components/Screen'
 import ValueLabelPair from '../../../components/ValueLabelPair'
 import { roleClassNames } from '../Vault/tabs/Roles/SetRoles/roleClassNames'
-import { EvmAddress } from '../../../lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 
 function fakePrice(address: `0x${string}`) {
   if (address === '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619') {
