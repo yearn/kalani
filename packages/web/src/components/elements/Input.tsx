@@ -23,8 +23,8 @@ rounded-primary saber-glow`)
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props }, ref) => {
   const borderClassName = useMemo(() => {
-    if (props.theme === 'warn') return '!border-warn-300'
-    if (props.theme === 'error') return '!border-error-300'
+    if (props.theme === 'warn') return '!border-warn-400'
+    if (props.theme === 'error') return '!border-error-500'
     return ''
   }, [props])
   return <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName)} />

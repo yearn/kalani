@@ -2,10 +2,10 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useConfig } from 'wagmi'
 import abis from '@kalani/lib/abis'
 import { readContractsQueryOptions } from 'wagmi/query'
-import { useWhitelist } from '../../provider'
+import { useWhitelist } from '../provider'
 import { useMemo } from 'react'
 import { EvmAddress } from '@kalani/lib/types'
-import { useAutomationGuidelines } from './useAutomationGuidelines'
+import { useAutomationGuidelines } from './StrategyForm/useAutomationGuidelines'
 
 export function useProfitMaxUnlockTimes(o?: { strategy?: EvmAddress }) {
   const { strategy } = o ?? {}

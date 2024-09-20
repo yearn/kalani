@@ -1,4 +1,4 @@
-import { EvmAddress } from '@kalani/lib/types'
+import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { createTestnetClient } from '@kalani/lib/tenderly'
 import { polygon, type Chain } from 'viem/chains'
 import { getContract, parseEther } from 'viem'
@@ -27,23 +27,26 @@ async function main() {
     await client.setBalance(yWMATIC_ROLE_MANAGER, parseEther('1000'))
     console.log('👹', 'balances set')
 
-    const dai1 = getContract({ abi: abis.vault, address: yWMATIC, client })
-    console.log('👹', 'yvault role manager', await dai1.read.role_manager())
-    await dai1.write.transfer_role_manager([ALICE], { account: yWMATIC_ROLE_MANAGER })
-    await dai1.write.accept_role_manager({ account: ALICE })
-    console.log('👹', 'yvault role manager', await dai1.read.role_manager())
+    const vault = getContract({ abi: abis.vault, address: yWMATIC, client })
+    console.log('👹', 'yvault role manager', await vault.read.role_manager())
+    await vault.write.transfer_role_manager([ALICE], { account: yWMATIC_ROLE_MANAGER })
+    await vault.write.accept_role_manager({ account: ALICE })
+    console.log('👹', 'yvault role manager', await vault.read.role_manager())
 
-    const spark = getContract({ abi: abis.strategy, address: AAVE_LENDER, client })
-    console.log('👹', 'spark management', await spark.read.management())
-    await spark.write.setPendingManagement([ALICE], { account: AAVE_LENDER_MANAGEMENT })
-    await spark.write.acceptManagement({ account: ALICE })
-    console.log('👹', 'spark management', await spark.read.management())
+    await vault.write.set_role([ALICE, ROLES.PROFIT_UNLOCK_MANAGER], { account: ALICE })
+    console.log('👹', 'alice roles in yvault', await vault.read.roles([ALICE]))
 
-    const stmatic = getContract({ abi: abis.strategy, address: STMATIC_ACCUMULATOR, client })
-    console.log('👹', 'stmatic management', await stmatic.read.management())
-    await stmatic.write.setPendingManagement([ALICE], { account: STMATIC_ACCUMULATOR_MANAGEMENT })
-    await stmatic.write.acceptManagement({ account: ALICE })
-    console.log('👹', 'stmatic management', await stmatic.read.management())
+    const strategy_a = getContract({ abi: abis.strategy, address: AAVE_LENDER, client })
+    console.log('👹', 'spark management', await strategy_a.read.management())
+    await strategy_a.write.setPendingManagement([ALICE], { account: AAVE_LENDER_MANAGEMENT })
+    await strategy_a.write.acceptManagement({ account: ALICE })
+    console.log('👹', 'spark management', await strategy_a.read.management())
+
+    const strategy_b = getContract({ abi: abis.strategy, address: STMATIC_ACCUMULATOR, client })
+    console.log('👹', 'stmatic management', await strategy_b.read.management())
+    await strategy_b.write.setPendingManagement([ALICE], { account: STMATIC_ACCUMULATOR_MANAGEMENT })
+    await strategy_b.write.acceptManagement({ account: ALICE })
+    console.log('👹', 'stmatic management', await strategy_b.read.management())
 
   } catch (e) {
     await client.revert(snapshot)

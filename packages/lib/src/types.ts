@@ -30,6 +30,10 @@ export const PSEUDO_ROLES = {
   ROLE_MANAGER: 2n ** 255n
 }
 
+export function containsRole(rolemask: bigint, role: bigint) {
+  return (rolemask & role) === role
+}
+
 export function* enumerateEnum<T>(enumObj: T): Generator<keyof T> {
   for (const key in enumObj) {
     if (isNaN(Number(key))) {

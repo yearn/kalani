@@ -1,17 +1,19 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import Input from '../../../../../../components/elements/Input'
-import Button from '../../../../../../components/elements/Button'
+import Input from '../../../../../components/elements/Input'
+import Button from '../../../../../components/elements/Button'
 import { PiCheck, PiLink } from 'react-icons/pi'
 import { useAccount, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { useWriteContract } from '../../../../../../hooks/useWriteContract'
+import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
-import { cn } from '../../../../../../lib/shadcn'
+import { cn } from '../../../../../lib/shadcn'
 import abis from '@kalani/lib/abis'
-import { useWhitelist } from '../../provider'
+import { useWhitelist } from '../provider'
 import { fEvmAddress } from '@kalani/lib/format'
-import { isNothing } from '@kalani/lib/strings'
+import { capitalize, isNothing } from '@kalani/lib/strings'
 import { EvmAddress } from '@kalani/lib/types'
-import { useAutomationGuidelines } from './useAutomationGuidelines'
+import { useAutomationGuidelines } from './StrategyForm/useAutomationGuidelines'
+import { TargetType, useTargetInfos } from '../useTargetInfos'
+import StepLabel from '../StepLabel'
 
 function DaysInput({
   disabled, days, onChange, className, theme
@@ -20,7 +22,7 @@ function DaysInput({
   days?: number | string | undefined,
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string,
-  theme?: 'warn'
+  theme?: 'default' | 'warn' | 'error'
 }) {
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === '.' || event.key === ',') {
@@ -39,7 +41,7 @@ function DaysInput({
       className={className}
       />
     <div className={cn(`
-      absolute inset-0 pr-20
+      absolute inset-0 pr-14
       flex items-center justify-end
       text-neutral-600 text-2xl
       pointer-events-none`)}>
@@ -75,7 +77,7 @@ function SecondsInput({
       className={className}
       />
     <div className={cn(`
-      absolute inset-0 pr-20
+      absolute inset-0 pr-14
       flex items-center justify-end
       text-neutral-600 text-2xl
       pointer-events-none`)}>
@@ -101,13 +103,13 @@ function useWrite(
   return { simulation, write, confirmation, resolveToast }
 }
 
-function ExecButton({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMaxUnlockTime: number }) {
+function ExecButton({ target, profitMaxUnlockTime, disabled }: { target: EvmAddress, profitMaxUnlockTime: number, disabled: boolean }) {
   const { refetch: refetchAll } = useProfitMaxUnlockTimes()
   const { profitMaxUnlockTimes: _previous, refetch: refetchPrevious } = useProfitMaxUnlockTimes({ strategy: target })
   const previous = useMemo(() => _previous[0] ?? 0, [_previous])
   const isSet = useMemo(() => profitMaxUnlockTime === previous, [profitMaxUnlockTime, previous])
 
-  const { simulation, write, confirmation, resolveToast } = useWrite(target, profitMaxUnlockTime, true)
+  const { simulation, write, confirmation, resolveToast } = useWrite(target, profitMaxUnlockTime, !disabled)
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -117,11 +119,12 @@ function ExecButton({ target, profitMaxUnlockTime }: { target: EvmAddress, profi
   }, [simulation, write, confirmation])
 
   const disableButton = useMemo(() => 
-    simulation.isFetching
+    disabled
+    || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending),
-  [simulation, write, confirmation])
+  [disabled, simulation, write, confirmation])
 
   const onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)
@@ -135,15 +138,15 @@ function ExecButton({ target, profitMaxUnlockTime }: { target: EvmAddress, profi
     }
   }, [confirmation, resolveToast, refetchAll, refetchPrevious])
 
-  if (isSet) return <div className="h-[42px] py-3 flex items-center justify-center text-green-400 text-sm"><PiCheck /></div>
+  if (isSet && !disabled) return <div className="h-[42px] py-3 flex items-center justify-center text-green-400 text-sm"><PiCheck /></div>
 
-  return <Button theme={buttonTheme} disabled={disableButton} onClick={onClick}>exec</Button>
+  return <Button theme={buttonTheme} disabled={disableButton} onClick={onClick}>Exec</Button>
 }
 
-function Target({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMaxUnlockTime: number }) {
+function Target({ target, type, profitMaxUnlockTime, isWithinGuidelines }: { target: EvmAddress, type: TargetType, profitMaxUnlockTime: number, isWithinGuidelines: boolean }) {
   return <div className="px-6 flex items-center justify-end ">
     <div className="grow">
-      <span className="text-neutral-400">Strategy</span>
+      <span className="text-neutral-400">{capitalize(type)}</span>
       <span className="text-neutral-600">(</span>
       {fEvmAddress(target)}
       <span className="text-neutral-600">)</span>.
@@ -153,7 +156,7 @@ function Target({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMax
       <span className="text-neutral-600">)</span>
     </div>
     <Suspense fallback={<></>}>
-      <ExecButton target={target} profitMaxUnlockTime={profitMaxUnlockTime} />
+      <ExecButton target={target} profitMaxUnlockTime={profitMaxUnlockTime} disabled={!isWithinGuidelines} />
     </Suspense>
   </div>
 }
@@ -161,6 +164,7 @@ function Target({ target, profitMaxUnlockTime }: { target: EvmAddress, profitMax
 export default function SetProfitMaxUnlockTimes() {
   const { chain } = useAccount()
   const { targets, frequency, setFrequency } = useWhitelist()
+  const { targetInfos } = useTargetInfos(targets)
   const { profitMaxUnlockTimes } = useProfitMaxUnlockTimes()
   const { recommendedFrequency, isWithinGuidelines: _isWithinGuidelines } = useAutomationGuidelines()
 
@@ -193,28 +197,31 @@ export default function SetProfitMaxUnlockTimes() {
     return _isWithinGuidelines(frequency)
   }, [frequency, _isWithinGuidelines])
 
-  return <div className="flex flex-col gap-6">
-    <p className="text-xl">· Set automation frequency and profit max unlock time</p>
-    <p className={cn('text-xl', isWithinGuidelines ? undefined : 'text-warn-400')}>· {recommendedFrequency} days or more recommended on {chain?.name}</p>
+  return <div className="flex items-start gap-12">
+    <StepLabel step={3} />
+    <div className="flex flex-col gap-6">
+      <p className="text-xl">Set automation frequency and profit max unlock time</p>
+      <p className={cn('text-xl', isWithinGuidelines ? undefined : 'text-error-500')}>({recommendedFrequency} days or more recommended on {chain?.name})</p>
 
-    <div className="mt-8 px-6 flex items-center justify-end gap-6">
+      <div className="mt-8 px-6 flex items-center justify-end gap-6">
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="flex items-center justify-end">Automation frequency</div>
-        <DaysInput days={frequency} onChange={onChangeFrequency} theme={isWithinGuidelines ? undefined : 'warn'} />
-        <div className="flex items-center justify-end">Profit max unlock time</div>
-        <SecondsInput disabled={true} seconds={profitMaxUnlockTime} />
+        <div className="grid grid-cols-2 gap-6">
+          <div className="flex items-center justify-end">Automation frequency</div>
+          <DaysInput days={frequency} onChange={onChangeFrequency} theme={isWithinGuidelines ? undefined : 'error'} />
+          <div className="flex items-center justify-end">Profit max unlock time</div>
+          <SecondsInput disabled={true} seconds={profitMaxUnlockTime} />
+        </div>
+
+        <div className="px-6 flex flex-col gap-3 items-center justify-center text-neutral-600 text-lg">
+          <div className="w-[1px] h-6 bg-neutral-800"></div>
+          <PiLink />
+          <div className="w-[1px] h-6 bg-neutral-800"></div>
+        </div>
       </div>
 
-      <div className="px-6 flex flex-col gap-3 items-center justify-center text-neutral-600 text-lg">
-        <div className="w-[1px] h-6 bg-neutral-800"></div>
-        <PiLink />
-        <div className="w-[1px] h-6 bg-neutral-800"></div>
-      </div>
+      {profitMaxUnlockTime !== undefined && <div className="mt-8 flex flex-col gap-2">
+        {targetInfos.map((target, index) => <Target key={index} target={target.address} type={target.targetType!} profitMaxUnlockTime={profitMaxUnlockTime} isWithinGuidelines={isWithinGuidelines} />)}
+      </div>}    
     </div>
-
-    {isWithinGuidelines && (profitMaxUnlockTime !== undefined) && <div className="mt-8 flex flex-col gap-2">
-      {targets.map((target, index) => <Target key={index} target={target} profitMaxUnlockTime={profitMaxUnlockTime} />)}
-    </div>}    
   </div>
 }

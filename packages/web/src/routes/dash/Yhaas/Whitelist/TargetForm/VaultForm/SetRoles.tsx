@@ -5,24 +5,26 @@ import { useRelayer } from '../../relayers'
 import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../provider'
-import { EvmAddress } from '@kalani/lib/types'
+import { EvmAddress, ROLES } from '@kalani/lib/types'
 import Button from '../../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
 import StepLabel from '../../StepLabel'
 
-function useWrite(
-  address: EvmAddress,
+function useWrite(args: {
+  vault: EvmAddress,
+  rolemask: bigint,
   enabled: boolean
-) {
+}) {
+  const { vault, rolemask, enabled } = args
   const relayer = useRelayer()
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: abis.strategy, address,
-    functionName: 'setKeeper',
-    args: [relayer],
+    address: vault, abi: abis.vault, functionName: 'set_role',
+    args: [relayer, rolemask],
     query: { enabled }
   }), [relayer, enabled])
+
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -30,9 +32,9 @@ function useWrite(
 }
 
 function ExecButton({ target }: { target: EvmAddress }) {
-  const { refetch: refetchAreAllRelayed } = useIsRelayed()
-  const { data: isRelayed, refetch: refetchIsRelayed } = useIsRelayed({ strategy: target })
-  const { simulation, write, confirmation, resolveToast } = useWrite(target, true)
+  const { refetch: refetchAreAllRelayed } = useIsRelayed({ rolemask: ROLES.REPORTING_MANAGER })
+  const { data: isRelayed, refetch: refetchIsRelayed } = useIsRelayed({ vault: target, rolemask: ROLES.REPORTING_MANAGER })
+  const { simulation, write, confirmation, resolveToast } = useWrite({ vault: target, rolemask: ROLES.REPORTING_MANAGER, enabled: true })
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -65,17 +67,17 @@ function ExecButton({ target }: { target: EvmAddress }) {
   return <Button theme={buttonTheme} disabled={disableButton} onClick={onClick}>exec</Button>
 }
 
-function Target({ target }: { target: EvmAddress }) {
+function Target({ target, rolemask }: { target: EvmAddress, rolemask: bigint }) {
   const relayer = useRelayer()
   return <div className="px-6 flex items-center justify-end ">
     <div className="grow">
-      <span className="text-neutral-400">Strategy</span>
+      <span className="text-neutral-400">Vault</span>
       <span className="text-neutral-600">(</span>
       {fEvmAddress(target)}
       <span className="text-neutral-600">)</span>.
-      <span className="font-bold text-secondary-400">setKeeper</span>
+      <span className="font-bold text-secondary-400">set_role</span>
       <span className="text-neutral-600">(</span>
-      {fEvmAddress(relayer ?? zeroAddress)}
+        {fEvmAddress(relayer ?? zeroAddress)}, {rolemask.toString()}
       <span className="text-neutral-600">)</span>
     </div>
     <Suspense fallback={<></>}>
@@ -84,14 +86,14 @@ function Target({ target }: { target: EvmAddress }) {
   </div>
 }
 
-export default function SetKeepers() {
+export default function SetRoles({ rolemask }: { rolemask: bigint }) {
   const { targets } = useWhitelist()
   return <div className="flex items-start gap-12">
     <StepLabel step={2} />
-    <div className="flex flex-col gap-6">
-      <p className="text-xl">Set keepers to yHaaS relayer</p>
+    <div className="grow flex flex-col gap-6">
+      <p className="text-xl">Grant yHaaS relayer the reporting role</p>
       <div className="flex flex-col gap-2">
-        {targets.map((target, index) => <Target key={index} target={target} />)}
+        {targets.map((target, index) => <Target key={index} target={target} rolemask={rolemask} />)}
       </div>
     </div>
   </div>

@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
 import SetKeepers from './SetKeepers'
-import SetProfitMaxUnlockTimes from './SetProfitMaxUnlockTimes'
+import SetProfitMaxUnlockTimes from '../SetProfitMaxUnlockTimes'
 import { useIsRelayed } from './useIsRelayed'
-import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
+import { useProfitMaxUnlockTimes } from '../useProfitMaxUnlockTimes'
 import SetRepo from '../SetRepo'
 
 export default function StrategyForm() {
@@ -23,7 +23,7 @@ export default function StrategyForm() {
 
     {areRelayed && areWithinGuidelines && <FlyInFromBottom _key="target-form-repo">
       <Suspense>
-        <SetRepo />
+        <SetRepo step={4} />
       </Suspense>
     </FlyInFromBottom>}
   </div>
