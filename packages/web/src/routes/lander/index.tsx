@@ -75,7 +75,7 @@ export default function Lander() {
           </div>
         </section>
         <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2">
-          <Button h="secondary" onClick={scrollToNextSection} className={`
+          <Button h="secondary" theme="cta" onClick={scrollToNextSection} className={`
             text-neutral-600 border-transparent drop-shadow-[0_12px_12px_rgba(0,0,0,.52)]`}>
             <PiCaretDoubleDownBold size={20} />
          </Button>

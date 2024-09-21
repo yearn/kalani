@@ -66,7 +66,7 @@ const Dialog: React.FC<DialogProps> = ({
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={handleClose}
       />
-      <FlyInFromBottom _key={dialogId} className="w-full flex justify-center" transition={springs.glitch}>
+      <FlyInFromBottom _key={dialogId} className="w-full flex justify-center pointer-events-none" transition={springs.glitch}>
         <div
           ref={dialogRef}
           className={cn(
@@ -74,13 +74,14 @@ const Dialog: React.FC<DialogProps> = ({
             `w-full sm:max-w-md sm:mx-4`,
             `shadow-lg`,
             `max-h-[90vh] overflow-y-auto`,
+            `pointer-events-auto`,
             className
           )}
         >
           {showCloseButton && (
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-neutral-400"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-neutral-700"
             >
               <PiX size={24} />
             </button>

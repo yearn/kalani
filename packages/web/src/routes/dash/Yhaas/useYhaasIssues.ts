@@ -27,7 +27,7 @@ export function useYhaasIssues() {
     queryFn: () => fetch(`${API}/api/yhaas/issues`).then(r => r.json())
   })
 
-  const issues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
-  const accountsIssues = useMemo(() => issues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`)), [issues])
-  return { ...query, accountsIssues }
+  const openIssues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
+  const forAccount = useMemo(() => openIssues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`)), [openIssues])
+  return { ...query, issues: forAccount }
 }
