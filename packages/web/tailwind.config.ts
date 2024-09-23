@@ -42,7 +42,7 @@ export default {
       },
 
       height: {
-        'field-btn': '54px',
+        'field-btn': '50px',
       },
 
       borderRadius: {

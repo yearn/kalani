@@ -1,40 +1,50 @@
-import React, { useEffect, useRef } from 'react'
+import React, { forwardRef, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { PiX } from 'react-icons/pi'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '../lib/shadcn'
 import FlyInFromBottom from './motion/FlyInFromBottom'
 import { springs } from '../lib/motion'
-import Button from './elements/Button'
+import Button, { ButtonProps } from './elements/Button'
+import { useCallback } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+
+export function useDialog(dialogId: string) {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const isOpen = location.hash === `#${dialogId}`
+
+  const openDialog = useCallback(() => {
+    navigate(`${location.pathname}#${dialogId}`)
+  }, [navigate, location.pathname, dialogId])
+
+  const closeDialog = useCallback(() => {
+    navigate(-1)
+  }, [navigate])
+
+  return { isOpen, openDialog, closeDialog }
+}
 
 interface DialogProps {
   dialogId: string
+  title?: string
   onClose?: () => void
   children: React.ReactNode
-  showCloseButton?: boolean
   className?: string
 }
 
 const Dialog: React.FC<DialogProps> = ({
   dialogId,
+  title,
   onClose,
   children,
-  showCloseButton = true,
   className
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null)
-  const navigate = useNavigate()
-  const location = useLocation()
-  const prevLocationRef = useRef(location)
-
-  const isOpen = location.hash === `#${dialogId}`
-
-  useEffect(() => {
-    prevLocationRef.current = location
-  }, [location])
+  const { isOpen, closeDialog } = useDialog(dialogId)
 
   const handleClose = () => {
-    navigate(-1)
+    closeDialog()
     onClose?.()
   }
 
@@ -70,22 +80,21 @@ const Dialog: React.FC<DialogProps> = ({
         <div
           ref={dialogRef}
           className={cn(
-            `relative bg-neutral-950 border border-neutral-800 rounded-t-primary sm:rounded-primary p-6 sm:p-12`,
-            `w-full sm:max-w-md sm:mx-4`,
-            `shadow-lg`,
-            `max-h-[90vh] overflow-y-auto`,
-            `pointer-events-auto`,
+            `relative w-full sm:max-w-md max-h-[90vh] p-6 sm:px-8 sm:py-6
+            flex flex-col gap-12
+            bg-neutral-950 border border-neutral-800
+            rounded-t-primary sm:rounded-primary
+            shadow-lg overflow-y-auto pointer-events-auto`,
             className
-          )}
-        >
-          {showCloseButton && (
+          )}>
+          <div className="flex items-center justify-between">
+            <div className="text-2xl font-bold">{title}</div>
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 text-neutral-700"
-            >
+              className="text-neutral-700">
               <PiX size={24} />
             </button>
-          )}
+          </div>
           {children}
         </div>
       </FlyInFromBottom>
@@ -96,9 +105,11 @@ const Dialog: React.FC<DialogProps> = ({
 
 export default Dialog
 
-export function DialogButton({ dialogId, children }: { dialogId: string, children: React.ReactNode }) {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const openDialog = () => navigate(`${location.pathname}#${dialogId}`)
-  return <Button onClick={openDialog}>{children}</Button>
-}
+export const DialogButton = forwardRef<HTMLButtonElement, ButtonProps & { dialogId: string; children: React.ReactNode }>(
+  ({ dialogId, children, ...props }, ref) => {
+    const { openDialog } = useDialog(dialogId)
+    return <Button ref={ref} onClick={openDialog} {...props}>{children}</Button>
+  }
+)
+
+DialogButton.displayName = 'DialogButton'

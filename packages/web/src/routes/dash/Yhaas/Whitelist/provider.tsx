@@ -21,7 +21,7 @@ export function WhitelistProvider({ children }: { children: React.ReactNode }) {
   const [frequency, setFrequency] = useState<number | undefined>()
   const [repo, setRepo] = useState<string | undefined>()
 
-  const githubRepoRegex = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
+  const githubRepoRegex = /^(https:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
   const isRepoValid = useMemo(() => {
     if (!repo) return false
     return githubRepoRegex.test(repo)

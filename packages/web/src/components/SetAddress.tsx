@@ -111,11 +111,6 @@ export default function SetAddress({
     }
   }, [simulation, setError])
 
-  // const inputTheme = useMemo(() => {
-  //   if (multicall.isFetching) return 'sim'
-  //   return 'default'
-  // }, [multicall])
-
   const disableInput = useMemo(() => 
     !permitted
     || multicall.isFetching,

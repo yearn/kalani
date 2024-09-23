@@ -12,7 +12,7 @@ export default function VaultForm() {
   const { data: areRelayed } = useIsRelayed({ rolemask: ROLES.REPORTING_MANAGER })
   const { areWithinGuidelines } = useProfitMaxUnlockTimes()
 
-  return <div className="flex flex-col gap-20">
+  return <div className="flex flex-col gap-24">
     <FlyInFromBottom _key="target-form-keeper">
       <SetRoles rolemask={ROLES.REPORTING_MANAGER} />
     </FlyInFromBottom>

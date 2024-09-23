@@ -24,7 +24,7 @@ use(function (_chai, utils) {
   })
 })
 
-describe.only('title', function() {
+describe('title', function() {
   it('generates undefined', async function() {
     expect(await generateTitle([])).to.be.undefined
   })

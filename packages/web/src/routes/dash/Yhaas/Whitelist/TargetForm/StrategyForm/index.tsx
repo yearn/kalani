@@ -10,7 +10,7 @@ export default function StrategyForm() {
   const { data: areRelayed } = useIsRelayed()
   const { areWithinGuidelines } = useProfitMaxUnlockTimes()
 
-  return <div className="flex flex-col gap-20">
+  return <div className="flex flex-col gap-24">
     <FlyInFromBottom _key="target-form-keeper">
       <SetKeepers />
     </FlyInFromBottom>

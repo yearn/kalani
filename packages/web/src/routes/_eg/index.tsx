@@ -76,8 +76,7 @@ export default function Eg() {
 
       <div>
         <DialogButton dialogId="example-dialog">Dialog</DialogButton>
-        <Dialog dialogId="example-dialog">
-          <h2 className="text-xl font-bold mb-4">Dialog Title</h2>
+        <Dialog title="Dialog Title" dialogId="example-dialog">
           <p>This is the dialog content.</p>
         </Dialog>
       </div>
