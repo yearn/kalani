@@ -55,15 +55,20 @@ const Dialog: React.FC<DialogProps> = ({
       }
     }
 
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+
     if (isOpen) {
       document.body.classList.add('overflow-hidden')
+      document.body.style.marginRight = `${scrollbarWidth}px`
       document.addEventListener('keydown', handleEscape)
     } else {
       document.body.classList.remove('overflow-hidden')
+      document.body.style.marginRight = ''
     }
 
     return () => {
       document.body.classList.remove('overflow-hidden')
+      document.body.style.marginRight = ''
       document.removeEventListener('keydown', handleEscape)
     }
   }, [isOpen, handleClose])
