@@ -18,7 +18,7 @@ export function useWriteContract() {
           new Promise((resolve) => setResolveToast(() => resolve)),
           {
             loading: `Confirming transaction...`,
-            success: () => `Transaction confirmed!`,
+            success: () => `Transaction confirmed`,
             action: {
               label: 'View', onClick: () => window.open(explorer, '_blank')
             }

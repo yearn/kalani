@@ -289,3 +289,7 @@
 		border-radius: 0.75rem;
 	}
 }
+
+.theme-error {
+	@apply !border-error-400 !text-error-400;
+}

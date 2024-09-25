@@ -17,7 +17,7 @@ export default function Eg() {
       new Promise((resolve) => setResolveToast(() => resolve)),
       {
         loading: `Confirming transaction...`,
-        success: () => `Transaction confirmed!`,
+        success: () => `Transaction confirmed`,
         action: { label: 'View', onClick: () => {} }
       }
     )

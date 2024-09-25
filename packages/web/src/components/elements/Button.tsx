@@ -1,7 +1,7 @@
 import { forwardRef, ButtonHTMLAttributes } from 'react'
 import { cn } from '../../lib/shadcn'
 
-export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active' | 'secondary' | 'cta'
+export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active' | 'secondary' | 'cta' | 'error'
 export type Hierarchy = 'primary' | 'secondary'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {

@@ -17,7 +17,7 @@ function Feature({
   href: string
 }) {
   return <a href={href} className={`group
-    h-full p-4 flex items-center justify-center gap-4
+    h-full p-4 flex items-center justify-center gap-4 sm:gap-8
     border-2 border-transparent hover:border-secondary-200 
     saber-glow rounded-primary`}>
     {icon}
@@ -41,7 +41,7 @@ export default function Lander() {
           <div className="z-10 w-full h-full pb-[10rem] flex flex-col items-center justify-center gap-16">
             <div className="flex flex-col items-center justify-end gap-3 text-neutral-900">
               <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
-              <p className="font-bold">Yearn vault super center</p>
+              <p className="font-bold text-xl">Yearn Vault Super Center</p>
             </div>
             <Finder className="w-full px-4 sm:px-0" placeholder='Search by vault / token / address' />
           </div>

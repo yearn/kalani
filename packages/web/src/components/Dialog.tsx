@@ -19,8 +19,8 @@ export function useDialog(dialogId: string) {
   }, [navigate, location.pathname, dialogId])
 
   const closeDialog = useCallback(() => {
-    navigate(-1)
-  }, [navigate])
+    if (isOpen) navigate(-1)
+  }, [isOpen, navigate])
 
   return { isOpen, openDialog, closeDialog }
 }
