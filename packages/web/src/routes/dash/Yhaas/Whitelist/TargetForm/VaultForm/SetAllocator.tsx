@@ -9,16 +9,26 @@ import { useWhitelist } from '../../provider'
 import { fEvmAddress } from '@kalani/lib/format'
 import { cn } from '../../../../../../lib/shadcn'
 import Input from '../../../../../../components/elements/Input'
-import { useAccount, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useConfig, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { EvmAddress } from '@kalani/lib/types'
 import abis from '@kalani/lib/abis'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { toEventSelector, zeroAddress } from 'viem'
 import { numberOr } from '@kalani/lib/nums'
+import { useErc20 } from '../../../../../../hooks/useErc20'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { readContractQueryOptions } from 'wagmi/query'
 
-const NewDebtAllocator = toEventSelector(
-  'event NewDebtAllocator(address indexed allocator, address indexed vault)'
-)
+function useAsset(vault: EvmAddress) {
+  const config = useConfig()
+  const query = useSuspenseQuery(readContractQueryOptions(config, {  
+    address: vault, abi: abis.vault,  functionName: 'asset' 
+  }))
+  return {
+    ...query,
+    asset: query.data
+  }
+}
 
 function useWrite(args: {
   vault: EvmAddress,
@@ -42,18 +52,20 @@ function useWrite(args: {
 }
 
 function MinChangeInput({
-  disabled, 
-  min, 
+  disabled,
+  asset,
+  min,
   onChange, 
   className
 }: {
   disabled?: boolean,
+  asset: EvmAddress,
   min?: number | undefined,
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string
 }) {
-  const { chain } = useAccount()
-  const symbol = chain?.nativeCurrency?.symbol ?? 'ETH'
+  const { token } = useErc20(asset)
+
   return <div className="relative">
     <Input
       disabled={disabled}
@@ -68,7 +80,7 @@ function MinChangeInput({
       flex items-center justify-end
       text-neutral-600 text-2xl
       pointer-events-none`)}>
-      {symbol}
+      {token.symbol ?? ''}
     </div>
   </div>
 }
@@ -86,9 +98,11 @@ function CreateAllocatorDialog({
   vault: EvmAddress, 
   onNewAllocator: (allocator: EvmAddress) => void
 }) {
+  const { asset } = useAsset(vault)
+  const { token } = useErc20(asset)
   const { closeDialog } = useDialog('create-allocator')
   const [minChange, setMinChange] = useState<number>(0)
-  const minimumChange = useMemo<bigint>(() => BigInt(numberOr(minChange) * 10 ** 18), [minChange])
+  const minimumChange = useMemo<bigint>(() => BigInt(numberOr(minChange) * 10 ** token.decimals), [token, minChange])
   const { isConnected, address: governance } = useAccount()
 
   const { simulation, write, confirmation, resolveToast } = useWrite({
@@ -127,6 +141,8 @@ function CreateAllocatorDialog({
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
+  const NewDebtAllocator = toEventSelector('event NewDebtAllocator(address indexed allocator, address indexed vault)')
+
   useEffect(() => {
     if (confirmation.isSuccess) {
       const log = confirmation.data.logs.find(log => log.topics[0] === NewDebtAllocator)!
@@ -147,7 +163,7 @@ function CreateAllocatorDialog({
         <div className="text-xl whitespace-nowrap">
           Min change
         </div>
-        <MinChangeInput disabled={write.isPending} min={minChange} onChange={e => setMinChange(parseFloat(e.target.value))} />
+        <MinChangeInput disabled={write.isPending} asset={asset} min={minChange} onChange={e => setMinChange(parseFloat(e.target.value))} />
       </div>
       <div className="text-neutral-600 text-sm">
         The minimum amount needed to trigger debt updates.
