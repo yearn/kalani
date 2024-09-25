@@ -3,8 +3,7 @@ import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useWhitelist } from './provider'
 import { useTargetInfos } from './useTargetInfos'
-
-const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+import { API_URL } from '../../../../lib/env'
 
 export function useApplyToWhitelist() {
   const { address, chainId } = useAccount()
@@ -21,7 +20,7 @@ export function useApplyToWhitelist() {
 
   return useMutation({
     mutationFn: ({ signature }: { signature: string }) => {
-      return fetch(`${API}/api/yhaas/whitelist`, {
+      return fetch(`${API_URL}/api/yhaas/whitelist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, signature })

@@ -3,9 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, EvmAddress } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
-
-const KONG_GQL_URL = import.meta.env.VITE_KONG_GQL
-if (!KONG_GQL_URL) throw new Error('🤬 VITE_KONG_GQL environment variable is not set')
+import { KONG_GQL_URL } from '../../../lib/env'
 
 function getRoles(permittedRolesMask: bigint): Record<string, boolean> {
   const roles: {

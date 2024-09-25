@@ -1,4 +1,5 @@
 export * from './abis'
+export * from './addresses'
 export * from './bmath'
 export * from './chains'
 export * from './format'

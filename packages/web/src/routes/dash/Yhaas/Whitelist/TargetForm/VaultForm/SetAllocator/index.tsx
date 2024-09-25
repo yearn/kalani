@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Address from '../../../../../../components/elements/Address'
-import StepLabel from '../../StepLabel'
-import { Switch } from '../../../../../../components/shadcn/switch'
-import { Label } from '../../../../../../components/shadcn/label'
-import Dialog, { DialogButton, useDialog } from '../../../../../../components/Dialog'
-import Button from '../../../../../../components/elements/Button'
-import { useWhitelist } from '../../provider'
+import Address from '../../../../../../../components/elements/Address'
+import StepLabel from '../../../StepLabel'
+import { Switch } from '../../../../../../../components/shadcn/switch'
+import { Label } from '../../../../../../../components/shadcn/label'
+import Dialog, { DialogButton, useDialog } from '../../../../../../../components/Dialog'
+import Button from '../../../../../../../components/elements/Button'
+import { useWhitelist } from '../../../provider'
 import { fEvmAddress } from '@kalani/lib/format'
-import { cn } from '../../../../../../lib/shadcn'
-import Input from '../../../../../../components/elements/Input'
+import { cn } from '../../../../../../../lib/shadcn'
+import Input from '../../../../../../../components/elements/Input'
 import { useAccount, useConfig, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { EvmAddress } from '@kalani/lib/types'
 import abis from '@kalani/lib/abis'
-import { useWriteContract } from '../../../../../../hooks/useWriteContract'
+import { useWriteContract } from '../../../../../../../hooks/useWriteContract'
 import { toEventSelector, zeroAddress } from 'viem'
 import { numberOr } from '@kalani/lib/nums'
-import { useErc20 } from '../../../../../../hooks/useErc20'
+import { useErc20 } from '../../../../../../../hooks/useErc20'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { readContractQueryOptions } from 'wagmi/query'
+import { useAllocator } from './useAllocator'
+import { isNothing } from '@kalani/lib/strings'
+import { useAllocatorFactoryAddress } from './useAllocatorFactory'
 
 function useAsset(vault: EvmAddress) {
   const config = useConfig()
@@ -37,13 +40,14 @@ function useWrite(args: {
   enabled: boolean
 }) {
   const { vault, governance, minimumChange, enabled } = args
+  const { factory } = useAllocatorFactoryAddress()
 
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    address: '0x0D1F62247035BBFf16742B0f31e8e2Af3aCd6e67', 
+    address: factory, 
     abi: abis.allocatorFactory, functionName: 'newGenericDebtAllocator',
     args: [vault, governance, minimumChange],
     query: { enabled }
-  }), [vault, governance, minimumChange, enabled])
+  }), [factory, vault, governance, minimumChange, enabled])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
@@ -177,11 +181,20 @@ function CreateAllocatorDialog({
 }
 
 export default function SetAllocator() {
+  const { chainId } = useAccount()
+  const { targets } = useWhitelist()
+  const [vault] = targets
   const [allocator, setAllocator] = useState<string | undefined>(undefined)
   const [isValid, setIsValid] = useState<boolean>(false)
   const [automate, setAutomate] = useState<boolean>(false)
-  const { targets } = useWhitelist()
-  const vault = targets[0]
+  const { allocator: indexedAllocator, data: allocatorData } = useAllocator({ chainId: chainId ?? 0, vault })
+
+  useEffect(() => {
+    if (indexedAllocator && isNothing(allocator)) {
+      setAllocator(indexedAllocator)
+      setIsValid(true)
+    }
+  }, [indexedAllocator, allocator, setAllocator, setIsValid, allocatorData])
 
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)

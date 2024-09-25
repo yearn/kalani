@@ -1,8 +1,6 @@
 import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
-
-const KONG_GQL_URL = import.meta.env.VITE_KONG_GQL
-if (!KONG_GQL_URL) throw new Error('🤬 VITE_KONG_GQL environment variable is not set')
+import { KONG_GQL_URL } from '../../lib/env'
 
 export const FinderItemSchema = z.object({
   label: z.enum(["vault", "strategy", "erc4626", "accountant"]),

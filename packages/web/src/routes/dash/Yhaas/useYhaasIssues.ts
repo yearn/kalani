@@ -4,8 +4,7 @@ import { useAccount } from 'wagmi'
 import { fEvmAddress } from '@kalani/lib/format'
 import { zeroAddress } from 'viem'
 import { useMemo } from 'react'
-
-const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+import { API_URL } from '../../../lib/env'
 
 export const GithubIssueSchema = z.object({
   url: z.string(),
@@ -24,7 +23,7 @@ export function useYhaasIssues() {
 
   const query = useSuspenseQuery({
     queryKey: ['yhaas-issues'],
-    queryFn: () => fetch(`${API}/api/yhaas/issues`).then(r => r.json())
+    queryFn: () => fetch(`${API_URL}/api/yhaas/issues`).then(r => r.json())
   })
 
   const openIssues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
