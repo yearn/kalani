@@ -88,7 +88,7 @@ export default function SetKeepers() {
   const { targets } = useWhitelist()
   return <div className="flex items-start gap-12">
     <StepLabel step={2} />
-    <div className="flex flex-col gap-6">
+    <div className="grow flex flex-col gap-6">
       <p className="text-xl">Set keepers to yHaaS relayer</p>
       <div className="flex flex-col gap-2">
         {targets.map((target, index) => <Target key={index} target={target} />)}

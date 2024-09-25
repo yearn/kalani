@@ -10,7 +10,9 @@ type Context = {
   setFrequency: React.Dispatch<React.SetStateAction<number | undefined>>,
   repo?: string,
   setRepo: React.Dispatch<React.SetStateAction<string | undefined>>,
-  isRepoValid: boolean
+  isRepoValid: boolean,
+  options: Record<string, any>,
+  setOptions: React.Dispatch<React.SetStateAction<Record<string, any>>>
 }
 
 export const WhitelistContext = createContext<Context>({} as Context)
@@ -20,6 +22,7 @@ export function WhitelistProvider({ children }: { children: React.ReactNode }) {
   const [targets, setTargets] = useState<EvmAddress[]>([])
   const [frequency, setFrequency] = useState<number | undefined>()
   const [repo, setRepo] = useState<string | undefined>()
+  const [options, setOptions] = useState<Record<string, any>>({})
 
   const githubRepoRegex = /^(https:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
   const isRepoValid = useMemo(() => {
@@ -31,7 +34,8 @@ export function WhitelistProvider({ children }: { children: React.ReactNode }) {
     targetsRaw, setTargetsRaw,
     targets, setTargets,
     frequency, setFrequency,
-    repo, setRepo, isRepoValid
+    repo, setRepo, isRepoValid,
+    options, setOptions
     }}>
     {children}
   </WhitelistContext.Provider>

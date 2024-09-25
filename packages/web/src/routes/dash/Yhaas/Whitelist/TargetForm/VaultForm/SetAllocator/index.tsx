@@ -182,7 +182,7 @@ function CreateAllocatorDialog({
 
 export default function SetAllocator() {
   const { chainId } = useAccount()
-  const { targets } = useWhitelist()
+  const { targets, setOptions } = useWhitelist()
   const [vault] = targets
   const [allocator, setAllocator] = useState<string | undefined>(undefined)
   const [isValid, setIsValid] = useState<boolean>(false)
@@ -196,11 +196,17 @@ export default function SetAllocator() {
     }
   }, [indexedAllocator, allocator, setAllocator, setIsValid, allocatorData])
 
+  const onAutomateChanged = useCallback((automate: boolean) => {
+    setAutomate(automate)
+    setOptions(current => ({ ...current, automate }))
+  }, [allocator, setAutomate, setOptions])
+
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)
     setIsValid(true)
-    setAutomate(true)
-  }, [setAllocator, setIsValid, setAutomate])
+    setOptions(current => ({ ...current, allocator }))
+    onAutomateChanged(true)
+  }, [setAllocator, setIsValid, setOptions, onAutomateChanged])
 
   return <div className="flex items-start gap-12">
     <StepLabel step={4} />
@@ -220,7 +226,7 @@ export default function SetAllocator() {
         </div>
         <div>
           <span className="group mx-6 inline-flex items-center gap-4">
-            <Switch disabled={!isValid} id="automate-allocator" checked={automate} onCheckedChange={setAutomate} />
+            <Switch disabled={!isValid} id="automate-allocator" checked={automate} onCheckedChange={onAutomateChanged} />
             <Label htmlFor="automate-allocator">Automate debt allocation</Label>
           </span>
         </div>

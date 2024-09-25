@@ -15,7 +15,8 @@ export function useApplyToWhitelist() {
     manager: address,
     targets: targetInfos,
     frequency: w.frequency,
-    repo: w.repo
+    repo: w.repo,
+    options: w.options
   }), [chainId, address, w])
 
   return useMutation({

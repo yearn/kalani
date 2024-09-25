@@ -25,7 +25,8 @@ export async function POST(req: Request) {
     chainId,
     manager,
     targets,
-    signature
+    signature,
+    options
   } = application
 
   const chain = chains[chainId]

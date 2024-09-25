@@ -11,7 +11,8 @@ export const ApplicationSchema = z.object({
   }).array(),
   frequency: z.number(),
   repo: z.string(),
-  signature: HexStringSchema
+  signature: HexStringSchema,
+  options: z.record(z.any())
 })
 
 export type Application = z.infer<typeof ApplicationSchema>
