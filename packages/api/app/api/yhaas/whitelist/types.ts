@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EvmAddressSchema, HexStringSchema } from '@/lib/types'
+import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 
 export const ApplicationSchema = z.object({
   chainId: z.number(),
@@ -11,7 +11,8 @@ export const ApplicationSchema = z.object({
   }).array(),
   frequency: z.number(),
   repo: z.string(),
-  signature: HexStringSchema
+  signature: HexStringSchema,
+  options: z.record(z.any())
 })
 
 export type Application = z.infer<typeof ApplicationSchema>

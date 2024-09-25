@@ -12,7 +12,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "viem": "2.21.5",
+    "viem": "2.21.14",
     "zod": "^3.23.8"
   }
 }

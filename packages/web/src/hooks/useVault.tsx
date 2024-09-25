@@ -1,12 +1,11 @@
 import { z } from 'zod'
-import { AccountRoleSchema, EvmAddressSchema, compareEvmAddresses, HexStringSchema, EvmAddress } from '../lib/types'
+import { AccountRoleSchema, EvmAddressSchema, HexStringSchema, EvmAddress } from '@kalani/lib/types'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useParams } from 'react-router-dom'
 import { nullsToUndefined } from '../lib/object'
 import { useFinderItems } from '../components/Finder/useFinderItems'
 import { useQuery } from '@tanstack/react-query'
-
-const KONG_GQL_URL = import.meta.env.VITE_KONG_GQL
-if (!KONG_GQL_URL) throw new Error('🤬 VITE_KONG_GQL environment variable is not set')
+import { KONG_GQL_URL } from '../lib/env'
 
 const StrategySchema = z.object({
   chainId: z.number(),

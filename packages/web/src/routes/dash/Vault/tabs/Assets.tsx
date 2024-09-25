@@ -1,7 +1,7 @@
 import Section from '../../../../components/Section'
 import { Vault, withVault } from '../../../../hooks/useVault'
 import { div, mulb } from '@kalani/lib/bmath'
-import { fBps, fPercent, fTokens, fUSD } from '../../../../lib/format'
+import { fBps, fPercent, fTokens, fUSD } from '@kalani/lib/format'
 import { useMemo } from 'react'
 
 function Assets({ vault }: { vault: Vault }) {

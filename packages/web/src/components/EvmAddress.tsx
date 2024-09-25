@@ -1,5 +1,5 @@
-import { fEvmAddress } from '../lib/format'
-import { EvmAddress } from '../lib/types'
+import { fEvmAddress } from '@kalani/lib/format'
+import { EvmAddress } from '@kalani/lib/types'
 import Copy from './Copy'
 import { cn } from '../lib/shadcn'
 import { getChain } from '../lib/chains'

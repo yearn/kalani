@@ -1,4 +1,4 @@
-import { EvmAddress, EvmAddressSchema } from '../../../lib/types'
+import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useParams } from 'react-router-dom'
 import Account from './Account'
 

@@ -1,10 +1,8 @@
 import { z } from 'zod'
-import { EvmAddressSchema } from '../../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-
-const KONG_GQL_URL = import.meta.env.VITE_KONG_GQL
-if (!KONG_GQL_URL) throw new Error('🤬 VITE_KONG_GQL environment variable is not set')
+import { KONG_GQL_URL } from '../../../lib/env'
 
 export const AccountantSchema = z.object({
   chainId: z.number(),

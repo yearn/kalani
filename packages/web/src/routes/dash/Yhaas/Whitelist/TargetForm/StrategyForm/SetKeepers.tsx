@@ -1,15 +1,16 @@
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { zeroAddress } from 'viem'
-import abis from '../../../../../../lib/abis'
+import abis from '@kalani/lib/abis'
 import { useRelayer } from '../../relayers'
 import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../provider'
 import { EvmAddress } from '@kalani/lib/types'
 import Button from '../../../../../../components/elements/Button'
-import { fEvmAddress } from '../../../../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
+import StepLabel from '../../StepLabel'
 
 function useWrite(
   address: EvmAddress,
@@ -85,10 +86,13 @@ function Target({ target }: { target: EvmAddress }) {
 
 export default function SetKeepers() {
   const { targets } = useWhitelist()
-  return <div className="flex flex-col gap-6">
-    <p className="text-xl">· Set keepers to yHaaS relayer</p>
-    <div className="flex flex-col gap-2">
-      {targets.map((target, index) => <Target key={index} target={target} />)}
+  return <div className="flex items-start gap-12">
+    <StepLabel step={2} />
+    <div className="grow flex flex-col gap-6">
+      <p className="text-xl">Set keepers to yHaaS relayer</p>
+      <div className="flex flex-col gap-2">
+        {targets.map((target, index) => <Target key={index} target={target} />)}
+      </div>
     </div>
   </div>
 }

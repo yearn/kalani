@@ -1,7 +1,7 @@
 import { useVaultFromParams } from '../../../hooks/useVault'
 import Badge from './Badge'
 import { PiCalculator, PiScales, PiRobot } from 'react-icons/pi'
-import { compareEvmAddresses } from '../../../lib/types'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 import { zeroAddress } from 'viem'
 
 export default function Vault() {

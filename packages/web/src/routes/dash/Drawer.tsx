@@ -39,11 +39,11 @@ export default function Drawer({
       <Yearn className="size-6" back="text-transparent" front="text-neutral-200" />
     </DrawerButton>
 
-    <DrawerButton to="/account" title="Account dash">
+    <DrawerButton to="/account" title="Account">
       <PiVault size={26} />
     </DrawerButton>
 
-    <DrawerButton to="/yhaas" title="yHaaS dash">
+    <DrawerButton to="/yhaas" title="Automation">
       <PiRobot size={26} />
     </DrawerButton>
   </div>

@@ -8,6 +8,7 @@ import TargetForm from './TargetForm'
 import Actions from './Actions'
 import { useWhitelist } from './provider'
 import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
+import StepLabel from './StepLabel'
 
 export default function Whitelist() {
   const { address, chain } = useAccount()
@@ -24,12 +25,15 @@ export default function Whitelist() {
       <Input value={`Role manager: ${address}`} disabled />
     </div>
 
-    <div className="flex flex-col gap-6">
-      <p className="text-xl">· What address(es) do you want to automate?</p>
-      <SetTargetAddresses />
-      <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
-        <TargetInfos />
-      </Suspense>
+    <div className="flex items-start gap-12">
+      <StepLabel step={1} />
+      <div className="grow flex flex-col gap-6">
+        <p className="text-xl">What address(es) do you want to automate?</p>
+        <SetTargetAddresses />
+        <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
+          <TargetInfos />
+        </Suspense>
+      </div>
     </div>
 
     <Suspense>

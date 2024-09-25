@@ -7,6 +7,7 @@ import bmath from '@kalani/lib/bmath'
 import { formatEther } from 'viem'
 import usePrices from '../../../hooks/usePrices'
 import Odometer from 'react-odometerjs'
+import { fNumber } from '@kalani/lib/format'
 
 function Brand() {
   return <div className="flex items-center gap-6 pl-4">
@@ -51,13 +52,8 @@ function Metrics() {
 
   return <div className="flex items-center gap-20">
     <div className="hidden 2xl:block flex flex-col items-start">
-      <div className="text-xl">{totalAutomations}</div>
+      <div className="text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
       <div className="text-xs text-balance">Automations</div>
-    </div>
-
-    <div className="hidden 2xl:block flex flex-col items-start">
-      <div className="text-xl">6,568</div>
-      <div className="text-xs">Harvests</div>
     </div>
 
     <div className="flex flex-col items-start">

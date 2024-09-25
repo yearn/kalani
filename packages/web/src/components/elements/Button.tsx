@@ -1,10 +1,10 @@
-import { ThemeName } from '../../lib/types'
 import { forwardRef, ButtonHTMLAttributes } from 'react'
 import { cn } from '../../lib/shadcn'
 
+export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active' | 'secondary' | 'cta' | 'error'
 export type Hierarchy = 'primary' | 'secondary'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   className?: string
   theme?: ThemeName
   h?: Hierarchy

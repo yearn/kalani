@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import Button from '../../components/elements/Button'
-import TransferFeeManager from '../dash/Accountant/Admins/TransferFeeManager'
 import Bg from '../lander/Bg'
 import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
 import TextGrow from '../../components/elements/TextGrow'
+import Dialog, { DialogButton } from '../../components/Dialog'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -17,7 +17,7 @@ export default function Eg() {
       new Promise((resolve) => setResolveToast(() => resolve)),
       {
         loading: `Confirming transaction...`,
-        success: () => `Transaction confirmed!`,
+        success: () => `Transaction confirmed`,
         action: { label: 'View', onClick: () => {} }
       }
     )
@@ -41,17 +41,16 @@ export default function Eg() {
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
-    <section className={`
-      w-[740px] flex flex-col gap-16`}>
+    <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
-      <TransferFeeManager chainId={137} accountant="0x54483f1592ab0aDea2757Ae0d62e6393361d4CEe" />
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center gap-6">
         <Button onClick={onToastAndWait} theme={toaston ? 'confirm' : 'default'}>toast and wait</Button>
         <Button onClick={onToast}>toast</Button>
         <Button onClick={onWarn}>warn</Button>
         <Button onClick={onError}>error</Button>
       </div>
-      <div className="flex items-center gap-6">
+
+      <div className="flex flex-wrap items-center gap-6">
         <Button theme={'default'}>d</Button>
         <Button theme={'default'} disabled={true}>d</Button>
         <Button theme={'cta'}>c</Button>
@@ -59,18 +58,29 @@ export default function Eg() {
         <Button theme={'sim'}>s</Button>
         <Button theme={'sim'} disabled={true}>s</Button>
       </div>
-      <div className="flex items-center gap-6">
+
+      <div className="flex flex-wrap items-center gap-6">
         <Button theme={'write'}>w</Button>
         <Button theme={'write'} disabled={true}>w</Button>
         <Button theme={'confirm'}>c</Button>
         <Button theme={'confirm'} disabled={true}>c</Button>
       </div>
+
       <div className="flex items-center gap-6">
         <Addresses placeholder="0x addresses" />
       </div>
+
       <div className="flex items-center gap-6">
         <TextGrow className="grow w-full" placeholder="text grow" />
       </div>
+
+      <div>
+        <DialogButton dialogId="example-dialog">Dialog</DialogButton>
+        <Dialog title="Dialog Title" dialogId="example-dialog">
+          <p>This is the dialog content.</p>
+        </Dialog>
+      </div>
+
     </section>
   </div>
 }

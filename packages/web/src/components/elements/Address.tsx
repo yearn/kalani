@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Input from './Input'
-import { EvmAddress, EvmAddressSchema } from '../../lib/types'
+import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { PiCheckCircle, PiWarningCircle } from 'react-icons/pi'
 
 export default function Address({ 

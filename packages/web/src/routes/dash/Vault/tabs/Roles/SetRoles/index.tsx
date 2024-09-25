@@ -1,11 +1,11 @@
-import abis from '../../../../../../lib/abis'
-import { EvmAddress, EvmAddressSchema, ROLES, compareEvmAddresses, enumerateEnum } from '../../../../../../lib/types'
+import abis from '@kalani/lib/abis'
+import { EvmAddress, EvmAddressSchema, ROLES, enumerateEnum } from '@kalani/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { UseSimulateContractParameters, useReadContract, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import Toggle from './Toggle'
 import Button from '../../../../../../components/elements/Button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../../components/shadcn/accordion'
-import { fEvmAddress } from '../../../../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import Dot from './Dot'
 import { PiStar, PiStarFill } from 'react-icons/pi'
 import Address from '../../../../../../components/elements/Address'
@@ -13,6 +13,7 @@ import { useIsRoleManager, useRoleManager } from '../../../../../../hooks/useRol
 import { zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import Sticker from '../../../../../../components/elements/Sticker'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 function usePrevious({
   chainId, vault, account 

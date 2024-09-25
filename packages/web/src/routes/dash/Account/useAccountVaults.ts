@@ -1,10 +1,9 @@
 import { z } from 'zod'
 import { useQuery } from '@tanstack/react-query'
-import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, compareEvmAddresses, EvmAddress } from '../../../lib/types'
+import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, EvmAddress } from '@kalani/lib/types'
 import { useMemo } from 'react'
-
-const KONG_GQL_URL = import.meta.env.VITE_KONG_GQL
-if (!KONG_GQL_URL) throw new Error('🤬 VITE_KONG_GQL environment variable is not set')
+import { compareEvmAddresses } from '@kalani/lib/strings'
+import { KONG_GQL_URL } from '../../../lib/env'
 
 function getRoles(permittedRolesMask: bigint): Record<string, boolean> {
   const roles: {

@@ -18,6 +18,7 @@ export default function Actions() {
     w.setTargets([])
     w.setRepo(undefined)
     w.setFrequency(undefined)
+    w.setOptions({})
   }, [w])
 
   const apply = useApplyToWhitelist()

@@ -46,7 +46,7 @@ const AutomationStatsSchema = z.record(
 
 type AutomationStats = z.infer<typeof AutomationStatsSchema>
 
-const chains = {
+export const chains = {
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: EvmChain.ETHEREUM,
   [parseInt(EvmChain.POLYGON.hex, 16)]: EvmChain.POLYGON,
   [parseInt(EvmChain.GNOSIS.hex, 16)]: EvmChain.GNOSIS,
@@ -54,7 +54,7 @@ const chains = {
   [parseInt(EvmChain.BASE.hex, 16)]: EvmChain.BASE
 }
 
-const defaultAutomationStats = AutomationStatsSchema.parse({
+export const defaultAutomationStats = AutomationStatsSchema.parse({
   [parseInt(EvmChain.ETHEREUM.hex, 16)]: { executors: [{
       address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
       block: 19483613n,
@@ -67,24 +67,24 @@ const defaultAutomationStats = AutomationStatsSchema.parse({
       automations: 0,
       gas: 0n
     }] },
-  [parseInt(EvmChain.GNOSIS.hex, 16)]: { executors: [{
-    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-    block: 35097929n,
-    automations: 0,
-    gas: 0n
-  }] },
-  [parseInt(EvmChain.ARBITRUM.hex, 16)]: { executors: [{
-    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-    block: 226203220n,
-    automations: 0,
-    gas: 0n
-  }] },
-  [parseInt(EvmChain.BASE.hex, 16)]: { executors: [{
-    address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
-    block: 19170746n,
-    automations: 0,
-    gas: 0n
-  }] }
+    [parseInt(EvmChain.GNOSIS.hex, 16)]: { executors: [{
+      address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+      block: 35097929n,
+      automations: 0,
+      gas: 0n
+    }] },
+    [parseInt(EvmChain.ARBITRUM.hex, 16)]: { executors: [{
+      address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+      block: 226203220n,
+      automations: 0,
+      gas: 0n
+    }] },
+    [parseInt(EvmChain.BASE.hex, 16)]: { executors: [{
+      address: '0x0A4d75AB96375E37211Cd00a842d77d0519eeD1B',
+      block: 19170746n,
+      automations: 0,
+      gas: 0n
+    }] }
 })
 
 async function getAutomationStats(redis: Redis): Promise<AutomationStats> {

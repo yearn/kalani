@@ -1,8 +1,8 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useConfig } from 'wagmi'
-import { EvmAddress } from '../../../../lib/types'
-import abis from '../../../../lib/abis'
+import { EvmAddress } from '@kalani/lib/types'
+import abis from '@kalani/lib/abis'
 import { useMemo } from 'react'
 import { zeroAddress } from 'viem'
 

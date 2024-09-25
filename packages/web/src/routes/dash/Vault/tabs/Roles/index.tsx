@@ -6,7 +6,7 @@ import { PiPlus } from 'react-icons/pi'
 import { useIsRoleManager } from '../../../../../hooks/useRoleManager'
 import SetRoles from './SetRoles'
 import { useCallback, useMemo, useState } from 'react'
-import { EvmAddressSchema } from '../../../../../lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import FieldLabelPair from '../../../../../components/FieldLabelPair'
 import Section from '../../../../../components/Section'
 

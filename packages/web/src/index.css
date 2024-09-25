@@ -46,6 +46,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 @keyframes rotate {
 	100% {
 		transform: rotate(1turn);
@@ -112,7 +116,7 @@
 		width: calc(100% - 2px);
 		height: calc(100% - 2px);
 		background: #0a0a0a;
-		border-radius: 0;
+		border-radius: 0.75rem;
 	}
 }
 
@@ -284,4 +288,8 @@
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}
+}
+
+.theme-error {
+	@apply !border-error-400 !text-error-400;
 }

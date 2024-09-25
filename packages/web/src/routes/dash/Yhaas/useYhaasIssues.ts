@@ -1,11 +1,10 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
-import { fEvmAddress } from '../../../lib/format'
+import { fEvmAddress } from '@kalani/lib/format'
 import { zeroAddress } from 'viem'
 import { useMemo } from 'react'
-
-const API = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+import { API_URL } from '../../../lib/env'
 
 export const GithubIssueSchema = z.object({
   url: z.string(),
@@ -24,10 +23,10 @@ export function useYhaasIssues() {
 
   const query = useSuspenseQuery({
     queryKey: ['yhaas-issues'],
-    queryFn: () => fetch(`${API}/api/yhaas/issues`).then(r => r.json())
+    queryFn: () => fetch(`${API_URL}/api/yhaas/issues`).then(r => r.json())
   })
 
-  const issues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
-  const accountsIssues = useMemo(() => issues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`)), [issues])
-  return { ...query, accountsIssues }
+  const openIssues = useMemo(() => GithubIssueSchema.array().parse(query.data), [query])
+  const forAccount = useMemo(() => openIssues?.filter((issue: any) => issue.title.endsWith(`[${formattedAddress}]`)), [openIssues])
+  return { ...query, issues: forAccount }
 }
