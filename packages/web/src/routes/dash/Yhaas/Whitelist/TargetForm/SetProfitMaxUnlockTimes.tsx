@@ -16,13 +16,15 @@ import { TargetType, useTargetInfos } from '../useTargetInfos'
 import StepLabel from '../StepLabel'
 
 function DaysInput({
-  disabled, days, onChange, className, theme
+  disabled, days, onChange, className, theme, isValid, validationMessage
 }: {
   disabled?: boolean,
   days?: number | string | undefined,
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string,
-  theme?: 'default' | 'warn' | 'error'
+  theme?: 'default' | 'warn' | 'error',
+  isValid?: boolean,
+  validationMessage?: string
 }) {
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === '.' || event.key === ',') {
@@ -46,6 +48,9 @@ function DaysInput({
       text-neutral-600 text-2xl
       pointer-events-none`)}>
       days
+    </div>
+    <div className={cn('absolute right-0 -bottom-6 text-error-500 text-xs whitespace-nowrap', isValid ? 'hidden' : '')}>
+      {validationMessage}
     </div>
   </div>
 }
@@ -199,15 +204,21 @@ export default function SetProfitMaxUnlockTimes() {
 
   return <div className="flex items-start gap-12">
     <StepLabel step={3} />
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col">
       <p className="text-xl">Set automation frequency and profit max unlock time</p>
-      <p className={cn('text-xl', isWithinGuidelines ? undefined : 'text-error-500')}>({recommendedFrequency} days or more recommended on {chain?.name})</p>
 
       <div className="mt-8 px-6 flex items-center justify-end gap-6">
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="relative grid grid-cols-2 gap-6">
           <div className="flex items-center justify-end">Automation frequency</div>
-          <DaysInput days={frequency} onChange={onChangeFrequency} theme={isWithinGuidelines ? undefined : 'error'} />
+          <DaysInput 
+            days={frequency} 
+            onChange={onChangeFrequency} 
+            theme={isWithinGuidelines ? undefined : 'error'} 
+            isValid={isWithinGuidelines}
+            validationMessage={`${recommendedFrequency} days or more recommended on ${chain?.name}`}
+            />
+
           <div className="flex items-center justify-end">Profit max unlock time</div>
           <SecondsInput disabled={true} seconds={profitMaxUnlockTime} />
         </div>

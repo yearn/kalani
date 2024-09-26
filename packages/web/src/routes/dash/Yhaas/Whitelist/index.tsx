@@ -28,7 +28,7 @@ export default function Whitelist() {
     <div className="flex items-start gap-12">
       <StepLabel step={1} />
       <div className="grow flex flex-col gap-6">
-        <p className="text-xl">What address(es) do you want to automate?</p>
+        <p className="text-xl">What address(es) do you want to automate with yHaaS?</p>
         <SetTargetAddresses />
         <Suspense fallback={<div className="flex justify-end text-sm text-neutral-400">Checking...</div>}>
           <TargetInfos />
