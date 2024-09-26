@@ -64,7 +64,7 @@ function ExecButton({ target }: { target: EvmAddress }) {
 
   if (isRelayed) return <div className="h-[42px] py-3 flex items-center justify-center text-green-400 text-sm"><PiCheck /></div>
 
-  return <Button theme={buttonTheme} disabled={disableButton} onClick={onClick}>exec</Button>
+  return <Button theme={buttonTheme} disabled={disableButton} onClick={onClick}>Exec</Button>
 }
 
 function Target({ target, rolemask }: { target: EvmAddress, rolemask: bigint }) {
