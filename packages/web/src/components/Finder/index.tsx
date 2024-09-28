@@ -7,6 +7,7 @@ import { ScrollArea } from '../shadcn/scroll-area'
 import { useNavigate } from 'react-router-dom'
 import { FinderItem, useFinderItems } from './useFinderItems'
 import ChainImg from '../ChainImg'
+import { useFinderQuery } from './useFinderQuery'
 
 const MAX_ITEMS = 100
 
@@ -23,10 +24,9 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
     return navigate(`/${item.label}/${item.chainId}/${item.address}`)
   }, [navigate])
 
-  const { data } = useFinderItems()
-  const items = useMemo(() => data ?? [], [data])
+  const { filter } = useFinderItems()
 
-  const [inputValue, setInputValue] = useState('')
+  const { query, setQuery } = useFinderQuery()
   const [filteredItems, setFilteredItems] = useState<FinderItem[]>([])
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -57,32 +57,17 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
   }, [])
 
   useEffect(() => {
-    if (items.length > 0) {
-      setFilteredItems(items.slice(0, MAX_ITEMS))
-    }
-  }, [items])
+    setFilteredItems(filter.slice(0, MAX_ITEMS))
+  }, [filter])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value
-    setInputValue(value)
-    filterItems(value)
-  }
-
-  const filterItems = (value: string): void => {
-    const valueLower = value.toLowerCase()
-    const filtered = items.filter((item: FinderItem) =>
-      item.nameLower?.includes(valueLower)
-      || item.addressIndex.toLowerCase().includes(valueLower)
-    )
-
-    filtered.sort((a, b) => (b.tvl ?? 0) - (a.tvl ?? 0))
-
-    setFilteredItems(filtered.slice(0, MAX_ITEMS))
+    setQuery(value)
     setSelectedIndex(-1)
   }
 
   const handleItemClick = (item: FinderItem): void => {
-    setInputValue(item.name ?? item.label)
+    setQuery(item.name ?? item.label)
     onFind?.(item)
     setShowSuggestions(false)
   }
@@ -103,8 +88,8 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
 
   const handleFocus = (): void => {
     setShowSuggestions(true)
-    if (inputValue === '') {
-      setFilteredItems(items.slice(0, MAX_ITEMS))
+    if (query === '') {
+      setFilteredItems(filter.slice(0, MAX_ITEMS))
     }
   }
 
@@ -113,7 +98,7 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
       ref={inputRef}
       type="text"
       name="finder"
-      value={inputValue}
+      value={query}
       placeholder={placeholder}
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}

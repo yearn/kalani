@@ -1,12 +1,12 @@
 import Header from '../Header'
 import Drawer from '../Drawer'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { ExplorerItem, useExplorerItems } from './useExplorerItems'
 import ChainImg from '../../../components/ChainImg'
-import { Suspense, useCallback, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { fEvmAddress, fPercent, fUSD } from '@kalani/lib/format'
 import Skeleton from '../../../components/Skeleton'
 import TokenImg from '../../../components/TokenImg'
+import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
 
 const FRAME_SIZE = 20
 
@@ -24,7 +24,7 @@ function Minibars({ series, className }: { series: number[], className?: string 
 	</div>
 }
 
-function Label({ item }: { item: ExplorerItem }) {
+function Label({ item }: { item: FinderItem }) {
   const label = useMemo(() => {
     switch (item.label) {
       case 'vault': return 'yearn allocator'
@@ -54,7 +54,7 @@ function Label({ item }: { item: ExplorerItem }) {
   </div>
 }
 
-function Tile({ item }: { item: ExplorerItem }) {
+function Tile({ item }: { item: FinderItem }) {
   const href = useMemo(() => {
     return `/${item.label}/${item.chainId}/${item.address}`
   }, [item])
@@ -90,8 +90,9 @@ function Tile({ item }: { item: ExplorerItem }) {
 }
 
 function Tiles() {
-  const { data: allItems } = useExplorerItems()
+  const { filter: allItems } = useFinderItems()
   const [items, setItems] = useState(allItems?.slice(0, FRAME_SIZE))
+  useEffect(() => setItems(allItems?.slice(0, FRAME_SIZE)), [allItems])
   const hasMoreFrames = useMemo(() => items.length < allItems.length, [items, allItems])
   const fetchFrame = useCallback(() => {
     const nextItems = allItems?.slice(items.length, items.length + FRAME_SIZE)
@@ -100,7 +101,8 @@ function Tiles() {
 
   return <InfiniteScroll className={`w-full p-2 sm:p-4 
     grid grid-flow-row gap-2 grid-cols-1 
-    sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4`}
+    sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
+    !overflow-hidden`}
 		dataLength={items.length}
 		next={fetchFrame}
 		hasMore={hasMoreFrames}

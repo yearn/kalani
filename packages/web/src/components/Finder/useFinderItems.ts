@@ -1,23 +1,33 @@
 import { z } from 'zod'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../lib/env'
+import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
+import { useFinderQuery } from './useFinderQuery'
+import { useEffect, useMemo } from 'react'
+import { isNothing } from '@kalani/lib/strings'
 
 export const FinderItemSchema = z.object({
   label: z.enum(["vault", "strategy", "erc4626", "accountant"]),
   chainId: z.number(),
-  address: z.string(),
+  address: EvmAddressSchema,
   name: z.string().optional(),
   nameLower: z.string().optional(),
+  yearn: z.boolean().nullish(),
   strategies: z.preprocess(
     (val) => (val === null ? undefined : val),
-    z.array(z.string()).optional()
+    z.array(EvmAddressSchema).optional()
   ),
   token: z.object({
-    address: z.string(),
+    address: EvmAddressSchema,
     name: z.string(),
     symbol: z.string()
   }).optional(),
-  tvl: z.number().optional(),
+  tvl: z.number().nullish(),
+  apy: z.number().nullish(),
+  sparklines: z.object({
+    tvl: z.array(z.number()),
+    apy: z.array(z.number())
+  }).optional(),
   addressIndex: z.string()
 })
 
@@ -47,6 +57,13 @@ query Query {
     tvl {
       close
     }
+    apy {
+      net
+    }
+    sparklines {
+      tvl { close }
+      apy { close }
+    }
   }
   strategies(erc4626: true) {
     chainId
@@ -56,7 +73,7 @@ query Query {
 `
 
 function toFinderItems(data: any): FinderItem[] {
-  const items: FinderItem[] = []
+  let results: FinderItem[] = []
 
   // Create a set of strategy addresses for quick lookup
   const strategyAddresses = new Set(data.strategies.map((s: any) => s.address.toLowerCase()))
@@ -72,18 +89,24 @@ function toFinderItems(data: any): FinderItem[] {
       name: vault.name,
       nameLower: vault.name.toLowerCase(),
       strategies: vault.strategies,
+      yearn: vault.yearn,
       token: {
         address: vault.asset.address,
         name: vault.asset.name,
         symbol: vault.asset.symbol
       },
       tvl: vault.tvl?.close,
+      apy: vault.apy?.net,
+      sparklines: {
+        tvl: vault.sparklines?.tvl?.map((s: any) => s.close) ?? [],
+        apy: vault.sparklines?.apy?.map((s: any) => s.close) ?? []
+      },
       addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase()
     }
-    items.push(item)
+    results.push(item)
 
     // Process strategies associated with this vault
-    vault.strategies?.forEach((strategyAddress: string) => {
+    vault.strategies?.forEach((strategyAddress: EvmAddress) => {
       if (strategyAddresses.has(strategyAddress.toLowerCase())) {
         const strategyItem: FinderItem = {
           label: 'strategy',
@@ -98,7 +121,7 @@ function toFinderItems(data: any): FinderItem[] {
           },
           addressIndex: `${strategyAddress} ${vault.asset.address}`.toLowerCase()
         }
-        items.push(strategyItem)
+        results.push(strategyItem)
       }
     })
   })
@@ -111,34 +134,47 @@ function toFinderItems(data: any): FinderItem[] {
       address: accountant.address,
       addressIndex: accountant.address.toLowerCase()
     }
-    items.push(item)
+    results.push(item)
   })
 
-  const result = FinderItemSchema.array().parse(items)
-  result.sort((a, b) => (b.tvl ?? 0) - (a.tvl ?? 0))
-  return result
+  results = FinderItemSchema.array().parse(results)
+  results.sort((a, b) => (b.tvl ?? 0) - (a.tvl ?? 0))
+  return results
 }
 
 async function fetchFinderItems(): Promise<FinderItem[]> {
   const response = await fetch(KONG_GQL_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query: QUERY }),
   })
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
-  }
+  if (!response.ok) { throw new Error(`HTTP error, status ${response.status}`) }
 
-  const result = await response.json()
-  return toFinderItems(result.data)
+  const json = await response.json()
+  return toFinderItems(json.data)
 }
 
 export function useFinderItems() {
-  return useQuery({
-    queryKey: ['finderItems'],
+  const { query: q } = useFinderQuery()
+
+  const query = useSuspenseQuery({
+    queryKey: ['useFinderItems'],
     queryFn: fetchFinderItems,
   })
+
+  const filter = useMemo(() => {
+    if (isNothing(q)) { return query.data }
+    const lowerq = q.toLowerCase()
+    return query.data?.filter((item: FinderItem) => {
+      return item.nameLower?.includes(lowerq)
+        || (lowerq.length > 6 && item.addressIndex.toLowerCase().includes(lowerq))
+    })
+  }, [query.data, q])
+
+  return { 
+    ...query, 
+    items: query.data ?? [], 
+    filter: filter ?? [] 
+  }
 }
