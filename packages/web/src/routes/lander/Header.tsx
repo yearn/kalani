@@ -7,7 +7,7 @@ export default function Header() {
     <div className="mx-auto w-full h-20 pr-4 sm:pr-10 flex items-center justify-between">
       <div className="grow flex items-center justify-start gap-12"></div>
       <div className="flex items-center justify-end gap-4">
-        <Connect />
+        <Connect label="Get started" />
         <Launcher alignRight={true} />
       </div>
     </div>

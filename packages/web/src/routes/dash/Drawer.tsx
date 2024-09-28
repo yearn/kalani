@@ -1,8 +1,7 @@
 import { AnchorHTMLAttributes, ReactNode } from 'react'
-import { PiRobot, PiVault } from 'react-icons/pi'
+import { PiMagnifyingGlass, PiRobot, PiVault, PiWallet } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
 import { Link } from 'react-router-dom'
-import { Yearn } from '../../assets/icons/Yearn'
 
 type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   to: string,
@@ -35,11 +34,15 @@ export default function Drawer({
     py-4 flex flex-col items-center justify-start gap-6
     bg-primary-2000 border-r border-primary-1000`, className)}>
 
-    <DrawerButton to="/" title="Lander">
-      <Yearn className="size-6" back="text-transparent" front="text-neutral-200" />
+    <DrawerButton to="/account" title="Your account">
+      <PiWallet size={26} />
     </DrawerButton>
 
-    <DrawerButton to="/account" title="Account">
+    <DrawerButton to="/explore" title="Explore">
+      <PiMagnifyingGlass size={26} />
+    </DrawerButton>
+
+    <DrawerButton to="/build" title="Build">
       <PiVault size={26} />
     </DrawerButton>
 

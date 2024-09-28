@@ -11,10 +11,8 @@ export default function Layout() {
     <div className="flex items-start">
       <div className="min-w-24"></div>
 
-      <div className="isolate grow min-w-[800px] min-h-screen flex justify-end px-24 py-12 border-r border-r-primary-1000">
-        <div className="w-[1024px]">
-          <Outlet />
-        </div>
+      <div className="isolate grow min-w-[800px] min-h-screen flex justify-end py-12 border-r border-r-primary-1000">
+        <Outlet />
       </div>
 
       <aside className={`min-w-[26%] px-8 py-12 h-screen`}>

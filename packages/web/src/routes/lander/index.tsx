@@ -43,7 +43,7 @@ export default function Lander() {
               <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
               <p className="font-bold text-xl">Yearn Vault Super Center</p>
             </div>
-            <Finder className="w-full px-4 sm:px-0" placeholder='Search by vault / token / address' />
+            <Finder className="w-full px-4 sm:px-0" placeholder='Find a yield bearing vault' />
           </div>
         </div>
       </section>
@@ -51,7 +51,7 @@ export default function Lander() {
 
     <div className="w-full sm:w-1/2 min-h-screen bg-primary-2000 flex items-center justify-center relative">
       <section className="flex flex-col items-start justify-center gap-16 text-neutral-300">
-        <Feature href="/account" 
+        <Feature href="/explore" 
           icon={<PiMagnifyingGlass size={96} />} 
           title="Explore" 
           description=<>Explore the universe of yield bearing <span className="font-bold text-primary-400">4626 vaults</span></>

@@ -2,6 +2,11 @@ import colors from 'tailwindcss/colors'
 import Theme from 'tailwindcss/defaultTheme'
 import animate from 'tailwindcss-animate'
 
+function heightSafeList() {
+  const maxheight = 101;
+  return Array(maxheight).fill(0).map((_, index) => `h-[${index}%]`);
+}
+
 export const primary = {
   ...colors.orange,
   '1000': '#281004',
@@ -17,6 +22,9 @@ export default {
   darkMode: ['class'],
   prefix: '',
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
+  safelist: [
+    ...heightSafeList()
+  ],
   theme: {
     container: {
       center: true,
