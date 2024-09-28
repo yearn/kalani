@@ -13,6 +13,7 @@ export function fEvmAddress(address: string) {
 }
 
 export function fPercent(amount: number, fixed?: number) {
+  if ((amount * 100) > 999) return `999+%`
   return `${(amount * 100).toFixed(fixed ?? 2)}%`
 }
 

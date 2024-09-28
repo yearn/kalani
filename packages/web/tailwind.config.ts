@@ -23,7 +23,8 @@ export default {
   prefix: '',
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
   safelist: [
-    ...heightSafeList()
+    ...heightSafeList(),
+    'w-[28px]', 'h-[28px]',
   ],
   theme: {
     container: {

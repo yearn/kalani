@@ -1,11 +1,12 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../lib/env'
+import { EvmAddressSchema } from '@kalani/lib/types'
 
 export const ExplorerItemSchema = z.object({
   label: z.enum(["vault", "strategy", "erc4626", "accountant"]),
   chainId: z.number(),
-  address: z.string(),
+  address: EvmAddressSchema,
   name: z.string().optional(),
   nameLower: z.string().optional(),
   yearn: z.boolean().nullish(),
@@ -14,7 +15,7 @@ export const ExplorerItemSchema = z.object({
     z.array(z.string()).optional()
   ),
   token: z.object({
-    address: z.string(),
+    address: EvmAddressSchema,
     name: z.string(),
     symbol: z.string()
   }).optional(),

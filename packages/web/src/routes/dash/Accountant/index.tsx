@@ -3,7 +3,7 @@ import { getChain } from '../../../lib/chains'
 import { Accountant, withAccountant } from './useAccountant'
 import Admins from './Admins'
 import EvmAddressLayout from '../../../components/EvmAddress'
-import ChainImage from '../../../components/ChainImage'
+import ChainImg from '../../../components/ChainImg'
 
 function Page({ accountant }: { accountant: Accountant }) {
   if (!accountant) return <></>
@@ -17,7 +17,7 @@ function Page({ accountant }: { accountant: Accountant }) {
       <div className="text-5xl">{fEvmAddress(accountant.address)}</div>
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-4">
-          <ChainImage chainId={accountant.chainId} />
+          <ChainImg chainId={accountant.chainId} />
           {getChain(accountant.chainId).name}
         </div>
       </div>

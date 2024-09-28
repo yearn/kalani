@@ -1,20 +1,20 @@
 import Header from '../Header'
 import Drawer from '../Drawer'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { ExplorerItem, useExplorerItems } from './useExplorerItems'
-import ChainImage from '../../../components/ChainImage'
-import { Suspense, useEffect, useMemo } from 'react'
+import ChainImg from '../../../components/ChainImg'
+import { Suspense, useCallback, useMemo, useState } from 'react'
 import { fEvmAddress, fPercent, fUSD } from '@kalani/lib/format'
-import A from '../../../components/elements/A'
 import Skeleton from '../../../components/Skeleton'
+import TokenImg from '../../../components/TokenImg'
+
+const FRAME_SIZE = 20
 
 function Minibars({ series, className }: { series: number[], className?: string }) {
 	const maxBar = 100
 	const maxSeries = Math.max(...series)
 	const scale = maxBar / maxSeries
 	const bars = series.map(value => Math.round(scale * value) || 1)
-  useEffect(() => {
-    console.log(bars)
-  }, [bars])
 	return <div className={`flex items-end gap-2 ${className}`}>
 		{bars.map((bar, index) => <div key={index} className={`
 			w-full h-[${bar}%] bg-neutral-800 
@@ -27,7 +27,7 @@ function Minibars({ series, className }: { series: number[], className?: string 
 function Label({ item }: { item: ExplorerItem }) {
   const label = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'yearn multi-strategy'
+      case 'vault': return 'yearn allocator'
       case 'strategy': return 'yearn strategy'
       default: return item.label
     }
@@ -66,13 +66,7 @@ function Tile({ item }: { item: ExplorerItem }) {
       <Minibars series={item.sparklines?.tvl ?? []} className="w-full h-[200px]" />
       <div className="absolute inset-0 p-6 flex flex-col justify-end gap-2">
 
-        <div className="flex items-center gap-3">
-          <ChainImage chainId={item.chainId} size={28} />
-          <Label item={item} />
-          <div className="p-2 bg-neutral-900 text-xs text-neutral-400 rounded-full">{fEvmAddress(item.address)}</div>
-        </div>
-
-        <div className="max-w-full truncate font-fancy text-lg">{item.name}</div>
+        <div className="max-w-full truncate font-fancy text-xl">{item.name}</div>
 
         <div className="flex justify-between">
           <div className="text-2xl font-bold">
@@ -83,26 +77,43 @@ function Tile({ item }: { item: ExplorerItem }) {
           </div>
         </div>
 
+        <div className="flex items-center gap-2">
+          <ChainImg chainId={item.chainId} size={28} />
+          <TokenImg chainId={item.chainId} address={item.token?.address} size={28} />
+          <Label item={item} />
+          <div className="p-2 bg-neutral-900 text-xs text-neutral-400 rounded-full">{fEvmAddress(item.address)}</div>
+        </div>
+
       </div>
     </div>
   </a>
 }
 
+function Tiles() {
+  const { data: allItems } = useExplorerItems()
+  const [items, setItems] = useState(allItems?.slice(0, FRAME_SIZE))
+  const hasMoreFrames = useMemo(() => items.length < allItems.length, [items, allItems])
+  const fetchFrame = useCallback(() => {
+    const nextItems = allItems?.slice(items.length, items.length + FRAME_SIZE)
+    setItems(prevItems => [...prevItems, ...nextItems])
+  }, [allItems, items])
+
+  return <InfiniteScroll className={`w-full p-2 sm:p-4 
+    grid grid-flow-row gap-2 grid-cols-1 
+    sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4`}
+		dataLength={items.length}
+		next={fetchFrame}
+		hasMore={hasMoreFrames}
+		loader={<></>}>
+    {items?.map((item, index) => <Tile key={index} item={item} />)}
+  </InfiniteScroll>
+}
+
 function SkeletonTiles() {
-  const count = 12
   return <div className={`w-full p-2 sm:p-4
     grid grid-flow-row gap-2 grid-cols-1 
     sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4`}>
-    {Array.from({ length: count }).map((_, index) => <Skeleton key={index} className="w-full h-48 rounded-primary" />)}
-  </div>
-}
-
-function Tiles() {
-  const { data: items } = useExplorerItems()
-  return <div className={`w-full p-2 sm:p-4 
-    grid grid-flow-row gap-2 grid-cols-1 
-    sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4`}>
-    {items?.map((item, index) => <Tile key={index} item={item} />)}
+    {Array.from({ length: FRAME_SIZE }).map((_, index) => <Skeleton key={index} className="w-full h-48 rounded-primary" />)}
   </div>
 }
 
@@ -112,7 +123,7 @@ export default function Explore() {
     <Drawer className="fixed z-50 top-0 left-0 w-24 h-screen" />
     <div className="flex items-start">
       <div className="min-w-24 border"></div>
-      <div className="isolate grow flex justify-center px-3 py-6 border-r border-r-primary-1000">
+      <div className="isolate grow px-3 py-6 border-r border-r-primary-1000">
         <Suspense fallback={<SkeletonTiles />}>
           <Tiles />
         </Suspense>

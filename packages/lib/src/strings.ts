@@ -9,6 +9,12 @@ export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export function ellipsize(str?: string, maxLength: number = 20) {
+  if (!str) return str
+  if (str.length <= maxLength) return str
+  return str.slice(0, maxLength) + '...'
+}
+
 export function compareEvmAddresses(a?: string, b?: string) {
   if (!a || !b) return false
 

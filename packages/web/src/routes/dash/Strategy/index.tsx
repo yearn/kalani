@@ -5,7 +5,7 @@ import { getChain } from '../../../lib/chains'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/shadcn/tabs'
 import Assets from './tabs/Assets'
 import Reports from './tabs/Reports'
-import ChainImage from '../../../components/ChainImage'
+import ChainImg from '../../../components/ChainImg'
 import EvmAddressLayout from '../../../components/EvmAddress'
 
 export default function Strategy() {
@@ -25,7 +25,7 @@ export default function Strategy() {
         <div className="text-4xl font-fancy">{vault.name}</div>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
-            <ChainImage chainId={vault.chainId} />
+            <ChainImg chainId={vault.chainId} />
             {getChain(vault.chainId).name}
           </div>
           <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />

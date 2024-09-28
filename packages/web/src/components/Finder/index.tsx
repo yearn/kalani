@@ -6,7 +6,7 @@ import { isNothing } from '@kalani/lib/strings'
 import { ScrollArea } from '../shadcn/scroll-area'
 import { useNavigate } from 'react-router-dom'
 import { FinderItem, useFinderItems } from './useFinderItems'
-import ChainImage from '../ChainImage'
+import ChainImg from '../ChainImg'
 
 const MAX_ITEMS = 100
 
@@ -148,7 +148,7 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
                   `}
                 >
                   <td className="w-20 px-4 py-4 text-xs text-center">
-                    <ChainImage chainId={item.chainId} />
+                    <ChainImg chainId={item.chainId} />
                   </td>
                   <td className="w-20 py-4 text-xs">{item.label}</td>
                   <td className="w-36 py-4">{fEvmAddress(item.address)}</td>
