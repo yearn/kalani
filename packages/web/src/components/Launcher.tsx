@@ -1,9 +1,10 @@
 import { Yearn } from '../assets/icons/Yearn'
 import { PiDotsNineBold, PiGithubLogoFill, PiX } from 'react-icons/pi'
-import { AnchorHTMLAttributes, forwardRef, useState } from 'react'
+import { AnchorHTMLAttributes, forwardRef } from 'react'
 import { cn } from '../lib/shadcn'
 import Wordmark from './Wordmark'
 import Juice from '../assets/icons/Juiced'
+import { useHashNav } from '../hooks/useHashNav'
 
 type LauncherButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   className?: string
@@ -57,17 +58,17 @@ export default function Launcher({
 }: {
   alignRight?: boolean
 }) {
-  const [open, setOpen] = useState(false)
+  const nav = useHashNav('launcher')
   return <div className="relative group">
     <div className="py-4">
-      <div onClick={() => setOpen(current => !current)} className={`
+      <div onClick={nav.toggle} className={`
         border border-transparent group-hover:border-secondary-50
         group-active:border-secondary-200
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
       </div>
     </div>
-    <div data-open={open} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
+    <div data-open={nav.isOpen} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
       border-0 sm:border-2 border-transparent group-hover:border-secondary-50
       group-active:border-secondary-200
@@ -75,7 +76,7 @@ export default function Launcher({
       alignRight ? 'right-0' : '')}>
       <div className="grow flex flex-col gap-4">
         <div className="sm:hidden px-2 py-3 flex items-center justify-end">
-          <PiX size={32} onClick={() => setOpen(false)} />
+          <PiX size={32} onClick={nav.close} />
         </div>
         <LauncherButton className="grow sm:grow-0" href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</LauncherButton>
         <V3Button className="grow sm:grow-0" href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>

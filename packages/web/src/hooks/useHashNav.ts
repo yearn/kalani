@@ -14,5 +14,10 @@ export function useHashNav(hashId: string) {
     if (isOpen) navigate(-1)
   }, [isOpen, navigate])
 
-  return { isOpen, open, close }
+  const toggle = useCallback(() => {
+    if (isOpen) close()
+    else open()
+  }, [isOpen, open, close])
+
+  return { isOpen, open, close, toggle }
 }

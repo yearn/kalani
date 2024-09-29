@@ -24,7 +24,7 @@ interface FinderProps {
 }
 
 const containerClassName = `group relative z-0
-data-[open=true]:fixed data-[open=true]:z-[100] data-[open=true]:inset-0 data-[open=true]:bg-neutral-950
+data-[open=true]:fixed data-[open=true]:z-[100] data-[open=true]:inset-0 data-[open=true]:bg-neutral-900
 data-[open=true]:flex data-[open=true]:flex-col-reverse data-[open=true]:justify-between
 
 sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:bg-transparent
@@ -45,7 +45,7 @@ overflow-y-auto
 `
 
 const scrollAreaClassName = `w-full sm:max-h-80 overflow-auto 
-bg-neutral-950 border border-secondary-200 
+bg-neutral-900 border border-secondary-200 
 group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secondary-200
 rounded-primary
 `
