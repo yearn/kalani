@@ -38,12 +38,14 @@ export default function Lander() {
         w-full sm:w-[340px] lg:w-[480px] xl:w-[580px] mx-auto min-h-screen
         flex flex-col items-center justify-center gap-8`}>
         <div className="w-full h-full flex flex-col sm:flex-row sm:justify-center gap-16">
-          <div className="z-10 w-full h-full pb-[10rem] flex flex-col items-center justify-center gap-16">
+          <div className="w-full h-full pb-[10rem] flex flex-col items-center justify-center gap-16">
             <div className="flex flex-col items-center justify-end gap-3 text-neutral-900">
               <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
               <p className="font-bold text-xl">Yearn Vault Super Center</p>
             </div>
-            <Finder className="w-full px-8 sm:px-0" placeholder='Find a yield bearing vault' />
+            <div className="w-full px-8 sm:px-0">
+              <Finder placeholder='Find yield bearing vaults' />
+            </div>
           </div>
         </div>
       </section>

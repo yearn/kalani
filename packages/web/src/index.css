@@ -75,6 +75,17 @@
 	disabled:group-hover:drop-shadow-none;
 }
 
+.saber-glow-reset {
+	@apply hover:!border-transparent 
+	hover:!drop-shadow-none
+	
+	group-hover:!border-transparent 
+	group-hover:!drop-shadow-none
+	
+	disabled:hover:!drop-shadow-none
+	disabled:group-hover:!drop-shadow-none;
+}
+
 .shimmer {
   background: linear-gradient(90deg, #1a1a1a 30%, #4a4a4a 60%, #1a1a1a 70%);
   background-size: 200% 100%;

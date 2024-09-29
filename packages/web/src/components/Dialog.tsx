@@ -5,24 +5,11 @@ import { cn } from '../lib/shadcn'
 import FlyInFromBottom from './motion/FlyInFromBottom'
 import { springs } from '../lib/motion'
 import Button, { ButtonProps } from './elements/Button'
-import { useCallback } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useHashNav } from '../hooks/useHashNav'
 
 export function useDialog(dialogId: string) {
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const isOpen = location.hash === `#${dialogId}`
-
-  const openDialog = useCallback(() => {
-    navigate(`${location.pathname}#${dialogId}`)
-  }, [navigate, location.pathname, dialogId])
-
-  const closeDialog = useCallback(() => {
-    if (isOpen) navigate(-1)
-  }, [isOpen, navigate])
-
-  return { isOpen, openDialog, closeDialog }
+  const nav = useHashNav(dialogId)
+  return { isOpen: nav.isOpen, openDialog: nav.open, closeDialog: nav.close }
 }
 
 interface DialogProps {

@@ -8,8 +8,8 @@ export function fHexString(hex: string) {
   return `${hex.slice(0, 6)}...${hex.slice(-4)}`
 }
 
-export function fEvmAddress(address: string) {
-  return fHexString(address)
+export function fEvmAddress(address: string, short = false) {
+  return short ? fHexString(address).slice(0, 8) : fHexString(address)
 }
 
 export function fPercent(amount: number, fixed?: number) {

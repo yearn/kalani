@@ -34,7 +34,7 @@ export default function Drawer({
     py-4 flex flex-col items-center justify-start gap-6
     bg-primary-2000 border-r border-primary-1000`, className)}>
 
-    <DrawerButton to="/home" title="Home">
+    <DrawerButton to="/" title="Home">
       <PiWallet size={26} />
     </DrawerButton>
 
