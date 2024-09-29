@@ -4,8 +4,10 @@ import Launcher from '../../components/Launcher'
 import { cn } from '../../lib/shadcn'
 
 export default function Header({
+  disableFinderSuggestions,
   className,
 }: {
+  disableFinderSuggestions?: boolean
   className?: string
 }) {
   return <header
@@ -13,9 +15,10 @@ export default function Header({
     <div className="mx-auto w-full h-20 pl-32 pr-6 flex items-center justify-between">
       <div className="grow flex items-center justify-start gap-12">
         <Finder
-          className="w-[32rem]"
+          className="!w-[32rem]"
           inputClassName="px-4 py-2 border-transparent"
-          placeholder="vault / token / 0x" />
+          placeholder="vault / token / 0x"
+          disableSuggestions={disableFinderSuggestions} />
       </div>
       <div className={`flex items-center justify-end gap-4`}>
         <Connect />

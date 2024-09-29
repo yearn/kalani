@@ -1,6 +1,6 @@
 import { Yearn } from '../assets/icons/Yearn'
-import { PiDotsNineBold, PiGithubLogoFill } from 'react-icons/pi'
-import { AnchorHTMLAttributes, forwardRef } from 'react'
+import { PiDotsNineBold, PiGithubLogoFill, PiX } from 'react-icons/pi'
+import { AnchorHTMLAttributes, forwardRef, useState } from 'react'
 import { cn } from '../lib/shadcn'
 import Wordmark from './Wordmark'
 import Juice from '../assets/icons/Juiced'
@@ -10,8 +10,8 @@ type LauncherButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 }
 
 const LauncherButtonClassName = `
-px-6 py-3 flex items-center justify-center
-bg-black rounded-primary
+px-6 py-6 sm:py-3 flex items-center justify-center
+text-2xl sm:text-base bg-black rounded-primary
 hover:bg-secondary-200 hover:text-black
 active:bg-secondary-500
 `
@@ -30,8 +30,9 @@ rounded-primary
 `
 
 const V3ButtonTextClassName = `
-w-full px-6 py-3
+w-full px-6 py-6 sm:py-3
 flex items-center justify-center
+text-2xl sm:text-base
 bg-clip-text bg-gradient-to-r from-pink-500 to-blue-500
 hover:bg-clip-border hover:text-black
 rounded-primary
@@ -46,7 +47,7 @@ const V3Button = forwardRef<HTMLAnchorElement, LauncherButtonProps>(({ className
 V3Button.displayName = 'V3Button'
 
 const LauncherIconButton = forwardRef<HTMLAnchorElement, LauncherButtonProps>(({ className, children, ...props }, ref) => (
-  <a ref={ref} {...props} className={cn(`group/button w-24 flex flex-col items-center justify-center gap-1 text-xs`, LauncherButtonClassName, className)}>{children}</a>
+  <a ref={ref} {...props} className={cn(`group/button w-1/2 sm:w-24 flex flex-col items-center justify-center gap-1 text-xs`, LauncherButtonClassName, className)}>{children}</a>
 ))
 
 LauncherIconButton.displayName = 'LauncherIconButton'
@@ -56,64 +57,73 @@ export default function Launcher({
 }: {
   alignRight?: boolean
 }) {
+  const [open, setOpen] = useState(false)
   return <div className="relative group">
     <div className="py-4">
-      <div className={`
+      <div onClick={() => setOpen(current => !current)} className={`
         border border-transparent group-hover:border-secondary-50
         group-active:border-secondary-200
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
       </div>
     </div>
-    <div className={cn(`absolute p-4
-      hidden group-hover:flex flex-col gap-4
-      border border-transparent group-hover:border-secondary-50
+    <div data-open={open} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
+      hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
+      border-0 sm:border-2 border-transparent group-hover:border-secondary-50
       group-active:border-secondary-200
-      bg-neutral-900 text-neutral-400 rounded-primary saber-glow`,
+      bg-neutral-900 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
       alignRight ? 'right-0' : '')}>
-      <LauncherButton href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</LauncherButton>
-      <V3Button href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>
-      <div className="flex items-center justify-center gap-4">
-        <LauncherIconButton href="https://juiced.yearn.fi/" target="_blank" rel="noreferrer">
-          <Juice className="group-hover/button:contrast-200 group-hover/button:grayscale" /> Juiced
-        </LauncherIconButton>
-
-        <LauncherIconButton href="https://yearn.fi/vaults" target="_blank" rel="noreferrer">
-          <Yearn back="text-[#f472b6] group-hover/button:text-neutral-900" front="text-neutral-200" /> V2
-        </LauncherIconButton>
+      <div className="grow flex flex-col gap-4">
+        <div className="sm:hidden px-2 py-3 flex items-center justify-end">
+          <PiX size={32} onClick={() => setOpen(false)} />
+        </div>
+        <LauncherButton className="grow sm:grow-0" href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</LauncherButton>
+        <V3Button className="grow sm:grow-0" href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>
+        <V3Button className="grow sm:grow-0" href="https://gimme.mom" target="_blank" rel="noreferrer">Gimme</V3Button>
       </div>
+      <div className="contents">
+        <div className="flex items-center justify-center gap-4">
+          <LauncherIconButton href="https://juiced.yearn.fi/" target="_blank" rel="noreferrer">
+            <Juice className="group-hover/button:contrast-200 group-hover/button:grayscale" /> Juiced
+          </LauncherIconButton>
 
-      <div className="flex items-center justify-center gap-4">
-        <LauncherIconButton href="https://veyfi.yearn.fi/" target="_blank" rel="noreferrer">
-          <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x41252E8691e964f7DE35156B68493bAb6797a275/logo-128.png" />
-          veYFI
-        </LauncherIconButton>
-        <LauncherIconButton href="https://ycrv.yearn.fi/" target="_blank" rel="noreferrer">
-          <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
-          yCRV
-        </LauncherIconButton>
-      </div>
+          <LauncherIconButton href="https://yearn.fi/vaults" target="_blank" rel="noreferrer">
+            <Yearn back="text-[#f472b6] group-hover/button:text-neutral-900" front="text-neutral-200" /> V2
+          </LauncherIconButton>
+        </div>
 
-      <div className="flex items-center justify-center gap-4">
-        <LauncherIconButton href="https://yeth.yearn.fi/" target="_blank" rel="noreferrer">
-          <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x1BED97CBC3c24A4fb5C069C6E311a967386131f7/logo-128.png" />
-          yETH
-        </LauncherIconButton>
-        <LauncherIconButton href="https://yprisma.yearn.fi/" target="_blank" rel="noreferrer">
-          <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xe3668873d944e4a949da05fc8bde419eff543882/logo-128.png" />
-          yPrisma
-        </LauncherIconButton>
-      </div>
+        <div className="flex items-center justify-center gap-4">
+          <LauncherIconButton href="https://veyfi.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x41252E8691e964f7DE35156B68493bAb6797a275/logo-128.png" />
+            veYFI
+          </LauncherIconButton>
+          <LauncherIconButton href="https://ycrv.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
+            yCRV
+          </LauncherIconButton>
+        </div>
 
-      <div className="flex items-center justify-center gap-4">
-        <LauncherIconButton href="https://factory.yearn.fi/" target="_blank" rel="noreferrer">
-          <Yearn back="text-neutral-800 group-hover/button:text-neutral-900" front="text-neutral-200" />
-          yFactory
-        </LauncherIconButton>
-        <LauncherIconButton href="https://github.com/murderteeth/kalani" target="_blank" rel="noreferrer">
-          <PiGithubLogoFill size={32} />
-          Github
-        </LauncherIconButton>
+        <div className="flex items-center justify-center gap-4">
+          <LauncherIconButton href="https://yeth.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x1BED97CBC3c24A4fb5C069C6E311a967386131f7/logo-128.png" />
+            yETH
+          </LauncherIconButton>
+          <LauncherIconButton href="https://yprisma.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xe3668873d944e4a949da05fc8bde419eff543882/logo-128.png" />
+            yPrisma
+          </LauncherIconButton>
+        </div>
+
+        <div className="flex items-center justify-center gap-4">
+          <LauncherIconButton href="https://factory.yearn.fi/" target="_blank" rel="noreferrer">
+            <Yearn back="text-neutral-800 group-hover/button:text-neutral-900" front="text-neutral-200" />
+            yFactory
+          </LauncherIconButton>
+          <LauncherIconButton href="https://github.com/murderteeth/kalani" target="_blank" rel="noreferrer">
+            <PiGithubLogoFill size={32} />
+            Github
+          </LauncherIconButton>
+        </div>
       </div>
     </div>
   </div>

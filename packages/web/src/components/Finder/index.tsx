@@ -1,5 +1,5 @@
 import Input from '../elements/Input'
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { fEvmAddress } from '@kalani/lib/format'
 import { isNothing } from '@kalani/lib/strings'
@@ -8,16 +8,19 @@ import { useNavigate } from 'react-router-dom'
 import { FinderItem, useFinderItems } from './useFinderItems'
 import ChainImg from '../ChainImg'
 import { useFinderQuery } from './useFinderQuery'
+import Skeleton from '../Skeleton'
+import { cn } from '../../lib/shadcn'
 
 const MAX_ITEMS = 100
 
 interface FinderProps {
   placeholder?: string,
   className?: string
-  inputClassName?: string
+  inputClassName?: string,
+  disableSuggestions?: boolean
 }
 
-const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName }) => {
+const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassName, disableSuggestions }) => {
   const navigate = useNavigate()
 
   const onFind = useCallback((item: FinderItem) => {
@@ -103,18 +106,18 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
-      className={inputClassName}
+      className={cn('max-h-12', inputClassName)}
       spellCheck={false}
       autoComplete="off"
       autoCapitalize="off"
       autoCorrect="off"
     />
 
-    <div className="absolute top-0 right-6 h-full flex items-center text-xs text-neutral-700 pointer-events-none">
+    <div className="absolute top-0 right-6 h-full hidden sm:flex items-center text-xs text-neutral-700 pointer-events-none">
       {isMac ? '⌘' : 'Ctrl'}+K
     </div>
 
-    {showSuggestions && filteredItems.length > 0 && (
+    {!disableSuggestions && showSuggestions && filteredItems.length > 0 && (
       <div className="absolute z-50 w-full mt-3 saber-glow">
         <ScrollArea className="w-full max-h-80 overflow-auto bg-neutral-950 border border-secondary-200 rounded-primary">
           <table className="table-fixed w-full text-neutral-200">
@@ -148,6 +151,12 @@ const Finder: React.FC<FinderProps> = ({ placeholder, className, inputClassName 
       </div>
     )}
   </div>
+}
+
+const Finder: React.FC<FinderProps> = props => {
+  return <Suspense fallback={<div className={props.className}><Skeleton className={cn('w-full h-12 rounded-primary')} /></div>}>
+    <Suspender {...props} />
+  </Suspense>
 }
 
 export default Finder

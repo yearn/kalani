@@ -83,7 +83,6 @@ function Tile({ item }: { item: FinderItem }) {
           <Label item={item} />
           <div className="p-2 bg-neutral-900 text-xs text-neutral-400 rounded-full">{fEvmAddress(item.address)}</div>
         </div>
-
       </div>
     </div>
   </a>
@@ -99,7 +98,7 @@ function Tiles() {
     setItems(prevItems => [...prevItems, ...nextItems])
   }, [allItems, items])
 
-  return <InfiniteScroll className={`w-full p-2 sm:p-4 
+  return <InfiniteScroll className={`w-full p-2 sm:px-4 sm:py-8 
     grid grid-flow-row gap-2 grid-cols-1 
     sm:gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
     !overflow-hidden`}
@@ -121,7 +120,7 @@ function SkeletonTiles() {
 
 export default function Explore() {
   return <div className="w-full min-h-screen">
-    <Header className="sticky z-50 inset-x-0 top-0 w-full" />
+    <Header disableFinderSuggestions={true} className="sticky z-50 inset-x-0 top-0 w-full" />
     <Drawer className="fixed z-50 top-0 left-0 w-24 h-screen" />
     <div className="flex items-start">
       <div className="min-w-24 border"></div>

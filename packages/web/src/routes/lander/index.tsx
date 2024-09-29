@@ -17,7 +17,7 @@ function Feature({
   href: string
 }) {
   return <a href={href} className={`group
-    h-full p-4 flex items-center justify-center gap-4 sm:gap-8
+    h-full p-6 flex items-center justify-center gap-6 sm:gap-8
     border-2 border-transparent hover:border-secondary-200 
     saber-glow rounded-primary`}>
     {icon}
@@ -43,14 +43,14 @@ export default function Lander() {
               <Wordmark className="px-12 py-2 text-5xl">Kalani</Wordmark>
               <p className="font-bold text-xl">Yearn Vault Super Center</p>
             </div>
-            <Finder className="w-full px-4 sm:px-0" placeholder='Find a yield bearing vault' />
+            <Finder className="w-full px-8 sm:px-0" placeholder='Find a yield bearing vault' />
           </div>
         </div>
       </section>
     </div>
 
     <div className="w-full sm:w-1/2 min-h-screen bg-primary-2000 flex items-center justify-center relative">
-      <section className="flex flex-col items-start justify-center gap-16 text-neutral-300">
+      <section className="px-4 flex flex-col items-start justify-center gap-16 text-neutral-300">
         <Feature href="/explore" 
           icon={<PiMagnifyingGlass size={96} />} 
           title="Explore" 

@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../lib/env'
 import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useFinderQuery } from './useFinderQuery'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { isNothing } from '@kalani/lib/strings'
 
 export const FinderItemSchema = z.object({
