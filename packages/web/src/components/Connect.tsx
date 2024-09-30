@@ -1,11 +1,12 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import Button from './elements/Button'
+import { ReactNode } from 'react'
 
 export default function Connect({ 
-  label = 'Connect',
+  label = <>Connect</>,
   className
 }: { 
-  label?: string
+  label?: ReactNode
   className?: string 
 }) {
   return <ConnectButton.Custom>

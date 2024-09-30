@@ -83,14 +83,20 @@ export default {
           '0%': { transform: 'translateY(-50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+
+				gradient: {
+  				to: {
+  					backgroundPosition: 'var(--bg-size) 0'
+  				}
+  			},
       },
 
       animation: {
         'atmospheric-pulse': 'pulse 30s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'accordion-down': 'accordion-down 0.1s ease-out',
         'accordion-up': 'accordion-up 0s ease-out',
-
         'grid': 'grid 120s linear infinite',
+				gradient: 'gradient 8s linear infinite'
       },
     },
   },

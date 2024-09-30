@@ -34,6 +34,7 @@ export default function Lander() {
 
     <div className="w-full sm:w-1/2 sm:min-h-screen flex items-center justify-center relative">
       <Bg />
+
       <section className={`
         w-full sm:w-[340px] lg:w-[480px] xl:w-[580px] mx-auto min-h-screen
         flex flex-col items-center justify-center gap-8`}>
