@@ -62,7 +62,7 @@ export default function Launcher({
   return <div className="relative group">
     <div className="py-4">
       <div onClick={nav.toggle} className={`
-        border border-transparent group-hover:border-secondary-50
+        border-primary border-transparent group-hover:border-secondary-50
         group-active:border-secondary-200
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
@@ -70,7 +70,7 @@ export default function Launcher({
     </div>
     <div data-open={nav.isOpen} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
-      border-0 sm:border-2 border-transparent group-hover:border-secondary-50
+      border-0 sm:border-primary border-transparent group-hover:border-secondary-50
       group-active:border-secondary-200
       bg-neutral-900 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
       alignRight ? 'right-0' : '')}>

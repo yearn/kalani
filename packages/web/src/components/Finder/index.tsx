@@ -13,6 +13,7 @@ import Skeleton from '../Skeleton'
 import { cn } from '../../lib/shadcn'
 import { useHashNav } from '../../hooks/useHashNav'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
+import FlyInFromBottom from '../motion/FlyInFromBottom'
 
 const MAX_ITEMS = 100
 
@@ -45,7 +46,7 @@ overflow-y-auto
 `
 
 const scrollAreaClassName = `w-full sm:max-h-80 overflow-auto 
-bg-neutral-900 border border-secondary-200 
+bg-neutral-900 border-primary border-secondary-200 
 group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secondary-200
 rounded-primary
 `
@@ -136,8 +137,13 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
       autoCorrect="off"
     />
 
-    <div className="absolute top-0 right-6 h-full hidden sm:flex items-center text-xs text-neutral-700 pointer-events-none">
-      {isMac ? '⌘' : 'Ctrl'}+K
+    <div className={`absolute top-0 right-6 h-full hidden sm:flex items-center ${query.length === 0 ? 'pointer-events-none' : ''}`}>
+      {query.length === 0 && <div className="text-xs text-neutral-700">{isMac ? '⌘' : 'Ctrl'}+K</div>}
+      {query.length > 0 && <FlyInFromBottom _key="finder-clear">
+        <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')}>
+          <PiX size={24} />
+        </button>
+      </FlyInFromBottom>}
     </div>
 
     {!disableSuggestions && nav.isOpen && filteredItems.length > 0 && (

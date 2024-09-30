@@ -24,7 +24,7 @@ export default {
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
   safelist: [
     ...heightSafeList(),
-    'w-[28px]', 'h-[28px]',
+    'w-[28px]', 'h-[28px]'
   ],
   theme: {
     container: {
@@ -52,6 +52,10 @@ export default {
 
       height: {
         'field-btn': '50px',
+      },
+
+      borderWidth: {
+        primary: Theme.borderWidth['2']
       },
 
       borderRadius: {

@@ -1,7 +1,8 @@
-import { AnchorHTMLAttributes, ReactNode } from 'react'
+import { AnchorHTMLAttributes, ReactNode, useMemo } from 'react'
 import { PiMagnifyingGlass, PiRobot, PiVault, PiWallet } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import ScaleIn from '../../components/motion/ScaleIn'
 
 type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   to: string,
@@ -9,19 +10,34 @@ type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode,
 }
 
-const DrawerButtonClassName = `group
+const DrawerButtonClassName = `peer
 p-3 flex items-center justify-center
-bg-black border border-transparent rounded-primary
+bg-black border-primary border-transparent rounded-primary
 hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
 active:text-secondary-200 active:border-secondary-200
 saber-glow
 `
 
-const DrawerButton: React.FC<DrawerButtonProps> = ({ className, children, ...props }) => (
-  <Link {...props} className={cn(DrawerButtonClassName, className)}>
-    {children}
-  </Link>
-)
+function DrawerButton({ className, children, ...props }: DrawerButtonProps) {
+  const location = useLocation()
+  const isActiveRoute = useMemo(() => {
+    return location.pathname === props.to
+  }, [location])
+
+  return <div className={cn('relative w-full flex items-center justify-center', className)}>
+    <Link {...props} className={cn(DrawerButtonClassName)}>
+      {children}
+    </Link>
+    <div className={`absolute inset-0 hidden peer-hover:flex items-center justify-start pointer-events-none`}>
+      <div className="w-1 h-2 bg-secondary-50 rounded-r-full"></div>
+    </div>
+    <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>
+      {isActiveRoute && <ScaleIn _key="drawer-active-indicator">
+        <div className="w-1 h-8 bg-secondary-50 rounded-r-full"></div>
+      </ScaleIn>}
+    </div>
+  </div>
+}
 
 DrawerButton.displayName = 'DrawerButton'
 

@@ -18,7 +18,7 @@ function Feature({
 }) {
   return <a href={href} className={`group
     h-full p-6 flex items-center justify-center gap-6 sm:gap-8
-    border-2 border-transparent hover:border-secondary-200 
+    border-primary border-transparent hover:border-secondary-200 
     saber-glow rounded-primary`}>
     {icon}
     <div className="lg:w-64 xl:w-96 flex flex-col items-start  gap-2">
@@ -58,7 +58,7 @@ export default function Lander() {
           title="Explore" 
           description=<>Explore the universe of yield bearing <span className="font-bold text-primary-400">4626 vaults</span></>
         />
-        <Feature href="/account" 
+        <Feature href="/build" 
           icon={<PiVault size={96} />} 
           title="Build" 
           description=<>Build your own 4626 vaults using <span className="font-bold text-primary-400">Yearn V3</span> protocol</>
