@@ -5,7 +5,7 @@ import Aside from './Aside'
 
 export default function Layout() {
   return <div className="w-full min-h-screen">
-    <Header className="sticky z-50 inset-x-0 top-0 w-full" />
+    <Header className="hidden sm:sticky z-50 inset-x-0 top-0 w-full" />
     <Drawer className="fixed z-50 top-0 left-0 w-24 h-screen" />
 
     <div className="flex items-start">
@@ -15,7 +15,7 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      <aside className={`min-w-[26%] px-8 py-12 h-screen`}>
+      <aside className={`hidden sm:block min-w-[26%] px-8 py-12 h-screen`}>
         <div className="max-w-[380px]">
           <Aside />
         </div>

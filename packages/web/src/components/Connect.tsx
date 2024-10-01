@@ -19,15 +19,13 @@ export default function Connect({
         authenticationStatus,
         mounted,
       }) => {
-        // Note: If your app doesn't use authentication, you
-        // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== 'loading';
+        const ready = mounted && authenticationStatus !== 'loading'
         const connected =
           ready &&
           account &&
           chain &&
           (!authenticationStatus ||
-            authenticationStatus === 'authenticated');
+            authenticationStatus === 'authenticated')
         return (() => {
           if (!connected) {
             return <Button 
@@ -46,7 +44,7 @@ export default function Connect({
             );
           }
           return (
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-4">
               <Button
                 onClick={openChainModal}
                 h="secondary"

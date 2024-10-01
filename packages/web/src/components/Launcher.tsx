@@ -59,10 +59,10 @@ export default function Launcher({
   alignRight?: boolean
 }) {
   const nav = useHashNav('launcher')
-  return <div className="relative group">
-    <div className="py-4">
+  return <div className="relative group pointer-events-auto">
+    <div className="hidden sm:block py-4">
       <div onClick={nav.toggle} className={`
-        border-primary border-transparent group-hover:border-secondary-50
+        border-0 sm:border-primary border-transparent group-hover:border-secondary-50
         group-active:border-secondary-200
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />

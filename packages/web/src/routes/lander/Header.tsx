@@ -9,7 +9,7 @@ function CTA() {
       bg-gradient-to-r from-primary-400 via-secondary-400 to-primary-400 
       bg-[length:var(--bg-size)_100%] 
       bg-clip-text text-transparent`}>
-      🚀 Get started
+      🚀 Let's go!
     </span>
   </AnimatedGradientText>
 }

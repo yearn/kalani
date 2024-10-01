@@ -1,9 +1,13 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+const borderPrimaryRegex = /([ ]|^)(\w{2}:)?border-primary/
+
 export function cn(...inputs: ClassValue[]) {
-  const containsPrimaryBorder = inputs.some(input => typeof input === 'string' && input.includes('border-primary'))
   const result = twMerge(clsx(inputs))
-  if (containsPrimaryBorder) return `border-primary ${result}`
+  const match = inputs.join(' ').match(borderPrimaryRegex)
+  if (match) {
+    return `${match[0].trim()} ${result}`
+  }
   return result
 }
