@@ -54,20 +54,22 @@ const LauncherIconButton = forwardRef<HTMLAnchorElement, LauncherButtonProps>(({
 LauncherIconButton.displayName = 'LauncherIconButton'
 
 export default function Launcher({
-  alignRight
+  alignRight,
+  hideToggle
 }: {
   alignRight?: boolean
+  hideToggle?: boolean
 }) {
   const nav = useHashNav('launcher')
   return <div className="relative group pointer-events-auto">
-    <div className="hidden sm:block py-4">
+    {!hideToggle && <div className="py-4">
       <div onClick={nav.toggle} className={`
         border-0 sm:border-primary border-transparent group-hover:border-secondary-50
         group-active:border-secondary-200
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
       </div>
-    </div>
+    </div>}
     <div data-open={nav.isOpen} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
       border-0 sm:border-primary border-transparent group-hover:border-secondary-50

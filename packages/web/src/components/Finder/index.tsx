@@ -35,7 +35,7 @@ sm:data-[open=true]:block
 const _inputClassName = `max-h-12
 group-data-[open=true]:rounded-none sm:group-data-[open=true]:rounded-primary
 group-data-[open=true]:z-50 sm:group-data-[open=true]:z-auto
-`
+pointer-events-auto`
 
 const suggestionsClassName = `absolute z-50 w-full mt-3
 group-data-[open=true]:grow sm:group-data-[open=true]:grow-0
@@ -120,7 +120,11 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
     }
   }, [filteredItems, selectedIndex, handleItemClick, nav])
 
-  return <div data-open={nav.isOpen} className={cn(containerClassName, className)}>
+  return <div data-open={nav.isOpen} className={cn(
+      containerClassName, 
+      className, 
+      disableSuggestions && '!bg-transparent pointer-events-none'
+    )}>
     <Input
       ref={inputRef}
       type="text"

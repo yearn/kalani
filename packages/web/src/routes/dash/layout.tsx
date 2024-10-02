@@ -5,8 +5,8 @@ import Aside from './Aside'
 
 export default function Layout() {
   return <div className="w-full min-h-screen">
-    <Header className="hidden sm:sticky z-50 inset-x-0 top-0 w-full" />
-    <Drawer className="fixed z-50 top-0 left-0 w-24 h-screen" />
+    <Header className="hidden sm:block fixed z-50 inset-x-0 top-0 w-full" />
+    <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
 
     <div className="flex items-start">
       <div className="min-w-24"></div>

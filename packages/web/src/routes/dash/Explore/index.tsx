@@ -7,6 +7,10 @@ import { fEvmAddress, fPercent, fUSD } from '@kalani/lib/format'
 import Skeleton from '../../../components/Skeleton'
 import TokenImg from '../../../components/TokenImg'
 import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
+import MenuBar from '../../../components/MenuBar'
+import Finder from '../../../components/Finder'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
+import { cn } from '../../../lib/shadcn'
 
 const FRAME_SIZE = 20
 
@@ -119,16 +123,25 @@ function SkeletonTiles() {
 }
 
 export default function Explore() {
+  const { sm } = useBreakpoints()
   return <div className="w-full min-h-screen">
-    <Header disableFinderSuggestions={true} className="sticky z-50 inset-x-0 top-0 w-full" />
-    <Drawer className="fixed z-50 top-0 left-0 w-24 h-screen" />
-    <div className="flex items-start">
-      <div className="min-w-24 border"></div>
+    <Header disableFinderSuggestions={true} className="hidden sm:block fixed z-50 inset-x-0 top-0 w-full" />
+    <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
+    <div className="pt-0 sm:pt-10 flex items-start">
+      <div className="hidden sm:block min-w-24 border"></div>
       <div className="isolate grow px-3 py-6 border-r border-r-primary-1000">
         <Suspense fallback={<SkeletonTiles />}>
           <Tiles />
         </Suspense>
       </div>
+    </div>
+    <MenuBar className="sm:hidden" />
+    <div className="sm:hidden fixed inset-0 flex flex-col justify-end pointer-events-none">
+      <Finder 
+        className="!w-full pointer-events-auto"
+        inputClassName={cn('px-4 py-2 border-transparent', !sm && '!rounded-none')}
+        placeholder="vault / token / 0x"
+        disableSuggestions={true} />
     </div>
   </div>
 }
