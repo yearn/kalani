@@ -16,9 +16,9 @@ function Planet({ planeteryClassName, className }: { planeteryClassName: string,
   </div>
 }
 
-export default function Bg() {
-  return <div className={`
-    isolate fixed -z-[1] inset-0 bg-primary-400`}>
+export default function Bg({ className }: { className?: string }) {
+  return <div className={cn(`
+    isolate fixed -z-[1] inset-0 bg-primary-400`, className)}>
     <div className="relative h-full w-full flex items-start justify-start overflow-hidden">
       <RetroGrid />
       <div className="absolute w-full h-[50%] bg-primary-400 overflow-hidden">

@@ -39,8 +39,8 @@ function Label({ item }: { item: FinderItem }) {
 
   const bgClassName = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'bg-blue-900'
-      case 'strategy': return 'bg-blue-900'
+      case 'vault': return 'bg-secondary-900'
+      case 'strategy': return 'bg-secondary-900'
       default: return 'bg-neutral-900'
     }
   }, [item])

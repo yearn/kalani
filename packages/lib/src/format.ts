@@ -26,12 +26,14 @@ export function fUSD(amount: number, options?: { fixed?: number, full?: boolean 
 }
 
 export function fTokens(amount: bigint, decimals: number, options?: {
-  fixed?: number
+  fixed?: number,
+  orInfiniteIfGt?: number
 }) {
-  const { fixed } = options ?? {}
+  const { fixed, orInfiniteIfGt } = options ?? {}
   const units = formatUnits(amount, decimals)
   const number = Number(units)
-  return Intl.NumberFormat(undefined, { 
+  if (orInfiniteIfGt && number > orInfiniteIfGt) return '∞'
+  return Intl.NumberFormat(undefined, {
     minimumFractionDigits: fixed ?? 2,
     maximumFractionDigits: fixed ?? 2
   }).format(number)

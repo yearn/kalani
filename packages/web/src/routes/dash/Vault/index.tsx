@@ -1,8 +1,5 @@
-import ValueLabelPair from '../../../components/ValueLabelPair'
 import { useVaultFromParams } from '../../../hooks/useVault'
-import { fNumber, fPercent } from '@kalani/lib/format'
-import { getChain } from '../../../lib/chains'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/shadcn/tabs'
+import { fPercent, fUSD } from '@kalani/lib/format'
 import Roles from './tabs/Roles'
 import Assets from './tabs/Assets'
 import Strategies from './tabs/Strategies'
@@ -10,8 +7,16 @@ import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import ChainImg from '../../../components/ChainImg'
-import EvmAddressLayout from '../../../components/EvmAddress'
-import Hero from '../../../components/Hero'
+import Hero, { HeroInset } from '../../../components/Hero'
+import { Tabs, Tab, TabContent } from '../../../components/Tabs'
+import TokenImg from '../../../components/TokenImg'
+import EvmAddressChip from '../../../components/EvmAddressChip'
+
+const tabClassName = `
+text-secondary-950
+data-[open=true]:border-secondary-950
+hover:border-secondary-950
+active:border-secondary-950/60 active:text-secondary-950/60`
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -20,36 +25,47 @@ export default function Vault() {
   return <section className="flex flex-col gap-8">
     <Hero className="bg-secondary-400 text-secondary-950">
       <div className="flex flex-col justify-center gap-2">
-        <div className="flex items-center gap-3 text-sm">
-          yearn allocator
-          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
-        </div>
         <div className={`text-4xl font-fancy`}>{vault.name}</div>
-        <div className="flex items-center gap-8">
-          <ChainImg chainId={vault.chainId} />
-          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
+
+        <div className="flex items-center gap-12">
+          <div className="text-2xl font-bold">
+            TVL {fUSD(vault.tvl.close ?? 0)}
+          </div>
+          <div className="text-2xl font-bold">
+            APY {fPercent(vault.apy?.close ?? NaN)}
+          </div>
         </div>
+
+        <div className="flex items-center gap-3 text-sm">
+          <ChainImg chainId={vault.chainId} size={28} />
+          <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
+          <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">yearn allocator</div>
+          <EvmAddressChip chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
+        </div>
+
+        <div></div>
       </div>
+
+      <HeroInset>
+        <Tabs className="flex gap-4">
+          <Tab id="assets" isDefault={true} className={tabClassName}>Assets</Tab>
+          <Tab id="strategies" className={tabClassName}>Strategies</Tab>
+          <Tab id="accountant" className={tabClassName}>Accountant</Tab>
+          {vault.strategies.length > 1 && <Tab id="allocator" className={tabClassName}>Allocator</Tab>}
+          <Tab id="reports" className={tabClassName}>Reports</Tab>
+          <Tab id="roles" className={tabClassName}>Roles</Tab>
+        </Tabs>
+      </HeroInset>
     </Hero>
 
-
-    <Tabs defaultValue="assets" className="w-full">
-      <TabsList>
-        <TabsTrigger value="assets">Assets</TabsTrigger>
-        <TabsTrigger value="strategies">Strategies</TabsTrigger>
-        <TabsTrigger value="accountant">Accountant</TabsTrigger>
-        {vault.strategies.length > 1 && <TabsTrigger value="allocator">Allocator</TabsTrigger>}
-        <TabsTrigger value="reports">Reports</TabsTrigger>
-        <TabsTrigger value="roles">Roles</TabsTrigger>
-      </TabsList>
-      <TabsContent value="assets"><Assets /></TabsContent>
-      <TabsContent value="strategies"><Strategies /></TabsContent>
-      <TabsContent value="accountant"><Accountant /></TabsContent>
-      <TabsContent value="allocator"><Allocator /></TabsContent>
-      <TabsContent value="reports"><Reports /></TabsContent>
-      <TabsContent value="roles"><Roles /></TabsContent>
-    </Tabs>
+    <div className="w-full px-12">
+      <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+      <TabContent id="strategies"><Strategies /></TabContent>
+      <TabContent id="accountant"><Accountant /></TabContent>
+      {vault.strategies.length > 1 && <TabContent id="allocator"><Allocator /></TabContent>}
+      <TabContent id="reports"><Reports /></TabContent>
+      <TabContent id="roles"><Roles /></TabContent>
+    </div>
 
     {/* <div className="w-full flex items-center gap-8">
       <Screen className={`

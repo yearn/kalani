@@ -7,15 +7,17 @@ export default function TokenImg({
   chainId,
   address,
   size,
-  className
-}: { 
+  className,
+  bgClassName
+}: {
   chainId: number,
   address?: EvmAddress,
   size?: number,
-  className?: string
+  className?: string,
+  bgClassName?: string
 }) {
   return <ImgOrBg
-    bgClassName="bg-neutral-900 rounded-full"
+    bgClassName={cn('bg-neutral-900 rounded-full', bgClassName)}
     src={`${import.meta.env.VITE_SMOL_ASSETS}/api/token/${chainId}/${address ?? zeroAddress}/logo-128.png`}
     alt={`Token ${address} image`}
     width={size ?? 32}

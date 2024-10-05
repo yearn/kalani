@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export function useHashNav(hashId: string, isDefault = false) {
+export function useQueryNav(queryId: string, isDefault = false) {
   const navigate = useNavigate()
   const location = useLocation()
-  const isOpen = location.hash === `#${hashId}`
-  || (isDefault && (location.hash === '' || location.hash === '#'))
+  const isOpen = location.search === `?${queryId}`
+  || (isDefault && (location.search === '' || location.search === '?'))
 
   const open = useCallback(() => {
-    navigate(`${location.pathname}${location.search}#${hashId}`)
-  }, [navigate, location.pathname, location.search, hashId])
+    navigate(`${location.pathname}?${queryId}`)
+  }, [navigate, location.pathname, queryId])
 
   const close = useCallback(() => {
     if (isOpen) navigate(-1)

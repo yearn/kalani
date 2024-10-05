@@ -29,7 +29,7 @@ function DrawerButton({ className, children, ...props }: DrawerButtonProps) {
       {children}
     </Link>
     <div className={`absolute inset-0 hidden peer-hover:flex items-center justify-start pointer-events-none`}>
-      <div className="w-1 h-2 bg-secondary-50 rounded-r-full"></div>
+      <div className="w-1 h-2 bg-secondary-50/20 rounded-r-full"></div>
     </div>
     <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>
       {isActiveRoute && <ScaleIn _key="drawer-active-indicator">
