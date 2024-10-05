@@ -2,15 +2,17 @@ import { PiRobot } from 'react-icons/pi'
 import Whitelist from './Whitelist'
 import { WhitelistProvider } from './Whitelist/provider'
 import { useYhaasStats } from './useYhaasStats'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import bmath from '@kalani/lib/bmath'
 import { formatEther } from 'viem'
 import usePrices from '../../../hooks/usePrices'
 import Odometer from 'react-odometerjs'
 import { fNumber } from '@kalani/lib/format'
+import Skeleton from '../../../components/Skeleton'
+import Hero from '../../../components/Hero'
 
 function Brand() {
-  return <div className="flex items-center gap-6 pl-4">
+  return <div className="flex items-center gap-6">
     <PiRobot size={64} />
     <div className="flex flex-col gap-0">
       <div className="flex items-end gap-1">
@@ -56,12 +58,12 @@ function Metrics() {
       <div className="text-xs text-balance">Automations</div>
     </div>
 
-    <div className="flex flex-col items-start">
+    <div className="relative flex flex-col items-start">
       <div className="text-xs text-nowrap">gas saved with yHaaS</div>
       <div className="text-6xl text-nowrap">
         <Odometer value={gasSaved} format="(,ddd).dddd" /> Ξ
       </div>
-      <div className="text-sm text-nowrap">
+      <div className="absolute -bottom-5 text-sm text-nowrap">
         $ <Odometer value={gasSavedUsd} format="(,ddd).dd" />
       </div>
     </div>
@@ -69,17 +71,21 @@ function Metrics() {
 }
 
 export default function Page() {
-  return <div className="flex flex-col gap-8">
-    <div className="flex items-center justify-between gap-12">
+  return <section className="flex flex-col gap-8">
+    <Hero className="text-zinc-950 bg-zinc-400">
       <Brand />
-      <Metrics />
-    </div>
-    <p>
-      .. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...
-    </p>
+      <Suspense fallback={<Skeleton className="w-80 h-28 rounded-primary" />}>
+        <Metrics />
+      </Suspense>
+    </Hero>
+    <div className="px-8 flex flex-col items-center gap-12">
+      <p>
+        .. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...
+      </p>
 
-    <WhitelistProvider>
-      <Whitelist />
-    </WhitelistProvider>
-  </div>
+      <WhitelistProvider>
+        <Whitelist />
+      </WhitelistProvider>
+    </div>
+  </section>
 }

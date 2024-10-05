@@ -19,15 +19,15 @@ const scaleValues = (data: PieData[], min: number, max: number): number[] => {
   })
 }
 
-export default function Pie({ data, size }: { data: PieData[], size: number }) {
+export default function Pie({ data, size, className }: { data: PieData[], size: number, className?: string }) {
   const width = size
   const height = size
-  const margin = { top: Math.floor(size / 10), right: Math.floor(size / 10), bottom: Math.floor(size / 10), left: Math.floor(size / 10) }
+  const margin = { top: 0, right: 0, bottom: 0, left: 0 }
   const animate = true
 
   const colorScale = scaleOrdinal({
     domain: data.map(d => d.label),
-    range: scaleValues(data, 0.3, 0.6).map(v => `rgba(255,255,255,${v})`),
+    range: scaleValues(data, 0.3, 0.6).map(v => `rgba(0,0,0,${v})`),
   })
 
   if (width < 10) return undefined
@@ -39,7 +39,7 @@ export default function Pie({ data, size }: { data: PieData[], size: number }) {
   const centerX = innerWidth / 2
   const donutThickness = 50
 
-  return <svg width={width} height={height}>
+  return <svg width={width} height={height} className={className}>
     <Group top={centerY + margin.top} left={centerX + margin.left}>
       <PieChart
         data={data}
@@ -126,7 +126,7 @@ function AnimatedPie<Datum>({
         {hasSpaceForLabel && (
           <animated.g style={{ opacity: props.opacity }}>
             <text
-              fill="white"
+              fill="#fb923c"
               x={centroidX}
               y={centroidY}
               dy=".33em"

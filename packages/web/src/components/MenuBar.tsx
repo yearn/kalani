@@ -18,7 +18,7 @@ export default function MenuBar({ className }: { className?: string }) {
   const navigate = useNavigate()
   const menu = useHashNav('menu')
   const launcher = useHashNav('launcher')
-  return <div className={cn('fixed z-50 inset-0 flex flex-col justify-start pointer-events-none', className)}>
+  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col pointer-events-none', className)}>
 
     {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-primary-2000 pointer-events-auto">
       <div className="px-6 py-6 flex items-center justify-end text-neutral-500">

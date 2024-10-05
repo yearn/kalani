@@ -127,7 +127,7 @@ export default function Explore() {
   return <div className="w-full min-h-screen">
     <Header disableFinderSuggestions={true} className="hidden sm:block fixed z-50 inset-x-0 top-0 w-full" />
     <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
-    <div className="pt-0 sm:pt-10 flex items-start">
+    <div className="sm:pt-10 flex items-start">
       <div className="hidden sm:block min-w-24 border"></div>
       <div className="isolate grow px-3 py-6 border-r border-r-primary-1000">
         <Suspense fallback={<SkeletonTiles />}>
@@ -135,7 +135,7 @@ export default function Explore() {
         </Suspense>
       </div>
     </div>
-    <MenuBar className="sm:hidden" />
+    <MenuBar className="justify-start" />
     <div className="sm:hidden fixed inset-0 flex flex-col justify-end pointer-events-none">
       <Finder 
         className="!w-full pointer-events-auto"

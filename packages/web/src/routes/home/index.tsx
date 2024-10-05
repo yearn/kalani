@@ -29,6 +29,6 @@ export default function Home() {
       </aside>
     </div>
 
-    <MenuBar className="sm:hidden" />
+    <MenuBar className="justify-end" />
   </div>
 }
