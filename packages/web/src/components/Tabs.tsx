@@ -1,15 +1,6 @@
 import { useQueryNav } from '../hooks/useQueryNav'
 import { cn } from '../lib/shadcn'
 
-function getColorClasses(baseColor: string) {
-  return {
-    textColor: `text-${baseColor}-950`,
-    borderColor: `border-${baseColor}-950`,
-    activeBorderColor: `active:border-${baseColor}-950/60`,
-    activeTextColor: `active:text-${baseColor}-950/60`
-  }
-}
-
 export function Tabs({ 
   className, 
   children 

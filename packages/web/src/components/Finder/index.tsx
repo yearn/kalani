@@ -141,7 +141,7 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
       autoCorrect="off"
     />
 
-    <div className={`absolute top-0 right-6 h-full hidden sm:flex items-center ${query.length === 0 ? 'pointer-events-none' : ''}`}>
+    <div className={`absolute top-0 right-6 h-full hidden sm:flex items-center ${query.length === 0 ? 'pointer-events-none' : 'pointer-events-auto'}`}>
       {query.length === 0 && <div className="text-xs text-neutral-700">{isMac ? '⌘' : 'Ctrl'}+K</div>}
       {query.length > 0 && <FlyInFromBottom _key="finder-clear">
         <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')}>

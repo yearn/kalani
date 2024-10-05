@@ -1,12 +1,17 @@
-import ValueLabelPair from '../../../components/ValueLabelPair'
 import { useVaultFromParams } from '../../../hooks/useVault'
-import { fNumber, fPercent } from '@kalani/lib/format'
-import { getChain } from '../../../lib/chains'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/shadcn/tabs'
+import { fPercent, fUSD } from '@kalani/lib/format'
 import Assets from './tabs/Assets'
 import ChainImg from '../../../components/ChainImg'
-import EvmAddressLayout from '../../../components/EvmAddress'
-import Hero from '../../../components/Hero'
+import Hero, { HeroInset } from '../../../components/Hero'
+import TokenImg from '../../../components/TokenImg'
+import EvmAddressChip from '../../../components/EvmAddressChip'
+import { Tabs, Tab, TabContent } from '../../../components/Tabs'
+
+const tabClassName = `
+text-secondary-950
+data-[open=true]:border-secondary-950
+hover:border-secondary-950
+active:border-secondary-950/60 active:text-secondary-950/60`
 
 export default function Erc4626() {
   const vault = useVaultFromParams()
@@ -14,27 +19,37 @@ export default function Erc4626() {
 
   return <section className="flex flex-col gap-8">
     <Hero className="bg-secondary-400 text-secondary-950">
-      <div className="grow flex flex-col justify-center gap-2">
+      <div className="flex flex-col justify-center gap-2">
+        <div className={`text-4xl font-fancy`}>{vault.name}</div>
+
+        <div className="flex items-center gap-12">
+          <div className="text-2xl font-bold">
+            TVL {fUSD(vault.tvl.close ?? 0)}
+          </div>
+          <div className="text-2xl font-bold">
+            APY {fPercent(vault.apy?.close ?? NaN)}
+          </div>
+        </div>
+
         <div className="flex items-center gap-3 text-sm">
-          erc4626 
-          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
+          <ChainImg chainId={vault.chainId} size={28} />
+          <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
+          <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">erc4626</div>
+          <EvmAddressChip chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
         </div>
-        <div className="text-4xl font-fancy">{vault.name}</div>
-        <div className="flex items-center gap-8">
-          <ChainImg chainId={vault.chainId} />
-          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
-        </div>
+
+        <div></div>
       </div>
-      <div className={`flex items-center justify-center justify-center gap-12`}>
-      </div>
+
+      <HeroInset>
+        <Tabs className="flex gap-4">
+          <Tab id="assets" isDefault={true} className={tabClassName}>Assets</Tab>
+        </Tabs>
+      </HeroInset>
     </Hero>
 
-    <Tabs defaultValue="assets" className="w-full">
-      <TabsList>
-        <TabsTrigger value="assets">Assets</TabsTrigger>
-      </TabsList>
-      <TabsContent value="assets"><Assets /></TabsContent>
-    </Tabs>
+    <div className="w-full px-12">
+      <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+    </div>
   </section>
 }

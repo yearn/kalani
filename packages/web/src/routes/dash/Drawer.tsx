@@ -6,6 +6,7 @@ import ScaleIn from '../../components/motion/ScaleIn'
 
 type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   to: string,
+  activeIfStartsWith?: string[],
   className?: string,
   children: ReactNode,
 }
@@ -18,11 +19,11 @@ active:text-secondary-200 active:border-secondary-200
 saber-glow
 `
 
-function DrawerButton({ className, children, ...props }: DrawerButtonProps) {
+function DrawerButton({ activeIfStartsWith, className, children, ...props }: DrawerButtonProps) {
   const location = useLocation()
   const isActiveRoute = useMemo(() => {
-    return location.pathname === props.to
-  }, [location])
+    return location.pathname === props.to || activeIfStartsWith?.some(startsWith => location.pathname.startsWith(startsWith))
+  }, [activeIfStartsWith, location, props.to])
 
   return <div className={cn('relative w-full flex items-center justify-center', className)}>
     <Link {...props} className={cn(DrawerButtonClassName)}>
@@ -54,7 +55,9 @@ export default function Drawer({
       <PiWallet size={26} />
     </DrawerButton>
 
-    <DrawerButton to="/explore" title="Explore">
+    <DrawerButton to="/explore" title="Explore" activeIfStartsWith={[
+      '/vault', '/strategy', '/erc4626', '/accountant', '/account'
+      ]}>
       <PiMagnifyingGlass size={26} />
     </DrawerButton>
 
