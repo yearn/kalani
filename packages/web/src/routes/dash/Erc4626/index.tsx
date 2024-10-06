@@ -7,11 +7,14 @@ import TokenImg from '../../../components/TokenImg'
 import EvmAddressChip from '../../../components/EvmAddressChip'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 
-const tabClassName = `
-text-secondary-950
-data-[open=true]:border-secondary-950
-hover:border-secondary-950
-active:border-secondary-950/60 active:text-secondary-950/60`
+const tabClassNames = {
+  textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
+  bgClassName: `
+    [[data-open=true]_&]:bg-secondary-950 
+    group-hover:bg-secondary-950 
+    group-active:bg-secondary-950/60
+  `
+}
 
 export default function Erc4626() {
   const vault = useVaultFromParams()
@@ -43,7 +46,7 @@ export default function Erc4626() {
 
       <HeroInset>
         <Tabs className="flex gap-4">
-          <Tab id="assets" isDefault={true} className={tabClassName}>Assets</Tab>
+          <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
         </Tabs>
       </HeroInset>
     </Hero>

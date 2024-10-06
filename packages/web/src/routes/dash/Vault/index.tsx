@@ -12,11 +12,14 @@ import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
 import EvmAddressChip from '../../../components/EvmAddressChip'
 
-const tabClassName = `
-text-secondary-950
-data-[open=true]:border-secondary-950
-hover:border-secondary-950
-active:border-secondary-950/60 active:text-secondary-950/60`
+const tabClassNames = {
+  textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
+  bgClassName: `
+    [[data-open=true]_&]:bg-secondary-950 
+    group-hover:bg-secondary-950 
+    group-active:bg-secondary-950/60
+  `
+}
 
 export default function Vault() {
   const vault = useVaultFromParams()
@@ -48,12 +51,12 @@ export default function Vault() {
 
       <HeroInset>
         <Tabs className="flex gap-4">
-          <Tab id="assets" isDefault={true} className={tabClassName}>Assets</Tab>
-          <Tab id="strategies" className={tabClassName}>Strategies</Tab>
-          <Tab id="accountant" className={tabClassName}>Accountant</Tab>
-          {vault.strategies.length > 1 && <Tab id="allocator" className={tabClassName}>Allocator</Tab>}
-          <Tab id="reports" className={tabClassName}>Reports</Tab>
-          <Tab id="roles" className={tabClassName}>Roles</Tab>
+          <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
+          <Tab id="strategies" classNames={tabClassNames}>Strategies</Tab>
+          <Tab id="accountant" classNames={tabClassNames}>Accountant</Tab>
+          {vault.strategies.length > 1 && <Tab id="allocator" classNames={tabClassNames}>Allocator</Tab>}
+          <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
+          <Tab id="roles" classNames={tabClassNames}>Roles</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
