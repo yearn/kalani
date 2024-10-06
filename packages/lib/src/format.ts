@@ -62,3 +62,8 @@ export function fNumber(amount: number, options?: { fixed?: number, prefix?: str
   if (options?.prefix) return `${options.prefix} ${result}`
   return result
 }
+
+export function fBlockTime(blockTime: number) {
+  const date = new Date(Number(blockTime) * 1000)
+  return date.toLocaleDateString()
+}
