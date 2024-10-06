@@ -12,16 +12,27 @@ export function fEvmAddress(address: string, short = false) {
   return short ? fHexString(address).slice(0, 8) : fHexString(address)
 }
 
-export function fPercent(amount: number, fixed?: number) {
-  if ((amount * 100) > 999) return `999+%`
-  return `${(amount * 100).toFixed(fixed ?? 2)}%`
+export function fPercent(amount: number, options?: { fixed?: number, padding?: { length: number, fill?: string } }) {
+  const { fixed, padding } = options ?? {}
+
+  let result = ''
+  if ((amount * 100) > 999) { result = `999% +` }
+  else { result = `${(amount * 100).toFixed(fixed ?? 2)}%` }
+
+  if (padding) {
+    const [whole] = result.split('.')
+    const adjustedPadding = result.length + Math.max(0, padding.length - whole.length)
+    result = result.padStart(adjustedPadding, padding.fill ?? ' ')
+  }
+
+  return result
 }
 
-export function fBps(bps: number, fixed?: number) {
-  return fPercent(bps / 10_000, fixed)
+export function fBps(bps: number, options?: { fixed?: number, padding?: { length: number, fill?: string } }) {
+  return fPercent(bps / 10_000, options)
 }
 
-export function fUSD(amount: number, options?: { fixed?: number, full?: boolean }) {
+export function fUSD(amount: number, options?: { fixed?: number, full?: boolean, padding?: { length: number, fill?: string } }) {
   return fNumber(amount, { ...options, prefix: '$' })
 }
 
@@ -48,9 +59,17 @@ export function fFixed(amount: number, options?: { accuracy?: number, locale?: s
   return formattedWhole
 }
 
-export function fNumber(amount: number, options?: { fixed?: number, prefix?: string, full?: boolean }) {
+export function fNumber(
+amount: number, 
+options?: { 
+  fixed?: number, 
+  prefix?: string, 
+  full?: boolean, 
+  padding?: { length: number, fill?: string }
+}) {
   const fixed = Number.isInteger(options?.fixed) ? options?.fixed : 2
   const full = options?.full
+  const padding = options?.padding ?? 0
   let result = ''
   if(!Number.isFinite(amount)) result = 'NaN'
   else if (!full && amount < 1000) result = amount.toFixed(fixed)
@@ -59,6 +78,13 @@ export function fNumber(amount: number, options?: { fixed?: number, prefix?: str
   else if (!full && amount < 1e12) result = `${(amount / 1e9).toFixed(fixed)}B`
   else if (!full) result = `${(amount / 1e12).toFixed(fixed)}T`
   else result = fFixed(amount, { accuracy: fixed })
+
+  if (padding) {
+    const [whole] = result.split('.')
+    const adjustedPadding = result.length + Math.max(0, padding.length - whole.length)
+    result = result.padStart(adjustedPadding, padding.fill ?? ' ')
+  }
+
   if (options?.prefix) return `${options.prefix} ${result}`
   return result
 }

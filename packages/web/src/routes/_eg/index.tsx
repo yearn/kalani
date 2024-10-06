@@ -5,6 +5,8 @@ import Addresses from '../../components/elements/Addresses'
 import TextGrow from '../../components/elements/TextGrow'
 import Dialog, { DialogButton } from '../../components/Dialog'
 import { Tab, TabContent, Tabs } from '../../components/Tabs'
+import ChipSlide from '../../components/ChipSlide'
+import Bg from '../lander/Bg'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -40,8 +42,12 @@ export default function Eg() {
   }, [toaston, resolveToast])
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
-    {/* <Bg /> */}
+    <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
+
+      <div className="flex">
+        <ChipSlide className="bg-neutral-900" slide={<div>slide</div>}>👋 buenas!</ChipSlide>
+      </div>
 
       <div className="flex flex-col gap-4">
         <Tabs className="flex gap-4">

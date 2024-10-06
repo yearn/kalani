@@ -4,7 +4,7 @@ import Assets from './tabs/Assets'
 import ChainImg from '../../../components/ChainImg'
 import Hero, { HeroInset } from '../../../components/Hero'
 import TokenImg from '../../../components/TokenImg'
-import EvmAddressChip from '../../../components/EvmAddressChip'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 
 const tabClassNames = {
@@ -38,7 +38,7 @@ export default function Erc4626() {
           <ChainImg chainId={vault.chainId} size={28} />
           <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
           <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">erc4626</div>
-          <EvmAddressChip chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
+          <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
         </div>
 
         <div></div>

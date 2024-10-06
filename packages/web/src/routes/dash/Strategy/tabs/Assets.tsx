@@ -1,16 +1,9 @@
-import { Vault, withVault } from '../../../../hooks/useVault'
-import { div, mulb } from '@kalani/lib/bmath'
-import { fBps, fPercent, fTokens } from '@kalani/lib/format'
-import { useMemo } from 'react'
+import { fBps, fTokens } from '@kalani/lib/format'
+import { useStrategyFromParams } from '../../../../hooks/useStrategy'
+import { Suspense } from 'react'
 
-function Assets({ vault }: { vault: Vault }) {
-  const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
-  const allocated = useMemo(() => vault?.strategies.reduce((acc, strategy) => acc + Number(strategy.targetDebtRatio), 0) ?? 0, [vault])
-  const deployed = useMemo(() => {
-    const totalAllocated = mulb(vault?.totalAssets ?? 0n, allocated / 10_000)
-    return div(vault?.totalDebt ?? 0n, totalAllocated)
-  }, [vault, allocated])
-
+function Suspender() {
+  const { strategy } = useStrategyFromParams()
   return <div>
     <div className={`
       w-1/2 h-full p-4`}>
@@ -18,23 +11,11 @@ function Assets({ vault }: { vault: Vault }) {
         <tbody>
           <tr>
             <td className="text-xl">Total assets</td>
-            <td className="text-right text-xl">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>
-          </tr>
-          <tr>
-            <td>Allocated</td>
-            <td className="text-right">{fBps(allocated)}</td>
-          </tr>
-          <tr>
-            <td>Deployed</td>
-            <td className="text-right">{fPercent(deployed)}</td>
-          </tr>
-          <tr>
-            <td>Idle assets</td>
-            <td className="text-right">{fTokens(idle, vault.asset.decimals)}</td>
+            <td className="text-right text-xl">{fTokens(strategy.totalAssets, strategy.asset.decimals)}</td>
           </tr>
           <tr>
             <td>Performance fee</td>
-            <td className="text-right">{fBps(vault.fees?.performanceFee!)}</td>
+            <td className="text-right">{fBps(strategy.fees?.performanceFee!)}</td>
           </tr>
         </tbody>
       </table>
@@ -42,4 +23,8 @@ function Assets({ vault }: { vault: Vault }) {
   </div>
 }
 
-export default withVault(Assets)
+export default function Assets() {
+  return <Suspense fallback={<div>Loading...</div>}>
+    <Suspender />
+  </Suspense>
+}

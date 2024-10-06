@@ -1,11 +1,13 @@
-import { EvmAddressSchema, HexStringSchema } from "@kalani/lib/types"
 import { z } from 'zod'
+import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
 import { Suspense } from "react"
-import { fBlockTime, fHexString, fPercent, fUSD } from "@kalani/lib/format"
-import { Vault, withVault } from "../../../../hooks/useVault"
+import { fBlockTime, fPercent, fUSD } from "@kalani/lib/format"
 import Skeleton from "../../../../components/Skeleton"
+import { useStrategyParams } from "../../../../hooks/useStrategy"
+import { cn } from "../../../../lib/shadcn"
+import TxChipSlide from "../../../../components/ChipSlide/TxChipSlide"
 
 export const ReportSchema = z.object({
   chainId: z.number(),
@@ -65,7 +67,7 @@ function useReports(chainId: number, address: string) {
   }
 }
 
-function numberClassNames(value: number) {
+function classNameFor(value: number) {
   if (value > 0) { return 'text-green-500' }
   if (value < 0) { return 'text-red-500' }
   return 'text-neutral-800'
@@ -96,13 +98,28 @@ function TableSkeleton() {
   </table>
 }
 
-function Suspender({ vault }: { vault: Vault }) {
-  const { reports } = useReports(vault.chainId, vault.address)
+function DisplayUSD({ usd, className }: { usd: number, className?: string }) {
+  return <div className={cn('relative', className)}>
+    <span className={classNameFor(0)}>{fUSD(usd, { padding: { length: 3, fill: '0' } })}</span>
+    <span className={cn('absolute inset-0 whitespace-pre', classNameFor(usd))}>{fUSD(usd, { padding: { length: 3, fill: ' ' } })}</span>
+  </div>
+}
+
+function DisplayPercent({ percent, className }: { percent: number, className?: string }) {
+  return <div className={cn('relative', className)}>
+    <span className={classNameFor(0)}>{fPercent(percent, { padding: { length: 3, fill: '0' } })}</span>
+    <span className={cn('absolute inset-0 whitespace-pre', classNameFor(percent))}>{fPercent(percent, { padding: { length: 3, fill: ' ' } })}</span>
+  </div>
+}
+
+function Suspender() {
+  const { chainId, address } = useStrategyParams()
+  const { reports } = useReports(chainId, address)
   return <div className="flex flex-col gap-2">
     <table className="w-full border-separate border-spacing-4">
       <thead>
-        <tr className="text-neutral-200">
-          <th className="w-52 text-left"></th>
+        <tr className="text-neutral-400">
+          <th className="w-52 text-left">TX</th>
           <th className="text-left">Date</th>
           <th className="text-left">Profit</th>
           <th className="text-left">Loss</th>
@@ -113,14 +130,18 @@ function Suspender({ vault }: { vault: Vault }) {
         {reports.map((report, index) => (
           <tr key={index}>
             <td className="flex justify-between">
-              <div className="text-neutral-400 bg-neutral-900 rounded-full px-3 py-1">
-                {fHexString(report.transactionHash)}
-              </div>
+              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} className="bg-neutral-900 text-neutral-400" />
             </td>
             <td className="text-neutral-400">{fBlockTime(report.blockTime)}</td>
-            <td className={numberClassNames(report.profitUsd)}>{fUSD(report.profitUsd)}</td>
-            <td className={numberClassNames(report.lossUsd)}>{fUSD(report.lossUsd)}</td>
-            <td className={numberClassNames(report.apr?.net ?? 0)}>{fPercent(report.apr?.net ?? 0)}</td>
+            <td>
+              <DisplayUSD usd={report.profitUsd} />
+            </td>
+            <td>
+              <DisplayUSD usd={report.lossUsd} />
+            </td>
+            <td className={classNameFor(report.apr?.net ?? 0)}>
+              <DisplayPercent percent={report.apr?.net ?? 0} />
+            </td>
           </tr>
         ))}
       </tbody>
@@ -128,12 +149,11 @@ function Suspender({ vault }: { vault: Vault }) {
   </div>
 }
 
-function Reports({ vault }: { vault: Vault }) {
+export default function Reports() {
   return <div>
     <Suspense fallback={<TableSkeleton />}>
-      <Suspender vault={vault} />
+      <Suspender />
     </Suspense>
   </div> 
 }
 
-export default withVault(Reports)

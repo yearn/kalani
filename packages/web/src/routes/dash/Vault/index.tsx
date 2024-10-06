@@ -10,7 +10,7 @@ import ChainImg from '../../../components/ChainImg'
 import Hero, { HeroInset } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
-import EvmAddressChip from '../../../components/EvmAddressChip'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 
 const tabClassNames = {
   textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
@@ -43,7 +43,7 @@ export default function Vault() {
           <ChainImg chainId={vault.chainId} size={28} />
           <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
           <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">yearn allocator</div>
-          <EvmAddressChip chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
+          <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
         </div>
 
         <div></div>

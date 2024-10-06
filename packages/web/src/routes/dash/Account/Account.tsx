@@ -5,7 +5,7 @@ import Pie from './Pie'
 import Tile from './Tile'
 import Hero from '../../../components/Hero'
 import ChainImg from '../../../components/ChainImg'
-import EvmAddressChip from '../../../components/EvmAddressChip'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { useIsContract } from '../../../hooks/useIsContract'
 import { useAccount } from 'wagmi'
 import { useMemo } from 'react'
@@ -38,7 +38,7 @@ export default function Account({ address }: { address: EvmAddress }) {
 
         <div className="flex items-center gap-3 text-sm">
           <ChainImg chainId={chainId} size={28} />
-          <EvmAddressChip chainId={chainId} address={address} className="bg-primary-950 text-primary-400" />
+          <EvmAddressChipSlide chainId={chainId} address={address} className="bg-primary-950 text-primary-400" />
         </div>
       </div>
 
