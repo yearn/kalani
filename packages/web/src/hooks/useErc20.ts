@@ -1,14 +1,23 @@
 import { EvmAddress } from '@kalani/lib/types'
 import { erc20Abi } from 'viem'
-import { useConfig } from 'wagmi'
+import { useAccount, useConfig } from 'wagmi'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { useEffect, useMemo } from 'react'
 
-export function useErc20(address: EvmAddress) {
+export function useErc20(options: { chainId?: number, address: EvmAddress }) {
+  const { chainId: optionalChainId, address } = options
+  const { chainId: accountChainId } = useAccount()
+  const chainId = useMemo(() => optionalChainId ?? accountChainId ?? 1, [optionalChainId, accountChainId])
+
+  useEffect(() => {
+    console.log('chainId', chainId, address)
+  }, [chainId, address])
+
   const contracts = [
-    {  address, abi: erc20Abi,  functionName: 'name' },
-    {  address, abi: erc20Abi,  functionName: 'symbol' },
-    {  address, abi: erc20Abi,  functionName: 'decimals' }
+    {  chainId, address, abi: erc20Abi,  functionName: 'name' },
+    {  chainId, address, abi: erc20Abi,  functionName: 'symbol' },
+    {  chainId, address, abi: erc20Abi,  functionName: 'decimals' }
   ]
 
   const config = useConfig()

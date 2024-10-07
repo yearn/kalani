@@ -1,4 +1,5 @@
 import Connect from '../../components/Connect'
+import CTA from '../../components/CTA'
 import Finder from '../../components/Finder'
 import Launcher from '../../components/Launcher'
 import { cn } from '../../lib/shadcn'
@@ -21,7 +22,7 @@ export default function Header({
           disableSuggestions={disableFinderSuggestions} />
       </div>
       <div className={`flex items-center justify-end gap-4`}>
-        <Connect />
+      <Connect label={<CTA>Connect</CTA>} />
         <Launcher alignRight={true} />
       </div>
     </div>

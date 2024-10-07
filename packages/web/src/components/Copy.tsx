@@ -11,7 +11,7 @@ interface CopyProps {
 const className = `
   cursor-pointer
   hover:text-secondary-50
-  active:text-secondary-200
+  active:text-secondary-400
 `
 
 const Copy: React.FC<CopyProps> = ({ text, size = 16 }) => {

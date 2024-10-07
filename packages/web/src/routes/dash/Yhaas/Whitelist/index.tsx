@@ -9,13 +9,14 @@ import Actions from './Actions'
 import { useWhitelist } from './provider'
 import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
 import StepLabel from './StepLabel'
+import CTA from '../../../../components/CTA'
 
 export default function Whitelist() {
   const { address, chain } = useAccount()
   const { targets } = useWhitelist()
 
   if (!(address && chain)) return <div className="flex gap-4">
-    <Connect label="Connect your wallet to get started" />
+    <Connect label={<CTA>Connect your wallet</CTA>} />
   </div>
 
   return <div className="pb-96 flex flex-col gap-20">

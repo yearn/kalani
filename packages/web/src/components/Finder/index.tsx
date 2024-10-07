@@ -47,7 +47,7 @@ overflow-y-auto
 
 const scrollAreaClassName = `w-full sm:max-h-80 overflow-auto 
 bg-neutral-900 border-primary border-secondary-200 
-group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secondary-200
+group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secondary-400
 rounded-primary
 `
 

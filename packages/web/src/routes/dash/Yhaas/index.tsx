@@ -72,12 +72,13 @@ function Metrics() {
 
 export default function Page() {
   return <section className="flex flex-col gap-8">
-    <Hero className="text-zinc-950 bg-zinc-400">
-      <Brand />
-      <Suspense fallback={<Skeleton className="w-80 h-28 rounded-primary" />}>
+    <Suspense fallback={<Skeleton className="h-48" />}>
+      <Hero className="text-zinc-950 bg-zinc-400">
+        <Brand />
         <Metrics />
-      </Suspense>
-    </Hero>
+      </Hero>
+    </Suspense>
+
     <div className="px-8 flex flex-col items-center gap-12">
       <p>
         .. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...

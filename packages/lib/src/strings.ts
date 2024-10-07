@@ -24,3 +24,10 @@ export function compareEvmAddresses(a?: string, b?: string) {
     return false
   }
 }
+
+export function kabobCase(str: string) {
+  return str
+    .replace(/\s+/g, '-')
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase()
+}

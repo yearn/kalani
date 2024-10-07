@@ -4,9 +4,9 @@ import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
 import TextGrow from '../../components/elements/TextGrow'
 import Dialog, { DialogButton } from '../../components/Dialog'
-import { Tab, TabContent, Tabs } from '../../components/Tabs'
 import ChipSlide from '../../components/ChipSlide'
 import Bg from '../lander/Bg'
+import SelectErc20 from '../../components/SelectErc20'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -46,26 +46,11 @@ export default function Eg() {
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
       <div className="flex">
-        <ChipSlide className="bg-neutral-900" slide={<div>slide</div>}>👋 buenas!</ChipSlide>
+        <ChipSlide className="bg-neutral-900" slide={<div className="whitespace-nowrap">👋 buenas!</div>}>chip slide</ChipSlide>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <Tabs className="flex gap-4">
-          <Tab id="a" isDefault={true}>tab a</Tab>
-          <Tab id="b">tab b</Tab>
-          <Tab id="c">tab c</Tab>
-        </Tabs>
-        <div>
-          <TabContent id="a" isDefault>
-            <div>a</div>
-          </TabContent>
-          <TabContent id="b">
-            <div>b</div>
-          </TabContent>
-          <TabContent id="c">
-            <div>c</div>
-          </TabContent>
-        </div>  
+      <div>
+        <SelectErc20 chainId={1} placeholder="Find asset by name or address" onSelect={item => toast(item.name)} />
       </div>
 
       <div className="flex flex-wrap items-center gap-6">

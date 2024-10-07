@@ -65,7 +65,7 @@ export default function Launcher({
     {!hideToggle && <div className="py-4">
       <div onClick={nav.toggle} className={`
         border-0 sm:border-primary border-transparent group-hover:border-secondary-50
-        group-active:border-secondary-200
+        group-active:border-secondary-400
         p-2 bg-neutral-950 rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
       </div>
@@ -73,7 +73,7 @@ export default function Launcher({
     <div data-open={nav.isOpen} className={cn(`fixed inset-0 sm:absolute sm:inset-auto sm:-right-2 p-4
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
       border-0 sm:border-primary border-transparent group-hover:border-secondary-50
-      group-active:border-secondary-200
+      group-active:border-secondary-400
       bg-neutral-900 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
       alignRight ? 'right-0' : '')}>
       <div className="grow flex flex-col gap-4">

@@ -68,7 +68,7 @@ function MinChangeInput({
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string
 }) {
-  const { token } = useErc20(asset)
+  const { token } = useErc20({ address: asset })
 
   return <div className="relative">
     <Input
@@ -103,7 +103,7 @@ function CreateAllocatorDialog({
   onNewAllocator: (allocator: EvmAddress) => void
 }) {
   const { asset } = useAsset(vault)
-  const { token } = useErc20(asset)
+  const { token } = useErc20({ address: asset })
   const { closeDialog } = useDialog('create-allocator')
   const [minChange, setMinChange] = useState<number>(0)
   const minimumChange = useMemo<bigint>(() => BigInt(numberOr(minChange) * 10 ** token.decimals), [token, minChange])

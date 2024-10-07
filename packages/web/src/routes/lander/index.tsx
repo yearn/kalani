@@ -19,6 +19,7 @@ function Feature({
   return <a href={href} className={`group
     h-full p-6 flex items-center justify-center gap-6 sm:gap-8
     border-primary border-transparent hover:border-secondary-200 
+    active:border-secondary-400 active:text-secondary-400
     saber-glow rounded-primary`}>
     {icon}
     <div className="lg:w-64 xl:w-96 flex flex-col items-start  gap-2">
@@ -57,17 +58,17 @@ export default function Lander() {
         <Feature href="/explore" 
           icon={<PiMagnifyingGlass size={96} />} 
           title="Explore" 
-          description=<>Explore the universe of yield bearing <span className="font-bold text-primary-400">4626 vaults</span></>
+          description=<>Explore the universe of yield bearing <span className="font-bold text-primary-400 group-active:text-secondary-400">4626 vaults</span></>
         />
         <Feature href="/build" 
           icon={<PiVault size={96} />} 
           title="Build" 
-          description=<>Build your own 4626 vaults using <span className="font-bold text-primary-400">Yearn V3</span> protocol</>
+          description=<>Build your own 4626 vaults using <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn V3</span> protocol</>
         />
         <Feature href="/yhaas" 
           icon={<PiRobot size={96} />} 
           title="Automate" 
-          description=<>Automate your vaults and strategies with <span className="font-bold text-primary-400">Yearn yHaaS</span></>
+          description=<>Automate your vaults and strategies with <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn yHaaS</span></>
         />
       </section>
     </div>

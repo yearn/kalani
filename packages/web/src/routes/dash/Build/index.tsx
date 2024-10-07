@@ -1,5 +1,8 @@
 import { PiVault } from 'react-icons/pi'
 import Hero from '../../../components/Hero'
+import { useAccount } from 'wagmi'
+import Connect from '../../../components/Connect'
+import CTA from '../../../components/CTA'
 
 function Brand() {
   return <div className="flex items-center gap-6">
@@ -15,9 +18,18 @@ function Brand() {
 }
 
 export default function Build() {
+  const { isConnected } = useAccount()
   return <section className="flex flex-col gap-8">
     <Hero className="bg-fuchsia-400 text-fuchsia-950">
       <Brand />
     </Hero>
+    <div className="px-8 flex flex-col items-center gap-12">
+      <p>
+        ... ...... .. ....... ... ....... ...... ..... ... .... ....... ... . ... ...... ... ... .... .. ... ....... ..... .. .. . ...... ... . ..... . .. .. ... ....... ....... . .. .. .. .. .. . ... ... .. .. . ...... . . ...... ....... .... ...... .. .. . ...... ....... ..... ..... . ....... ....... .... .... .. ..... .... . .. ........ ........ . .... .... ..... ... . ..... ........ .... . ..... ....
+      </p>
+
+      {!isConnected && <Connect label={<CTA>Connect your wallet</CTA>} />}
+
+    </div>
   </section>
 }

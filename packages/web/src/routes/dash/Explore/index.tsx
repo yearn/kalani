@@ -64,7 +64,7 @@ function Tile({ item }: { item: FinderItem }) {
   }, [item])
 
   return <a href={href} className={`group relative p-3 flex flex-col
-    gap-2 border-primary border-transparent hover:border-secondary-200 
+    gap-2 border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer`}>
     <div className="flex flex-col gap-2">
       <Minibars series={item.sparklines?.tvl ?? []} className="w-full h-[200px]" />

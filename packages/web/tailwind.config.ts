@@ -25,6 +25,7 @@ export default {
   safelist: [
     ...heightSafeList(),
     'w-[28px]', 'h-[28px]',
+    'w-[48px]', 'h-[48px]',
     'border-primary',
   ],
   theme: {

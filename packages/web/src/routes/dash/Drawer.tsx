@@ -11,11 +11,11 @@ type DrawerButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode,
 }
 
-const DrawerButtonClassName = `peer
+const DrawerButtonClassName = `
 p-3 flex items-center justify-center
 bg-black border-primary border-transparent rounded-primary
 hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
-active:text-secondary-200 active:border-secondary-200
+group-active:text-secondary-400 group-active:border-secondary-400
 saber-glow
 `
 
@@ -25,16 +25,16 @@ function DrawerButton({ activeIfStartsWith, className, children, ...props }: Dra
     return location.pathname === props.to || activeIfStartsWith?.some(startsWith => location.pathname.startsWith(startsWith))
   }, [activeIfStartsWith, location, props.to])
 
-  return <div className={cn('relative w-full flex items-center justify-center', className)}>
+  return <div className={cn('group relative w-full flex items-center justify-center', className)}>
     <Link {...props} className={cn(DrawerButtonClassName)}>
       {children}
     </Link>
-    <div className={`absolute inset-0 hidden peer-hover:flex items-center justify-start pointer-events-none`}>
+    <div className={`absolute inset-0 hidden group-hover:flex items-center justify-start pointer-events-none`}>
       <div className="w-1 h-2 bg-secondary-50/20 rounded-r-full"></div>
     </div>
     <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>
       {isActiveRoute && <ScaleIn _key="drawer-active-indicator">
-        <div className="w-1 h-8 bg-secondary-50 rounded-r-full"></div>
+        <div className="w-1 h-8 bg-secondary-50 group-active:bg-secondary-400 rounded-r-full"></div>
       </ScaleIn>}
     </div>
   </div>
