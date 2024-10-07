@@ -22,7 +22,7 @@ export const ReportSchema = z.object({
   lossUsd: z.number({ coerce: true }),
   apr: z.object({
     net: z.number({ coerce: true }).nullable()
-  })
+  }).nullable()
 })
 
 export type Report = z.infer<typeof ReportSchema>
