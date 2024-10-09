@@ -9,6 +9,16 @@ export const zevmaddressstring = z.custom<`0x${string}`>((val: any) => /^0x[a-fA
 export const EvmAddressSchema = zevmaddressstring.transform(s => getAddress(s))
 export type EvmAddress = z.infer<typeof EvmAddressSchema>
 
+export const Erc20Schema = z.object({
+  chainId: z.number(),
+  address: EvmAddressSchema,
+  name: z.string(),
+  symbol: z.string(),
+  decimals: z.number()
+})
+
+export type Erc20 = z.infer<typeof Erc20Schema>
+
 export const ROLES = {
   ADD_STRATEGY_MANAGER: 2n ** 0n,
   REVOKE_STRATEGY_MANAGER: 2n ** 1n,

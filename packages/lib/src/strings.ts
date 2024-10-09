@@ -5,6 +5,10 @@ export function isNothing(value?: string | null): boolean {
   return value === undefined || value === null || value.trim() === ''
 }
 
+export function isSomething(value?: string | null): boolean {
+  return !isNothing(value)
+}
+
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

@@ -9,9 +9,10 @@ import FlyInFromBottom from '../motion/FlyInFromBottom'
 import { PiX } from 'react-icons/pi'
 import { ScrollArea } from '../shadcn/scroll-area'
 import TokenImg from '../TokenImg'
-import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
+import { Erc20, EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { fEvmAddress } from '@kalani/lib/format'
 import { useErc20 } from '../../hooks/useErc20'
+import { ErrorBoundary } from 'react-error-boundary'
 
 interface SelectErc20Props {
   chainId?: number,
@@ -19,14 +20,8 @@ interface SelectErc20Props {
   inputClassName?: string,
   className?: string,
   disabled?: boolean,
-  onSelect?: (item: Erc20) => void
-}
-
-interface Erc20 {
-  chainId: number,
-  address: EvmAddress,
-  name: string,
-  symbol: string
+  selected?: Erc20,
+  onSelect?: (item: Erc20 | undefined) => void
 }
 
 const containerClassName = `group relative z-0
@@ -63,7 +58,7 @@ function CustomToken({ chainId, address, onClick }: { chainId?: number, address:
   const { token } = useErc20({ chainId, address })
 
   const handleClick = useCallback(() => {
-    onClick?.({ chainId: chainId ?? 0, address, name: token.name ?? 'Error', symbol: token.symbol ?? 'Error' })
+    onClick?.({ chainId: chainId ?? 0, address, name: token.name ?? 'Error', symbol: token.symbol ?? 'Error', decimals: token.decimals ?? 18 })
   }, [chainId, address, token, onClick])
 
   return <div onClick={handleClick} className={`h-18 px-4 py-3 
@@ -80,6 +75,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
   className, 
   inputClassName, 
   disabled, 
+  selected,
   onSelect 
 }) => {
   const breakpoints = useBreakpoints()
@@ -87,18 +83,17 @@ const Suspender: React.FC<SelectErc20Props> = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState<string>('')
   const isQueryAddress = useMemo(() => EvmAddressSchema.safeParse(query).success, [query])
-  const [selected, setSelected] = useState<Erc20|undefined>()
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
   const [tokens] = useState<Erc20[]>([
-    { chainId: 1, address: '0x6B175474E89094C44Da98b954EedeAC495271d0F', name: 'Dai', symbol: 'DAI' },
-    { chainId: 1, address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name: 'USDC', symbol: 'USDC' },
-    { chainId: 1, address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', name: 'Tether USD', symbol: 'USDT' },
-    { chainId: 1, address: '0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E', name: 'Curve USD', symbol: 'crvYSD' },
-    { chainId: 1, address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', name: 'Wrapped BTC', symbol: 'WBTC' },
-    { chainId: 1, address: '0x06325440D014e39736583c165C2963BA99fAf14E', name: 'Curve.fi ETH/stETH', symbol: 'steCRV' },
-    { chainId: 1, address: '0x04C154b66CB340F3Ae24111CC767e0184Ed00Cc6', name: 'Pirex ETH', symbol: 'pxETH' },
-    { chainId: 1, address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', name: 'Wrapped ETH', symbol: 'WETH' }
+    { chainId: 1, address: '0x6B175474E89094C44Da98b954EedeAC495271d0F', name: 'Dai', symbol: 'DAI', decimals: 18 },
+    { chainId: 1, address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', name: 'USDC', symbol: 'USDC', decimals: 6 },
+    { chainId: 1, address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', name: 'Tether USD', symbol: 'USDT', decimals: 18 },
+    { chainId: 1, address: '0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E', name: 'Curve USD', symbol: 'crvYSD', decimals: 18 },
+    { chainId: 1, address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', name: 'Wrapped BTC', symbol: 'WBTC', decimals: 18 },
+    { chainId: 1, address: '0x06325440D014e39736583c165C2963BA99fAf14E', name: 'Curve.fi ETH/stETH', symbol: 'steCRV', decimals: 18 },
+    { chainId: 1, address: '0x04C154b66CB340F3Ae24111CC767e0184Ed00Cc6', name: 'Pirex ETH', symbol: 'pxETH', decimals: 18 },
+    { chainId: 1, address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', name: 'Wrapped ETH', symbol: 'WETH', decimals: 18 }
   ])
 
   const filter = useMemo(() => {
@@ -143,11 +138,10 @@ const Suspender: React.FC<SelectErc20Props> = ({
     }
   }, [nav, filter])
 
-  const handleItemClick = useCallback((item: Erc20): void => {
+  const handleItemClick = useCallback((item: Erc20 | undefined): void => {
     setQuery('')
-    setSelected(item)
     onSelect?.(item)
-  }, [setQuery, setSelected, onSelect])
+  }, [setQuery, onSelect])
 
   return <div data-open={nav.isOpen} className={cn(
       containerClassName, 
@@ -183,7 +177,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
       <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} bgClassName={tokenBgClassName} /></div>
       <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
       <div className="grow truncate">{selected.name}</div>
-      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => setSelected(undefined)}>
+      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}>
         <PiX size={24} />
       </button>
     </div>}
@@ -205,9 +199,11 @@ const Suspender: React.FC<SelectErc20Props> = ({
     {nav.isOpen && isQueryAddress && (
       <div className={cn(suggestionsClassName, breakpoints.sm ? 'saber-glow' : '')}>
         <ScrollArea className={scrollAreaClassName}>
-          <Suspense fallback={<Skeleton className="w-full h-14 rounded-primary" />}>
-            <CustomToken chainId={chainId} address={EvmAddressSchema.parse(query)} onClick={handleItemClick} />
-          </Suspense>
+          <ErrorBoundary fallback={<div className="w-full h-14 px-6 flex items-center text-neutral-400 rounded-primary">No tokens found =(</div>}>
+            <Suspense fallback={<Skeleton className="w-full h-14 rounded-primary" />}>
+              <CustomToken chainId={chainId} address={EvmAddressSchema.parse(query)} onClick={handleItemClick} />
+            </Suspense>
+          </ErrorBoundary>
         </ScrollArea>
       </div>
     )}

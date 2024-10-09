@@ -13,7 +13,7 @@ import { capitalize, isNothing } from '@kalani/lib/strings'
 import { EvmAddress } from '@kalani/lib/types'
 import { useAutomationGuidelines } from './StrategyForm/useAutomationGuidelines'
 import { TargetType, useTargetInfos } from '../useTargetInfos'
-import StepLabel from '../StepLabel'
+import StepLabel from '../../../../../components/forms/StepLabel'
 
 function DaysInput({
   disabled, days, onChange, className, theme, isValid, validationMessage

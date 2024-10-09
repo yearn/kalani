@@ -50,7 +50,7 @@ export default function Eg() {
       </div>
 
       <div>
-        <SelectErc20 chainId={1} placeholder="Find asset by name or address" onSelect={item => toast(item.name)} />
+        <SelectErc20 chainId={1} placeholder="Find asset by name or address" onSelect={item => toast(item?.name ?? 'what token?')} />
       </div>
 
       <div className="flex flex-wrap items-center gap-6">

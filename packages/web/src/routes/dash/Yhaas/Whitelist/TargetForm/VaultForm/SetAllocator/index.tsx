@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Address from '../../../../../../../components/elements/Address'
-import StepLabel from '../../../StepLabel'
+import StepLabel from '../../../../../../../components/forms/StepLabel'
 import { Switch } from '../../../../../../../components/shadcn/switch'
 import { Label } from '../../../../../../../components/shadcn/label'
 import Dialog, { DialogButton, useDialog } from '../../../../../../../components/Dialog'

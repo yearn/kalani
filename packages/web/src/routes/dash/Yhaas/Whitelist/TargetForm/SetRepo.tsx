@@ -3,7 +3,7 @@ import { useWhitelist } from '../provider'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { PiCheckFatFill, PiWarningCircleBold } from 'react-icons/pi'
 import { isNothing } from '@kalani/lib/strings'
-import StepLabel from '../StepLabel'
+import StepLabel from '../../../../../components/forms/StepLabel'
 import { useMemo } from 'react'
 
 export default function SetRepo({ step }: { step: number }) {

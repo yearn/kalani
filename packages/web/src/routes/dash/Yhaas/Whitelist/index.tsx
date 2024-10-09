@@ -8,7 +8,7 @@ import TargetForm from './TargetForm'
 import Actions from './Actions'
 import { useWhitelist } from './provider'
 import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
-import StepLabel from './StepLabel'
+import StepLabel from '../../../../components/forms/StepLabel'
 import CTA from '../../../../components/CTA'
 
 export default function Whitelist() {

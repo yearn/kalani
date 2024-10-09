@@ -10,7 +10,7 @@ import Button from '../../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
-import StepLabel from '../../StepLabel'
+import StepLabel from '../../../../../../components/forms/StepLabel'
 
 function useWrite(
   address: EvmAddress,

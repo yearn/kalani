@@ -4,14 +4,15 @@ import allocator from './allocator'
 import allocatorFactory from './allocatorFactory'
 import strategy from './strategy'
 import vault from './vault'
-
+import vaultFactory from './vaultFactory'
 const abis = { 
   accountant, 
   addressProvider,
   allocator,
   allocatorFactory,
   strategy,
-  vault 
+  vault,
+  vaultFactory
 }
 
 export default abis

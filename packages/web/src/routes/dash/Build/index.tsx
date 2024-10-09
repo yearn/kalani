@@ -3,6 +3,7 @@ import Hero from '../../../components/Hero'
 import { useAccount } from 'wagmi'
 import Connect from '../../../components/Connect'
 import CTA from '../../../components/CTA'
+import VaultForm from './VaultForm'
 
 function Brand() {
   return <div className="flex items-center gap-6">
@@ -29,6 +30,7 @@ export default function Build() {
       </p>
 
       {!isConnected && <Connect label={<CTA>Connect your wallet</CTA>} />}
+      {isConnected && <VaultForm className="max-w-3xl" />}
 
     </div>
   </section>
