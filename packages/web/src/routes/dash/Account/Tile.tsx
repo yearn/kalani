@@ -38,11 +38,11 @@ export default function Tile({
   }, [vault, latest])
 
   return <Screen onClick={() => navigate(`/vault/${vault.chainId}/${vault.address}`)} className={`
-    w-full p-12 flex gap-8 border border-neutral-900
+    w-full p-12 flex gap-8 border-primary border-neutral-900
     hover:border-secondary-50 hover:!text-secondary-50
-    active:border-secondary-200 active:!text-secondary-200
+    active:border-secondary-400 active:!text-secondary-400
     bg-neutral-950 text-neutral-300
-    cursor-pointer`}>
+    rounded-primary  cursor-pointer`}>
     <div className="w-1/2 flex flex-col gap-2">
       <div className="py-2 text-3xl font-fancy">{vault.name}</div>
 

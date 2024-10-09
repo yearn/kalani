@@ -1,6 +1,6 @@
-import { cn } from "../lib/shadcn"
+import { cn } from '../lib/shadcn'
 
-export default function ChainImage({ 
+export default function ChainImg({ 
   chainId,
   size,
   className
@@ -11,7 +11,7 @@ export default function ChainImage({
 }) {
   return <img
     src={`${import.meta.env.VITE_SMOL_ASSETS}/api/chain/${chainId}/logo-128.png`}
-    alt={`Chain ${chainId} logo`}
+    alt={`Chain ${chainId} image`}
     width={size ?? 32}
     height={size ?? 32}
     className={cn('inline-block ml-1', chainId === 100 ? 'invert' : '', className)} />

@@ -75,6 +75,17 @@
 	disabled:group-hover:drop-shadow-none;
 }
 
+.saber-glow-reset {
+	@apply hover:!border-transparent 
+	hover:!drop-shadow-none
+	
+	group-hover:!border-transparent 
+	group-hover:!drop-shadow-none
+	
+	disabled:hover:!drop-shadow-none
+	disabled:group-hover:!drop-shadow-none;
+}
+
 .shimmer {
   background: linear-gradient(90deg, #1a1a1a 30%, #4a4a4a 60%, #1a1a1a 70%);
   background-size: 200% 100%;
@@ -111,10 +122,10 @@
 		content: '';
 		position: absolute;
 		z-index: -1;
-		left: 1px;
-		top: 1px;
-		width: calc(100% - 2px);
-		height: calc(100% - 2px);
+		left: 2px;
+		top: 2px;
+		width: calc(100% - 4px);
+		height: calc(100% - 4px);
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}
@@ -150,10 +161,10 @@
 		content: '';
 		position: absolute;
 		z-index: -1;
-		left: 1px;
-		top: 1px;
-		width: calc(100% - 2px);
-		height: calc(100% - 2px);
+		left: 2px;
+		top: 2px;
+		width: calc(100% - 4px);
+		height: calc(100% - 4px);
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}
@@ -196,10 +207,10 @@
 		content: '';
 		position: absolute;
 		z-index: -1;
-		left: 1px;
-		top: 1px;
-		width: calc(100% - 2px);
-		height: calc(100% - 2px);
+		left: 2px;
+		top: 2px;
+		width: calc(100% - 4px);
+		height: calc(100% - 4px);
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}
@@ -242,10 +253,10 @@
 		content: '';
 		position: absolute;
 		z-index: -1;
-		left: 1px;
-		top: 1px;
-		width: calc(100% - 2px);
-		height: calc(100% - 2px);
+		left: 2px;
+		top: 2px;
+		width: calc(100% - 4px);
+		height: calc(100% - 4px);
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}
@@ -281,10 +292,10 @@
 		content: '';
 		position: absolute;
 		z-index: -1;
-		left: 1px;
-		top: 1px;
-		width: calc(100% - 2px);
-		height: calc(100% - 2px);
+		left: 2px;
+		top: 2px;
+		width: calc(100% - 4px);
+		height: calc(100% - 4px);
 		background: #0a0a0a;
 		border-radius: 0.75rem;
 	}

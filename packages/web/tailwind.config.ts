@@ -2,6 +2,11 @@ import colors from 'tailwindcss/colors'
 import Theme from 'tailwindcss/defaultTheme'
 import animate from 'tailwindcss-animate'
 
+function heightSafeList() {
+  const maxheight = 101;
+  return Array(maxheight).fill(0).map((_, index) => `h-[${index}%]`);
+}
+
 export const primary = {
   ...colors.orange,
   '1000': '#281004',
@@ -17,6 +22,12 @@ export default {
   darkMode: ['class'],
   prefix: '',
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
+  safelist: [
+    ...heightSafeList(),
+    'w-[28px]', 'h-[28px]',
+    'w-[48px]', 'h-[48px]',
+    'border-primary',
+  ],
   theme: {
     container: {
       center: true,
@@ -45,6 +56,10 @@ export default {
         'field-btn': '50px',
       },
 
+      borderWidth: {
+        primary: Theme.borderWidth['2']
+      },
+
       borderRadius: {
         primary: Theme.borderRadius['xl']
       },
@@ -70,14 +85,20 @@ export default {
           '0%': { transform: 'translateY(-50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+
+				gradient: {
+  				to: {
+  					backgroundPosition: 'var(--bg-size) 0'
+  				}
+  			},
       },
 
       animation: {
         'atmospheric-pulse': 'pulse 30s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'accordion-down': 'accordion-down 0.1s ease-out',
         'accordion-up': 'accordion-up 0s ease-out',
-
         'grid': 'grid 120s linear infinite',
+				gradient: 'gradient 8s linear infinite'
       },
     },
   },

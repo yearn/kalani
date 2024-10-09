@@ -39,7 +39,7 @@ function Assets({ vault }: { vault: Vault }) {
           </tr>
           {vault.label === 'vault' && <tr>
             <td>Deposit limit</td>
-            <td className="text-right">{fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0 })}</td>
+            <td className="text-right">{fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0, orInfiniteIfGt: 100_000_000_000_000 })}</td>
           </tr>}
           <tr>
             <td>Performance fee</td>

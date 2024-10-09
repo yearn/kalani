@@ -1,50 +1,68 @@
-import ValueLabelPair from '../../../components/ValueLabelPair'
-import { useVaultFromParams } from '../../../hooks/useVault'
-import { fNumber, fPercent } from '@kalani/lib/format'
-import { getChain } from '../../../lib/chains'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/shadcn/tabs'
+import { fPercent, fUSD } from '@kalani/lib/format'
 import Assets from './tabs/Assets'
 import Reports from './tabs/Reports'
-import ChainImage from '../../../components/ChainImage'
-import EvmAddressLayout from '../../../components/EvmAddress'
+import ChainImg from '../../../components/ChainImg'
+import Hero, { HeroInset } from '../../../components/Hero'
+import TokenImg from '../../../components/TokenImg'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
+import { Tabs, Tab, TabContent } from '../../../components/Tabs'
+import { useStrategyFromParams } from '../../../hooks/useStrategy'
+import { Suspense } from 'react'
+import Skeleton from '../../../components/Skeleton'
+
+const tabClassNames = {
+  textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
+  bgClassName: `
+    [[data-open=true]_&]:bg-secondary-950 
+    group-hover:bg-secondary-950 
+    group-active:bg-secondary-950/60
+  `
+}
+
+function Suspender() {
+  const { strategy } = useStrategyFromParams()
+
+  return <section className="flex flex-col gap-8">
+    <Hero className="bg-secondary-400 text-secondary-950">
+      <div className="flex flex-col justify-center gap-2">
+        <div className={`text-4xl font-fancy`}>{strategy.name}</div>
+
+        <div className="flex items-center gap-12">
+          <div className="text-2xl font-bold">
+            TVL {fUSD(strategy.tvl.close ?? 0)}
+          </div>
+          <div className="text-2xl font-bold">
+            APY {fPercent(strategy.apy?.close ?? NaN)}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 text-sm">
+          <ChainImg chainId={strategy.chainId} size={28} />
+          <TokenImg chainId={strategy.chainId} address={strategy.asset.address} size={28} bgClassName="bg-secondary-950" />
+          <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">yearn strategy</div>
+          <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-secondary-950 text-secondary-400" />
+        </div>
+
+        <div></div>
+      </div>
+
+      <HeroInset>
+        <Tabs className="flex gap-4">
+          <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
+          <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
+        </Tabs>
+      </HeroInset>
+    </Hero>
+
+    <div className="w-full px-12">
+      <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+      <TabContent id="reports"><Reports /></TabContent>
+    </div>
+  </section>
+}
 
 export default function Strategy() {
-  const vault = useVaultFromParams()
-
-  if (!vault) return <></>
-
-  return <section className={`
-    relative w-6xl max-w-6xl mx-auto
-    flex flex-col items-center justify-start gap-8`}>
-    <div className="w-full flex items-center justify-center gap-8">
-      <div className="w-1/2 h-48 p-4 flex flex-col justify-center gap-2">
-        <div className="flex items-center gap-3 text-sm">
-          tokenized strategy 
-          <EvmAddressLayout chainId={vault.chainId} address={vault.address} />
-        </div>
-        <div className="text-4xl font-fancy">{vault.name}</div>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-            <ChainImage chainId={vault.chainId} />
-            {getChain(vault.chainId).name}
-          </div>
-          <ValueLabelPair value={fNumber(vault.tvl.close)} label="tvl" className="text-4xl" />
-          <ValueLabelPair value={fPercent(vault.apy?.close ?? NaN)} label="apy" className="text-4xl" />
-        </div>
-      </div>
-      <div className={`
-        w-1/2 h-48 flex items-center justify-center justify-center gap-12`}>
-        <div>latest report</div>
-      </div>
-    </div>
-
-    <Tabs defaultValue="assets" className="w-full">
-      <TabsList>
-        <TabsTrigger value="assets">Assets</TabsTrigger>
-        <TabsTrigger value="reports">Reports</TabsTrigger>
-      </TabsList>
-      <TabsContent value="assets"><Assets /></TabsContent>
-      <TabsContent value="reports"><Reports /></TabsContent>
-    </Tabs>
-  </section>
+  return <Suspense fallback={<Skeleton className="h-48" />}>
+    <Suspender />
+  </Suspense>
 }

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import Button from '../../components/elements/Button'
-import Bg from '../lander/Bg'
 import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
 import TextGrow from '../../components/elements/TextGrow'
 import Dialog, { DialogButton } from '../../components/Dialog'
+import ChipSlide from '../../components/ChipSlide'
+import Bg from '../lander/Bg'
+import SelectErc20 from '../../components/SelectErc20'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -42,6 +44,14 @@ export default function Eg() {
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
+
+      <div className="flex">
+        <ChipSlide className="bg-neutral-900" slide={<div className="whitespace-nowrap">👋 buenas!</div>}>chip slide</ChipSlide>
+      </div>
+
+      <div>
+        <SelectErc20 chainId={1} placeholder="Find asset by name or address" onSelect={item => toast(item?.name ?? 'what token?')} />
+      </div>
 
       <div className="flex flex-wrap items-center gap-6">
         <Button onClick={onToastAndWait} theme={toaston ? 'confirm' : 'default'}>toast and wait</Button>

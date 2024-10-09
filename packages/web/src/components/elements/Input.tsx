@@ -8,11 +8,12 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 
 export const InputClassName = cn(`
 relative w-full px-6 py-3 text-lg
-bg-neutral-950 border border-neutral-800
+bg-neutral-950 border-primary border-neutral-800
 placeholder:text-neutral-500
 
 group-hover:text-secondary-50 group-hover:bg-black group-hover:border-secondary-50
-group-has-[:focus]:text-secondary-200 group-has-[:focus]:border-secondary-200 focus:bg-black
+group-has-[:focus]:text-secondary-400 group-has-[:focus]:border-secondary-400
+focus:text-secondary-400 focus:border-secondary-400 focus:bg-black
 
 disabled:text-neutral-400 disabled:bg-transparent 
 group-hover:disabled:text-neutral-400 group-hover:disabled:border-black
