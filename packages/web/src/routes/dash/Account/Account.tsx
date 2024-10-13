@@ -8,9 +8,10 @@ import ChainImg from '../../../components/ChainImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { useIsContract } from '../../../hooks/useIsContract'
 import { useAccount } from 'wagmi'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
+import Skeleton from '../../../components/Skeleton'
 
-export default function Account({ address }: { address: EvmAddress }) {
+function Suspender({ address }: { address: EvmAddress }) {
   const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
   const user = useAccountVaults(address)
@@ -50,4 +51,10 @@ export default function Account({ address }: { address: EvmAddress }) {
       {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} account={address} />)}
     </div>
   </section>
+}
+
+export default function Account({ address }: { address: EvmAddress }) {
+  return <Suspense fallback={<Skeleton className="h-48" />}>
+    <Suspender address={address} />
+  </Suspense>
 }

@@ -6,6 +6,8 @@ import Hero, { HeroInset } from '../../../components/Hero'
 import TokenImg from '../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
+import { Suspense } from 'react'
+import Skeleton from '../../../components/Skeleton'
 
 const tabClassNames = {
   textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
@@ -16,7 +18,7 @@ const tabClassNames = {
   `
 }
 
-export default function Erc4626() {
+function Suspender() {
   const vault = useVaultFromParams()
   if (!vault) return <></>
 
@@ -55,4 +57,10 @@ export default function Erc4626() {
       <TabContent id="assets" isDefault={true}><Assets /></TabContent>
     </div>
   </section>
+}
+
+export default function Erc4626() {
+  return <Suspense fallback={<Skeleton className="h-48" />}>
+    <Suspender />
+  </Suspense>
 }
