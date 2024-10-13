@@ -4,7 +4,7 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useParams } from 'react-router-dom'
 import { nullsToUndefined } from '../lib/object'
 import { useFinderItems } from '../components/Finder/useFinderItems'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../lib/env'
 
 const StrategySchema = z.object({
@@ -158,7 +158,7 @@ export function useVaultParams() {
   return { chainId, address }
 }
 
-async function fetchVault({ chainId, address }: { chainId: number, address: `0x${string}` }) {
+async function fetchVault({ chainId, address }: { chainId: number, address: EvmAddress }) {
   const response = await fetch(KONG_GQL_URL, {
     method: 'POST',
     headers: {
@@ -177,8 +177,8 @@ async function fetchVault({ chainId, address }: { chainId: number, address: `0x$
   return response.json()
 }
 
-export function useVaultQuery({ chainId, address }: { chainId: number, address: `0x${string}` }) {
-  return useQuery({
+function useVaultQuery({ chainId, address }: { chainId: number, address: EvmAddress }) {
+  return useSuspenseQuery({
     queryKey: ['vault', chainId, address],
     queryFn: () => fetchVault({ chainId, address })
   })
