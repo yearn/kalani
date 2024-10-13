@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { useSignMessage } from 'wagmi'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAccount, useSignMessage } from 'wagmi'
 import Button from '../../../components/elements/Button'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
 import { useVaultFactory } from './useVaultFactory'
+import Dialog, { useDialog } from '../../../components/Dialog'
+import { parseEventLogs, zeroAddress } from 'viem'
+import abis from '@kalani/lib/abis'
+import EvmAddressLink from '../../../components/EvmAddressLink'
 
 export default function Actions() {
-  const { reset } = useVaultFormData()
+  const { chainId } = useAccount()
+  const { newAddress, setNewAddress, reset } = useVaultFormData()
   const { isFormValid } = useVaultFormValidation()
   const { signMessageAsync } = useSignMessage()
-
+  const indexOnDemandDialog = useDialog('index-on-demand')
   const { simulation, write, confirmation, resolveToast } = useVaultFactory()
 
   const buttonTheme = useMemo(() => {
@@ -25,7 +30,8 @@ export default function Actions() {
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [isFormValid, simulation, write, confirmation])
+    || !!newAddress
+  }, [isFormValid, simulation, write, confirmation, newAddress])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -36,8 +42,13 @@ export default function Actions() {
   }, [write, simulation])
 
   useEffect(() => {
-    if (confirmation.isSuccess) { resolveToast() }
-  }, [confirmation, resolveToast])
+    if (!newAddress && confirmation.isSuccess) {
+      resolveToast()
+      const logs = parseEventLogs({ abi: abis.vaultFactory, eventName: 'NewVault', logs: confirmation.data.logs })
+      setNewAddress(logs[0].args.vault_address)
+      indexOnDemandDialog.openDialog()
+    }
+  }, [newAddress, confirmation, resolveToast, indexOnDemandDialog, setNewAddress])
 
   const onIndex = useCallback(async () => {
     try {
@@ -54,6 +65,22 @@ export default function Actions() {
     {simulation.isError && <div className="absolute right-0 -bottom-8 text-error-400">
       Vault factory is returning an error, see console
     </div>}
-    <Button onClick={onIndex} theme={buttonTheme} disabled={disabled} className="hidden">Index Vault</Button>
+
+    <Dialog title="Your vault is ready, ser" dialogId="index-on-demand">
+      <p>
+        Your new vault is available onchain here, <EvmAddressLink chainId={chainId ?? 1} address={newAddress ?? zeroAddress} />. 
+      </p>
+      <p>
+        But before we can acccess your new vault in Kalani it has to be indexed.
+      </p>
+      <p>
+        Index your new vault?
+      </p>
+      <div className="flex justify-end gap-4">
+        <Button h={'secondary'} onClick={indexOnDemandDialog.closeDialog}>Cancel</Button>
+        <Button onClick={onIndex}>Index</Button>
+      </div>
+    </Dialog>
+
   </div>
 }

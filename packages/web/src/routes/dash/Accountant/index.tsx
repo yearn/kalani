@@ -2,7 +2,7 @@ import { fEvmAddress } from '@kalani/lib/format'
 import { getChain } from '../../../lib/chains'
 import { Accountant, withAccountant } from './useAccountant'
 import Admins from './Admins'
-import EvmAddressLayout from '../../../components/EvmAddress'
+import EvmAddressLink from '../../../components/EvmAddressLink'
 import ChainImg from '../../../components/ChainImg'
 import Hero from '../../../components/Hero'
 
@@ -14,7 +14,7 @@ function Page({ accountant }: { accountant: Accountant }) {
       <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center gap-3 text-sm">
           accountant
-          <EvmAddressLayout chainId={accountant.chainId} address={accountant.address} />
+          <EvmAddressLink chainId={accountant.chainId} address={accountant.address} />
         </div>
         <div className="text-5xl">{fEvmAddress(accountant.address)}</div>
         <div className="flex items-center gap-8">
