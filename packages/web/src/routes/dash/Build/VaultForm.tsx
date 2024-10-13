@@ -66,7 +66,7 @@ export default function VaultForm({ className }: { className?: string }) {
   const { address, chain } = useAccount()
   const { assetValidation, profitMaxUnlockTimeValidation } = useVaultFormValidation()
 
-  return <div className={cn('pb-96 flex flex-col gap-20', className)}>
+  return <div className={cn('pb-96 flex flex-col gap-24', className)}>
     <div className="flex flex-col gap-2">
       <p>Let's go!</p>
       <Input value={`Network: ${chain?.name}`} disabled />
@@ -83,9 +83,10 @@ export default function VaultForm({ className }: { className?: string }) {
       <Step3 />
     </FlyInFromBottom>}
 
-    <Suspense>
-      <Actions />
-    </Suspense>
-
+    {assetValidation.isValid && <FlyInFromBottom _key="action">
+      <Suspense>
+        <Actions />
+      </Suspense>
+    </FlyInFromBottom>}
   </div>
 }
