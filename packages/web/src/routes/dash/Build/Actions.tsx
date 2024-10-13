@@ -7,12 +7,58 @@ import Dialog, { useDialog } from '../../../components/Dialog'
 import { parseEventLogs, zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
 import EvmAddressLink from '../../../components/EvmAddressLink'
+import FlyInFromBottom from '../../../components/motion/FlyInFromBottom'
+
+function IndexDialog() {
+  const { chainId } = useAccount()
+  const { newAddress } = useVaultFormData()
+  const { signMessageAsync } = useSignMessage()
+  const indexOnDemandDialog = useDialog('index-on-demand')
+  const [indexing, setIndexing] = useState(false)
+
+  const onIndex = useCallback(async () => {
+    try {
+      const signature = await signMessageAsync({ message: `Please index this vault,\n${'0x'}` })
+      console.log(signature)
+      setIndexing(true)
+    } catch (error) {
+      console.error(error)
+    }
+  }, [signMessageAsync, setIndexing])
+
+  return <Dialog title="Your vault is ready!" dialogId="index-on-demand" fireworks={true}>
+    {!indexing && <FlyInFromBottom _key="index-on-demand-info" className="flex flex-col gap-12">
+      <p>
+        Your new vault is available onchain here, <EvmAddressLink chainId={chainId ?? 1} address={newAddress ?? zeroAddress} />
+      </p>
+      <p>
+        But before we can acccess your new vault in Kalani it has to be indexed.
+      </p>
+      <p>
+        Index your new vault?
+      </p>
+      <div className="flex justify-end gap-4">
+        <Button h={'secondary'} onClick={indexOnDemandDialog.closeDialog}>Cancel</Button>
+        <Button onClick={onIndex}>Index</Button>
+      </div>
+    </FlyInFromBottom>}
+    {indexing && <FlyInFromBottom _key="index-on-demand" className="flex flex-col gap-12">
+      <p>
+        Coming soon...
+      </p>
+      <p>
+        On demand indexing is still in development.
+      </p>
+      <div className="flex justify-end gap-4">
+        <Button onClick={indexOnDemandDialog.closeDialog}>Ok</Button>
+      </div>
+    </FlyInFromBottom>}
+  </Dialog>
+}
 
 export default function Actions() {
-  const { chainId } = useAccount()
   const { newAddress, setNewAddress, reset } = useVaultFormData()
   const { isFormValid } = useVaultFormValidation()
-  const { signMessageAsync } = useSignMessage()
   const indexOnDemandDialog = useDialog('index-on-demand')
   const { simulation, write, confirmation, resolveToast } = useVaultFactory()
 
@@ -50,37 +96,12 @@ export default function Actions() {
     }
   }, [newAddress, confirmation, resolveToast, indexOnDemandDialog, setNewAddress])
 
-  const onIndex = useCallback(async () => {
-    try {
-      const signature = await signMessageAsync({ message: `Please index this vault,\n${'0x'}` })
-      console.log(signature)
-    } catch (error) {
-      console.error(error)
-    }
-  }, [signMessageAsync])
-
   return <div className="relative mt-8 flex items-center justify-end gap-6">
     <Button onClick={reset} h={'secondary'}>Reset</Button>
     <Button onClick={onCreate} theme={buttonTheme} disabled={disabled}>Create Vault</Button>
     {simulation.isError && <div className="absolute right-0 -bottom-8 text-error-400">
       Vault factory is returning an error, see console
     </div>}
-
-    <Dialog title="Your vault is ready, ser" dialogId="index-on-demand">
-      <p>
-        Your new vault is available onchain here, <EvmAddressLink chainId={chainId ?? 1} address={newAddress ?? zeroAddress} />. 
-      </p>
-      <p>
-        But before we can acccess your new vault in Kalani it has to be indexed.
-      </p>
-      <p>
-        Index your new vault?
-      </p>
-      <div className="flex justify-end gap-4">
-        <Button h={'secondary'} onClick={indexOnDemandDialog.closeDialog}>Cancel</Button>
-        <Button onClick={onIndex}>Index</Button>
-      </div>
-    </Dialog>
-
+    <IndexDialog />
   </div>
 }

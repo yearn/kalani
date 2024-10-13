@@ -6,6 +6,43 @@ import FlyInFromBottom from './motion/FlyInFromBottom'
 import { springs } from '../lib/motion'
 import Button, { ButtonProps } from './elements/Button'
 import { useHashNav } from '../hooks/useHashNav'
+import confetti from 'canvas-confetti'
+
+function useFireworks({ enabled }: { enabled?: boolean }) {
+  useEffect(() => {
+    if (!enabled) return
+    setTimeout(() => {
+      const duration = 5 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  
+      const randomInRange = (min: number, max: number) =>
+        Math.random() * (max - min) + min;
+  
+      const interval = window.setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+  
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+  
+        const particleCount = 50 * (timeLeft / duration);
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+          zIndex: 50,
+        });
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          zIndex: 50,
+        });
+      }, 250)
+    }, 250)
+  }, [enabled])
+}
 
 export function useDialog(dialogId: string) {
   const nav = useHashNav(dialogId)
@@ -16,6 +53,7 @@ interface DialogProps {
   dialogId: string
   title?: string
   onClose?: () => void
+  fireworks?: boolean
   children: React.ReactNode
   className?: string
 }
@@ -24,11 +62,13 @@ const Dialog: React.FC<DialogProps> = ({
   dialogId,
   title,
   onClose,
+  fireworks,
   children,
   className
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null)
   const { isOpen, closeDialog } = useDialog(dialogId)
+  useFireworks({ enabled: isOpen && fireworks })
 
   const handleClose = () => {
     closeDialog()
@@ -90,6 +130,7 @@ const Dialog: React.FC<DialogProps> = ({
           {children}
         </div>
       </FlyInFromBottom>
+
     </div>,
     document.body
   )
