@@ -1,5 +1,5 @@
 import Link from '../../../../../components/elements/Link'
-import EvmAddressLayout from '../../../../../components/EvmAddress'
+import EvmAddressLink from '../../../../../components/EvmAddressLink'
 import Section from '../../../../../components/Section'
 import TxHash from '../../../../../components/TxHash'
 import { Strategy, Vault, withVault } from '../../../../../hooks/useVault'
@@ -29,7 +29,7 @@ function StrategyLayout({ vault, strategy }: { vault: Vault, strategy: Strategy 
 
   return <Section key={strategy.address} className="w-full flex items-start gap-8">
     <div className="w-1/2 h-[300px] pt-4 flex flex-col gap-1">
-      <EvmAddressLayout chainId={strategy.chainId} address={strategy.address} />
+      <EvmAddressLink chainId={strategy.chainId} address={strategy.address} />
       <div className="text-2xl">
         <Link to={linkTo}>{strategy.name}</Link>
       </div>
@@ -59,7 +59,7 @@ function StrategyLayout({ vault, strategy }: { vault: Vault, strategy: Strategy 
           <tr>
             <td>Keeper</td>
             <td className="flex justify-end">
-              {strategy.keeper && <EvmAddressLayout chainId={strategy.chainId} address={strategy.keeper} />}
+              {strategy.keeper && <EvmAddressLink chainId={strategy.chainId} address={strategy.keeper} />}
             </td>
           </tr>
         </tbody>

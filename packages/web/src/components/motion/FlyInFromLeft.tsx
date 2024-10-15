@@ -7,24 +7,26 @@ export default function FlyInFromLeft({
   _key,
   transition = springs.roll,
   waitForMount,
+  x = { start: -8, end: 0 },
   className,
   children 
 }: { 
   _key: string,
   transition?: Transition,
   waitForMount?: boolean,
+  x?: { start: number, end: number },
   className?: string,
   children: React.ReactNode 
 }) {
   const mounted = useMounted()
   const initial = useMemo(() => 
-    (!waitForMount || mounted) ? { x: -8, opacity: 0 } : false, 
+    (!waitForMount || mounted) ? { x: x.start, opacity: 0 } : false, 
   [waitForMount, mounted])
   return <motion.div className={className}
     key={`motion-${_key}`}
     transition={transition}
     initial={initial}
-    animate={{ x: 0, opacity: 1 }} >
+    animate={{ x: x.end, opacity: 1 }} >
     {children}
   </motion.div>
 }

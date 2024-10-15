@@ -189,17 +189,18 @@ export default function SetAllocator() {
   const [automate, setAutomate] = useState<boolean>(false)
   const { allocator: indexedAllocator, data: allocatorData } = useAllocator({ chainId: chainId ?? 0, vault })
 
+  const onAutomateChanged = useCallback((automate: boolean) => {
+    setAutomate(automate)
+    setOptions(current => ({ ...current, automate }))
+  }, [setAutomate, setOptions])
+
   useEffect(() => {
     if (indexedAllocator && isNothing(allocator)) {
       setAllocator(indexedAllocator)
       setIsValid(true)
+      onAutomateChanged(true)
     }
-  }, [indexedAllocator, allocator, setAllocator, setIsValid, allocatorData])
-
-  const onAutomateChanged = useCallback((automate: boolean) => {
-    setAutomate(automate)
-    setOptions(current => ({ ...current, automate }))
-  }, [allocator, setAutomate, setOptions])
+  }, [indexedAllocator, allocator, setAllocator, setIsValid, allocatorData, onAutomateChanged])
 
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)

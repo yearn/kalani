@@ -1,5 +1,5 @@
 import { isSomething } from '@kalani/lib/strings'
-import { Erc20, Erc20Schema } from '@kalani/lib/types'
+import { Erc20, Erc20Schema, EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { z } from 'zod'
@@ -14,6 +14,8 @@ export const VaultFormDataSchema = z.object({
   setName: z.function().args(z.string()).returns(z.void()),
   symbol: z.string().optional(),
   setSymbol: z.function().args(z.string()).returns(z.void()),
+  newAddress: EvmAddressSchema.optional(),
+  setNewAddress: z.function().args(EvmAddressSchema.optional()).returns(z.void()),
   reset: z.function().returns(z.void())
 })
 
@@ -28,11 +30,14 @@ export const useVaultFormData = create<VaultFormData>(set => ({
   setName: (name: string | undefined) => set({ name }),
   symbol: undefined,
   setSymbol: (symbol: string | undefined) => set({ symbol }),
-    reset: () => set({ 
+  newAddress: undefined,
+  setNewAddress: (newAddress: EvmAddress | undefined) => set({ newAddress }),
+  reset: () => set({ 
     asset: undefined,
     profitMaxUnlockTime: undefined,
     name: undefined,
-    symbol: undefined
+    symbol: undefined,
+    newAddress: undefined
   })
 }))
 

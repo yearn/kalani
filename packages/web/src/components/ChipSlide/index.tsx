@@ -18,7 +18,7 @@ export default function ChipSlide({
     onMouseLeave={() => setIsHovered(false)}>
     <div>{children}</div>
     {isHovered && <div className="absolute z-10 top-0 bottom-0 left-full h-full">
-      <FlyInFromLeft _key="chip-slide" transition={springs.glitch} className="h-full">
+      <FlyInFromLeft _key="chip-slide" transition={springs.glitch} x={{ start: -18, end: -8 }} className="h-full">
         <div className={cn('h-full px-3 py-1 rounded-r-full', className)}>{slide}</div>
       </FlyInFromLeft>
     </div>}
