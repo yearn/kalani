@@ -7,7 +7,7 @@ import MenuBar from '../../components/MenuBar'
 
 export default function Home() {
   const { address } = useAccount()
- 
+
   return <div className={`
     w-full min-h-screen sm:max-h-auto
     flex sm:block flex-col justify-between`}>

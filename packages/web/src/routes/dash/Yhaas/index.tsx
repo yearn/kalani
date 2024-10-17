@@ -52,10 +52,12 @@ function Metrics() {
     return gasSaved * wethPrice
   }, [gasSaved, wethPrice])
 
-  return <div className="flex items-center gap-20">
-    <div className="hidden 2xl:block flex flex-col items-start">
-      <div className="text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
-      <div className="text-xs text-balance">Automations</div>
+  return <div className="flex items-end gap-24">
+    <div className="relative hidden sm:block flex flex-col items-start">
+      <div className="pb-1 text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
+      <div className="absolute -bottom-5 text-sm text-nowrap">
+        Automations
+      </div>
     </div>
 
     <div className="relative flex flex-col items-start">

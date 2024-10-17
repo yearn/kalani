@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, EvmAddress } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
@@ -123,12 +123,11 @@ query Query($account: String!, $chainId: Int) {
 `
 
 export function useAccountVaults(account?: EvmAddress | undefined) {
-  const { data } = useQuery({
-    enabled: !!account,
+  const { data } = useSuspenseQuery({
     queryKey: ['accountVaults', account],
     queryFn: async () => {
       if (!account) return null
-  
+
       const response = await fetch(KONG_GQL_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -137,11 +136,11 @@ export function useAccountVaults(account?: EvmAddress | undefined) {
           variables: { account }
         })
       })
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-  
+
       return response.json()
     }
   })

@@ -8,12 +8,14 @@ import Skeleton from "../../../../components/Skeleton"
 import { useStrategyParams } from "../../../../hooks/useStrategy"
 import { cn } from "../../../../lib/shadcn"
 import TxChipSlide from "../../../../components/ChipSlide/TxChipSlide"
+import DateOrBlock from '../../../../components/DateOrBlock'
 
 export const ReportSchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,
   transactionHash: HexStringSchema,
   blockTime: z.number({ coerce: true }),
+  blockNumber: z.bigint({ coerce: true }),
   profit: z.number({ coerce: true }),
   profitUsd: z.number({ coerce: true }),
   loss: z.number({ coerce: true }),
@@ -32,6 +34,7 @@ query Query($chainId: Int, $address: String) {
     address
     transactionHash
     blockTime
+    blockNumber
     profit
     profitUsd
     loss
@@ -132,7 +135,9 @@ function Suspender() {
             <td className="flex justify-between">
               <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} className="bg-neutral-900 text-neutral-400" />
             </td>
-            <td className="text-neutral-400">{fBlockTime(report.blockTime)}</td>
+            <td className="text-neutral-400">
+              <DateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
+            </td>
             <td>
               <DisplayUSD usd={report.profitUsd} />
             </td>
