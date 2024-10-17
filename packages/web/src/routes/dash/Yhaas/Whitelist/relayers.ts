@@ -10,7 +10,8 @@ export const RELAYERS: Record<number, EvmAddress> = {
   10: '0x21BB199ab3be9E65B1E60b51ea9b0FE9a96a480a',
 }
 
-export function useRelayer() {
-  const { chainId } = useAccount()
-  return chainId ? RELAYERS[chainId] : undefined
+export function useRelayer(chainId?: number) {
+  const { chainId: accountChainId } = useAccount()
+  const chainIdToUse = chainId ?? accountChainId
+  return chainIdToUse ? RELAYERS[chainIdToUse] : undefined
 }

@@ -4,7 +4,7 @@ import Copy from '../Copy'
 import { getChain } from '../../lib/chains'
 import A from '../elements/A'
 import { useMemo } from 'react'
-import { PiArrowFatRightFill, PiArrowSquareOutBold } from 'react-icons/pi'
+import { PiArrowRight, PiArrowSquareOutBold } from 'react-icons/pi'
 import ChipSlide from '.'
 import Link from '../elements/Link'
 
@@ -23,10 +23,10 @@ export default function StrategyChipSlide({
     return `${explorer.url}/address/${address}`
   }, [chain, address])
 
-  const slide = <div className="h-full flex items-center gap-3">
+  const slide = <div className="h-full flex items-center gap-4">
     <Copy text={address} />
     <A href={href} target="_blank" rel="noreferrer"><PiArrowSquareOutBold /></A>
-    <Link to={`/strategy/${chainId}/${address}`}><PiArrowFatRightFill /></Link>
+    <Link to={`/strategy/${chainId}/${address}`}><PiArrowRight /></Link>
   </div>
 
   return <ChipSlide className={className} slide={slide}>{fEvmAddress(address)}</ChipSlide>

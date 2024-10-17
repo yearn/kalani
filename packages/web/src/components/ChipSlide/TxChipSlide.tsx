@@ -22,7 +22,7 @@ export default function TxChipSlide({
     return `${explorer.url}/tx/${txhash}`
   }, [chain, txhash])
 
-  const slide = <div className="h-full flex items-center gap-3">
+  const slide = <div className="h-full flex items-center gap-4">
     <Copy text={txhash} />
     <A href={href} target="_blank" rel="noreferrer"><PiArrowSquareOutBold /></A>
   </div>
