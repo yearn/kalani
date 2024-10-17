@@ -2,6 +2,7 @@ import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChip
 import DateOrBlock from '../../../../components/DateOrBlock'
 import { Vault, withVault } from '../../../../hooks/useVault'
 import { fTokens } from '@kalani/lib/format'
+import { getChain } from '../../../../lib/chains'
 
 function Assets({ vault }: { vault: Vault }) {
   return <div>
@@ -11,6 +12,20 @@ function Assets({ vault }: { vault: Vault }) {
           <tr>
             <td className="text-xl">Total assets</td>
             <td className="text-right text-2xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>
+          </tr>
+
+          <tr>
+            <td>Network</td>
+            <td className="flex items-center justify-end gap-4">
+              {getChain(vault.chainId).name}
+            </td>
+          </tr>
+
+          <tr>
+            <td>Address</td>
+            <td className="flex items-center justify-end gap-4">
+              <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-800" />
+            </td>
           </tr>
 
           <tr>

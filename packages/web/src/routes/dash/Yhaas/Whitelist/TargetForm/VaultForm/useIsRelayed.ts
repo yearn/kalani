@@ -8,16 +8,16 @@ import { useRelayer } from '../../relayers'
 import { containsRole, EvmAddress } from '@kalani/lib/types'
 import { zeroAddress } from 'viem'
 
-export function useIsRelayed(args: { vault?: EvmAddress, rolemask: bigint }) {
-  const { vault, rolemask } = args
+export function useIsRelayed(args: { vault?: EvmAddress, chainId?: number, rolemask: bigint }) {
+  const { vault, chainId, rolemask } = args
   const config = useConfig()
   const { targets: _targets } = useWhitelist()
   const targets = useMemo(() => vault !== undefined ? [vault] : _targets, [vault, _targets])
-  const relayer = useRelayer()
+  const relayer = useRelayer(chainId)
 
   const contracts = useMemo(() => targets.map(target => ({
-    abi: abis.vault, address: target, functionName: 'roles', args: [relayer ?? zeroAddress],
-  })), [targets, relayer])
+    abi: abis.vault, chainId, address: target, functionName: 'roles', args: [relayer ?? zeroAddress],
+  })), [targets, relayer, chainId])
 
   const options = readContractsQueryOptions(config, { contracts })
 

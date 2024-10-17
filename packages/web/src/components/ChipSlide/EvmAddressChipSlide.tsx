@@ -22,7 +22,7 @@ export default function EvmAddressChipSlide({
     return `${explorer.url}/address/${address}`
   }, [chain, address])
 
-  const slide = <div className="h-full flex items-center gap-3">
+  const slide = <div className="h-full flex items-center gap-4">
     <Copy text={address} />
     <A href={href} target="_blank" rel="noreferrer"><PiArrowSquareOutBold /></A>
   </div>
