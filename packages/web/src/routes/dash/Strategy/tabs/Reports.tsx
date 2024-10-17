@@ -3,7 +3,7 @@ import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
 import { Suspense } from "react"
-import { fBlockTime, fPercent, fUSD } from "@kalani/lib/format"
+import { fPercent, fUSD } from "@kalani/lib/format"
 import Skeleton from "../../../../components/Skeleton"
 import { useStrategyParams } from "../../../../hooks/useStrategy"
 import { cn } from "../../../../lib/shadcn"
