@@ -1,4 +1,4 @@
-import { mainnet, polygon, gnosis, arbitrum } from '@wagmi/chains'
+import { mainnet, polygon, gnosis, arbitrum, base } from '@wagmi/chains'
 
 function rpc(chainId: number) {
   if(import.meta.env.VITE_TESTNET === 'true') {
@@ -44,7 +44,16 @@ export const _arbitrum = Object.assign({}, arbitrum, {
   }
 })
 
-export const chains = [_mainnet, _gnosis, _polygon, _arbitrum] as const
+export const _base = Object.assign({}, base, {
+  "id": 8453,
+  "rpcUrls": {
+    "default": {
+      "http": [rpc(8453)]
+    }
+  }
+})
+
+export const chains = [_mainnet, _gnosis, _polygon, _arbitrum, _base] as const
 
 export function getChain(chainId: number) {
   const result = chains.find(n => n.id === chainId)

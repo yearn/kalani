@@ -1,7 +1,7 @@
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
-import { useRelayer } from '../../relayers'
+import { useRelayers } from '../../relayers'
 import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../provider'
@@ -18,7 +18,7 @@ function useWrite(args: {
   enabled: boolean
 }) {
   const { vault, rolemask, enabled } = args
-  const relayer = useRelayer()
+  const [relayer] = useRelayers()
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     address: vault, abi: abis.vault, functionName: 'set_role',
     args: [relayer, rolemask],
@@ -68,7 +68,7 @@ function ExecButton({ target }: { target: EvmAddress }) {
 }
 
 function Target({ target, rolemask }: { target: EvmAddress, rolemask: bigint }) {
-  const relayer = useRelayer()
+  const [relayer] = useRelayers()
   return <div className="px-6 flex items-center justify-end ">
     <div className="grow">
       <span className="text-neutral-400">Vault</span>
@@ -77,7 +77,7 @@ function Target({ target, rolemask }: { target: EvmAddress, rolemask: bigint }) 
       <span className="text-neutral-600">)</span>.
       <span className="font-bold text-secondary-400">set_role</span>
       <span className="text-neutral-600">(</span>
-        {fEvmAddress(relayer ?? zeroAddress)}, {rolemask.toString()}
+        {fEvmAddress(relayer)}, {rolemask.toString()}
       <span className="text-neutral-600">)</span>
     </div>
     <Suspense fallback={<></>}>

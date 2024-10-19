@@ -4,20 +4,19 @@ import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '@kalani/lib/abis'
 import { useWhitelist } from '../../provider'
-import { useRelayer } from '../../relayers'
+import { useRelayers } from '../../relayers'
 import { containsRole, EvmAddress } from '@kalani/lib/types'
-import { zeroAddress } from 'viem'
 
 export function useIsRelayed(args: { vault?: EvmAddress, chainId?: number, rolemask: bigint }) {
   const { vault, chainId, rolemask } = args
   const config = useConfig()
   const { targets: _targets } = useWhitelist()
   const targets = useMemo(() => vault !== undefined ? [vault] : _targets, [vault, _targets])
-  const relayer = useRelayer(chainId)
+  const relayers = useRelayers(chainId)
 
-  const contracts = useMemo(() => targets.map(target => ({
-    abi: abis.vault, chainId, address: target, functionName: 'roles', args: [relayer ?? zeroAddress],
-  })), [targets, relayer, chainId])
+  const contracts = useMemo(() => targets.map(target => relayers.map(relayer => ({
+    abi: abis.vault, chainId, address: target, functionName: 'roles', args: [relayer]
+  }))).flat(), [targets, relayers, chainId])
 
   const options = readContractsQueryOptions(config, { contracts })
 
@@ -26,10 +25,10 @@ export function useIsRelayed(args: { vault?: EvmAddress, chainId?: number, rolem
 
   const isRelayed = useMemo(() => {
     return query.data.every(result => 
-      result.status === 'success'
-      && containsRole(result.result as bigint, rolemask)
+      result.status !== 'success' || (result.status === 'success'
+      && containsRole(result.result as bigint, rolemask))
     )
-  }, [rolemask, relayer, query])
+  }, [targets, rolemask, relayers, query])
 
   return { ...query, data: isRelayed }
 }

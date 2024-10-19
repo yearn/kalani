@@ -29,7 +29,7 @@ function DrawerButton({ activeIfStartsWith, className, children, ...props }: Dra
     <Link {...props} className={cn(DrawerButtonClassName)}>
       {children}
     </Link>
-    <div className={`absolute inset-0 hidden group-hover:flex items-center justify-start pointer-events-none`}>
+    <div className={`absolute inset-0 hidden group-active:flex items-center justify-start pointer-events-none`}>
       <div className="w-1 h-2 bg-secondary-50/20 rounded-r-full"></div>
     </div>
     <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>

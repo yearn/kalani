@@ -1,7 +1,7 @@
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
-import { useRelayer } from '../../relayers'
+import { useRelayers } from '../../relayers'
 import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../provider'
@@ -16,7 +16,7 @@ function useWrite(
   address: EvmAddress,
   enabled: boolean
 ) {
-  const relayer = useRelayer()
+  const [relayer] = useRelayers()
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     abi: abis.strategy, address,
     functionName: 'setKeeper',
@@ -66,7 +66,7 @@ function ExecButton({ target }: { target: EvmAddress }) {
 }
 
 function Target({ target }: { target: EvmAddress }) {
-  const relayer = useRelayer()
+  const relayer = useRelayers()
   return <div className="px-6 flex items-center justify-end ">
     <div className="grow">
       <span className="text-neutral-400">Strategy</span>
