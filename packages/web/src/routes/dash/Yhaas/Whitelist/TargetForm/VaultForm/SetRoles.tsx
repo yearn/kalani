@@ -1,5 +1,4 @@
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
 import { useRelayers } from '../../relayers'
 import { Suspense, useCallback, useEffect, useMemo } from 'react'

@@ -66,7 +66,7 @@ function ExecButton({ target }: { target: EvmAddress }) {
 }
 
 function Target({ target }: { target: EvmAddress }) {
-  const relayer = useRelayers()
+  const [relayer] = useRelayers()
   return <div className="px-6 flex items-center justify-end ">
     <div className="grow">
       <span className="text-neutral-400">Strategy</span>

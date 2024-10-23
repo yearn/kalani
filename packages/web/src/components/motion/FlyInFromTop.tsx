@@ -4,7 +4,7 @@ import { springs } from '../../lib/motion'
 import { useMounted } from '../../hooks/useMounted'
 import { cn } from '../../lib/shadcn'
 
-export default function FlyInFromBottom({ 
+export default function FlyInFromTop({ 
   _key, 
   transition = springs.roll,
   waitForMount,
