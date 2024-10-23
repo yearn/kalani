@@ -29,7 +29,7 @@ function DrawerButton({ activeIfStartsWith, className, children, ...props }: Dra
     <Link {...props} className={cn(DrawerButtonClassName)}>
       {children}
     </Link>
-    <div className={`absolute inset-0 hidden group-hover:flex items-center justify-start pointer-events-none`}>
+    <div className={`absolute inset-0 hidden group-active:flex items-center justify-start pointer-events-none`}>
       <div className="w-1 h-2 bg-secondary-50/20 rounded-r-full"></div>
     </div>
     <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>
@@ -49,7 +49,7 @@ export default function Drawer({
 }) {
   return <div className={cn(`
     py-4 flex flex-col items-center justify-start gap-6
-    bg-primary-2000 border-r border-primary-1000`, className)}>
+    bg-primary-2000 border-r-primary border-primary-1000`, className)}>
 
     <DrawerButton to="/" title="Home">
       <PiWallet size={26} />

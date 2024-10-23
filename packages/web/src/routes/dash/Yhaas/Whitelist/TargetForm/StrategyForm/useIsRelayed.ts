@@ -4,20 +4,20 @@ import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '@kalani/lib/abis'
 import { useWhitelist } from '../../provider'
-import { useRelayer } from '../../relayers'
+import { useRelayers } from '../../relayers'
 import { EvmAddress } from '@kalani/lib/types'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 
-export function useIsRelayed(o?: { strategy?: EvmAddress }) {
-  const { strategy } = o ?? {}
+export function useIsRelayed(o?: { chainId?: number, strategy?: EvmAddress }) {
+  const { chainId, strategy } = o ?? {}
   const config = useConfig()
   const { targets: _targets } = useWhitelist()
   const targets = useMemo(() => strategy !== undefined ? [strategy] : _targets, [strategy, _targets])
-  const relayer = useRelayer()
+  const relayers = useRelayers(chainId)
 
   const contracts = useMemo(() => targets.map(target => ({
-    abi: abis.strategy, address: target, functionName: 'keeper'
-  })), [targets])
+    abi: abis.strategy, chainId, address: target, functionName: 'keeper'
+  })), [targets, chainId])
 
   const options = readContractsQueryOptions(config, { contracts })
 
@@ -27,9 +27,9 @@ export function useIsRelayed(o?: { strategy?: EvmAddress }) {
   const isRelayed = useMemo(() => {
     return query.data.every(result => 
       result.status === 'success' 
-      && compareEvmAddresses(result.result.toString(), relayer)
+      && relayers.some(relayer => compareEvmAddresses(result.result.toString(), relayer))
     )
-  }, [relayer, query])
+  }, [relayers, query])
 
   return { ...query, data: isRelayed }
 }

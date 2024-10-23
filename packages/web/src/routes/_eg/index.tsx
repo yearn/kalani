@@ -8,6 +8,7 @@ import ChipSlide from '../../components/ChipSlide'
 import Bg from '../lander/Bg'
 import SelectErc20 from '../../components/SelectErc20'
 import DateOrBlock from '../../components/DateOrBlock'
+import SelectProject from '../../components/SelectProject'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -49,6 +50,10 @@ export default function Eg() {
       <div className="flex items-center gap-12">
         <DateOrBlock timestamp={1714857600} block={18345645} className="bg-neutral-900" />
         <ChipSlide className="bg-neutral-900" slide={<div className="whitespace-nowrap">👋 buenas!</div>}>chip slide</ChipSlide>
+      </div>
+
+      <div>
+        <SelectProject chainId={1} placeholder="Find project" onSelect={item => toast(item?.name ?? 'what project?')} />
       </div>
 
       <div>

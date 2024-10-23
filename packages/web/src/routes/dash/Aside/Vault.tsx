@@ -8,13 +8,14 @@ import { useIsRelayed } from '../Yhaas/Whitelist/TargetForm/VaultForm/useIsRelay
 
 export default function Vault() {
   const vault = useVaultFromParams()
-  const { data: isRelayed } = useIsRelayed({ 
+  const { data: isRelayed } = useIsRelayed({
     vault: vault?.address ?? zeroAddress, 
     chainId: vault?.chainId, 
     rolemask: ROLES.REPORTING_MANAGER 
   })
 
   if (!vault) return <></>
+
   return <div>
     <div className="flex flex-col items-center justify-center gap-12">
       <Badge label="Accountant" icon={PiCalculator} enabled={!compareEvmAddresses(vault.accountant, zeroAddress)} />

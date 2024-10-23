@@ -11,7 +11,7 @@ import Skeleton from '../../../components/Skeleton'
 
 export default function Aside() {
   return <div className="flex flex-col items-center justify-center gap-12">
-    <Suspense fallback={<Skeleton className="w-full h-48 rounded-primary" />}>
+    <Suspense fallback={<Skeleton className="absolute top-20 left-0 w-full h-48" />}>
       <Routes>
         <Route path="/account" element={<Account />} />
         <Route path="/strategy/:chainId/:address" element={<Strategy />} />

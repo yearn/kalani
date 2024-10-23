@@ -1,5 +1,5 @@
 import { Chain } from 'viem'
-import { mainnet, polygon, gnosis, arbitrum } from 'viem/chains'
+import { mainnet, polygon, gnosis, arbitrum, base } from 'viem/chains'
 
 const testnet = Boolean(process.env.TESTNET ?? false)
 
@@ -13,5 +13,6 @@ export const chains: Record<number, Chain> = {
   [mainnet.id]: mainnet,
   [polygon.id]: polygon,
   [gnosis.id]: gnosis,
-  [arbitrum.id]: arbitrum
+  [arbitrum.id]: arbitrum,
+  [base.id]: base,
 }
