@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server'
 import { fetchAllOpenIssues } from '@/lib/gh'
+import { CORS_HEADERS } from '../../headers'
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-}
+const headers = { ...CORS_HEADERS }
 
 export async function OPTIONS() {
   const response = new Response('', { headers })
@@ -17,7 +14,6 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const limit = Number(searchParams.get('limit')) || 1000
     const issues = await fetchAllOpenIssues(limit)
-    await new Promise(resolve => setTimeout(resolve, 3000))
     return NextResponse.json(issues, { headers })
   } catch (error) {
     console.error('Error fetching open issues:', error)

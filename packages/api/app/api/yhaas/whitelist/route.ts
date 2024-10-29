@@ -6,12 +6,9 @@ import { chains, getRpc } from '@kalani/lib/chains'
 import makeIssueMarkdown from './issue'
 import { ApplicationSchema } from './types'
 import { generateTitle } from './title'
+import { CORS_HEADERS } from '../../headers'
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-}
+const headers = { ...CORS_HEADERS }
 
 export async function OPTIONS() {
   const response = new Response('', { headers })

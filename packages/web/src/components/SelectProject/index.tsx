@@ -1,39 +1,35 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Input from './elements/Input'
-import Skeleton from './Skeleton'
-import { useHashNav } from '../hooks/useHashNav'
+import Input from '../elements/Input'
+import Skeleton from '../Skeleton'
+import { useHashNav } from '../../hooks/useHashNav'
 import { isNothing, kabobCase } from '@kalani/lib/strings'
-import { useBreakpoints } from '../hooks/useBreakpoints'
-import { cn } from '../lib/shadcn'
-import FlyInFromBottom from './motion/FlyInFromBottom'
+import { useBreakpoints } from '../../hooks/useBreakpoints'
+import { cn } from '../../lib/shadcn'
+import FlyInFromBottom from '../motion/FlyInFromBottom'
 import { PiX } from 'react-icons/pi'
-import { ScrollArea } from './shadcn/scroll-area'
-import TokenImg from './TokenImg'
-import { EvmAddress } from '@kalani/lib/types'
-import { fEvmAddress } from '@kalani/lib/format'
+import { ScrollArea } from '../shadcn/scroll-area'
+import { fHexString } from '@kalani/lib/format'
+import { create } from 'zustand'
+import { Project, useProjects } from './useProjects'
+import Dialog, { useDialog } from '../../components/Dialog'
+import NewProject from './NewProject'
 
-interface Project {
-  chainId: number,
-  address: EvmAddress,
-  name: string
-}
+type UseSelectedProject = {
+  selectedProject: Project | undefined,
+  setSelectedProject: (project: Project | undefined) => void
+} 
 
-const PROJECTS: Project[] = [
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 1' },
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 2' },
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 3' },
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 4' },
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 5' },
-  { chainId: 1, address: '0x0000000000000000000000000000000000000000', name: 'Project 6' },
-]
+export const useSelectedProject = create<UseSelectedProject>(set => ({
+  selectedProject: undefined,
+  setSelectedProject: (project: Project | undefined) => set({ selectedProject: project })
+}))
 
 interface SelectProjectProps {
-  chainId?: number,
+  chainId: number,
   placeholder?: string,
   inputClassName?: string,
   className?: string,
   disabled?: boolean,
-  selected?: Project,
   onSelect?: (item: Project | undefined) => void
 }
 
@@ -64,30 +60,28 @@ group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secon
 rounded-primary
 `
 
-const Suspender: React.FC<SelectProjectProps> = ({ 
+const Suspender: React.FC<SelectProjectProps> = ({
   chainId, 
   placeholder, 
   className, 
   inputClassName, 
   disabled, 
-  selected,
   onSelect 
 }) => {
   const breakpoints = useBreakpoints()
-  const nav = useHashNav(kabobCase(placeholder ?? 'select-erc20'))
+  const nav = useHashNav(kabobCase(placeholder ?? 'select-project'))
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState<string>('')
-  const [selectedIndex, setSelectedIndex] = useState(-1)
-  const projects = useMemo(() => PROJECTS.filter(project => project.chainId === chainId), [chainId])
+  const selected = useSelectedProject(state => state.selectedProject)
+  const [cursorIndex, setCursorIndex] = useState(-1)
+  const { projects } = useProjects(chainId)
+  const { openDialog } = useDialog('new-project')
 
   const filter = useMemo(() => {
     if (isNothing(query)) { return projects }
     const lower = query.toLowerCase()
-    return projects.filter(project => 
-      project.name.toLowerCase().includes(lower) 
-      || project.address.toLowerCase().includes(lower)
-    )
-  }, [query, projects, breakpoints.sm])
+    return projects.filter(project => project.name.toLowerCase().includes(lower))
+  }, [query, projects])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent): void => {
@@ -103,18 +97,18 @@ const Suspender: React.FC<SelectProjectProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value
     setQuery(value)
-    setSelectedIndex(-1)
+    setCursorIndex(-1)
   }
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setSelectedIndex(prev => (prev > 0 ? prev - 1 : filter.length - 1))
+      setCursorIndex(prev => (prev > 0 ? prev - 1 : filter.length - 1))
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setSelectedIndex(prev => (prev < filter.length - 1 ? prev + 1 : 0))
+      setCursorIndex(prev => (prev < filter.length - 1 ? prev + 1 : 0))
     } else if (e.key === 'Enter') {
-      handleItemClick(filter[selectedIndex])
+      handleItemClick(filter[cursorIndex])
     } else if (e.key === 'Escape') {
       nav.close()
     }
@@ -124,6 +118,11 @@ const Suspender: React.FC<SelectProjectProps> = ({
     setQuery('')
     onSelect?.(item)
   }, [setQuery, onSelect])
+
+  const handleNewProjectClick = useCallback(async () => {
+    await new Promise(resolve => setTimeout(resolve, 10))
+    openDialog()
+  }, [openDialog])
 
   return <div data-open={nav.isOpen} className={cn(
       containerClassName, 
@@ -156,57 +155,64 @@ const Suspender: React.FC<SelectProjectProps> = ({
     </div>
 
     {selected && <div className="absolute inset-2 z-10 px-2 border-primary border-transparent flex items-center gap-6 bg-neutral-950 rounded-primary pointer-events-none">
-      <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} /></div>
-      <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
       <div className="grow truncate">{selected.name}</div>
       <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}>
         <PiX size={24} />
       </button>
     </div>}
 
-    {nav.isOpen && filter.length > 0 && (
-      <div className="sm:hidden fixed inset-0 z-50 px-6 py-6 flex items-start justify-end pointer-events-none">
-        <PiX size={32} onClick={() => nav.close()} className="text-neutral-500 pointer-events-auto" />
-      </div>
-    )}
-
     {nav.isOpen && filter.length == 0 && !selected && (
       <div className={cn(suggestionsClassName, breakpoints.sm ? 'saber-glow' : '')}>
         <ScrollArea className={scrollAreaClassName}>
-          <div className="w-full h-14 px-6 flex items-center text-neutral-400 rounded-primary">No projects found =(</div>
-        </ScrollArea>
-      </div>
-    )}
-
-    {nav.isOpen && filter.length > 0 && (
-      <div className={cn(suggestionsClassName, breakpoints.sm ? 'saber-glow' : '')}>
-        <ScrollArea className={scrollAreaClassName}>
-          <div className="w-full flex flex-col gap-3 text-neutral-200">
-            {filter.map((item, index) => (
-              <div
-                key={`${index}-${item.address}`}
-                onClick={() => handleItemClick(item)}
-                onMouseOver={() => setSelectedIndex(index)}
-                className={`
-                  px-4 py-3 flex items-center gap-6 cursor-pointer
-                  hover:bg-black hover:text-secondary-200
-                  ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
-                  ${index === 0 ? 'rounded-t-primary' : ''}
-                  ${index === filter.length - 1 ? 'rounded-b-primary' : ''}
-                `}>
-                <div>{fEvmAddress(item.address, !breakpoints.sm)}</div>
-                <div className="grow truncate">{item.name}</div>
-              </div>
-            ))}
+          <div onClick={handleNewProjectClick} className={`
+              px-4 py-3 flex items-center justify-between gap-6 cursor-pointer
+              hover:bg-black hover:text-secondary-200 rounded-b-primary
+            `}>
+            Start new project...
           </div>
         </ScrollArea>
       </div>
     )}
+
+    {nav.isOpen && filter.length > 0 && (
+      <div className={cn(suggestionsClassName, breakpoints.sm ? 'saber-glow' : '')}>
+        <ScrollArea className={scrollAreaClassName}>
+          <div className="w-full flex flex-col text-neutral-200">
+            {filter.map((item, index) => (
+              <div
+                key={`${index}-${item.id}`}
+                onClick={() => handleItemClick(item)}
+                onMouseOver={() => setCursorIndex(index)}
+                className={`
+                  px-4 py-3 flex items-center justify-between gap-6 cursor-pointer
+                  hover:bg-black hover:text-secondary-200
+                  ${index === cursorIndex ? 'bg-black text-secondary-200' : ''}
+                  ${index === 0 ? 'rounded-t-primary' : ''}
+                `}>
+                <div className="truncate">{item.name}</div>
+                <div className="sm:pr-6 text-xs">{fHexString(item.id, !breakpoints.sm)}</div>
+              </div>
+            ))}
+
+            <div onClick={handleNewProjectClick} className={`
+                px-4 py-3 flex items-center justify-between gap-6 cursor-pointer
+                hover:bg-black hover:text-secondary-200 rounded-b-primary
+              `}>
+              Start new project...
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
+    )}
+
+    <Dialog title="New project" dialogId="new-project">
+      <NewProject />
+    </Dialog>
   </div>
 }
 
 const SelectProject: React.FC<SelectProjectProps> = props => {
-  return <Suspense fallback={<div className={props.className}><Skeleton className="w-full h-10 rounded-primary" /></div>}>
+  return <Suspense fallback={<div className={props.className}><Skeleton className="w-full h-14 rounded-primary" /></div>}>
     <Suspender {...props} />
   </Suspense>
 }
