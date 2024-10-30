@@ -13,6 +13,7 @@ import { create } from 'zustand'
 import { Project, useProjects } from './useProjects'
 import Dialog, { useDialog } from '../../components/Dialog'
 import NewProject from './NewProject'
+import { useChainId } from 'wagmi'
 
 type UseSelectedProject = {
   selectedProject: Project | undefined,
@@ -25,7 +26,8 @@ export const useSelectedProject = create<UseSelectedProject>(set => ({
 }))
 
 interface SelectProjectProps {
-  chainId: number,
+  navkey?: string,
+  chainId?: number,
   placeholder?: string,
   inputClassName?: string,
   className?: string,
@@ -41,7 +43,7 @@ sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:
 sm:data-[open=true]:block
 `
 
-const _inputClassName = `h-14 py-4
+const _inputClassName = `h-12 py-4
 group-data-[open=true]:rounded-none sm:group-data-[open=true]:rounded-primary
 group-data-[open=true]:z-50 sm:group-data-[open=true]:z-auto
 pointer-events-auto`
@@ -61,21 +63,25 @@ rounded-primary
 `
 
 const Suspender: React.FC<SelectProjectProps> = ({
-  chainId, 
-  placeholder, 
-  className, 
-  inputClassName, 
-  disabled, 
-  onSelect 
+  navkey,
+  chainId,
+  placeholder = 'Select Project',
+  className,
+  inputClassName,
+  disabled,
+  onSelect
 }) => {
+  const _navkey = useMemo(() => navkey ?? kabobCase(placeholder ?? 'select-project'), [navkey, placeholder])
+  const _dialogId = useMemo(() => `${_navkey}-new-project`, [_navkey])
+  const activeChainId = useChainId()
   const breakpoints = useBreakpoints()
-  const nav = useHashNav(kabobCase(placeholder ?? 'select-project'))
+  const nav = useHashNav(_navkey)
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState<string>('')
   const selected = useSelectedProject(state => state.selectedProject)
   const [cursorIndex, setCursorIndex] = useState(-1)
-  const { projects } = useProjects(chainId)
-  const { openDialog } = useDialog('new-project')
+  const { projects } = useProjects(chainId ?? activeChainId ?? 0)
+  const { openDialog } = useDialog(_dialogId)
 
   const filter = useMemo(() => {
     if (isNothing(query)) { return projects }
@@ -131,7 +137,7 @@ const Suspender: React.FC<SelectProjectProps> = ({
     <Input
       ref={inputRef}
       type="text"
-      disabled={disabled}
+      disabled={disabled || (chainId ?? activeChainId) === undefined}
       name="selectProject"
       value={query ?? ''}
       onClick={() => nav.open()}
@@ -205,8 +211,8 @@ const Suspender: React.FC<SelectProjectProps> = ({
       </div>
     )}
 
-    <Dialog title="New project" dialogId="new-project">
-      <NewProject />
+    <Dialog title="New project" dialogId={_dialogId}>
+      <NewProject dialogId={_dialogId} />
     </Dialog>
   </div>
 }

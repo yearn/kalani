@@ -47,7 +47,7 @@ function useProjectId(name: string, governance: string | undefined) {
   })
 }
 
-export default function NewProject() {
+export default function NewProject({ dialogId }: { dialogId: string }) {
   const { chainId, address } = useAccount()
   const [name, setName] = useState('')
   const [governance, setGovernance] = useState<string | undefined>()
@@ -55,7 +55,7 @@ export default function NewProject() {
   const [management, setManagement] = useState<string | undefined>()
   const [isManagementValid, setIsManagementValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
-  const { closeDialog } = useDialog('new-project')
+  const { closeDialog } = useDialog(dialogId)
   const { data: projectId } = useProjectId(name, governance)
   const { simulation, write, confirmation, resolveToast } = useWrite(
     chainId ?? 1, name, governance, management, isFormValid
@@ -67,7 +67,7 @@ export default function NewProject() {
   }, [address])
 
   useEffect(() => {
-    setIsFormValid(name.length > 3 && isGovernanceValid && ((management ?? '').length === 0  || isManagementValid))
+    setIsFormValid(name.length > 2 && isGovernanceValid && ((management ?? '').length === 0  || isManagementValid))
   }, [name, isGovernanceValid, management, isManagementValid])
 
   const buttonTheme = useMemo(() => {
@@ -126,7 +126,7 @@ export default function NewProject() {
     </div>
 
     {confirmation.isSuccess && <FlyInFromBottom _key="indexing" className="absolute inset-0 flex flex-col gap-6">
-      <IndexProject chainId={chainId} projectId={projectId} name={name} governance={governance} />
+      <IndexProject chainId={chainId} projectId={projectId} name={name} governance={governance} dialogId={dialogId} />
     </FlyInFromBottom>}
   </div>
 }

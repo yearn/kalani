@@ -1,58 +1,86 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccount, useSignMessage } from 'wagmi'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useAccount, useReadContract } from 'wagmi'
 import Button from '../../../components/elements/Button'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
-import { useVaultFactory } from './useVaultFactory'
 import Dialog, { useDialog } from '../../../components/Dialog'
 import { parseEventLogs, zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
-import EvmAddressLink from '../../../components/EvmAddressLink'
-import FlyInFromBottom from '../../../components/motion/FlyInFromBottom'
+import { useNewVault } from './useNewVault'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
+import { fHexString } from '@kalani/lib/format'
+import { useIndexVault } from './useIndexVault'
+import { cn } from '../../../lib/shadcn'
+import { useSelectedProject } from '../../../components/SelectProject'
+import { useNavigate } from 'react-router-dom'
 
-function IndexDialog() {
+function IndexDialog({
+  blockNumber,
+  timestamp
+}: {
+  blockNumber?: bigint,
+  timestamp?: number
+}) {
   const { chainId } = useAccount()
-  const { newAddress } = useVaultFormData()
-  const { signMessageAsync } = useSignMessage()
-  const indexOnDemandDialog = useDialog('index-on-demand')
-  const [indexing, setIndexing] = useState(false)
+  const { asset, newAddress } = useVaultFormData()
+  const indexVault = useIndexVault(chainId, newAddress)
+  const isPending = useMemo(() => indexVault.state?.status === 'pending', [indexVault])
+  const isSuccess = useMemo(() => indexVault.state?.status === 'success', [indexVault])
+  const { selectedProject } = useSelectedProject()
+  const navigate = useNavigate()
+
+  const { data: apiVersion } = useReadContract({
+    abi: abis.vault, address: newAddress ?? zeroAddress, functionName: 'apiVersion'
+  })
 
   const onIndex = useCallback(async () => {
-    try {
-      const signature = await signMessageAsync({ message: `Please index this vault,\n${'0x'}` })
-      console.log(signature)
-      setIndexing(true)
-    } catch (error) {
-      console.error(error)
-    }
-  }, [signMessageAsync, setIndexing])
+    indexVault.mutation.mutate({
+      asset: asset?.address,
+      decimals: asset?.decimals,
+      apiVersion,
+      projectId: selectedProject?.id,
+      roleManager: selectedProject?.roleManager,
+      inceptBlock: blockNumber, 
+      inceptTime: timestamp
+    })
+  }, [indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp])
 
-  return <Dialog title="Your vault is ready!" dialogId="index-on-demand" fireworks={true}>
-    {!indexing && <FlyInFromBottom _key="index-on-demand-info" className="flex flex-col gap-12">
-      <p>
-        Your new vault is available onchain here, <EvmAddressLink chainId={chainId ?? 1} address={newAddress ?? zeroAddress} />
-      </p>
-      <p>
-        But before we can acccess your new vault in Kalani it has to be indexed.
-      </p>
-      <p>
-        Index your new vault?
-      </p>
-      <div className="flex justify-end gap-4">
-        <Button h={'secondary'} onClick={indexOnDemandDialog.closeDialog}>Cancel</Button>
-        <Button onClick={onIndex}>Index</Button>
+  const onOk = useCallback(() => {
+    navigate(`/vault/${chainId}/${newAddress}`, { replace: true })
+  }, [navigate, chainId, newAddress])
+
+  const imparative = useMemo(() => {
+    if (isSuccess) {
+      return 'Your vault is indexed!'
+    } else {
+      return 'But before we can acccess your new vault in Kalani it must be indexed.'
+    }
+  }, [isSuccess])
+
+  const buttonLabel = useMemo(() => {
+    if (isSuccess) return 'Check out your vault'
+    if (isPending) return 'Indexing...'
+    return `Index ${fHexString(newAddress ?? zeroAddress)}`
+  }, [isSuccess, isPending, newAddress])
+
+  const theme = useMemo(() => {
+    if (isPending) return 'confirm'
+    return 'default'
+  }, [isSuccess, isPending])
+
+  return <Dialog title="Your vault is ready!" dialogId="index-on-demand" fireworks={true} className="relative">
+    <div className={cn('flex flex-col gap-12')}>
+      <div className={cn('flex flex-col gap-6', theme)}>
+        <div>
+          Your new vault is available onchain here, 
+          <EvmAddressChipSlide chainId={chainId ?? 1} address={newAddress ?? zeroAddress} className="bg-neutral-600" />
+        </div>
+        <div>{imparative}</div>
       </div>
-    </FlyInFromBottom>}
-    {indexing && <FlyInFromBottom _key="index-on-demand" className="flex flex-col gap-12">
-      <p>
-        Coming soon...
-      </p>
-      <p>
-        On demand indexing is still in development.
-      </p>
       <div className="flex justify-end gap-4">
-        <Button onClick={indexOnDemandDialog.closeDialog}>Ok</Button>
+        {!isSuccess && <Button onClick={onIndex} theme={theme}>{buttonLabel}</Button>}
+        {isSuccess && <Button onClick={onOk}>{buttonLabel}</Button>}
       </div>
-    </FlyInFromBottom>}
+    </div>
   </Dialog>
 }
 
@@ -60,7 +88,7 @@ export default function Actions() {
   const { newAddress, setNewAddress, reset } = useVaultFormData()
   const { isFormValid } = useVaultFormValidation()
   const indexOnDemandDialog = useDialog('index-on-demand')
-  const { simulation, write, confirmation, resolveToast } = useVaultFactory()
+  const { simulation, write, confirmation, resolveToast } = useNewVault()
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -90,8 +118,8 @@ export default function Actions() {
   useEffect(() => {
     if (!newAddress && confirmation.isSuccess) {
       resolveToast()
-      const logs = parseEventLogs({ abi: abis.vaultFactory, eventName: 'NewVault', logs: confirmation.data.logs })
-      setNewAddress(logs[0].args.vault_address)
+      const [log] = parseEventLogs({ abi: abis.vaultFactory, eventName: 'NewVault', logs: confirmation.data.logs })
+      setNewAddress(log.args.vault_address)
       indexOnDemandDialog.openDialog()
     }
   }, [newAddress, confirmation, resolveToast, indexOnDemandDialog, setNewAddress])
@@ -100,8 +128,8 @@ export default function Actions() {
     <Button onClick={reset} h={'secondary'}>Reset</Button>
     <Button onClick={onCreate} theme={buttonTheme} disabled={disabled}>Create Vault</Button>
     {simulation.isError && <div className="absolute right-0 -bottom-8 text-error-400">
-      Vault factory is returning an error, see console
+      Role manager is returning an error, see console
     </div>}
-    <IndexDialog />
+    <IndexDialog blockNumber={confirmation.data?.blockNumber} timestamp={Math.floor(Date.now() / 1000)} />
   </div>
 }

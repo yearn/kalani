@@ -10,10 +10,12 @@ import ChipSlide from '.'
 export default function EvmAddressChipSlide({
   chainId,
   address,
+  prefix,
   className
 }: {
   chainId: number
   address: EvmAddress
+  prefix?: string
   className?: string
 }) {
   const chain = getChain(chainId)
@@ -27,5 +29,5 @@ export default function EvmAddressChipSlide({
     <A href={href} target="_blank" rel="noreferrer"><PiArrowSquareOutBold /></A>
   </div>
 
-  return <ChipSlide className={className} slide={slide}>{fEvmAddress(address)}</ChipSlide>
+  return <ChipSlide className={className} slide={slide}>{`${prefix ?? ''}${fEvmAddress(address)}`}</ChipSlide>
 }

@@ -23,13 +23,13 @@ export function useIndexProject(
   }, [chainId, projectId])
 
   const mutation = useMutation({
-    mutationKey: ['postThing', chainId, projectId],
+    mutationKey: ['indexProject', chainId, projectId],
     mutationFn: async (args: { roleManager: EvmAddress, inceptBlock: bigint, inceptTime: number }) => 
       await indexProject(args.roleManager, args.inceptBlock, args.inceptTime)
   })
 
   const [state] = useMutationState({
-    filters: { mutationKey: ['postThing', chainId, projectId] }
+    filters: { mutationKey: ['indexProject', chainId, projectId] }
   })
 
   return { mutation, state }

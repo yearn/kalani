@@ -10,21 +10,23 @@ import { useDialog } from '../Dialog'
 import { useSelectedProject } from '.'
 import { useProjectsNonce } from './useProjects'
 
-export default function IndexProject({ 
+export default function IndexProject({
   chainId,
   projectId, 
   name,
-  governance
+  governance,
+  dialogId
 }: { 
   chainId: number | undefined,
   projectId: HexString | undefined,
   name: string,
-  governance: string | undefined
+  governance: string | undefined,
+  dialogId: string
 }) {
   const indexProject = useIndexProject(chainId, projectId)
   const nextProjectNonce = useProjectsNonce(state => state.next)
   const { setSelectedProject } = useSelectedProject()
-  const { closeDialog } = useDialog('new-project')
+  const { closeDialog } = useDialog(dialogId)
   const isPending = useMemo(() => indexProject.state?.status === 'pending', [indexProject])
   const theme = useMemo(() => isPending ? 'theme-confirm' : 'theme-default', [isPending])
   const label = useMemo(() => isPending ? 'Indexing...' : 'OK', [isPending])
