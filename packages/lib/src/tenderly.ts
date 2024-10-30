@@ -4,7 +4,7 @@ import { PublicClient, Chain } from 'viem'
 
 export type TestnetClient = PublicClient<CustomTransport, Chain> & {
   request: (args: { 
-    method: 'tenderly_setBalance' | 'evm_snapshot' | 'evm_revert'; 
+    method: 'tenderly_setBalance' | 'evm_snapshot' | 'evm_revert'
     params: string[] 
   }) => Promise<void | string | boolean>
   setBalance: (address: EvmAddress, amount: bigint) => Promise<void>
@@ -12,7 +12,7 @@ export type TestnetClient = PublicClient<CustomTransport, Chain> & {
   revert: (snapshotId: string) => Promise<boolean>
 }
 
-export function createTestnetClient(chain: Chain) {
+export function createTestnetClient(chain: Chain): TestnetClient {
   const client = createPublicClient({
     chain, transport: http(chain.rpcUrls.default.http[0])
   }) as unknown as TestnetClient

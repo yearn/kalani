@@ -32,7 +32,7 @@ function VaultHero() {
 
       <div className="flex items-center gap-12">
         <div className="text-2xl font-bold">
-          TVL {fUSD(vault.tvl.close ?? 0)}
+          TVL {fUSD(vault.tvl?.close ?? 0)}
         </div>
         <div className="text-2xl font-bold">
           APY {fPercent(vault.apy?.close ?? NaN)}

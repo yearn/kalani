@@ -20,8 +20,7 @@ export default function Whitelist() {
   </div>
 
   return <div className="pb-96 flex flex-col gap-20">
-    <div className="flex flex-col gap-6">
-      <p>Let's go!</p>
+    <div className="flex flex-col">
       <Input value={`Network: ${chain?.name}`} disabled />
       <Input value={`Role manager: ${address}`} disabled />
     </div>

@@ -8,11 +8,12 @@ import ChipSlide from '../../components/ChipSlide'
 import Bg from '../lander/Bg'
 import SelectErc20 from '../../components/SelectErc20'
 import DateOrBlock from '../../components/DateOrBlock'
-import SelectProject from '../../components/SelectProject'
+import SelectProject, { useSelectedProject } from '../../components/SelectProject'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
   const [resolveToast, setResolveToast] = useState<(() => (value: unknown) => void)>(() => () => {})
+  const { setSelectedProject } = useSelectedProject()
 
   const onToastAndWait = useCallback(() => {
     setToaston(t => !t)
@@ -53,7 +54,10 @@ export default function Eg() {
       </div>
 
       <div>
-        <SelectProject chainId={1} placeholder="Find project" onSelect={item => toast(item?.name ?? 'what project?')} />
+        <SelectProject chainId={137} placeholder="Find project" onSelect={item => {
+          toast(item?.name ?? 'what project?')
+          setSelectedProject(item)
+        }} />
       </div>
 
       <div>

@@ -23,7 +23,7 @@ function Assets({ vault }: { vault: Vault }) {
           </tr>
           <tr>
             <td>TVL</td>
-            <td className="text-right">{fUSD(vault.tvl.close)}</td>
+            <td className="text-right">{fUSD(vault.tvl?.close ?? 0)}</td>
           </tr>
           <tr>
             <td>Allocated</td>

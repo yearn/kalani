@@ -33,8 +33,9 @@ export default function Address({
     if (frozen) return
     setHasNext(e.target.value.length > 0)
     setNext?.(e.target.value)
-    setIsNextValid?.(EvmAddressSchema.safeParse(e.target.value).success)
-    onChange?.(e.target.value, EvmAddressSchema.safeParse(e.target.value).success)
+    const parseable = EvmAddressSchema.safeParse(e.target.value).success
+    setIsNextValid?.(parseable)
+    onChange?.(e.target.value, parseable)
   }, [frozen, setHasNext, setNext, setIsNextValid, onChange])
 
   useEffect(() => setIsNextValid?.(EvmAddressSchema.safeParse(next).success), [setIsNextValid, next])

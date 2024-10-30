@@ -1,15 +1,15 @@
 import { isSomething } from '@kalani/lib/strings'
 import { Erc20, Erc20Schema, EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useMemo } from 'react'
-import { useAccount } from 'wagmi'
 import { z } from 'zod'
 import { create } from 'zustand'
+import { useSelectedProject } from '../../../components/SelectProject'
 
 export const VaultFormDataSchema = z.object({
   asset: Erc20Schema.optional(),
   setAsset: z.function().args(Erc20Schema.optional()).returns(z.void()),
-  profitMaxUnlockTime: z.number({ coerce: true }).optional(),
-  setProfitMaxUnlockTime: z.function().args(z.number({ coerce: true }).optional()).returns(z.void()),
+  category: z.number().optional(),
+  setCategory: z.function().args(z.number()).returns(z.void()),
   name: z.string().optional(),
   setName: z.function().args(z.string()).returns(z.void()),
   symbol: z.string().optional(),
@@ -24,8 +24,8 @@ export type VaultFormData = z.infer<typeof VaultFormDataSchema>
 export const useVaultFormData = create<VaultFormData>(set => ({
   asset: undefined,
   setAsset: (asset: Erc20 | undefined) => set({ asset }),
-  profitMaxUnlockTime: undefined,
-  setProfitMaxUnlockTime: (profitMaxUnlockTime: number | undefined) => set({ profitMaxUnlockTime }),
+  category: 1,
+  setCategory: (category: number) => set({ category }),
   name: undefined,
   setName: (name: string | undefined) => set({ name }),
   symbol: undefined,
@@ -34,7 +34,7 @@ export const useVaultFormData = create<VaultFormData>(set => ({
   setNewAddress: (newAddress: EvmAddress | undefined) => set({ newAddress }),
   reset: () => set({ 
     asset: undefined,
-    profitMaxUnlockTime: undefined,
+    category: undefined,
     name: undefined,
     symbol: undefined,
     newAddress: undefined
@@ -42,8 +42,15 @@ export const useVaultFormData = create<VaultFormData>(set => ({
 }))
 
 export function useVaultFormValidation() {
-  const { chainId } = useAccount()
-  const { asset, profitMaxUnlockTime, name, symbol } = useVaultFormData()
+  const { asset, category, name, symbol } = useVaultFormData()
+  const { selectedProject } = useSelectedProject()
+
+  const projectIdValidation = useMemo(() => {
+    return {
+      isValid: isSomething(selectedProject?.id),
+      message: 'Project ID is required'
+    }
+  }, [selectedProject])
 
   const assetValidation = useMemo(() => {
     return {
@@ -52,14 +59,12 @@ export function useVaultFormValidation() {
     }
   }, [asset])
 
-  const profitMaxUnlockTimeValidation = useMemo(() => {
-    const days = (profitMaxUnlockTime ?? 0) / 60 / 60 / 24
-    const recommended = chainId === 1 ? 5 : 3
+  const categoryValidation = useMemo(() => {
     return {
-      isValid: days >= recommended,
-      message: `We recommend at least ${recommended} days`
+      isValid: (category ?? 0) > 0,
+      message: 'Category is required'
     }
-  }, [chainId, profitMaxUnlockTime])
+  }, [category])
 
   const nameValidation = useMemo(() => {
     return {
@@ -76,15 +81,17 @@ export function useVaultFormValidation() {
   }, [symbol])
 
   const isFormValid = useMemo(() => {
-    return assetValidation.isValid 
-      && profitMaxUnlockTimeValidation.isValid 
-      && nameValidation.isValid 
+    return projectIdValidation.isValid
+      && assetValidation.isValid
+      && categoryValidation.isValid
+      && nameValidation.isValid
       && symbolValidation.isValid
-  }, [assetValidation, profitMaxUnlockTimeValidation, nameValidation, symbolValidation])
+  }, [projectIdValidation, assetValidation, categoryValidation, nameValidation, symbolValidation])
 
   return {
+    projectIdValidation,
     assetValidation,
-    profitMaxUnlockTimeValidation,
+    categoryValidation,
     nameValidation,
     symbolValidation,
     isFormValid
