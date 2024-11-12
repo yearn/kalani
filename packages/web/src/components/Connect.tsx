@@ -4,9 +4,11 @@ import { ReactNode } from 'react'
 
 export default function Connect({ 
   label = <>Connect</>,
+  short = false,
   className
 }: { 
   label?: ReactNode
+  short?: boolean
   className?: string 
 }) {
   return <ConnectButton.Custom>
@@ -49,7 +51,7 @@ export default function Connect({
                 onClick={openChainModal}
                 h="secondary"
                 type="button"
-                className={`border-transparent ${className}`}
+                className={`border-transparent ${short ? 'hidden' : ''} ${className}`}
               >
                 {chain.hasIcon && (
                   <div
@@ -80,7 +82,7 @@ export default function Connect({
                 onClick={openAccountModal} 
                 type="button">
                 {account.displayName}
-                {account.displayBalance
+                {!short && account.displayBalance
                   ? ` (${account.displayBalance})`
                   : ''}
               </Button>

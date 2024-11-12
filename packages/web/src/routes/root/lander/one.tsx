@@ -1,7 +1,7 @@
 import Header from './Header'
 import Bg from './Bg'
-import Finder from '../../components/Finder'
-import Wordmark from '../../components/Wordmark'
+import Finder from '../../../components/Finder'
+import Wordmark from '../../../components/Wordmark'
 import { PiMagnifyingGlass, PiVault, PiRobot } from 'react-icons/pi'
 import { ReactNode } from 'react'
 

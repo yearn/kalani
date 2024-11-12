@@ -1,18 +1,22 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import Input from '../elements/Input'
 import Button from '../elements/Button'
 import { useDialog } from '../Dialog'
 import Address from '../elements/Address'
 import { ROLE_MANAGER_FACTORY } from '@kalani/lib/addresses'
 import { useAccount, useReadContract, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { parseEventLogs, zeroAddress } from 'viem'
+import { zeroAddress } from 'viem'
 import { getAddress } from 'viem'
 import { useWriteContract } from '../../hooks/useWriteContract'
 import abis from '@kalani/lib/abis'
 import FlyInFromBottom from '../motion/FlyInFromBottom'
 import { cn } from '../../lib/shadcn'
-import IndexProject from './IndexProject'
-import { useIndexProject } from './useIndexProject'
+import { isNothing } from '@kalani/lib/strings'
+import { fHexString } from '@kalani/lib/format'
+import { useLocalProjects, useReadProject } from './useProjects'
+import { useSelectedProject } from '.'
+import { useNavigate } from 'react-router-dom'
+import Skeleton from '../Skeleton'
 
 function useWrite(
   chainId: number,
@@ -21,14 +25,25 @@ function useWrite(
   management: string | undefined,
   enabled: boolean
 ) {
+  const getAddressOrZero = useCallback((address: string | undefined) => {
+    if (isNothing(address)) return zeroAddress
+    try { return enabled ? getAddress(address!) : zeroAddress }
+    catch { return zeroAddress }
+  }, [enabled])
+
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     abi: abis.roleManagerFactory,
     chainId: chainId,
     address: ROLE_MANAGER_FACTORY,
-    args: [name, getAddress(governance ?? zeroAddress), getAddress(management ?? zeroAddress)],
+    args: [
+      name, 
+      getAddressOrZero(governance), 
+      getAddressOrZero(management)
+    ],
     functionName: 'newProject',
     query: { enabled }
   }), [chainId, name, governance, management, enabled])
+
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -47,8 +62,8 @@ function useProjectId(name: string, governance: string | undefined) {
   })
 }
 
-export default function NewProject({ dialogId }: { dialogId: string }) {
-  const { chainId, address } = useAccount()
+function Suspender({ dialogId }: { dialogId: string }) {
+  const { chainId, address, isConnected } = useAccount()
   const [name, setName] = useState('')
   const [governance, setGovernance] = useState<string | undefined>()
   const [isGovernanceValid, setIsGovernanceValid] = useState(false)
@@ -60,14 +75,17 @@ export default function NewProject({ dialogId }: { dialogId: string }) {
   const { simulation, write, confirmation, resolveToast } = useWrite(
     chainId ?? 1, name, governance, management, isFormValid
   )
-  const indexProject = useIndexProject(chainId, projectId)
 
   useEffect(() => {
     if (address) { setGovernance(address) }
   }, [address])
 
   useEffect(() => {
-    setIsFormValid(name.length > 2 && isGovernanceValid && ((management ?? '').length === 0  || isManagementValid))
+    setIsFormValid(
+      name.length > 2 
+      && isGovernanceValid 
+      && (isNothing(management) || isManagementValid)
+    )
   }, [name, isGovernanceValid, management, isManagementValid])
 
   const buttonTheme = useMemo(() => {
@@ -97,36 +115,45 @@ export default function NewProject({ dialogId }: { dialogId: string }) {
   useEffect(() => {
     if (confirmation.isSuccess) { 
       resolveToast()
-      if (indexProject.mutation.isIdle) {
-        const logs = parseEventLogs({ 
-          abi: abis.roleManagerFactory, 
-          eventName: 'NewProject', 
-          logs: confirmation.data.logs 
-        })
-        const { roleManager } = logs[0].args
-        const approximateBlockTime = Math.floor(Date.now() / 1000)
-        indexProject.mutation.mutate({ 
-          roleManager, 
-          inceptBlock: confirmation.data.blockNumber, 
-          inceptTime: approximateBlockTime 
-        })
-      }
     }
-  }, [confirmation, resolveToast, indexProject])
+  }, [confirmation, resolveToast])
+
+  const { setLocalProjects } = useLocalProjects()
+  const { setSelectedProject } = useSelectedProject()
+  const { project } = useReadProject(chainId!, projectId, confirmation.isSuccess)
+  const navigate = useNavigate()
+
+  const onOk = useCallback(async () => {
+    await setLocalProjects(projects => ([...(projects ?? []), project]))
+    setSelectedProject(project)
+    navigate('/build', { replace: true })
+  }, [setLocalProjects, setSelectedProject, project, navigate])
 
   return <div className="relative flex flex-col gap-6">
-    <div className={cn('flex flex-col gap-6', confirmation.isSuccess && 'invisible')}>
-      <Input className="theme-sim" value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
-      <Address frozen placeholder="0x governance" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
-      <Address placeholder="0x management (optional)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} />
+    {!confirmation.isSuccess && <div className={cn('flex flex-col gap-6')}>
+      <Input disabled={!isConnected} className="theme-sim" value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
+      <Address disabled={!isConnected} frozen placeholder="0x governance" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
+      <Address disabled={!isConnected} placeholder="0x management (optional)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} />
       <div className="flex items-center justify-end gap-3">
         <Button h="secondary" onClick={closeDialog}>Cancel</Button>
         <Button disabled={disabled} theme={buttonTheme} onClick={onCreate}>Create</Button>
       </div>
-    </div>
+    </div>}
 
-    {confirmation.isSuccess && <FlyInFromBottom _key="indexing" className="absolute inset-0 flex flex-col gap-6">
-      <IndexProject chainId={chainId} projectId={projectId} name={name} governance={governance} dialogId={dialogId} />
+    {confirmation.isSuccess && <FlyInFromBottom _key="ready" className="flex flex-col gap-6">
+      <div className={cn('grow rounded-primary flex flex-col gap-2 p-4 text-lg')}>
+        <div>Id: {fHexString(projectId ?? '0x')}</div>
+        <div>Name: {name}</div>
+      </div>
+      <div className="flex items-center justify-end gap-3">
+        <Button className="w-full" onClick={onOk}>Project ready, OK!</Button>
+      </div>
     </FlyInFromBottom>}
   </div>
+}
+
+export default function NewProject({ dialogId }: { dialogId: string }) {
+  return <Suspense fallback={<Skeleton className="w-full h-48 rounded-primary" />}>
+    <Suspender dialogId={dialogId} />
+  </Suspense>
 }

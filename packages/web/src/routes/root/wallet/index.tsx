@@ -1,11 +1,11 @@
 import { useAccount } from 'wagmi'
-import Drawer from '../dash/Drawer'
-import Header from '../dash/Header'
-import Account from '../dash/Account/Account'
+import Drawer from '../../dash/Drawer'
+import Header from '../../dash/Header'
+import Account from '../../dash/Account/Account'
 import { zeroAddress } from 'viem'
-import MenuBar from '../../components/MenuBar'
+import MenuBar from '../../../components/MenuBar'
 
-export default function Home() {
+export default function Wallet() {
   const { address } = useAccount()
 
   return <div className={`
@@ -19,7 +19,7 @@ export default function Home() {
 
       <div className={`
         isolate grow w-full sm:min-h-screen
-        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-primary-1000`}>
+        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
         <div className="hidden sm:block w-full h-20 border-b border-transparent"></div>
         <Account address={address ?? zeroAddress} />
       </div>

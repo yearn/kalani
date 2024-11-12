@@ -1,6 +1,6 @@
-import { Yearn } from '../../assets/icons/Yearn'
-import RetroGrid from '../../components/magicui/retro-grid-claude'
-import { cn } from '../../lib/shadcn'
+import { Yearn } from '../../../assets/icons/Yearn'
+import RetroGrid from '../../../components/magicui/retro-grid-claude'
+import { cn } from '../../../lib/shadcn'
 
 function PlaneteryDisc({ className }: { className: string }) {
   return <div className={cn('absolute rounded-full', className)}></div>

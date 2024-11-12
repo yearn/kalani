@@ -129,7 +129,7 @@ export default function Explore() {
     <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
     <div className="sm:pt-10 flex items-start">
       <div className="hidden sm:block min-w-24 border"></div>
-      <div className="isolate grow px-3 py-6 border-r border-r-primary-1000">
+      <div className="isolate grow px-3 py-10">
         <Suspense fallback={<SkeletonTiles />}>
           <Tiles />
         </Suspense>

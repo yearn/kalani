@@ -8,12 +8,14 @@ export default function FlyInFromTop({
   _key, 
   transition = springs.roll,
   waitForMount,
+  exit = 0,
   className,
   children
 }: { 
   _key: string,
   transition?: Transition,
-  waitForMount?: boolean, 
+  waitForMount?: boolean,
+  exit?: -1 | 0 | 1,
   className?: string,
   children: React.ReactNode
 }) {
@@ -25,6 +27,7 @@ export default function FlyInFromTop({
     transition={transition}
     initial={initial}
     animate={{ y: 0, opacity: 1 }}
+    exit={{ y: - exit * 8, opacity: 1 - Math.abs(exit) }}
     className={cn(className)}>
     {children}
   </motion.div>

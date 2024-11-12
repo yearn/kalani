@@ -8,9 +8,9 @@ import { Suspense } from 'react'
 import Actions from './Actions'
 import { cn } from '../../../lib/shadcn'
 import SelectProject, { useSelectedProject } from '../../../components/SelectProject'
-import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { zeroAddress } from 'viem'
 import InputInteger from './InputInteger'
+import ProjectChipSlide from '../../../components/ChipSlide/ProjectClipSlide'
 
 function Step_Project() {
   const { selectedProject, setSelectedProject } = useSelectedProject()
@@ -20,11 +20,10 @@ function Step_Project() {
       <p className="text-xl">Select a project</p>
       <SelectProject navkey="step_project" onSelect={setSelectedProject} />
       <div>
-        {selectedProject && <EvmAddressChipSlide 
-          prefix='Role manager: '
-          chainId={selectedProject?.chainId ?? 1} 
-          address={selectedProject?.roleManager ?? zeroAddress} 
-          className="bg-neutral-600" 
+        {selectedProject && <ProjectChipSlide
+          chainId={selectedProject?.chainId ?? 1}
+          id={selectedProject?.id ?? zeroAddress}
+          className="bg-neutral-600"
         />}
       </div>
     </div>
