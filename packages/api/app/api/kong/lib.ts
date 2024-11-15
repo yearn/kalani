@@ -1,11 +1,12 @@
 import { EvmAddress } from '@kalani/lib/types'
-import { useMutation } from '@tanstack/react-query'
-import { API_URL } from './env'
+import { KONG_API_HEADERS } from '../headers'
+
+const KONG_API = process.env.KONG_API
 
 async function addJob(queueName: string, jobName: string, data: any, options?: any) {
-  const response = await fetch(`${API_URL}/api/kong/mq/add`, {
+  const response = await fetch(`${KONG_API}/mq/add`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { ...KONG_API_HEADERS },
     body: JSON.stringify({ queueName, jobName, data, options })
   })
   if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`) }
@@ -13,8 +14,8 @@ async function addJob(queueName: string, jobName: string, data: any, options?: a
 }
 
 async function getJob(queueName: string, jobId: string) {
-  const response = await fetch(`${API_URL}/api/kong/mq/job?queueName=${queueName}&jobId=${jobId}`, {
-    headers: { 'Content-Type': 'application/json' }
+  const response = await fetch(`${KONG_API}/mq/job?queueName=${queueName}&jobId=${jobId}`, {
+    headers: { ...KONG_API_HEADERS }
   })
   if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`) }
   return await response.json()
@@ -38,13 +39,6 @@ export async function postThing(chainId: number, address: EvmAddress, label: str
   )
   const { queueName, jobId } = result
   return await waitForJobToFinishOrFail(queueName, jobId)
-}
-
-export function usePostThing(args: { chainId: number, address: EvmAddress, label: string, defaults: any }) {
-  return useMutation({
-    mutationKey: ['postThing', args],
-    mutationFn: () => postThing(args.chainId, args.address, args.label, args.defaults)
-  })
 }
 
 export async function extractSnapshot(abiPath: string, chainId: number, address: EvmAddress) {

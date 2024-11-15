@@ -4,7 +4,7 @@ import StepLabel from '../../../components/forms/StepLabel'
 import SelectErc20 from '../../../components/SelectErc20'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
 import FlyInFromBottom from '../../../components/motion/FlyInFromBottom'
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import Actions from './Actions'
 import { cn } from '../../../lib/shadcn'
 import SelectProject, { useSelectedProject } from '../../../components/SelectProject'
@@ -42,18 +42,39 @@ function Step_Token() {
   </div>
 }
 
+const categoryClassNames: Record<number, string> = {
+  [1]: `hover:border-green-900 hover:text-green-500
+    data-[selected=true]:border-green-900 data-[selected=true]:bg-green-900 data-[selected=true]:text-green-500
+    active:border-green-950 active:text-green-800`,
+  [2]: `hover:border-yellow-900 hover:text-yellow-500
+    data-[selected=true]:border-yellow-900 data-[selected=true]:bg-yellow-900 data-[selected=true]:text-yellow-500
+    active:border-yellow-950 active:text-yellow-800`,
+  [3]: `hover:border-red-900 hover:text-red-500
+    data-[selected=true]:border-red-900 data-[selected=true]:bg-red-900 data-[selected=true]:text-red-500
+    active:border-red-950 active:text-red-800`,
+}
+
+function CategoryChip({ category, label }: { category: number, label: string }) {
+  const { category: selectedCategory, setCategory } = useVaultFormData()
+  const selected = useMemo(() => selectedCategory === category, [selectedCategory, category])
+  return <div onClick={() => setCategory(category)} data-selected={selected} className={cn(
+    `px-6 py-2 border-primary border-neutral-900 bg-neutral-900
+    text-neutral-600 text-lg font-bold rounded-full cursor-pointer`, 
+    categoryClassNames[category])}>
+    {label}
+  </div>
+}
+
 function Step_Category() {
-  const { category, setCategory } = useVaultFormData()
-  const { categoryValidation } = useVaultFormValidation()
   return <div className="flex items-start gap-12">
     <StepLabel step={3} />
     <div className="grow flex flex-col gap-6">
-      <p className="text-xl">What category does your vault fall under?</p>
-      <InputInteger value={category} 
-        onChange={e => setCategory(Number(e.target.value))} 
-        isValid={categoryValidation.isValid}
-        validationMessage={categoryValidation.message}
-      />
+      <p className="text-xl">What's your vault's risk category?</p>
+      <div className="flex items-center gap-4">
+        <CategoryChip category={1} label="Safe" />
+        <CategoryChip category={2} label="Risky" />
+        <CategoryChip category={3} label="Degen" />
+      </div>
     </div>
   </div>
 }

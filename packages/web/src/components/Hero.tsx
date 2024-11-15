@@ -9,7 +9,7 @@ export function HeroInset({ className, children }: { className?: string, childre
 
 export default function Hero({ className, children }: { className?: string, children: React.ReactNode }) {
   return <Screen className={cn(`relative h-48 px-4 sm:px-12 pb-10 
-    flex items-end justify-between gap-12 `, className)}>
+    flex items-end justify-between gap-12 rounded-primary`, className)}>
     {children}
   </Screen>
 }

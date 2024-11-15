@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useAccount, useReadContract } from 'wagmi'
+import { useAccount, useReadContract, useSignMessage } from 'wagmi'
 import Button from '../../../components/elements/Button'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
 import Dialog, { useDialog } from '../../../components/Dialog'
@@ -20,7 +20,7 @@ function IndexDialog({
   blockNumber?: bigint,
   timestamp?: number
 }) {
-  const { chainId } = useAccount()
+  const { chainId, address } = useAccount()
   const { asset, newAddress } = useVaultFormData()
   const indexVault = useIndexVault(chainId, newAddress)
   const isPending = useMemo(() => indexVault.state?.status === 'pending', [indexVault])
@@ -32,23 +32,32 @@ function IndexDialog({
     abi: abis.vault, address: newAddress ?? zeroAddress, functionName: 'apiVersion'
   })
 
+  const { signMessageAsync } = useSignMessage()
+
   const onIndex = useCallback(async () => {
-    indexVault.mutation.mutate({
-      asset: asset?.address,
-      decimals: asset?.decimals,
-      apiVersion,
-      projectId: selectedProject?.id,
-      roleManager: selectedProject?.roleManager,
-      inceptBlock: blockNumber, 
-      inceptTime: timestamp
-    })
-  }, [indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp])
+    try {
+      const signature = await signMessageAsync({ message: `Hi, please index my vault, ${newAddress}. Thank you!` })
+      indexVault.mutation.mutate({
+        asset: asset?.address,
+        decimals: asset?.decimals,
+        apiVersion,
+        projectId: selectedProject?.id,
+        roleManager: selectedProject?.roleManager,
+        inceptBlock: blockNumber, 
+        inceptTime: timestamp,
+        signature,
+        signer: address
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }, [newAddress, indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp, address])
 
   const onOk = useCallback(() => {
     navigate(`/vault/${chainId}/${newAddress}`, { replace: true })
   }, [navigate, chainId, newAddress])
 
-  const imparative = useMemo(() => {
+  const imperative = useMemo(() => {
     if (isSuccess) {
       return 'Your vault is indexed!'
     } else {
@@ -74,7 +83,7 @@ function IndexDialog({
           Your new vault is available onchain here, 
           <EvmAddressChipSlide chainId={chainId ?? 1} address={newAddress ?? zeroAddress} className="bg-neutral-600" />
         </div>
-        <div>{imparative}</div>
+        <div>{imperative}</div>
       </div>
       <div className="flex justify-end gap-4">
         {!isSuccess && <Button onClick={onIndex} theme={theme}>{buttonLabel}</Button>}

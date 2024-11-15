@@ -22,7 +22,7 @@ function Suspender() {
         <div className="flex items-center gap-3 text-sm">
           project
         </div>
-        <div className="text-5xl">{project.name}</div>
+        <div className="text-5xl font-bold">{project.name}</div>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
           </div>
