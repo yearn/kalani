@@ -42,7 +42,9 @@ function VaultHero() {
       <div className="flex items-center gap-3 text-sm">
         <ChainImg chainId={vault.chainId} size={28} />
         <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
-        <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">yearn allocator</div>
+        <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">
+          {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
+        </div>
         <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
       </div>
 

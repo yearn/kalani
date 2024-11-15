@@ -42,7 +42,7 @@ export type VaultReport = z.infer<typeof VaultReportSchema>
 export const VaultSchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,
-  label: z.enum(['vault', 'strategy', 'erc4626']),
+  label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
   name: z.string(),
   apiVersion: z.string().optional(),
   asset: z.object({
@@ -66,7 +66,11 @@ export const VaultSchema = z.object({
   apy: z.object({ close: z.number().default(0) }).optional(),
   strategies: StrategySchema.array(),
   accounts: AccountRoleSchema.array(),
-  reports: VaultReportSchema.array()
+  reports: VaultReportSchema.array(),
+  projectId: HexStringSchema.optional(),
+  projectName: z.string().optional(),
+  yearn: z.boolean().nullish(),
+  v3: z.boolean().nullish()
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -95,6 +99,10 @@ query Query($chainId: Int, $address: String) {
     lastProfitUpdate
     totalAssets
     totalDebt
+    projectId
+    projectName
+    yearn
+    v3
 
     debts {
 			strategy

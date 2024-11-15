@@ -20,8 +20,8 @@ function IndexDialog({
   blockNumber?: bigint,
   timestamp?: number
 }) {
-  const { chainId, address } = useAccount()
-  const { asset, newAddress } = useVaultFormData()
+  const { chainId } = useAccount()
+  const { asset, newAddress, category } = useVaultFormData()
   const indexVault = useIndexVault(chainId, newAddress)
   const isPending = useMemo(() => indexVault.state?.status === 'pending', [indexVault])
   const isSuccess = useMemo(() => indexVault.state?.status === 'success', [indexVault])
@@ -41,17 +41,18 @@ function IndexDialog({
         asset: asset?.address,
         decimals: asset?.decimals,
         apiVersion,
+        category,
         projectId: selectedProject?.id,
+        projectName: selectedProject?.name,
         roleManager: selectedProject?.roleManager,
         inceptBlock: blockNumber, 
         inceptTime: timestamp,
-        signature,
-        signer: address
+        signature
       })
     } catch (error) {
       console.error(error)
     }
-  }, [newAddress, indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp, address])
+  }, [newAddress, indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp])
 
   const onOk = useCallback(() => {
     navigate(`/vault/${chainId}/${newAddress}`, { replace: true })

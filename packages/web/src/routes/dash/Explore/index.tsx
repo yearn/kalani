@@ -3,7 +3,7 @@ import Drawer from '../Drawer'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ChainImg from '../../../components/ChainImg'
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import { fEvmAddress, fPercent, fUSD } from '@kalani/lib/format'
+import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import Skeleton from '../../../components/Skeleton'
 import TokenImg from '../../../components/TokenImg'
 import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
@@ -30,25 +30,22 @@ function Minibars({ series, className }: { series: number[], className?: string 
 
 function Label({ item }: { item: FinderItem }) {
   const label = useMemo(() => {
-    switch (item.label) {
-      case 'vault': return 'yearn allocator'
-      case 'strategy': return 'yearn strategy'
-      default: return item.label
-    }
+    if (item.projectId) return item.projectName ?? `project ${fHexString(item.projectId, true)}`
+    return item.label
   }, [item])
 
   const bgClassName = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'bg-secondary-900'
-      case 'strategy': return 'bg-secondary-900'
+      case 'yVault': return 'bg-secondary-900'
+      case 'yStrategy': return 'bg-secondary-900'
       default: return 'bg-neutral-900'
     }
   }, [item])
 
   const textClassName = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'text-neutral-100'
-      case 'strategy': return 'text-neutral-100'
+      case 'yVault': return 'text-neutral-100'
+      case 'yStrategy': return 'text-neutral-100'
       default: return 'text-neutral-400'
     }
   }, [item])
@@ -58,9 +55,19 @@ function Label({ item }: { item: FinderItem }) {
   </div>
 }
 
+function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant') {
+  switch (label) {
+    case 'yVault': return 'vault'
+    case 'yStrategy': return 'strategy'
+    case 'v3': return 'vault'
+    case 'erc4626': return 'erc4626'
+    default: return label
+  }
+}
+
 function Tile({ item }: { item: FinderItem }) {
   const href = useMemo(() => {
-    return `/${item.label}/${item.chainId}/${item.address}`
+    return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
   }, [item])
 
   return <a href={href} className={`group relative p-3 flex flex-col

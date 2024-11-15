@@ -6,7 +6,7 @@ export function fElipsize(text: string, length = 48) {
 
 export function fHexString(hex: string, short = false) {
   const result = `${hex.slice(0, 6)}...${hex.slice(-4)}`
-  return short ? result.slice(0, 8) : result
+  return short ? result.slice(0, 6) : result
 }
 
 export function fEvmAddress(address: string, short = false) {

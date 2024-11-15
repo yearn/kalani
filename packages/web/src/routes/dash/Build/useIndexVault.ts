@@ -7,22 +7,23 @@ export type IndexVaultArgs = {
   asset?: EvmAddress,
   decimals?: number,
   apiVersion?: string,
+  category?: number,
   projectId?: HexString,
+  projectName?: string,
   roleManager?: EvmAddress,
   inceptBlock?: bigint,
   inceptTime?: number,
-  signature?: HexString,
-  signer?: EvmAddress
+  signature?: HexString
 }
 
 export function useIndexVault(chainId?: number, address?: EvmAddress) {
   const indexVault = useCallback(async ({
-    asset, decimals, apiVersion,
-    projectId, roleManager,
+    asset, decimals, apiVersion, category,
+    projectId, projectName, roleManager,
     inceptBlock, inceptTime, 
-    signature, signer
+    signature
   }: IndexVaultArgs) => {
-    if (!chainId || !address || !asset || !decimals || !apiVersion || !projectId || !roleManager || !inceptBlock || !inceptTime || !signature || !signer) {
+    if (!chainId || !address || !asset || !decimals || !apiVersion || !category || !projectId || !projectName || !roleManager || !inceptBlock || !inceptTime || !signature) {
       throw new Error('Missing required arguments')
     }
 
@@ -30,8 +31,9 @@ export function useIndexVault(chainId?: number, address?: EvmAddress) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chainId, address, asset, decimals, apiVersion,
-        projectId, roleManager, inceptBlock, inceptTime, signature, signer
+        chainId, address, asset, decimals, apiVersion, category,
+        projectId, projectName, roleManager, 
+        inceptBlock, inceptTime, signature
       })
     })
     if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`) }

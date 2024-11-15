@@ -18,12 +18,13 @@ const RequestDataSchema = z.object({
   asset: EvmAddressSchema,
   decimals: z.number(),
   apiVersion: z.string(),
+  category: z.number(),
   projectId: HexStringSchema,
+  projectName: z.string(),
   roleManager: EvmAddressSchema,
   inceptBlock: z.bigint({ coerce: true }),
   inceptTime: z.number(),
-  signature: HexStringSchema,
-  signer: EvmAddressSchema
+  signature: HexStringSchema
 })
 
 type RequestData = z.infer<typeof RequestDataSchema>
@@ -34,7 +35,7 @@ export async function OPTIONS() {
 }
 
 async function verifySignature(data: RequestData) {
-  const { chainId, address, roleManager, signature, signer } = data
+  const { chainId, address, roleManager, signature } = data
   const chain = chains[chainId]
   const client = createPublicClient({ chain, transport: http(getRpc(chainId)) })
   const onchainRoleManager = await client.readContract({
@@ -80,13 +81,15 @@ export async function POST(request: Request) {
 
   const { 
     chainId, address, 
-    asset, decimals, apiVersion, projectId, roleManager, 
+    asset, decimals, apiVersion, category,
+    projectId, projectName, roleManager, 
     inceptBlock, inceptTime 
   } = data
 
   await postThing(chainId, address, 'vault', {
     erc4626: true, v3: true, yearn: false,
-    asset, decimals, apiVersion, projectId, roleManager,
+    asset, decimals, apiVersion, category,
+    projectId, projectName, roleManager,
     inceptBlock, inceptTime
   })
 
