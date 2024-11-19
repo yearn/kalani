@@ -2,6 +2,7 @@ import React, { useId, useState } from 'react'
 import { PiCopyBold, PiCheck } from 'react-icons/pi'
 import FlyInFromBottom from './motion/FlyInFromBottom'
 import { springs } from '../lib/motion'
+import { useMounted } from '../hooks/useMounted'
 
 interface CopyProps {
   text: string
@@ -15,6 +16,7 @@ const className = `
 `
 
 const Copy: React.FC<CopyProps> = ({ text, size = 16 }) => {
+  const mounted = useMounted()
   const id = useId()
   const [isCopied, setIsCopied] = useState(false)
 
@@ -26,7 +28,7 @@ const Copy: React.FC<CopyProps> = ({ text, size = 16 }) => {
 
   if (isCopied) return <FlyInFromBottom _key={`copied-${id}`} transition={springs.glitch}><PiCheck size={size} /></FlyInFromBottom>
 
-  return <FlyInFromBottom _key={`ready-${id}`} waitForMount={true}><PiCopyBold size={size} onClick={handleCopy} className={className} style={{ cursor: 'pointer' }} /></FlyInFromBottom>
+  return <FlyInFromBottom _key={`ready-${id}`} parentMounted={mounted}><PiCopyBold size={size} onClick={handleCopy} className={className} style={{ cursor: 'pointer' }} /></FlyInFromBottom>
 }
 
 export default Copy

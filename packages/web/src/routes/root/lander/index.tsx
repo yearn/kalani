@@ -39,7 +39,7 @@ function Feature({
 }
 
 function LeftHero() {
-  const nav = useHashNav('get-started')
+  const nav = useHashNav('lets-go')
   return <div className="w-full min-h-screen flex items-center justify-center relative">
     <Bg />
     <section className={`
@@ -49,11 +49,13 @@ function LeftHero() {
         <div className="w-full h-full pt-[6rem] flex flex-col items-center justify-center gap-16">
           <div className="px-8 sm:px-0 flex flex-col items-start justify-end gap-3 text-neutral-900">
             <Wordmark className="py-2 text-3xl">Kalani</Wordmark>
-            <p className="font-bold text-5xl">Get your users the best yields in DeFi</p>
+            <p className="font-bold text-5xl">
+              Get your users the best yields in DeFi
+            </p>
           </div>
           <div className="w-full px-8 sm:px-0">
-            <Button className="py-6 text-2xl" onClick={nav.toggle}>
-              <CTA>🚀 Get started</CTA>
+            <Button className="py-6 text-2xl bg-primary-2000 shadow-xl" onClick={nav.toggle}>
+              <CTA>🚀 Let's go</CTA>
             </Button>
           </div>
         </div>
@@ -63,63 +65,64 @@ function LeftHero() {
 }
 
 function RightHero() {
+  const Highlight = ({ children }: { children: ReactNode }) => <span className="font-bold text-primary-400 group-active:text-secondary-400">{children}</span>
   return <div className="w-full min-h-screen bg-primary-2000 flex items-center justify-center relative">
     <section className="px-4 flex flex-col items-start justify-center gap-16 text-neutral-300">
       <Feature href="/build" 
         icon={<PiVault size={96} />} 
         title="Build" 
-        description=<>Build vaults on <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn V3</span> protocol, allocate to any 4626 vault or strategy</>
+        description=<>Build <Highlight>vaults</Highlight> on Yearn V3 protocol, allocate to any 4626 vault or strategy</>
       />
       <Feature href="/yhaas" 
         icon={<PiRobot size={96} />} 
         title="Automate" 
-        description=<>Automate your vaults and strategies with <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn yHaaS</span></>
+        description=<>Automate the <Highlight>tending and harvesting</Highlight> of your vaults with Yearn yHaaS</>
       />
       <Feature href="/fees" 
         icon={<PiMoneyWavy size={96} />} 
         title="Earn" 
-        description=<>Earn management <span className="font-bold text-primary-400 group-active:text-secondary-400">fees</span> on your vaults, claim them in the app</>
+        description=<>Earn management <Highlight>fees</Highlight> on your vaults, claim them in the app</>
       />
     </section>
   </div>
 }
 
-function GetStarted() {
+function LetsGo() {
   return <div className="w-[280px] flex flex-col gap-6">
     <div>
       <h1 className="text-2xl font-bold">Create a project</h1>
       <p className="text-neutral-500">Projects are unique groups of addresses used for deploying and managing your vaults.</p>
     </div>
     <Connect className="w-full py-6 border-neutral-800" short />
-    <NewProject dialogId="get-started" />
+    <NewProject dialogId="lets-go" />
   </div>
 }
 
 export default function Lander() {
   const mounted = useMounted()
-  const nav = useHashNav('get-started')
+  const nav = useHashNav('lets-go')
 
-  return <div className="relative w-full min-h-screen flex flex-col sm:flex-row">
+  return <div className="relative w-full min-h-screen flex flex-col sm:flex-row sm:overflow-hidden">
     {!nav.isOpen && <Header />}
 
     <AnimatePresence>
-      {!nav.isOpen && <FlyInFromBottom _key="left-hero" transition={springs.slowRoll} exit={1} waitForMount={!mounted} 
+      {!nav.isOpen && <FlyInFromBottom _key="left-hero" transition={springs.slowRoll} exit={1} parentMounted={mounted} 
         className="w-full sm:w-1/2 min-h-screen">
         <LeftHero />
       </FlyInFromBottom>}
     </AnimatePresence>
 
     <AnimatePresence>
-      {!nav.isOpen && <FlyInFromTop _key="right-hero" transition={springs.slowRoll} exit={1} waitForMount={!mounted} 
+      {!nav.isOpen && <FlyInFromTop _key="right-hero" transition={springs.slowRoll} exit={1} parentMounted={mounted} 
         className="w-full sm:w-1/2 min-h-screen">
         <RightHero />
       </FlyInFromTop>}
     </AnimatePresence>
 
     <AnimatePresence>
-      {nav.isOpen && <FlyInFromBottom _key="get-started" transition={springs.slowGlitch} exit={1} 
+      {nav.isOpen && <FlyInFromBottom _key="lets-go" transition={springs.slowGlitch} exit={1} 
         className="absolute z-50 inset-0 flex flex-col items-center justify-center gap-8">
-        <GetStarted />
+        <LetsGo />
       </FlyInFromBottom>}
     </AnimatePresence>
   </div>

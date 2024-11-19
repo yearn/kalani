@@ -52,7 +52,7 @@ function SetAddress({
   setChanged: (changed: boolean) => void
 }) {
   const { isConnected, chainId, address } = useAccount()
-  const vault = useVaultFromParams()
+  const { vault } = useVaultFromParams()
   const [previous, setPrevious] = useState<EvmAddress | undefined>(undefined)
   const [roles, setRoles] = useState<bigint | undefined>(undefined)
 

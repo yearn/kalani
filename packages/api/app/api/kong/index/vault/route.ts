@@ -8,7 +8,7 @@ import { http } from 'viem'
 import { createPublicClient } from 'viem'
 import { chains } from '@kalani/lib/chains'
 import abis from '@kalani/lib/abis'
-import { extractSnapshot, postThing } from '../../lib'
+import { extractLogs, extractSnapshot, postThing } from '../../lib'
 
 const headers = { ...CORS_HEADERS }
 
@@ -92,6 +92,8 @@ export async function POST(request: Request) {
     projectId, projectName, roleManager,
     inceptBlock, inceptTime
   })
+
+  await extractLogs('yearn/3/vault', chainId, address, inceptBlock - 1n, inceptBlock + 1n)
 
   await extractSnapshot('yearn/3/vault', chainId, address)
 

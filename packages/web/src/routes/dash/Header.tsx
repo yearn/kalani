@@ -12,7 +12,7 @@ export default function Header({
   className?: string
 }) {
   return <header
-    className={cn(`bg-primary-2000/60 backdrop-blur border-b-primary border-neutral-900`, className)}>
+    className={cn(`bg-grill border-b-primary border-neutral-900`, className)}>
     <div className="mx-auto w-full h-20 pl-32 pr-6 flex items-center justify-between gap-4">
       <div className="grow flex items-center justify-start">
         <Finder

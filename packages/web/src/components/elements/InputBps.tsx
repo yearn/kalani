@@ -1,26 +1,36 @@
-import { useCallback, useMemo, useState } from 'react'
-import Input from '../../../components/elements/Input'
-import { cn } from '../../../lib/shadcn'
+import { useCallback, useMemo } from 'react'
+import Input from './Input'
+import { cn } from '../../lib/shadcn'
+import useLocalStorage from 'use-local-storage'
 
-export default function InputSeconds({
-  seconds,
+export function useInputBpsSettings() {
+  const options = ['bps', '%']
+  const [setting, setSetting] = useLocalStorage('input-bps', '%')
+  const next = useCallback(() => {
+    const index = (options.indexOf(setting) + 1) % options.length
+    setSetting(options[index])
+  }, [setting, setSetting])
+  return { setting, next }
+}
+
+export default function InputBps({
+  bps,
   disabled,
-  startInDaysMode,
   onChange,
   className,
   isValid,
   validationMessage
 }: {
-  seconds?: number | string | undefined,
+  bps?: number | string | undefined,
   disabled?: boolean,
-  startInDaysMode?: boolean,
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   isValid?: boolean,
   validationMessage?: string
 }) {
-  const [isDaysMode, setIsDaysMode] = useState(startInDaysMode || false)
-  const secondsPerDay = 60 * 60 * 24
+  const { setting, next } = useInputBpsSettings()
+  const isPercentMode = useMemo(() => setting === '%', [setting])
+  const max = useMemo(() => isPercentMode ? 100 : 10_000, [isPercentMode])
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === '.' || event.key === ',') {
@@ -29,21 +39,23 @@ export default function InputSeconds({
   }, [])
 
   const displayValue = useMemo(() => {
-    return isDaysMode 
-      ? Math.floor((Number(seconds) || 0) / secondsPerDay).toString() 
-      : seconds?.toString() || ''
-  }, [isDaysMode, seconds])
+    return isPercentMode 
+      ? (100.0 * (Math.floor((Number(bps) ?? 0)) / 10_000.0)).toFixed(2).toString() 
+      : bps?.toString() ?? ''
+  }, [isPercentMode, bps])
 
   const _onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const secondsValue = isDaysMode ? Number(value) * secondsPerDay : Number(value)
+    const value = Number(e.target.value)
+    if (value < 0 || value > max) return
+
+    const bpsValue = isPercentMode ? Math.floor((value / 100) * 10_000) : value
     if (onChange) {
       onChange({
         ...e,
-        target: { ...e.target, value: secondsValue.toString() }
+        target: { ...e.target, value: bpsValue.toString() }
       })
     }
-  }, [isDaysMode, onChange, secondsPerDay])
+  }, [isPercentMode, onChange, max])
 
   return <div className="group relative">
     <Input
@@ -60,13 +72,12 @@ export default function InputSeconds({
       flex items-center justify-end
       pointer-events-none`)}>
       <button 
-        className={`px-3 py-1 
+        className={`px-6 py-1 text-lg
           bg-neutral-900 text-neutral-600 hover:text-neutral-50 
           rounded-full cursor-pointer pointer-events-auto`}
-        onClick={() => setIsDaysMode(current => !current)}
-        disabled={disabled}
-      >
-        {isDaysMode ? 'days' : 'seconds'}
+        onClick={next}
+        disabled={disabled}>
+        {setting}
       </button>
     </div>
     <div className={cn('absolute right-0 -bottom-6 text-error-500 text-xs whitespace-nowrap', isValid ? 'hidden' : '')}>

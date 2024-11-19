@@ -9,6 +9,7 @@ import Bg from '../root/lander/Bg'
 import SelectErc20 from '../../components/SelectErc20'
 import DateOrBlock from '../../components/DateOrBlock'
 import SelectProject, { useSelectedProject } from '../../components/SelectProject'
+import InputBps from '../../components/elements/InputBps'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -44,9 +45,15 @@ export default function Eg() {
     if (!toaston) resolveToast()
   }, [toaston, resolveToast])
 
+  const [bps, setBps] = useState(100)
+
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
+
+      <div className="flex items-center gap-12 w-32">
+        <InputBps bps={bps} isValid={true} className="w-[200px]" onChange={e => setBps(Number(e.target.value))} />
+      </div>
 
       <div className="flex items-center gap-12">
         <DateOrBlock timestamp={1714857600} block={18345645} className="bg-neutral-900" />

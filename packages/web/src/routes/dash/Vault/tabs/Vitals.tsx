@@ -4,7 +4,7 @@ import { div, mulb } from '@kalani/lib/bmath'
 import { fBps, fPercent, fTokens, fUSD } from '@kalani/lib/format'
 import { useMemo } from 'react'
 
-function Assets({ vault }: { vault: Vault }) {
+function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const allocated = useMemo(() => vault?.strategies.reduce((acc, strategy) => acc + Number(strategy.targetDebtRatio), 0) ?? 0, [vault])
   const deployed = useMemo(() => {
@@ -37,7 +37,7 @@ function Assets({ vault }: { vault: Vault }) {
             <td>Idle assets</td>
             <td className="text-right">{fTokens(idle, vault.asset.decimals)}</td>
           </tr>
-          {vault.label === 'vault' && <tr>
+          {vault.label === 'yVault' && <tr>
             <td>Deposit limit</td>
             <td className="text-right">{fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0, orInfiniteIfGt: 100_000_000_000_000 })}</td>
           </tr>}
@@ -51,4 +51,4 @@ function Assets({ vault }: { vault: Vault }) {
   </Section>
 }
 
-export default withVault(Assets)
+export default withVault(Vitals)

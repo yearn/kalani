@@ -6,6 +6,8 @@ import { nullsToUndefined } from '../lib/object'
 import { useFinderItems } from '../components/Finder/useFinderItems'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../lib/env'
+import { useCallback } from 'react'
+import useLocalStorage from 'use-local-storage'
 
 const StrategySchema = z.object({
   chainId: z.number(),
@@ -74,6 +76,21 @@ export const VaultSchema = z.object({
 })
 
 export type Vault = z.infer<typeof VaultSchema>
+
+export const VaultStrategiesSchema = z.object({
+  chainId: z.number(),
+  vault: EvmAddressSchema,
+  address: EvmAddressSchema,
+  name: z.string(),
+  keeper: EvmAddressSchema.optional(),
+  yearn: z.boolean().nullish(),
+  lastReportDetail: z.object({
+    blockTime: z.bigint({ coerce: true }),
+    transactionHash: HexStringSchema
+  }).optional()
+})
+
+export type VaultStrategy = z.infer<typeof VaultStrategiesSchema>
 
 const QUERY = `
 query Query($chainId: Int, $address: String) {
@@ -192,14 +209,37 @@ function useVaultQuery({ chainId, address }: { chainId: number, address: EvmAddr
   })
 }
 
-export function useVault({ chainId, address }: { chainId: number, address: EvmAddress }) {
-  const { data } = useVaultQuery({ chainId, address })
-  const { data: finderItems } = useFinderItems()
+export function useLocalVaultStrategies() {
+  const [localVaultStrategies, _setLocalVaultStrategies] = useLocalStorage<VaultStrategy[]>('use-local-vault-strategies', [])
+  const setLocalVaultStrategies = useCallback(async (setter: (vaultStrategies: VaultStrategy[]) => VaultStrategy[]) => {
+    _setLocalVaultStrategies(vaultStrategies => setter(vaultStrategies ?? []))
+    await new Promise(resolve => setTimeout(resolve, 10))
+  }, [_setLocalVaultStrategies])
+  return { localVaultStrategies, setLocalVaultStrategies }
+}
 
-  if (!data) return undefined
+export function useVault({ chainId, address }: { chainId: number, address: EvmAddress }) {
+  const query = useVaultQuery({ chainId, address })
+  const { data } = query
+  const { data: finderItems } = useFinderItems()
+  const { localVaultStrategies } = useLocalVaultStrategies()
+
+  if (!data) return { query, vault: undefined }
 
   const vault = data.data.vault
-  const strategies = data.data.vaultStrategies.map((strategy: any) => {
+  const vaultStrategies = [
+    ...data.data.vaultStrategies,
+    ...localVaultStrategies.filter(strategy => 
+      strategy.vault === vault.address
+      && !data.data.vaultStrategies.some((vaultStrategy: any) => 
+        strategy.chainId === vaultStrategy.chainId
+        && compareEvmAddresses(vaultStrategy.address, strategy.address)
+        && compareEvmAddresses(vaultStrategy.vault, strategy.vault)
+      )
+    )
+  ]
+
+  const strategies = vaultStrategies.map((strategy: any) => {
     const debt = vault.debts.find((debt: any) => debt.strategy === strategy.address)
     return {
       ...strategy,
@@ -211,13 +251,13 @@ export function useVault({ chainId, address }: { chainId: number, address: EvmAd
 
   const item = finderItems?.find(item => item.chainId === vault.chainId && compareEvmAddresses(item.address, vault.address))
 
-  return VaultSchema.parse(nullsToUndefined({
-    label: item?.label ?? 'vault',
+  return { query, vault: VaultSchema.parse(nullsToUndefined({
+    label: item?.label ?? 'erc4626',
     ...vault,
     strategies,
     accounts: data.data.accounts,
     reports: data.data.reports
-  }))
+  }))}
 }
 
 export function useVaultFromParams() {
@@ -227,7 +267,7 @@ export function useVaultFromParams() {
 
 export function withVault(WrappedComponent: React.ComponentType<{ vault: Vault }>) {
   return function ComponentWithVault(props: any) {
-    const vault = useVaultFromParams()
+    const { vault } = useVaultFromParams()
     if (!vault) return <></>
     return <WrappedComponent vault={vault} {...props} />
   }

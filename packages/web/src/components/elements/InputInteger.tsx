@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import Input from '../../../components/elements/Input'
-import { cn } from '../../../lib/shadcn'
+import Input from './Input'
+import { cn } from '../../lib/shadcn'
 
 export default function InputInteger({
   value,

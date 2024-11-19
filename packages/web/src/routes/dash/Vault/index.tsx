@@ -1,7 +1,7 @@
 import { useVaultFromParams } from '../../../hooks/useVault'
 import { fPercent, fUSD } from '@kalani/lib/format'
 import Roles from './tabs/Roles'
-import Assets from './tabs/Assets'
+import Vitals from './tabs/Vitals'
 import Strategies from './tabs/Strategies'
 import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
@@ -13,6 +13,7 @@ import TokenImg from '../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
+import { useAllocator } from './useAllocator'
 
 const tabClassNames = {
   textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
@@ -24,8 +25,11 @@ const tabClassNames = {
 }
 
 function VaultHero() {
-  const vault = useVaultFromParams()
+  const { vault } = useVaultFromParams()
+  const { allocator } = useAllocator()
+
   if (!vault) return <></>
+
   return <Hero className="bg-secondary-400 text-secondary-950">
     <div className="flex flex-col justify-center gap-2">
       <div className={`text-4xl font-fancy`}>{vault.name}</div>
@@ -35,7 +39,7 @@ function VaultHero() {
           TVL {fUSD(vault.tvl?.close ?? 0)}
         </div>
         <div className="text-2xl font-bold">
-          APY {fPercent(vault.apy?.close ?? NaN)}
+          APY {fPercent(vault.apy?.close) ?? '-.--%'}
         </div>
       </div>
 
@@ -53,10 +57,10 @@ function VaultHero() {
 
     <HeroInset>
       <Tabs className="flex gap-4">
-        <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
+        <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
+        {allocator && <Tab id="allocator" classNames={tabClassNames}>Allocator</Tab>}
         <Tab id="strategies" classNames={tabClassNames}>Strategies</Tab>
         <Tab id="accountant" classNames={tabClassNames}>Accountant</Tab>
-        {vault.strategies.length > 1 && <Tab id="allocator" classNames={tabClassNames}>Allocator</Tab>}
         <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
         <Tab id="roles" classNames={tabClassNames}>Roles</Tab>
       </Tabs>
@@ -65,13 +69,16 @@ function VaultHero() {
 }
 
 function VaultContent() {
-  const vault = useVaultFromParams()
+  const { vault } = useVaultFromParams()
+  const { allocator } = useAllocator()
+
   if (!vault) return <></>
+
   return <div className="w-full px-12">
-    <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+    <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
+    {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
     <TabContent id="strategies"><Strategies /></TabContent>
     <TabContent id="accountant"><Accountant /></TabContent>
-    {vault.strategies.length > 1 && <TabContent id="allocator"><Allocator /></TabContent>}
     <TabContent id="reports"><Reports /></TabContent>
     <TabContent id="roles"><Roles /></TabContent>
   </div>

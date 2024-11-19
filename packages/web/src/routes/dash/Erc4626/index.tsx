@@ -19,7 +19,8 @@ const tabClassNames = {
 }
 
 function Suspender() {
-  const vault = useVaultFromParams()
+  const { vault } = useVaultFromParams()
+
   if (!vault) return <></>
 
   return <section className="flex flex-col gap-8">

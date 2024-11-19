@@ -13,6 +13,19 @@ import { cn } from '../../../lib/shadcn'
 import { useSelectedProject } from '../../../components/SelectProject'
 import { useNavigate } from 'react-router-dom'
 
+function useResetEverything() {
+  const { reset } = useVaultFormData()
+  const indexVault = useIndexVault()
+  const newVault = useNewVault()
+  const { setSelectedProject } = useSelectedProject()
+  return useCallback(() => {
+    indexVault.mutation.reset()
+    newVault.write.reset()
+    reset()
+    setSelectedProject(undefined)
+  }, [indexVault, newVault, reset, setSelectedProject])
+}
+
 function IndexDialog({
   blockNumber,
   timestamp
@@ -27,6 +40,8 @@ function IndexDialog({
   const isSuccess = useMemo(() => indexVault.state?.status === 'success', [indexVault])
   const { selectedProject } = useSelectedProject()
   const navigate = useNavigate()
+  const dialog = useDialog('index-on-demand')
+  const resetEverything = useResetEverything()
 
   const { data: apiVersion } = useReadContract({
     abi: abis.vault, address: newAddress ?? zeroAddress, functionName: 'apiVersion'
@@ -55,8 +70,14 @@ function IndexDialog({
   }, [newAddress, indexVault, asset, apiVersion, selectedProject, blockNumber, timestamp])
 
   const onOk = useCallback(() => {
-    navigate(`/vault/${chainId}/${newAddress}`, { replace: true })
-  }, [navigate, chainId, newAddress])
+    navigate(`/vault/${chainId}/${newAddress}?allocator`, { replace: true })
+    resetEverything()
+  }, [navigate, chainId, newAddress, resetEverything])
+
+  const onCancel = useCallback(() => {
+    resetEverything()
+    dialog.closeDialog()
+  }, [resetEverything, dialog])
 
   const imperative = useMemo(() => {
     if (isSuccess) {
@@ -67,7 +88,7 @@ function IndexDialog({
   }, [isSuccess])
 
   const buttonLabel = useMemo(() => {
-    if (isSuccess) return 'Check out your vault'
+    if (isSuccess) return 'Your vault ->'
     if (isPending) return 'Indexing...'
     return `Index ${fHexString(newAddress ?? zeroAddress)}`
   }, [isSuccess, isPending, newAddress])
@@ -87,18 +108,22 @@ function IndexDialog({
         <div>{imperative}</div>
       </div>
       <div className="flex justify-end gap-4">
-        {!isSuccess && <Button onClick={onIndex} theme={theme}>{buttonLabel}</Button>}
-        {isSuccess && <Button onClick={onOk}>{buttonLabel}</Button>}
+        {!isSuccess && <Button onClick={onIndex} theme={theme} disabled={isPending}>{buttonLabel}</Button>}
+        {isSuccess && <>
+          <Button onClick={onCancel} h="secondary">Back</Button>
+          <Button onClick={onOk}>{buttonLabel}</Button>
+        </>}
       </div>
     </div>
   </Dialog>
 }
 
 export default function Actions() {
-  const { newAddress, setNewAddress, reset } = useVaultFormData()
+  const { newAddress, setNewAddress } = useVaultFormData()
   const { isFormValid } = useVaultFormValidation()
   const indexOnDemandDialog = useDialog('index-on-demand')
   const { simulation, write, confirmation, resolveToast } = useNewVault()
+  const resetEverything = useResetEverything()
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -135,8 +160,8 @@ export default function Actions() {
   }, [newAddress, confirmation, resolveToast, indexOnDemandDialog, setNewAddress])
 
   return <div className="relative mt-8 flex items-center justify-end gap-6">
-    <Button onClick={reset} h={'secondary'}>Reset</Button>
-    <Button onClick={onCreate} theme={buttonTheme} disabled={disabled}>Create Vault</Button>
+    <Button onClick={resetEverything} h={'secondary'}>Reset</Button>
+    <Button onClick={onCreate} theme={buttonTheme} disabled={disabled}>Deploy Vault</Button>
     {simulation.isError && <div className="absolute right-0 -bottom-8 text-error-400">
       Role manager is returning an error, see console
     </div>}

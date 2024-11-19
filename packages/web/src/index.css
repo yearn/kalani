@@ -304,3 +304,11 @@
 .theme-error {
 	@apply !border-error-400 !text-error-400;
 }
+
+.bg-grill {
+	background-color: transparent;
+	background-image: radial-gradient(transparent 1px, #040200 1px);
+	background-size: 4px 4px;
+	backdrop-filter: blur(3px);
+	opacity: 1;
+}

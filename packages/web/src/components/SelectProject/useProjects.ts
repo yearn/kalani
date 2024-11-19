@@ -64,8 +64,8 @@ async function fetchProjects(chainId: number, nonce: string) {
 
 export function useLocalProjects() {
   const [localProjects, _setLocalProjects] = useLocalStorage<Project[]>('use-local-projects', [])
-  const setLocalProjects = useCallback(async (updater: (projects: Project[]) => Project[]) => {
-    _setLocalProjects(projects => updater(projects ?? []))
+  const setLocalProjects = useCallback(async (setter: (projects: Project[]) => Project[]) => {
+    _setLocalProjects(projects => setter(projects ?? []))
     await new Promise(resolve => setTimeout(resolve, 10))
   }, [_setLocalProjects])
   return { localProjects, setLocalProjects }
@@ -89,7 +89,12 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
 
   const projects = useMemo(() => {
     const indexed = ProjectSchema.array().parse(query.data?.data?.projects ?? [])
-    const result = [...indexed, ...localProjects]
+    const result = [
+      ...indexed, 
+      ...localProjects.filter(project => 
+        !indexed.some(indexedProject => indexedProject.id === project.id)
+      )
+    ]
     result.sort((a, b) => a.name.localeCompare(b.name))
     return result
   }, [query, localProjects])

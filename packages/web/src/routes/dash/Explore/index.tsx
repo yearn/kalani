@@ -6,7 +6,7 @@ import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import Skeleton from '../../../components/Skeleton'
 import TokenImg from '../../../components/TokenImg'
-import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
+import { FinderItem, getItemHref, useFinderItems } from '../../../components/Finder/useFinderItems'
 import MenuBar from '../../../components/MenuBar'
 import Finder from '../../../components/Finder'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
@@ -55,22 +55,8 @@ function Label({ item }: { item: FinderItem }) {
   </div>
 }
 
-function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant') {
-  switch (label) {
-    case 'yVault': return 'vault'
-    case 'yStrategy': return 'strategy'
-    case 'v3': return 'vault'
-    case 'erc4626': return 'erc4626'
-    default: return label
-  }
-}
-
 function Tile({ item }: { item: FinderItem }) {
-  const href = useMemo(() => {
-    return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
-  }, [item])
-
-  return <a href={href} className={`group relative p-3 flex flex-col
+  return <a href={getItemHref(item)} className={`group relative p-3 flex flex-col
     gap-2 border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer`}>
     <div className="flex flex-col gap-2">

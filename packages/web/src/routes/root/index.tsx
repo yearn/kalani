@@ -11,13 +11,13 @@ function Suspender() {
   const mounted = useMounted()
   const { isConnected, chainId, address } = useAccount()
   const { projects } = useProjects(chainId, address)
-  const getStarted = useHashNav('get-started')
+  const letsGo = useHashNav('lets-go')
 
   const lander = useMemo(() => {
     if (!mounted) return <></>
-    if (getStarted.isOpen) return <Lander />
+    if (letsGo.isOpen) return <Lander />
     return (isConnected && projects.length > 0) ? <Wallet /> : <Lander />
-  }, [mounted, isConnected, projects, getStarted])
+  }, [mounted, isConnected, projects, letsGo])
 
   return <div className="relative w-full min-h-screen flex flex-col sm:flex-row">
     {lander}

@@ -34,7 +34,7 @@ export const useVaultFormData = create<VaultFormData>(set => ({
   setNewAddress: (newAddress: EvmAddress | undefined) => set({ newAddress }),
   reset: () => set({ 
     asset: undefined,
-    category: undefined,
+    category: 1,
     name: undefined,
     symbol: undefined,
     newAddress: undefined

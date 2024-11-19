@@ -11,8 +11,8 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, h, children, ...props }, ref) => {
-  const bg = h === 'secondary' ? 'bg-neutral-950' : 'bg-primary-1000'
-  const text = h === 'secondary' ? 'text-neutral-300' : 'text-neutral-0'
+  const bg = h === 'secondary' ? 'bg-neutral-950' : 'bg-primary-600'
+  const text = h === 'secondary' ? 'text-neutral-300' : 'text-neutral-950 font-bold'
   const border = h === 'secondary' ? 'border-neutral-800' : 'border-transparent'
 
   return <button ref={ref} {...props} className={cn(`

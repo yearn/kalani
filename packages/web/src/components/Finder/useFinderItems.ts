@@ -12,6 +12,7 @@ export const FinderItemSchema = z.object({
   address: EvmAddressSchema,
   name: z.string().optional(),
   nameLower: z.string().optional(),
+  symbol: z.string().optional(),
   yearn: z.boolean().nullish(),
   v3: z.boolean().nullish(),
   projectId: z.string().nullish(),
@@ -47,6 +48,7 @@ query Query {
     chainId
     address
     name
+    symbol
     strategies
     yearn
     erc4626
@@ -94,6 +96,7 @@ function toFinderItems(data: any): FinderItem[] {
       address: vault.address,
       name: vault.name,
       nameLower: vault.name.toLowerCase(),
+      symbol: vault.symbol,
       strategies: vault.strategies,
       yearn: vault.yearn,
       v3: vault.v3,
@@ -118,7 +121,7 @@ function toFinderItems(data: any): FinderItem[] {
     vault.strategies?.forEach((strategyAddress: EvmAddress) => {
       if (strategyAddresses.has(strategyAddress.toLowerCase())) {
         const strategyItem: FinderItem = {
-          label: 'strategy',
+          label: 'yStrategy',
           chainId: parseInt(vault.chainId),
           address: strategyAddress,
           name: `${vault.name} Strategy`,
@@ -186,4 +189,18 @@ export function useFinderItems() {
     items: query.data ?? [], 
     filter: filter ?? [] 
   }
+}
+
+function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant') {
+  switch (label) {
+    case 'yVault': return 'vault'
+    case 'yStrategy': return 'strategy'
+    case 'v3': return 'vault'
+    case 'erc4626': return 'erc4626'
+    default: return label
+  }
+}
+
+export function getItemHref(item: FinderItem) {
+  return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
 }
