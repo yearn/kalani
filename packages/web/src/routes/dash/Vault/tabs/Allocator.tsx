@@ -91,7 +91,8 @@ type DebtRatioUpdate = {
   chainId: number,
   vault: EvmAddress,
   strategy: EvmAddress,
-  debtRatio: bigint
+  debtRatio: bigint,
+  isDirty: boolean
 }
 
 type UseDebtRatioUpdates = {
@@ -118,15 +119,24 @@ function useDebtRatioUpdates() {
   const { updates: _updates, updateDebtRatio } = useDebtRatioUpdatesStore(state => state)
 
   const updates = useMemo(() => {
-    return onChainTargetRatios.map(a => ({
-      chainId: Number(vault?.chainId ?? 0),
-      vault: vault?.address ?? zeroAddress,
-      strategy: a.strategy,
-      debtRatio: _updates.find(b => b.strategy === a.strategy)?.debtRatio ?? a.debtRatio
-    }))
+    return onChainTargetRatios.map(a => {
+      const found = _updates.find(b => b.strategy === a.strategy)
+      return {
+        chainId: Number(vault?.chainId ?? 0),
+        vault: vault?.address ?? zeroAddress,
+        strategy: a.strategy,
+        debtRatio: found?.debtRatio ?? a.debtRatio,
+        isDirty: (found && found.debtRatio !== a.debtRatio) ?? false
+      }
+    })
   }, [onChainTargetRatios, _updates, vault])
 
   return { updates, updateDebtRatio }
+}
+
+function useDebtRatioUpdate(strategy: EvmAddress) {
+  const { updates } = useDebtRatioUpdates()
+  return updates.find(a => a.strategy === strategy)!
 }
 
 function Allocation({ strategy }: { strategy: {
@@ -137,48 +147,34 @@ function Allocation({ strategy }: { strategy: {
   const { items } = useFinderItems()
   const { vault } = useVaultFromParams()
   const { refetch: refetchVaultConfig } = useVaultConfig()
-
   const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
   const onchainTargetRatio = useOnchainTargetRatio(strategy.address)
-  const { updates, updateDebtRatio } = useDebtRatioUpdates()
+  const { updateDebtRatio } = useDebtRatioUpdates()
+  const update = useDebtRatioUpdate(strategy.address)
   const { totalDebtRatio } = useTotalDebtRatio()
-
-  const update = useMemo(() => {
-    const found = updates.find(a => a.chainId === strategy.chainId && a.vault === vault?.address && a.strategy === strategy.address)
-    return found ?? {
-      chainId: strategy.chainId,
-      vault: vault?.address ?? zeroAddress,
-      strategy: strategy.address,
-      debtRatio: onchainTargetRatio
-    }
-  }, [updates, vault, strategy, onchainTargetRatio])
-
-  const isDirty = useMemo(() => {
-    return update.debtRatio !== onchainTargetRatio
-  }, [update, onchainTargetRatio])
 
   const { simulation, write, confirmation, resolveToast } = useSetStrategyDebtRatio(
     strategy.address, 
     update.debtRatio, 
-    isDirty
+    update.isDirty
   )
 
   const buttonTheme = useMemo(() => {
-    if (!isDirty) return 'default'
+    if (!update.isDirty) return 'default'
     if (write.isSuccess && confirmation.isPending) return 'confirm'
     if (write.isPending) return 'write'
     if (simulation.isFetching) return 'sim'
     if (simulation.isError) return 'error'
     return 'default'
-  }, [isDirty, simulation, write, confirmation])
+  }, [update, simulation, write, confirmation])
 
   const disabled = useMemo(() => {
-    return !isDirty
+    return !update.isDirty
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [isDirty, simulation, write])
+  }, [update, simulation, write])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -213,7 +209,8 @@ function Allocation({ strategy }: { strategy: {
       chainId: strategy.chainId,
       vault: vault?.address ?? zeroAddress,
       strategy: strategy.address,
-      debtRatio: newRatio
+      debtRatio: newRatio,
+      isDirty: newRatio !== onchainTargetRatio
     })
   }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio])
 
@@ -222,7 +219,7 @@ function Allocation({ strategy }: { strategy: {
   }, [write, simulation])
 
   return <div key={strategy.address} className="w-full flex items-center gap-6">
-    <LinkButton to={getStrategyHref(strategy)} h="secondary" className="px-6 grow h-14 flex items-center justify-between">
+    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
       <div>{strategy.name}</div>
       <div className="text-sm">{fPercent(getFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>
@@ -253,6 +250,34 @@ function TotalAllocation() {
   </div>
 }
 
+function EstimatedApy() {
+  const { items } = useFinderItems()
+  const { updates } = useDebtRatioUpdates()
+  const isDirty = useMemo(() => updates.some(a => a.isDirty), [updates])
+
+  const apys = useMemo(() => {
+    const result: { strategy: EvmAddress, apy: number | null | undefined, debtRatio: bigint }[] = []
+    for (const update of updates) {
+      const item = items.find(a => compareEvmAddresses(a.address, update.strategy))
+      if (item) { result.push({ strategy: update.strategy, apy: item.apy, debtRatio: update.debtRatio }) }
+      else { result.push({ strategy: update.strategy, apy: 0, debtRatio: update.debtRatio }) }
+    }
+    return result
+  }, [updates, items])
+
+  const weightedApy = useMemo(() => {
+    if (apys.every(a => a.apy === undefined)) return undefined
+    return apys.reduce((acc, a) => {
+      if (a.apy === undefined) { return acc }
+      return (acc ?? 0) + ((a.apy ?? 0) * Number(a.debtRatio))
+    }, 0) / 10_000
+  }, [apys])
+
+  return <div className={`pr-4 text-2xl font-bold ${isDirty ? 'text-primary-400' : ''}`}>
+    {fPercent(weightedApy) ?? '-.--%'}
+  </div>
+}
+
 function Allocations() {
   const { vault } = useVaultFromParams()
 
@@ -268,7 +293,7 @@ function Allocations() {
     <div className="mt-8 w-full flex items-center gap-6">
       <div className="pr-2 grow flex flex-col items-end gap-2">
         <div className="text-sm text-neutral-400">Estimated APY</div>
-        <div className="pr-4 text-2xl font-bold">--.-%</div>
+        <EstimatedApy />
       </div>
       <div className="w-64 pl-2 flex flex-col items-start gap-2">
         <div className="text-sm text-neutral-400">Total allocation</div>

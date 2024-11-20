@@ -40,7 +40,7 @@ export function useAddStrategy(strategy: EvmAddress) {
 
 function Badges() {
   const { vault } = useVaultFromParams()
-  const allocator = useAllocator()
+  const { allocator } = useAllocator()
   const { data: isRelayed } = useIsRelayed({
     vault: vault?.address ?? zeroAddress, 
     chainId: vault?.chainId, 
@@ -111,7 +111,7 @@ function SelectableVault({ item }: { item: FinderItem }) {
   }, [confirmation, resolveToast, setLocalVaultStrategies, item, query, vault])
 
   return <div className="flex items-center gap-4">
-    <LinkButton to={getItemHref(item)} h="secondary" className="px-4 grow h-14 flex items-center justify-between">
+    <LinkButton to={getItemHref(item)} h="tertiary" className="px-4 grow h-14 flex items-center justify-between">
       <div className="text-sm">{item.symbol}</div>
       <div className="text-xs">{fPercent(item.apy) ?? '-.--%'}</div>
     </LinkButton>

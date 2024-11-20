@@ -13,9 +13,9 @@ type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 }
 
 const LinkButton: React.FC<LinkProps> = ({ className, theme, h, children, ...props }) => {
-  const bg = h === 'secondary' ? 'bg-neutral-950' : 'bg-primary-1000'
+  const bg = h === 'secondary' ? 'bg-neutral-950' : h === 'tertiary' ? 'bg-transparent' : 'bg-primary-1000'
   const text = h === 'secondary' ? 'text-neutral-300' : 'text-neutral-0'
-  const border = h === 'secondary' ? 'border-neutral-800' : 'border-transparent'
+  const border = h === 'secondary' ? 'border-neutral-800' : h === 'tertiary' ? 'border-transparent' : 'border-transparent'
 
   return <_Link {...props} className={cn(`
     relative h-8 px-8 py-5 flex items-center justify-center

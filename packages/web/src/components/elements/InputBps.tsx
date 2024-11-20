@@ -66,6 +66,7 @@ export default function InputBps({
       onChange={_onChange}
       onKeyDown={onKeyDown}
       className={className}
+      step={1}
       />
     <div className={cn(`
       absolute inset-0 pr-14
