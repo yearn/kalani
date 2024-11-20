@@ -24,7 +24,7 @@ function Suspender() {
   if (!vault) return <></>
 
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-secondary-400 text-secondary-950">
+    <Hero className="bg-secondary-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2">
         <div className={`text-4xl font-fancy`}>{vault.name}</div>
 
@@ -39,9 +39,9 @@ function Suspender() {
 
         <div className="flex items-center gap-3 text-sm">
           <ChainImg chainId={vault.chainId} size={28} />
-          <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
-          <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">erc4626</div>
-          <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
+          <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-neutral-950" />
+          <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">erc4626</div>
+          <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-950 text-secondary-400" />
         </div>
 
         <div></div>

@@ -21,7 +21,7 @@ function Brand() {
 export default function Build() {
   const { isConnected } = useAccount()
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-fuchsia-400 text-fuchsia-950">
+    <Hero className="bg-fuchsia-400 text-neutral-950">
       <Brand />
     </Hero>
     <div className="px-8 flex flex-col items-center gap-12">

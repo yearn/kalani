@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import Hero from '../../../components/Hero'
-import { fHexString } from '@kalani/lib/format'
 import { zeroHash } from 'viem'
 import { getChain } from '../../../lib/chains'
 import { HexStringSchema } from '@kalani/lib/types'
@@ -17,7 +16,7 @@ function Suspender() {
   const { project } = useSuspenseReadProject(chainId, id)
 
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-indigo-400 text-indigo-950">
+    <Hero className="bg-indigo-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center gap-3 text-sm">
           project

@@ -2,8 +2,6 @@ import { useVaultFromParams } from '../../../hooks/useVault'
 import { fPercent, fUSD } from '@kalani/lib/format'
 import Roles from './tabs/Roles'
 import Vitals from './tabs/Vitals'
-import Strategies from './tabs/Strategies'
-import Accountant from './tabs/Accountant'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import ChainImg from '../../../components/ChainImg'
@@ -14,6 +12,7 @@ import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSli
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
+import Fees from './tabs/Fees'
 
 const tabClassNames = {
   textClassName: 'text-neutral-950 group-active:text-neutral-950/60',
@@ -59,8 +58,7 @@ function VaultHero() {
       <Tabs className="flex gap-4">
         <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
         {allocator && <Tab id="allocator" classNames={tabClassNames}>Allocator</Tab>}
-        <Tab id="strategies" classNames={tabClassNames}>Strategies</Tab>
-        <Tab id="accountant" classNames={tabClassNames}>Accountant</Tab>
+        <Tab id="fees" classNames={tabClassNames}>Fees</Tab>
         <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
         <Tab id="roles" classNames={tabClassNames}>Roles</Tab>
       </Tabs>
@@ -77,8 +75,7 @@ function VaultContent() {
   return <div className="w-full px-12">
     <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
-    <TabContent id="strategies"><Strategies /></TabContent>
-    <TabContent id="accountant"><Accountant /></TabContent>
+    <TabContent id="fees"><Fees /></TabContent>
     <TabContent id="reports"><Reports /></TabContent>
     <TabContent id="roles"><Roles /></TabContent>
   </div>

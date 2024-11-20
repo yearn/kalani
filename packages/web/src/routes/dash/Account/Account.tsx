@@ -24,7 +24,7 @@ function Suspender({ address }: { address: EvmAddress }) {
   if (!address) return <></>
 
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-primary-400 text-primary-950">
+    <Hero className="bg-primary-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2">
         <div className={`text-4xl font-fancy`}>{title}</div>
 
@@ -39,7 +39,7 @@ function Suspender({ address }: { address: EvmAddress }) {
 
         <div className="flex items-center gap-3 text-sm">
           <ChainImg chainId={chainId} size={28} />
-          <EvmAddressChipSlide chainId={chainId} address={address} className="bg-primary-950 text-primary-400" />
+          <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-primary-400" />
         </div>
       </div>
 
