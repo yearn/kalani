@@ -3,6 +3,8 @@ import { Vault, withVault } from '../../../../hooks/useVault'
 import { div, mulb } from '@kalani/lib/bmath'
 import { fBps, fPercent, fTokens, fUSD } from '@kalani/lib/format'
 import { useMemo } from 'react'
+import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
+import { zeroAddress } from 'viem'
 
 function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
@@ -17,6 +19,12 @@ function Vitals({ vault }: { vault: Vault }) {
       w-1/2 h-full`}>
       <table className="table-auto w-full border-separate border-spacing-2">
         <tbody>
+          <tr>
+            <td>Asset</td>
+            <td className="text-right">
+              <EvmAddressChipSlide chainId={vault.chainId} address={vault.asset.address} className="bg-neutral-950" />
+            </td>
+          </tr>
           <tr>
             <td className="text-xl">Total assets</td>
             <td className="text-right text-4xl">{fTokens(vault.totalAssets, vault.asset.decimals)}</td>

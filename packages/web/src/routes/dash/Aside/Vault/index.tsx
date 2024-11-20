@@ -11,7 +11,6 @@ import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
 import { useMounted } from '../../../../hooks/useMounted'
 import { FinderItem, getItemHref, useFinderItems } from '../../../../components/Finder/useFinderItems'
 import { useCallback, useEffect, useMemo } from 'react'
-import Input from '../../../../components/elements/Input'
 import { fPercent } from '@kalani/lib/format'
 import Button from '../../../../components/elements/Button'
 import LinkButton from '../../../../components/elements/LinkButton'
@@ -20,6 +19,7 @@ import { useWriteContract } from '../../../../hooks/useWriteContract'
 import { UseSimulateContractParameters } from 'wagmi'
 import abis from '@kalani/lib/abis'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
+import StrategiesByAddress from './StrategiesByAddress'
 
 export function useAddStrategy(strategy: EvmAddress) {
   const { address: vault } = useVaultParams()
@@ -56,7 +56,7 @@ function Badges() {
   </div>
 }
 
-function SelectableVault({ item }: { item: FinderItem }) {
+export function SelectableVault({ item }: { item: FinderItem }) {
   const { write, simulation, confirmation, resolveToast } = useAddStrategy(item.address)
   const { setLocalVaultStrategies } = useLocalVaultStrategies()
   const { query, vault } = useVaultFromParams()
@@ -138,10 +138,6 @@ function VaultSelector() {
     <div className="flex flex-col gap-6">
       {filter.map(item => <SelectableVault key={item.address} item={item} />)}
     </div>
-
-    <div>
-      <Input placeholder="0x" />
-    </div>
   </div>
 }
 
@@ -163,9 +159,10 @@ export default function Vault() {
       ) } else { return (
         <FlyInFromBottom _key="strategy-selector" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
           <div className="flex items-center justify-start gap-6 text-neutral-400">
-            Allocator <EvmAddressChipSlide chainId={chainId} address={allocator} className="bg-neutral-800" />
+            Allocator <EvmAddressChipSlide chainId={chainId} address={allocator} className="bg-neutral-950" />
           </div>
           <VaultSelector />
+          <StrategiesByAddress />
         </FlyInFromBottom>
         )
       }

@@ -19,8 +19,8 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      <aside className={`relative hidden sm:block min-w-[26%] px-8 pt-28 pb-12 h-screen`}>
-        <div className="max-w-[380px]">
+      <aside className={`relative hidden sm:block min-w-[26%] px-8 pt-28 h-screen`}>
+        <div className="max-w-[380px] pb-12 sm:pb-48">
           <Aside />
         </div>
       </aside>

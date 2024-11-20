@@ -16,11 +16,11 @@ import Skeleton from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 
 const tabClassNames = {
-  textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
+  textClassName: 'text-neutral-950 group-active:text-neutral-950/60',
   bgClassName: `
-    [[data-open=true]_&]:bg-secondary-950 
-    group-hover:bg-secondary-950 
-    group-active:bg-secondary-950/60
+    [[data-open=true]_&]:bg-neutral-950 
+    group-hover:bg-neutral-950 
+    group-active:bg-neutral-950/60
   `
 }
 
@@ -30,7 +30,7 @@ function VaultHero() {
 
   if (!vault) return <></>
 
-  return <Hero className="bg-secondary-400 text-secondary-950">
+  return <Hero className="bg-secondary-400 text-neutral-950">
     <div className="flex flex-col justify-center gap-2">
       <div className={`text-4xl font-fancy`}>{vault.name}</div>
 
@@ -45,11 +45,11 @@ function VaultHero() {
 
       <div className="flex items-center gap-3 text-sm">
         <ChainImg chainId={vault.chainId} size={28} />
-        <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-secondary-950" />
-        <div className="px-3 py-1 bg-secondary-950 text-secondary-400 rounded-full">
+        <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-neutral-950" />
+        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">
           {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
         </div>
-        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-secondary-950 text-secondary-400" />
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-950 text-secondary-400" />
       </div>
 
       <div></div>

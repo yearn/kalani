@@ -260,15 +260,15 @@ function EstimatedApy() {
     for (const update of updates) {
       const item = items.find(a => compareEvmAddresses(a.address, update.strategy))
       if (item) { result.push({ strategy: update.strategy, apy: item.apy, debtRatio: update.debtRatio }) }
-      else { result.push({ strategy: update.strategy, apy: 0, debtRatio: update.debtRatio }) }
+      else { result.push({ strategy: update.strategy, apy: undefined, debtRatio: update.debtRatio }) }
     }
     return result
   }, [updates, items])
 
   const weightedApy = useMemo(() => {
-    if (apys.every(a => a.apy === undefined)) return undefined
+    if (apys.every(a => a.apy === undefined || a.apy === null)) return undefined
     return apys.reduce((acc, a) => {
-      if (a.apy === undefined) { return acc }
+      if (a.apy === undefined || a.apy === null) { return acc }
       return (acc ?? 0) + ((a.apy ?? 0) * Number(a.debtRatio))
     }, 0) / 10_000
   }, [apys])
