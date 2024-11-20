@@ -245,7 +245,8 @@ function useTotalDebtRatio() {
 function TotalAllocation() {
   const { setting: bpsSetting } = useInputBpsSettings()
   const { totalDebtRatio, isDirty } = useTotalDebtRatio()
-  return <div className={`pl-4 text-2xl font-bold ${isDirty ? 'text-primary-400' : ''}`}>
+  const { next } = useInputBpsSettings()
+  return <div onClick={next} className={`pl-4 text-2xl font-bold cursor-pointer ${isDirty ? 'text-primary-400' : ''}`}>
     {fBps(Number(totalDebtRatio), { percent: bpsSetting === '%' })}
   </div>
 }
