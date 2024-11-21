@@ -51,13 +51,26 @@ group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secon
 rounded-primary
 `
 
+const getViewName = (item: FinderItem) => {
+  switch (item.label) {
+    case 'yVault':
+    case 'v3':
+      return 'vault'
+    case 'yStrategy':
+      return 'strategy'
+    default:
+      return item.label
+  }
+}
+
 const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassName, disableSuggestions }) => {
   const nav = useHashNav('find')
   const navigate = useNavigate()
   const breakpoints = useBreakpoints()
 
   const onFind = useCallback((item: FinderItem) => {
-    return navigate(`/${item.label}/${item.chainId}/${item.address}`, { replace: true })
+    const view = getViewName(item)
+    return navigate(`/${view}/${item.chainId}/${item.address}`, { replace: true })
   }, [navigate])
 
   const { filter } = useFinderItems()
@@ -102,9 +115,8 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
   }
 
   const handleItemClick = useCallback((item: FinderItem): void => {
-    setQuery(item.name ?? item.label)
     onFind?.(item)
-  }, [setQuery, onFind])
+  }, [onFind])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'ArrowUp') {
@@ -177,7 +189,7 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
                   <td className="w-20 px-4 py-4 text-xs text-center">
                     <ChainImg chainId={item.chainId} />
                   </td>
-                  <td className="hidden sm:table-cell w-20 py-4 text-xs">{item.label}</td>
+                  <td className="hidden sm:table-cell w-20 py-4 text-xs">{getViewName(item)}</td>
                   <td className="w-20 sm:w-36 py-4">{fEvmAddress(item.address, !breakpoints.sm)}</td>
                   <td className="max-w-0 px-4 py-4 truncate">
                     {isNothing(item.name) ? item.label : item.name}
