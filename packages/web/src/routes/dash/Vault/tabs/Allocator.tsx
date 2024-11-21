@@ -15,6 +15,7 @@ import { parseAbi, zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../hooks/useWriteContract'
 import InputInteger from '../../../../components/elements/InputInteger'
 import { create } from 'zustand'
+import Section from '../../../../components/Section'
 
 export function useSetMinimumChange(minimumChange: bigint) {
   const { address: vault } = useVaultParams()
@@ -374,7 +375,7 @@ export default function Allocator() {
     return <NoStrategies />
   }, [vaultConfig, vault])
 
-  return <div className="w-full p-4 flex flex-col gap-12">
+  return <Section>
     {content}
-  </div>
+  </Section>
 }

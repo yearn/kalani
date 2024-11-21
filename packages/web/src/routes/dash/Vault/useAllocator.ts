@@ -5,7 +5,6 @@ import { useMemo } from 'react'
 import { parseAbi, zeroAddress } from 'viem'
 import abis from '@kalani/lib/abis'
 import { useVaultFromParams } from '../../../hooks/useVault'
-import roleManager from '@kalani/lib/abis/roleManager'
 
 export function useAllocator() {
   const { vault } = useVaultFromParams()

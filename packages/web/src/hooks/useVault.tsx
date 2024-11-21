@@ -54,6 +54,7 @@ export const VaultSchema = z.object({
     decimals: z.number()  
   }),
   accountant: EvmAddressSchema.optional(),
+  allocator: EvmAddressSchema.optional(),
   roleManager: EvmAddressSchema.optional(),
   inceptBlock: z.bigint({ coerce: true }),
   inceptTime: z.number({ coerce: true }),
@@ -106,6 +107,7 @@ query Query($chainId: Int, $address: String) {
       decimals
     }
     accountant
+    allocator
     roleManager: role_manager
     inceptBlock
     inceptTime

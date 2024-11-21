@@ -2,7 +2,7 @@ import { fBlockTime } from '@kalani/lib/format'
 import { useCallback, useMemo } from 'react'
 import ReactTimeago from 'react-timeago'
 import useLocalStorage from 'use-local-storage'
-import { cn } from '../lib/shadcn'
+import { cn } from '../../lib/shadcn'
 
 function useDateOrBlockSettings() {
   const options = ['date', 'time ago', 'timestamp', 'block']
@@ -28,7 +28,7 @@ function useDateOrBlockFormat(timestamp: number, block: number | bigint) {
   return format
 }
 
-export default function DateOrBlock({ timestamp, block, className }: { timestamp: number, block: number | bigint, className?: string }) {
+export default function ViewDateOrBlock({ timestamp, block, className }: { timestamp: number, block: number | bigint, className?: string }) {
   const { setting, next } = useDateOrBlockSettings()
   const format = useDateOrBlockFormat(timestamp, block)
   return <div onClick={next} title={setting} className={cn('px-3 py-1 inline-flex items-center rounded-full cursor-pointer', className)}>

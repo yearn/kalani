@@ -7,7 +7,7 @@ import Dialog, { DialogButton } from '../../components/Dialog'
 import ChipSlide from '../../components/ChipSlide'
 import Bg from '../root/lander/Bg'
 import SelectErc20 from '../../components/SelectErc20'
-import DateOrBlock from '../../components/DateOrBlock'
+import ViewDateOrBlock from '../../components/elements/ViewDateOrBlock'
 import SelectProject, { useSelectedProject } from '../../components/SelectProject'
 import InputBps from '../../components/elements/InputBps'
 
@@ -56,7 +56,7 @@ export default function Eg() {
       </div>
 
       <div className="flex items-center gap-12">
-        <DateOrBlock timestamp={1714857600} block={18345645} className="bg-neutral-900" />
+        <ViewDateOrBlock timestamp={1714857600} block={18345645} className="bg-neutral-900" />
         <ChipSlide className="bg-neutral-900" slide={<div className="whitespace-nowrap">👋 buenas!</div>}>chip slide</ChipSlide>
       </div>
 

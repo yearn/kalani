@@ -1,5 +1,5 @@
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
-import DateOrBlock from '../../../../components/DateOrBlock'
+import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import { Vault, withVault } from '../../../../hooks/useVault'
 import { fTokens } from '@kalani/lib/format'
 import { getChain } from '../../../../lib/chains'
@@ -40,7 +40,7 @@ function Assets({ vault }: { vault: Vault }) {
           <tr>
             <td>Inception</td>
             <td className="text-right">
-              <DateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} className="bg-neutral-800" />
+              <ViewDateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} className="bg-neutral-800" />
             </td>
           </tr>
         </tbody>

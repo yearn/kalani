@@ -24,6 +24,7 @@ export default {
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
   safelist: [
     ...heightSafeList(),
+    'w-[24px]', 'h-[24px]',
     'w-[28px]', 'h-[28px]',
     'w-[48px]', 'h-[48px]',
     'border-primary',

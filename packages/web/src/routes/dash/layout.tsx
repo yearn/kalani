@@ -13,7 +13,7 @@ export default function Layout() {
       <div className="hidden sm:block min-w-24"></div>
 
       <div className={`
-        isolate grow w-full sm:min-h-screen
+        isolate grow w-full sm:min-h-screen pb-24
         sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
         <div className="hidden sm:block w-full h-20 border-b border-transparent"></div>
         <Outlet />
