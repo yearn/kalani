@@ -7,11 +7,11 @@ import { create } from 'zustand'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useCallback, useMemo } from 'react'
 import useLocalStorage from 'use-local-storage'
-import { useConfig, useReadContract } from 'wagmi'
+import { useConfig, useReadContract, useReadContracts } from 'wagmi'
 import abis from '@kalani/lib/abis'
 import { ROLE_MANAGER_FACTORY } from '@kalani/lib/addresses'
 import { zeroAddress, zeroHash } from 'viem'
-import { readContractQueryOptions } from 'wagmi/query'
+import { readContractQueryOptions, readContractsQueryOptions } from 'wagmi/query'
 
 export const ProjectSchema = z.object({
   chainId: z.number(),
@@ -21,7 +21,8 @@ export const ProjectSchema = z.object({
   registry: EvmAddressSchema,
   accountant: EvmAddressSchema,
   debtAllocator: EvmAddressSchema,
-  roleManagerFactory: EvmAddressSchema
+  roleManagerFactory: EvmAddressSchema,
+  governance: EvmAddressSchema
 })
 
 export type Project = z.infer<typeof ProjectSchema>
@@ -40,6 +41,7 @@ const QUERY = `query Query($chainId: Int) {
     accountant
     debtAllocator
     roleManagerFactory
+    governance
   }
 }`
 
@@ -82,7 +84,7 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
       const { data: { projects } } = await fetchProjects(chainId, nonce)
       if (!address) return projects
       return projects.filter((project: Project) => 
-        compareEvmAddresses(project.roleManager, address)
+        compareEvmAddresses(project.governance, address)
       )
     }
   })
@@ -97,7 +99,8 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
     ]
     result.sort((a, b) => a.name.localeCompare(b.name))
     return result
-  }, [query, localProjects])
+  }, [query, localProjects, address])
+
   return { ...query, projects }
 }
 
@@ -112,14 +115,20 @@ export function useReadProject(chainId?: number, id?: HexString, enabled = true)
 
   const roleManager = useMemo(() => readProject.data?.[0] ?? zeroAddress, [readProject])
 
-  const readRoleManager = useReadContract({
+  const readRoleManager = useReadContracts({ contracts: [{
     abi: abis.roleManager,
     chainId, address: roleManager,
-    functionName: 'name',
-    query: { enabled: roleManager !== zeroAddress }
-  })
+    functionName: 'name'
+  }, {
+    abi: abis.roleManager,
+    chainId, address: roleManager,
+    functionName: 'chad'
+  }], query: {
+    enabled: roleManager !== zeroAddress
+  }})
 
-  const name = useMemo(() => (readRoleManager.data ?? '').replace(' Role Manager', ''), [readRoleManager])
+  const name = useMemo(() => (readRoleManager.data?.[0]?.result ?? '').replace(' Role Manager', ''), [readRoleManager])
+  const governance = useMemo(() => readRoleManager.data?.[1]?.result ?? zeroAddress, [readRoleManager])
 
   const project = useMemo(() => ProjectSchema.parse({
     chainId: chainId ?? 0, 
@@ -129,7 +138,8 @@ export function useReadProject(chainId?: number, id?: HexString, enabled = true)
     registry: readProject.data?.[1] ?? zeroAddress,
     accountant: readProject.data?.[2] ?? zeroAddress,
     debtAllocator: readProject.data?.[3] ?? zeroAddress,
-    roleManagerFactory: ROLE_MANAGER_FACTORY
+    roleManagerFactory: ROLE_MANAGER_FACTORY,
+    governance
   }), [chainId, id, name, readProject])
 
   return { readProject, readRoleManager, project }
@@ -150,14 +160,19 @@ export function useSuspenseReadProject(chainId?: number, id?: HexString) {
   const roleManager = useMemo(() => readProject.data?.[0] ?? zeroAddress, [readProject])
 
   const readRoleManager = useSuspenseQuery(
-    readContractQueryOptions(config, {
+    readContractsQueryOptions(config, { contracts: [{
       abi: abis.roleManager,
       chainId, address: roleManager,
       functionName: 'name'
-    })
+    }, {
+      abi: abis.roleManager,
+      chainId, address: roleManager,
+      functionName: 'chad'
+    }]})
   )
 
-  const name = useMemo(() => (readRoleManager.data ?? '').replace(' Role Manager', ''), [readRoleManager])
+  const name = useMemo(() => (readRoleManager.data?.[0]?.result ?? '').replace(' Role Manager', ''), [readRoleManager])
+  const governance = useMemo(() => readRoleManager.data?.[1]?.result ?? zeroAddress, [readRoleManager])
 
   const project = useMemo(() => ProjectSchema.parse({
     chainId: chainId ?? 0, 
@@ -167,7 +182,8 @@ export function useSuspenseReadProject(chainId?: number, id?: HexString) {
     registry: readProject.data?.[1] ?? zeroAddress,
     accountant: readProject.data?.[2] ?? zeroAddress,
     debtAllocator: readProject.data?.[3] ?? zeroAddress,
-    roleManagerFactory: ROLE_MANAGER_FACTORY
+    roleManagerFactory: ROLE_MANAGER_FACTORY,
+    governance
   }), [chainId, id, name, readProject])
 
   return { readProject, readRoleManager, project }

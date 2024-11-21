@@ -9,11 +9,21 @@ import { useSuspenseReadProject } from '../../../components/SelectProject/usePro
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 
-function Suspender() {
+export function useProjectParams() {
   const params = useParams()
   const chainId = parseInt(params.chainId ?? '0')
   const id = HexStringSchema.parse(params.id) ?? zeroHash
-  const { project } = useSuspenseReadProject(chainId, id)
+  return { chainId, id }
+}
+
+export function useProjectByParams() {
+  const { chainId, id } = useProjectParams()
+  return useSuspenseReadProject(chainId, id)
+}
+
+function Suspender() {
+  const { chainId, id } = useProjectParams()
+  const { project } = useProjectByParams()
 
   return <section className="flex flex-col gap-8">
     <Hero className="bg-indigo-400 text-neutral-950">

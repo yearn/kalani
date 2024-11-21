@@ -132,9 +132,10 @@ function VaultSelector() {
     )
   }, [items, vault])
 
+  if (filter.length === 0) return <></>
+
   return <div className="flex flex-col gap-6">
     <div className="text-neutral-400">Available {vault?.asset.symbol} Strategies</div>
-
     <div className="flex flex-col gap-6">
       {filter.map(item => <SelectableVault key={item.address} item={item} />)}
     </div>
