@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '@kalani/lib/abis'
 import { compareEvmAddresses } from '@kalani/lib/strings'
-import { useWhitelist } from '../../provider'
+import { useWhitelist } from '../../useWhitelist'
 
 export function useIsManagement() {
   const config = useConfig()

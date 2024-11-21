@@ -1,7 +1,7 @@
 import { PiCheck, PiWarning } from 'react-icons/pi'
 import FlyInFromLeft from '../../../../components/motion/FlyInFromLeft'
 import { TargetType, useTargetInfos } from './useTargetInfos'
-import { useWhitelist } from './provider'
+import { useWhitelist } from './useWhitelist'
 import { useAccount } from 'wagmi'
 import { EvmAddress } from '@kalani/lib/types'
 import { fEvmAddress } from '@kalani/lib/format'

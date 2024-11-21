@@ -45,7 +45,7 @@ function Roles({ vault }: { vault: Vault }) {
 
   return <div className="flex flex-col gap-8">
     <Section>
-      <div>
+      <div className="flex flex-col gap-6">
         {accounts.map((account, index) => <SetRoles 
           key={index} 
           chainId={account.chainId}
@@ -53,10 +53,11 @@ function Roles({ vault }: { vault: Vault }) {
           account={account.address}
           editAddress={account.editAddress}
         />)}
+        <div className="flex justify-end">
+          <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
+        </div>
       </div>
-      <div className="flex justify-end">
-        <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
-      </div>
+
     </Section>
     <Section>
       <FieldLabelPair label="Role Manager">

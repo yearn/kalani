@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useSignMessage } from 'wagmi'
 import Button from '../../../../components/elements/Button'
-import { useWhitelist } from './provider'
+import { useWhitelist } from './useWhitelist'
 import { useTargetInfos } from './useTargetInfos'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
 import { toast } from 'sonner'

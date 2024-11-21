@@ -1,7 +1,7 @@
 import Section from '../../../../components/Section'
 import { Vault, withVault } from '../../../../hooks/useVault'
 import { div, mulb } from '@kalani/lib/bmath'
-import { fBps, fPercent, fTokens, fUSD } from '@kalani/lib/format'
+import { fTokens, fUSD } from '@kalani/lib/format'
 import { useMemo } from 'react'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import { getChain } from '../../../../lib/chains'
@@ -12,12 +12,25 @@ import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import ChainImg from '../../../../components/ChainImg'
 import TokenImg from '../../../../components/TokenImg'
 import { zeroAddress } from 'viem'
-import { Switch } from '../../../../components/shadcn/switch'
+import { cn } from '../../../../lib/shadcn'
+import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRelayed'
+import { ROLES } from '@kalani/lib/types'
+
+function LabelValueRow({ label, className, children }: { label: string, className?: string, children: React.ReactNode }) {
+  return <div className={cn(
+    'px-6 py-2 w-full flex items-center justify-between rounded-primary even:bg-neutral-950',
+    className
+  )}>
+    <div>{label}</div>
+    <div className="flex justify-end">{children}</div>
+  </div>
+}
 
 function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const { vaultConfig } = useVaultConfig()
   const totalDebtRatio = useMemo(() => vaultConfig.totalDebtRatio, [vaultConfig])
+
   const deployed = useMemo(() => {
     if (!totalDebtRatio) { return 0 }
     if (!vault?.totalDebt) { return 0 }
@@ -25,133 +38,100 @@ function Vitals({ vault }: { vault: Vault }) {
     return Math.floor(Number(div(vault?.totalDebt ?? 0n, totalAllocated)) * 10_000)
   }, [vault, totalDebtRatio])
 
-  return <Section className="w-full p-4">
-    <table className="table-auto w-full border-separate border-spacing-6">
-      <tbody>
-        <tr>
-          <td>Network</td>
-          <td className="flex justify-end">
-            <ViewGeneric className="flex items-center gap-4">
-              <ChainImg chainId={vault.chainId} size={24} /> {getChain(vault.chainId).name}
-            </ViewGeneric>
-          </td>
-        </tr>
-        <tr>
-          <td>Address</td>
-          <td className="flex justify-end">
-            <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-900" />
-          </td>
-        </tr>
-        <tr>
-          <td>Asset</td>
-          <td className="flex items-center justify-end gap-4">
-            <TokenImg chainId={vault.chainId} address={vault.asset.address} size={24} bgClassName="bg-neutral-900" />
-            <EvmAddressChipSlide chainId={vault.chainId} address={vault.asset.address} className="bg-neutral-900" />
-          </td>
-        </tr>
-        <tr>
-          <td>Asset name</td>
-          <td className="flex items-center justify-end gap-4">
-            <ViewGeneric>{vault.asset.name} ({vault.asset.symbol})</ViewGeneric>
-          </td>
-        </tr>
+  const { data: isRelayed } = useIsRelayed({
+    vault: vault?.address ?? zeroAddress,
+    chainId: vault?.chainId,
+    rolemask: ROLES.REPORTING_MANAGER
+  })
 
-        <tr>
-          <td className="text-xl">Total assets</td>
-          <td className="flex justify-end">
-            <ViewGeneric className="text-3xl font-bold">
-              {fTokens(vault.totalAssets, vault.asset.decimals)}
-            </ViewGeneric>
-          </td>
-        </tr>
+  return <Section>
+    <div className="px-4 py-2 flex flex-col gap-6">
 
-        <tr>
-          <td>TVL</td>
-          <td className="flex justify-end">
-            <ViewGeneric>{fUSD(vault.tvl?.close ?? 0)}</ViewGeneric>
-          </td>
-        </tr>
+      <LabelValueRow label="Network">
+        <ViewGeneric className="flex items-center gap-4">
+          <ChainImg chainId={vault.chainId} size={24} /> {getChain(vault.chainId).name}
+        </ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Allocated</td>
-          <td className="flex justify-end">
-            <ViewBps bps={totalDebtRatio} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="Address">
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-900" />
+      </LabelValueRow>
 
-        <tr>
-          <td>Deployed</td>
-          <td className="flex justify-end">
-            <ViewBps bps={deployed} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="Name">
+        <ViewGeneric>{vault.name} ({vault.symbol})</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Idle assets</td>
-          <td className="flex justify-end">
-            <ViewGeneric>{fTokens(idle, vault.asset.decimals)}</ViewGeneric>
-          </td>
-        </tr>
+      <LabelValueRow label="Asset">
+        <div className="flex items-center justify-end gap-4">
+          <TokenImg chainId={vault.chainId} address={vault.asset.address} size={24} bgClassName="bg-neutral-900" />
+          <EvmAddressChipSlide chainId={vault.chainId} address={vault.asset.address} className="bg-neutral-900" />
+        </div>
+      </LabelValueRow>
 
-        {vault.v3 && <tr>
-          <td>Deposit limit</td>
-          <td className="flex justify-end">
-            <ViewGeneric>
-              {fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0, orInfiniteIfGt: 100_000_000_000_000 })}
-            </ViewGeneric>
-          </td>
-        </tr>}
+      <LabelValueRow label="Asset name">
+        <ViewGeneric>{vault.asset.name} ({vault.asset.symbol})</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Performance fee</td>
-          <td className="flex justify-end">
-            <ViewBps bps={vault.fees?.performanceFee!} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="Total assets">
+        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals)}</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Role manager</td>
-          <td className="flex justify-end">
-            <EvmAddressChipSlide chainId={vault.chainId} address={vault.roleManager ?? zeroAddress} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="TVL">
+        <ViewGeneric>{fUSD(vault.tvl?.close ?? 0)}</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Accountant</td>
-          <td className="flex justify-end">
-            <EvmAddressChipSlide chainId={vault.chainId} address={vault.accountant ?? zeroAddress} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="Price per share">
+        <ViewGeneric>{fTokens(vault.pricePerShare ?? 0n, vault.asset.decimals, { fixed: 6 })}</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Allocator</td>
-          <td className="flex justify-end">
-            <EvmAddressChipSlide chainId={vault.chainId} address={vault.allocator ?? zeroAddress} className="bg-neutral-900" />
-          </td>
-        </tr>
+      <LabelValueRow label="Allocated">
+        <ViewBps bps={totalDebtRatio} className="bg-neutral-900" />
+      </LabelValueRow>
 
-        <tr>
-          <td>yHaaS automation</td>
-          <td className="flex justify-end">
-            <ViewGeneric className="text-warn-400">Off</ViewGeneric>
-          </td>
-        </tr>
+      <LabelValueRow label="Deployed">
+        <ViewBps bps={deployed} className="bg-neutral-900" />
+      </LabelValueRow>
 
-        <tr>
-          <td>Version</td>
-          <td className="flex justify-end">
-            <ViewGeneric>{vault.apiVersion}</ViewGeneric>
-          </td>
-        </tr>
+      <LabelValueRow label="Idle">
+        <ViewGeneric>{fTokens(idle, vault.asset.decimals)}</ViewGeneric>
+      </LabelValueRow>
 
-        <tr>
-          <td>Inception</td>
-          <td className="flex justify-end">
-            <ViewDateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} className="bg-neutral-900" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      {vault.v3 && <LabelValueRow label="Deposit limit">
+        <ViewGeneric>
+          {fTokens(vault.deposit_limit ?? 0n, vault.asset.decimals, { fixed: 0, orInfiniteIfGt: 100_000_000_000_000 })}
+        </ViewGeneric>
+      </LabelValueRow>}
+
+      <LabelValueRow label="Performance fee">
+        <ViewBps bps={vault.fees?.performanceFee ?? 0} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Role manager">
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.roleManager ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Accountant">
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.accountant ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+
+      <LabelValueRow label="Allocator">
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.allocator ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="yHaaS automation">
+        {isRelayed ? <ViewGeneric className="text-secondary-100">Enabled</ViewGeneric>
+          : <ViewGeneric className="text-warn-400">Disabled</ViewGeneric>}
+      </LabelValueRow>
+
+      <LabelValueRow label="Version">
+        <ViewGeneric>{vault.apiVersion}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Inception">
+        <ViewDateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} className="bg-neutral-900" />
+      </LabelValueRow>
+    </div>
   </Section>
 }
 

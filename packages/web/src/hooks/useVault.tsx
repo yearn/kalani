@@ -46,6 +46,7 @@ export const VaultSchema = z.object({
   address: EvmAddressSchema,
   label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
   name: z.string(),
+  symbol: z.string(),
   apiVersion: z.string().optional(),
   asset: z.object({
     address: EvmAddressSchema,
@@ -100,6 +101,7 @@ query Query($chainId: Int, $address: String) {
     address
     apiVersion
     name
+    symbol
     asset {
       address
       name

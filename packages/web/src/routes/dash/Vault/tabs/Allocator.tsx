@@ -344,12 +344,10 @@ function SetMinimumChange() {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <div className={`
-    px-6 py-24 flex items-center justify-center 
-     border-primary border-neutral-900 rounded-primary`}>
-    <div className="flex flex-col gap-4">
-      <div className="text-xl text-neutral-600">Minimum change</div>
-      <div className="flex items-center gap-4">
+  return <div className={`py-16 flex items-center justify-center`}>
+    <div className="flex flex-col gap-8">
+      <div className="text-xl">Set your vault's minimum change</div>
+      <div className="flex items-center gap-6">
         <InputInteger value={Number(minimumChange)} onChange={e => setMinimumChange(BigInt(e.target.value))} isValid={true} />
         <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
       </div>
@@ -359,8 +357,8 @@ function SetMinimumChange() {
 
 function NoStrategies() {
   return <div className={`
-    px-6 py-24 flex items-center justify-center 
-    text-xl text-neutral-600 border-primary border-neutral-900 rounded-primary`}>
+    py-16 flex items-center justify-center 
+    text-xl text-neutral-600`}>
     No strategies yet
   </div>
 }

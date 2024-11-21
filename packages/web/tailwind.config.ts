@@ -28,6 +28,7 @@ export default {
     'w-[28px]', 'h-[28px]',
     'w-[48px]', 'h-[48px]',
     'border-primary',
+    'odd:bg-grill-900'
   ],
   theme: {
     container: {

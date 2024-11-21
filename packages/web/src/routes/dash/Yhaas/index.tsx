@@ -1,6 +1,5 @@
 import { PiRobot } from 'react-icons/pi'
 import Whitelist from './Whitelist'
-import { WhitelistProvider } from './Whitelist/provider'
 import { useYhaasStats } from './useYhaasStats'
 import { Suspense, useMemo } from 'react'
 import bmath from '@kalani/lib/bmath'
@@ -82,13 +81,8 @@ export default function Page() {
     </Suspense>
 
     <div className="px-8 flex flex-col items-center gap-12">
-      <p>
-        .. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...
-      </p>
-
-      <WhitelistProvider>
-        <Whitelist />
-      </WhitelistProvider>
+      <p>.. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...</p>
+      <Whitelist />
     </div>
   </section>
 }

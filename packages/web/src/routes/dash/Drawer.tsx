@@ -15,7 +15,7 @@ const DrawerButtonClassName = `
 p-3 flex items-center justify-center
 bg-black border-primary border-transparent rounded-primary
 hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
-group-active:text-secondary-400 group-active:border-secondary-400
+group-active:text-secondary-400 group-active:border-secondary-400 group-active:bg-black
 saber-glow
 `
 
