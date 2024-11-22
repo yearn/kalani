@@ -12,19 +12,9 @@ import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import ChainImg from '../../../../components/ChainImg'
 import TokenImg from '../../../../components/TokenImg'
 import { zeroAddress } from 'viem'
-import { cn } from '../../../../lib/shadcn'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRelayed'
 import { ROLES } from '@kalani/lib/types'
-
-function LabelValueRow({ label, className, children }: { label: string, className?: string, children: React.ReactNode }) {
-  return <div className={cn(
-    'px-6 py-2 w-full flex items-center justify-between rounded-primary even:bg-neutral-950',
-    className
-  )}>
-    <div>{label}</div>
-    <div className="flex justify-end">{children}</div>
-  </div>
-}
+import LabelValueRow from '../../../../components/elements/LabelValueRow'
 
 function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
@@ -120,7 +110,7 @@ function Vitals({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="yHaaS automation">
-        {isRelayed ? <ViewGeneric className="text-secondary-100">Enabled</ViewGeneric>
+        {isRelayed ? <ViewGeneric className="text-green-400">Enabled</ViewGeneric>
           : <ViewGeneric className="text-warn-400">Disabled</ViewGeneric>}
       </LabelValueRow>
 

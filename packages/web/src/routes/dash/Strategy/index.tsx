@@ -1,5 +1,5 @@
 import { fPercent, fUSD } from '@kalani/lib/format'
-import Assets from './tabs/Assets'
+import Vitals from './tabs/Vitals'
 import Reports from './tabs/Reports'
 import ChainImg from '../../../components/ChainImg'
 import Hero, { HeroInset } from '../../../components/Hero'
@@ -25,7 +25,7 @@ function Suspender() {
   return <section className="flex flex-col gap-8">
     <Hero className="bg-secondary-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2">
-        <div className={`text-4xl font-fancy`}>{strategy.name}</div>
+        <div className={`xl:w-[800px] text-4xl font-fancy truncate`}>{strategy.name}</div>
 
         <div className="flex items-center gap-12">
           <div className="text-2xl font-bold">
@@ -48,14 +48,14 @@ function Suspender() {
 
       <HeroInset>
         <Tabs className="flex gap-4">
-          <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
+          <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
           <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
 
     <div className="w-full px-12">
-      <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+      <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
       <TabContent id="reports"><Reports /></TabContent>
     </div>
   </section>

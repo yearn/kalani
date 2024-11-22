@@ -9,6 +9,7 @@ const StrategySchema = z.object({
   chainId: z.number(),
   address: EvmAddressSchema,
   name: z.string(),
+  symbol: z.string(),
   apiVersion: z.string().optional(),
   inceptBlock: z.bigint({ coerce: true }),
   inceptTime: z.number({ coerce: true }),
@@ -20,6 +21,8 @@ const StrategySchema = z.object({
     name: z.string(),
     decimals: z.number()  
   }),
+  pricePerShare: z.bigint({ coerce: true }).optional(),
+  depositLimit: z.bigint({ coerce: true }).optional(),
   lastReportDetail: z.object({
     blockTime: z.bigint({ coerce: true }),
     transactionHash: HexStringSchema
@@ -37,10 +40,13 @@ query Query($chainId: Int, $address: String) {
     chainId
     address
     name
+    symbol
     apiVersion
     inceptBlock
     inceptTime
     totalAssets
+    pricePerShare
+    depositLimit: deposit_limit
     asset {
       address
       name

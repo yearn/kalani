@@ -1,6 +1,6 @@
 import { useVaultFromParams } from '../../../hooks/useVault'
 import { fPercent, fUSD } from '@kalani/lib/format'
-import Assets from './tabs/Assets'
+import Vitals from './tabs/Vitals'
 import ChainImg from '../../../components/ChainImg'
 import Hero, { HeroInset } from '../../../components/Hero'
 import TokenImg from '../../../components/TokenImg'
@@ -10,11 +10,11 @@ import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 
 const tabClassNames = {
-  textClassName: 'text-secondary-950 group-active:text-secondary-950/60',
+  textClassName: 'text-neutral-950 group-active:text-neutral-950/60',
   bgClassName: `
-    [[data-open=true]_&]:bg-secondary-950 
-    group-hover:bg-secondary-950 
-    group-active:bg-secondary-950/60
+    [[data-open=true]_&]:bg-neutral-950 
+    group-hover:bg-neutral-950 
+    group-active:bg-neutral-950/60
   `
 }
 
@@ -49,13 +49,13 @@ function Suspender() {
 
       <HeroInset>
         <Tabs className="flex gap-4">
-          <Tab id="assets" isDefault={true} classNames={tabClassNames}>Assets</Tab>
+          <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
 
     <div className="w-full px-12">
-      <TabContent id="assets" isDefault={true}><Assets /></TabContent>
+      <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     </div>
   </section>
 }

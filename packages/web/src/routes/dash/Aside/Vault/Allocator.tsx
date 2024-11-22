@@ -11,11 +11,12 @@ import LinkButton from "../../../../components/elements/LinkButton"
 import { fPercent } from '@kalani/lib/format'
 import Button from '../../../../components/elements/Button'
 import StrategiesByAddress from './StrategiesByAddress'
-import { useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
-import { EvmAddress } from '@kalani/lib/types'
+import { useAccount, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
+import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { UseSimulateContractParameters } from 'wagmi'
 import abis from '@kalani/lib/abis'
 import { useWriteContract } from '../../../../hooks/useWriteContract'
+import { useHasRole } from '../../../../hooks/useHasRole'
 
 export function useAddStrategy(strategy: EvmAddress) {
   const { address: vault } = useVaultParams()
@@ -89,7 +90,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
   }, [confirmation, resolveToast, setLocalVaultStrategies, item, query, vault])
 
   return <div className="flex items-center gap-4">
-    <LinkButton to={getItemHref(item)} h="tertiary" className="px-4 grow h-14 flex items-center justify-between">
+    <LinkButton to={getItemHref(item)} h="tertiary" className="w-full px-4 grow h-14 flex items-center justify-between">
       <div className="text-sm">{item.symbol}</div>
       <div className="text-xs">{fPercent(item.apy) ?? '-.--%'}</div>
     </LinkButton>
@@ -104,7 +105,8 @@ function VaultSelector() {
   const filter = useMemo(() => {
     if (!vault) return []
     return items.filter(item => 
-      compareEvmAddresses(item.token?.address ?? zeroAddress, vault.asset.address)
+      item.chainId === vault.chainId
+      && compareEvmAddresses(item.token?.address ?? zeroAddress, vault.asset.address)
       && !compareEvmAddresses(item.address, vault.address)
       && !vault.strategies.some(strategy => compareEvmAddresses(strategy.address, item.address))
     )
@@ -115,15 +117,16 @@ function VaultSelector() {
   return <div className="flex flex-col gap-6">
     <div className="text-neutral-400">Available {vault?.asset.symbol} Strategies</div>
     <div className="flex flex-col gap-6">
-      {filter.map(item => <SelectableVault key={item.address} item={item} />)}
+      {filter.slice(0, 4).map(item => <SelectableVault key={item.address} item={item} />)}
     </div>
   </div>
 }
 
 export default function Allocator() {
+  const { chainId, address: vault } = useVaultParams()
+  const authorized = useHasRole({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
   const { vaultConfig } = useVaultConfig()
   const { allocator } = useAllocator()
-  const { chainId } = useVaultParams()
   const mounted = useMounted()
 
   if (vaultConfig.minimumChange < 1) { return (
@@ -133,8 +136,8 @@ export default function Allocator() {
       <div className="flex items-center justify-start gap-6 text-neutral-400">
         Allocator <EvmAddressChipSlide chainId={chainId} address={allocator} className="bg-neutral-900" />
       </div>
-      <VaultSelector />
-      <StrategiesByAddress />
+      {authorized && <VaultSelector />}
+      {authorized && <StrategiesByAddress />}
     </FlyInFromBottom>
     )
   }

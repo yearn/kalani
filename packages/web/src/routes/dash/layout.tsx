@@ -13,16 +13,16 @@ export default function Layout() {
       <div className="hidden sm:block min-w-24"></div>
 
       <div className={`
-        isolate grow w-full sm:min-h-screen pb-24
-        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
+        isolate grow sm:min-h-screen pb-24
+        sm:flex sm:flex-col sm:justify-start`}>
         <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
         <Outlet />
       </div>
 
-      <aside className={`relative hidden sm:block min-w-[26%] px-8 pt-28 h-screen`}>
-        <div className="max-w-[380px] pb-12 sm:pb-48">
-          <Aside />
-        </div>
+      <aside className={`relative hidden sm:block 
+        min-w-[380px] max-w-[380px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24
+        border-l-primary border-l-neutral-900`}>
+        <Aside />
       </aside>
     </div>
 

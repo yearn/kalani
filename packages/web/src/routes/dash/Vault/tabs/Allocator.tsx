@@ -7,7 +7,7 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import LinkButton from '../../../../components/elements/LinkButton'
 import { fBps, fPercent } from '@kalani/lib/format'
 import InputBps, { useInputBpsSettings } from '../../../../components/elements/InputBps'
-import { EvmAddress } from '@kalani/lib/types'
+import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { readContractsQueryOptions } from 'wagmi/query'
 import { useConfig, useWaitForTransactionReceipt, useSimulateContract, UseSimulateContractParameters } from 'wagmi'
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -16,6 +16,7 @@ import { useWriteContract } from '../../../../hooks/useWriteContract'
 import InputInteger from '../../../../components/elements/InputInteger'
 import { create } from 'zustand'
 import Section from '../../../../components/Section'
+import { useHasRole } from '../../../../hooks/useHasRole'
 
 export function useSetMinimumChange(minimumChange: bigint) {
   const { address: vault } = useVaultParams()
@@ -145,8 +146,14 @@ function Allocation({ strategy }: { strategy: {
   address: `0x${string}`, 
   name: string 
 } }) {
-  const { items } = useFinderItems()
   const { vault } = useVaultFromParams()
+  const authorized = useHasRole({
+    chainId: vault?.chainId ?? 0,
+    vault: vault?.address ?? zeroAddress,
+    roleMask: ROLES.DEBT_MANAGER
+  })
+
+  const { items } = useFinderItems()
   const { refetch: refetchVaultConfig } = useVaultConfig()
   const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
   const onchainTargetRatio = useOnchainTargetRatio(strategy.address)
@@ -170,12 +177,13 @@ function Allocation({ strategy }: { strategy: {
   }, [update, simulation, write, confirmation])
 
   const disabled = useMemo(() => {
-    return !update.isDirty
+    return !authorized 
+    || !update.isDirty
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [update, simulation, write])
+  }, [authorized, update, simulation, write])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -225,7 +233,7 @@ function Allocation({ strategy }: { strategy: {
       <div className="text-sm">{fPercent(getFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>
     <div className="w-64 text-right text-2xl font-bold">
-      <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-64" />
+      <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} disabled={disabled} className="w-64" />
     </div>
     <div className="flex justify-end">
       <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
@@ -237,7 +245,7 @@ function useTotalDebtRatio() {
   const { vaultConfig } = useVaultConfig()
   const { updates } = useDebtRatioUpdates()
   const totalDebtRatio = useMemo(() => updates.reduce((acc, update) => acc + update.debtRatio, 0n), [updates])
-  return { 
+  return {
     totalDebtRatio, 
     isDirty: Number(totalDebtRatio) !== vaultConfig.totalDebtRatio 
   }
@@ -282,7 +290,6 @@ function EstimatedApy() {
 
 function Allocations() {
   const { vault } = useVaultFromParams()
-
   return <div className="w-full flex flex-col gap-6">
     <div className="w-full flex items-center gap-6">
       <div className="grow"></div>
