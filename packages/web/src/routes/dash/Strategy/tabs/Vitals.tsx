@@ -11,6 +11,7 @@ import TokenImg from '../../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/StrategyForm/useIsRelayed'
+import { zeroAddress } from 'viem'
 
 function Suspender() {
   const { strategy } = useStrategyFromParams()
@@ -58,6 +59,18 @@ function Suspender() {
 
       <LabelValueRow label="Performance fee">
         <ViewBps bps={strategy.fees?.performanceFee ?? 0} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Management">
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.management ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Keeper">
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.keeper ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Health check">
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.healthCheck ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
 
       <LabelValueRow label="yHaaS automation">

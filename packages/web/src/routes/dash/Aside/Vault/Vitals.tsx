@@ -4,12 +4,12 @@ import { useAllocator } from '../../Vault/useAllocator'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRelayed'
 import { useVaultFromParams } from '../../../../hooks/useVault'
 import { zeroAddress } from 'viem'
-import { PSEUDO_ROLES, ROLES } from '@kalani/lib/types'
+import { ROLES } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
 import Notification from '../Notification'
-import { useHasRole } from '../../../../hooks/useHasRole'
+import { useHasRoles } from '../../../../hooks/useHasRoles'
 import { useIsRoleManager } from '../../../../hooks/useRoleManager'
 
 function useNotifications() {
@@ -30,8 +30,8 @@ function useNotifications() {
     navigate(`/yhaas`)
   }, [navigate, setTargets, setTargetsRaw, vault])
 
-  const accountantManager = useHasRole({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.ACCOUNTANT_MANAGER })
-  const debtManager = useHasRole({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.DEBT_MANAGER })
+  const isAccountantManager = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.ACCOUNTANT_MANAGER })
+  const isDebtManager = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.DEBT_MANAGER })
   const isRoleManager = useIsRoleManager({ chainId: vault?.chainId ?? 0, address: vault?.address ?? zeroAddress })
 
   return useMemo(() => {
@@ -40,27 +40,29 @@ function useNotifications() {
       result.push(<Notification 
         key={`vault-vitals-accountant-${vault?.address}`}
         id={`vault-vitals-accountant-${vault?.address}`}
-        authorized={accountantManager} 
+        authorized={isAccountantManager} 
         icon={PiCalculator}>
           No accountant set
         </Notification>
       )
     }
+
     if (compareEvmAddresses(allocator, zeroAddress)) {
       result.push(<Notification 
         id={`vault-vitals-allocator-${vault?.address}`} 
         key={`vault-vitals-allocator-${vault?.address}`}
-        authorized={debtManager} 
+        authorized={isDebtManager} 
         icon={PiScales}>
           No allocator set
         </Notification>
       )
     }
+    
     if (!isRelayed) {
       result.push(<Notification 
         id={`vault-vitals-yhaas-${vault?.address}`} 
         key={`vault-vitals-yhaas-${vault?.address}`}
-        authorized={isRoleManager} 
+        authorized={isRoleManager ?? false} 
         icon={PiRobot} 
         onFix={onFixYhaas}>
           yHaaS disabled

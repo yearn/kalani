@@ -14,6 +14,8 @@ const StrategySchema = z.object({
   inceptBlock: z.bigint({ coerce: true }),
   inceptTime: z.number({ coerce: true }),
   keeper: EvmAddressSchema.optional(),
+  management: EvmAddressSchema.optional(),
+  healthCheck: EvmAddressSchema.optional(),
   totalAssets: z.bigint({ coerce: true }),
   asset: z.object({
     address: EvmAddressSchema,
@@ -66,6 +68,8 @@ query Query($chainId: Int, $address: String) {
 
   strategy(chainId: $chainId, address: $address) {
     keeper
+    management
+    healthCheck
     lastReportDetail {
       blockTime
       transactionHash

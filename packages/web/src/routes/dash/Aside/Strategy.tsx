@@ -6,12 +6,19 @@ import ReactTimeago from 'react-timeago'
 import { useNavigate } from 'react-router-dom'
 import { useWhitelist } from '../Yhaas/Whitelist/useWhitelist'
 import Notification from './Notification'
+import { useManagement } from '../Strategy/useManagement'
+import { useAccount } from 'wagmi'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 function useNotifications() {
   const navigate = useNavigate()
+  const { address } = useAccount()
   const { setTargets, setTargetsRaw } = useWhitelist()
   const { strategy } = useStrategyFromParams()
   const { data: isRelayed } = useIsRelayed({ chainId: strategy.chainId, strategy: strategy.address })
+
+  const { management } = useManagement(strategy.chainId, strategy.address)
+  const authorized = useMemo(() => compareEvmAddresses(management, address), [management, address])
 
   const onFixYhaas = useCallback(() => {
     if (!strategy) { return }
@@ -22,18 +29,18 @@ function useNotifications() {
 
   return useMemo(() => {
     const result: React.ReactNode[] = []
-    if (!isRelayed) {
+    if (!isRelayed && authorized) {
       result.push(<Notification 
         id={`strategy-vitals-yhaas-${strategy?.address}`} 
         key={`strategy-vitals-yhaas-${strategy?.address}`} 
-        authorized={true}
+        authorized={authorized}
         icon={PiRobot} onFix={onFixYhaas}>
           yHaaS disabled
         </Notification>
       )
     }
     return result
-  }, [strategy, isRelayed])
+  }, [strategy, isRelayed, authorized])
 }
 
 export default function Strategy() {

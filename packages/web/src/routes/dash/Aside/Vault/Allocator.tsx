@@ -3,7 +3,7 @@ import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChip
 import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
 import { useMounted } from '../../../../hooks/useMounted'
 import { useLocalVaultStrategies, useVaultFromParams, useVaultParams } from '../../../../hooks/useVault'
-import { useVaultConfig, useAllocator } from '../../Vault/useAllocator'
+import { useAllocator, useMinimumChange } from '../../Vault/useAllocator'
 import { FinderItem, getItemHref, useFinderItems } from '../../../../components/Finder/useFinderItems'
 import { useCallback, useEffect, useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
@@ -11,12 +11,12 @@ import LinkButton from "../../../../components/elements/LinkButton"
 import { fPercent } from '@kalani/lib/format'
 import Button from '../../../../components/elements/Button'
 import StrategiesByAddress from './StrategiesByAddress'
-import { useAccount, useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
 import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { UseSimulateContractParameters } from 'wagmi'
 import abis from '@kalani/lib/abis'
 import { useWriteContract } from '../../../../hooks/useWriteContract'
-import { useHasRole } from '../../../../hooks/useHasRole'
+import { useHasRoles } from '../../../../hooks/useHasRoles'
 
 export function useAddStrategy(strategy: EvmAddress) {
   const { address: vault } = useVaultParams()
@@ -124,12 +124,12 @@ function VaultSelector() {
 
 export default function Allocator() {
   const { chainId, address: vault } = useVaultParams()
-  const authorized = useHasRole({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
-  const { vaultConfig } = useVaultConfig()
+  const authorized = useHasRoles({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
+  const { minimumChange } = useMinimumChange()
   const { allocator } = useAllocator()
   const mounted = useMounted()
 
-  if (vaultConfig.minimumChange < 1) { return (
+  if (minimumChange < 1) { return (
     <></>
   ) } else { return (
     <FlyInFromBottom _key="strategy-selector" parentMounted={mounted} exit={1} className="flex flex-col gap-12">

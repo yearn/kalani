@@ -78,7 +78,7 @@ function RightHero() {
         title="Automate" 
         description=<>Automate the <Highlight>tending and harvesting</Highlight> of your vaults with Yearn yHaaS</>
       />
-      <Feature href="/fees" 
+      <Feature href="/" 
         icon={<PiMoneyWavy size={96} />} 
         title="Earn" 
         description=<>Earn management <Highlight>fees</Highlight> on your vaults, claim them in the app</>

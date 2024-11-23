@@ -173,6 +173,7 @@ export function useFinderItems() {
   const query = useSuspenseQuery({
     queryKey: ['useFinderItems'],
     queryFn: fetchFinderItems,
+    staleTime: 1000 * 60 * 5
   })
 
   const filter = useMemo(() => {

@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import { getChain } from '../../../../lib/chains'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
-import { useVaultConfig } from '../useAllocator'
+import { useTotalDebtRatio } from '../useAllocator'
 import ViewBps from '../../../../components/elements/ViewBps'
 import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import ChainImg from '../../../../components/ChainImg'
@@ -18,13 +18,12 @@ import LabelValueRow from '../../../../components/elements/LabelValueRow'
 
 function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
-  const { vaultConfig } = useVaultConfig()
-  const totalDebtRatio = useMemo(() => vaultConfig.totalDebtRatio, [vaultConfig])
+  const { totalDebtRatio } = useTotalDebtRatio()
 
   const deployed = useMemo(() => {
     if (!totalDebtRatio) { return 0 }
     if (!vault?.totalDebt) { return 0 }
-    const totalAllocated = mulb(vault?.totalAssets ?? 0n, totalDebtRatio / 10_000)
+    const totalAllocated = mulb(vault?.totalAssets ?? 0n, Number(totalDebtRatio) / 10_000)
     return Math.floor(Number(div(vault?.totalDebt ?? 0n, totalAllocated)) * 10_000)
   }, [vault, totalDebtRatio])
 

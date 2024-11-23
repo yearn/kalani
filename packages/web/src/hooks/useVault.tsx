@@ -71,6 +71,7 @@ export const VaultSchema = z.object({
   strategies: StrategySchema.array(),
   accounts: AccountRoleSchema.array(),
   reports: VaultReportSchema.array(),
+  defaultQueue: z.array(EvmAddressSchema).optional(),
   projectId: HexStringSchema.optional(),
   projectName: z.string().optional(),
   yearn: z.boolean().nullish(),
@@ -120,6 +121,7 @@ query Query($chainId: Int, $address: String) {
     lastProfitUpdate
     totalAssets
     totalDebt
+    defaultQueue: get_default_queue
     projectId
     projectName
     yearn
@@ -209,7 +211,8 @@ async function fetchVault({ chainId, address }: { chainId: number, address: EvmA
 function useVaultQuery({ chainId, address }: { chainId: number, address: EvmAddress }) {
   return useSuspenseQuery({
     queryKey: ['vault', chainId, address],
-    queryFn: () => fetchVault({ chainId, address })
+    queryFn: () => fetchVault({ chainId, address }),
+    staleTime: 30_000
   })
 }
 

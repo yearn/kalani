@@ -1,10 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-export function useSuspendFor(seconds: number) {
+export function useSuspendFor(milliseconds: number, nonce?: string) {
   return useSuspenseQuery({
-    queryKey: ['useSuspendFor', seconds],
+    queryKey: ['useSuspendFor', milliseconds, nonce],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, seconds * 1000))
+      await new Promise(resolve => setTimeout(resolve, milliseconds))
       return {}
     }
   })

@@ -14,6 +14,7 @@ function useTabAsideContent() {
   const tab = useTabName()
   return useMemo(() => {
     switch(tab) {
+      case 'allocator-mock': return <></>
       case 'allocator': return <Allocator />
       default: return <Vitals />
     }

@@ -5,7 +5,7 @@ import { useAccount, useConfig } from 'wagmi'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
-export function useHasRole(args: { chainId: number, vault: EvmAddress, roleMask: bigint }) {
+export function useHasRoles(args: { chainId: number, vault: EvmAddress, roleMask: bigint }) {
   const { chainId, vault, roleMask } = args
   const config = useConfig()
   const { address } = useAccount()
@@ -14,7 +14,7 @@ export function useHasRole(args: { chainId: number, vault: EvmAddress, roleMask:
     chainId, abi: abis.vault, address: vault, functionName: 'roles', args: [address ?? zeroAddress]
   })
 
-  const { data: userRoleMask } = useSuspenseQuery(options)
+  const { data: userRoleMask } = useSuspenseQuery({ ...options, staleTime: 30_000 })
 
   return containsRole(userRoleMask, roleMask)
 }
