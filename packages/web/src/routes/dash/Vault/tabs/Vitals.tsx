@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import { getChain } from '../../../../lib/chains'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
-import { useTotalDebtRatio } from '../useAllocator'
+import { useAllocator, useTotalDebtRatio } from '../useAllocator'
 import ViewBps from '../../../../components/elements/ViewBps'
 import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import ChainImg from '../../../../components/ChainImg'
@@ -19,6 +19,7 @@ import LabelValueRow from '../../../../components/elements/LabelValueRow'
 function Vitals({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const { totalDebtRatio } = useTotalDebtRatio()
+  const { allocator } = useAllocator()
 
   const deployed = useMemo(() => {
     if (!totalDebtRatio) { return 0 }
@@ -105,7 +106,7 @@ function Vitals({ vault }: { vault: Vault }) {
 
 
       <LabelValueRow label="Allocator">
-        <EvmAddressChipSlide chainId={vault.chainId} address={vault.allocator ?? zeroAddress} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={vault.chainId} address={allocator ?? vault.allocator ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
 
       <LabelValueRow label="yHaaS automation">

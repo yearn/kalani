@@ -130,9 +130,13 @@ export default function Allocator() {
   const mounted = useMounted()
 
   if (minimumChange < 1) { return (
-    <></>
+    <FlyInFromBottom _key="aside-allocator-no-min-change" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
+      <div className="flex items-center justify-start gap-6 text-neutral-400">
+        Allocator <EvmAddressChipSlide chainId={chainId} address={allocator} className="bg-neutral-900" />
+      </div>
+    </FlyInFromBottom>
   ) } else { return (
-    <FlyInFromBottom _key="strategy-selector" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
+    <FlyInFromBottom _key="aside-allocator" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
       <div className="flex items-center justify-start gap-6 text-neutral-400">
         Allocator <EvmAddressChipSlide chainId={chainId} address={allocator} className="bg-neutral-900" />
       </div>

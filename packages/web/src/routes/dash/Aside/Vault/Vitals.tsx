@@ -5,7 +5,7 @@ import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRe
 import { useVaultFromParams } from '../../../../hooks/useVault'
 import { zeroAddress } from 'viem'
 import { ROLES } from '@kalani/lib/types'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
 import Notification from '../Notification'

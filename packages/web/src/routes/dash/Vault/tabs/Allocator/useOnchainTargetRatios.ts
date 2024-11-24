@@ -28,7 +28,7 @@ export function useOnchainTargetRatios() {
       const strategy = vault?.strategies[i]
       result.push({ 
         strategy: vault?.strategies[i].address ?? zeroAddress, 
-        debtRatio: BigInt(strategy?.targetDebtRatio ?? query.data[i].result!)
+        debtRatio: BigInt((query.data[i].status === 'success') ? query.data[i].result! : strategy?.targetDebtRatio ?? 0n)
       })
     }
     return result

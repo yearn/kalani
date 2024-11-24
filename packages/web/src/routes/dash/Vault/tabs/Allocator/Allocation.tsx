@@ -11,7 +11,6 @@ import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
-import { useSuspendFor } from '../../../../../hooks/useSuspendFor'
 import { fPercent } from '@kalani/lib/format'
 import LinkButton from '../../../../../components/elements/LinkButton'
 import { compareEvmAddresses } from '@kalani/lib/strings'
@@ -40,7 +39,6 @@ function useFinderUtils() {
     if (item) return getItemHref(item)
     return `/erc4626/${strategy.chainId}/${strategy.address}`
   }, [findFinderItem])
-  return { findFinderItem, getStrategyHref }
 
   return { findFinderItem, getStrategyHref }
 }
@@ -73,8 +71,6 @@ function MutableAllocation({ strategy }: { strategy: {
   address: `0x${string}`, 
   name: string 
 } }) {
-  useSuspendFor(2_000, 'xxx')
-
   const { vault } = useVaultFromParams()
   const authorized = useHasDebtManagerRole()
 
