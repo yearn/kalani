@@ -51,7 +51,7 @@ export default {
       },
 
       width: {
-        'field-btn': '8rem',
+        'field-btn': '8rem'
       },
 
       height: {

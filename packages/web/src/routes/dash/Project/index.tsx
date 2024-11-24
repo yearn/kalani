@@ -8,6 +8,10 @@ import CopyHashChipSlide from '../../../components/ChipSlide/CopyHashChipSlide'
 import { useSuspenseReadProject } from '../../../components/SelectProject/useProjects'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
+import LabelValueRow from '../../../components/elements/LabelValueRow'
+import ViewGeneric from '../../../components/elements/ViewGeneric'
+import ChainImg from '../../../components/ChainImg'
+import Section from '../../../components/Section'
 
 export function useProjectParams() {
   const params = useParams()
@@ -25,7 +29,7 @@ function Suspender() {
   const { chainId, id } = useProjectParams()
   const { project } = useProjectByParams()
 
-  return <section className="flex flex-col gap-8">
+  return <section className="flex flex-col gap-10">
     <Hero className="bg-indigo-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center gap-3 text-sm">
@@ -39,60 +43,39 @@ function Suspender() {
       </div>
     </Hero>
 
-    <div className="w-full px-12">
-    <table className="table-auto w-full border-separate border-spacing-6">
-        <tbody>
-          <tr>
-            <td>Network</td>
-            <td className="flex items-center justify-end gap-4">
-              {getChain(chainId).name}
-            </td>
-          </tr>
+    <Section className="mx-12">
+      <div className="px-4 py-2 flex flex-col gap-6">
+        <LabelValueRow label="Network">
+          <ViewGeneric className="flex items-center gap-4">
+            <ChainImg chainId={chainId} size={24} /> {getChain(chainId).name}
+          </ViewGeneric>
+        </LabelValueRow>
 
-          <tr>
-            <td>Id</td>
-            <td className="text-right">
-              <CopyHashChipSlide hash={id} className="bg-neutral-800" />
-            </td>
-          </tr>
+        <LabelValueRow label="Id">
+          <CopyHashChipSlide hash={id} className="bg-neutral-800" />
+        </LabelValueRow>
 
-          <tr>
-            <td>Role manager</td>
-            <td className="flex items-center justify-end gap-4">
-              <EvmAddressChipSlide chainId={chainId} address={project.roleManager} className="bg-neutral-800" />
-            </td>
-          </tr>
+        <LabelValueRow label="Role manager">
+          <EvmAddressChipSlide chainId={chainId} address={project.roleManager} className="bg-neutral-800" />
+        </LabelValueRow>
 
-          <tr>
-            <td>Registry</td>
-            <td className="flex items-center justify-end gap-4">
-              <EvmAddressChipSlide chainId={chainId} address={project.registry} className="bg-neutral-800" />
-            </td>
-          </tr>
+        <LabelValueRow label="Registry">
+          <EvmAddressChipSlide chainId={chainId} address={project.registry} className="bg-neutral-800" />
+        </LabelValueRow>
 
-          <tr>
-            <td>Accountant</td>
-            <td className="flex items-center justify-end gap-4">
-              <EvmAddressChipSlide chainId={chainId} address={project.accountant} className="bg-neutral-800" />
-            </td>
-          </tr>
+        <LabelValueRow label="Accountant">
+          <EvmAddressChipSlide chainId={chainId} address={project.accountant} className="bg-neutral-800" />
+        </LabelValueRow>
 
-          <tr>
-            <td>Debt allocator</td>
-            <td className="flex items-center justify-end gap-4">
-              <EvmAddressChipSlide chainId={chainId} address={project.debtAllocator} className="bg-neutral-800" />
-            </td>
-          </tr>
+        <LabelValueRow label="Debt allocator">
+          <EvmAddressChipSlide chainId={chainId} address={project.debtAllocator} className="bg-neutral-800" />
+        </LabelValueRow>
 
-          <tr>
-            <td>Factory</td>
-            <td className="flex items-center justify-end gap-4">
-              <EvmAddressChipSlide chainId={chainId} address={project.roleManagerFactory} className="bg-neutral-800" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <LabelValueRow label="Factory">
+          <EvmAddressChipSlide chainId={chainId} address={project.roleManagerFactory} className="bg-neutral-800" />
+        </LabelValueRow>
+      </div>
+    </Section>
   </section>
 }
 

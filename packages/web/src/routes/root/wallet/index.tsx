@@ -23,12 +23,14 @@ export default function Wallet() {
       <div className={`
         isolate grow w-full sm:min-h-screen
         sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
-        <div className="hidden sm:block w-full h-20 border-b border-transparent"></div>
+        <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
         <Account address={address ?? zeroAddress} />
       </div>
 
-      <aside className={`relative hidden sm:block min-w-[26%] px-8 pt-28 h-screen`}>
-        <div className="max-w-[380px] flex flex-col gap-6">
+      <div className="min-w-[420px] max-w-[420px]"></div>
+      <aside className={`fixed right-0 hidden sm:block 
+        min-w-[420px] max-w-[420px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
+        <div className="flex flex-col gap-6">
           <h2 className="text-neutral-400">Projects</h2>
           {projects.map(project => <LinkButton 
             key={project.id} 

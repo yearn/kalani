@@ -19,6 +19,15 @@ import InputBps from '../../../../../components/elements/InputBps'
 import Button from '../../../../../components/elements/Button'
 import ViewBps from '../../../../../components/elements/ViewBps'
 
+function useHasDebtManagerRole() {
+  const { vault } = useVaultFromParams()
+  return useHasRoles({
+    chainId: vault?.chainId ?? 0,
+    vault: vault?.address ?? zeroAddress,
+    roleMask: ROLES.DEBT_MANAGER
+  })
+}
+
 function useFinderUtils() {
   const { items } = useFinderItems()
 
@@ -67,13 +76,8 @@ function MutableAllocation({ strategy }: { strategy: {
   useSuspendFor(2_000, 'xxx')
 
   const { vault } = useVaultFromParams()
-  const authorized = useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorized = useHasDebtManagerRole()
 
-  const { items } = useFinderItems()
   const { refetch: refetchTotalDebtRatio } = useTotalDebtRatio()
   const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
   const onchainTargetRatio = useOnchainTargetRatio(strategy.address)
@@ -81,85 +85,74 @@ function MutableAllocation({ strategy }: { strategy: {
   const { updateDebtRatio } = useDebtRatioUpdates()
   const update = useDebtRatioUpdate(strategy.address)
   const { totalDebtRatio } = useTotalDebtRatioUpdates()
+  const { findFinderItem, getStrategyHref } = useFinderUtils()
 
   const { simulation, write, confirmation, resolveToast } = useSetStrategyDebtRatio(
     strategy.address, 
     update.debtRatio, 
-    false //update.isDirty
+    update.isDirty
   )
 
-  // const buttonTheme = useMemo(() => {
-  //   if (!update.isDirty) return 'default'
-  //   if (write.isSuccess && confirmation.isPending) return 'confirm'
-  //   if (write.isPending) return 'write'
-  //   if (simulation.isFetching) return 'sim'
-  //   if (simulation.isError) return 'error'
-  //   return 'default'
-  // }, [update, simulation, write, confirmation])
+  const buttonTheme = useMemo(() => {
+    if (!update.isDirty) return 'default'
+    if (write.isSuccess && confirmation.isPending) return 'confirm'
+    if (write.isPending) return 'write'
+    if (simulation.isFetching) return 'sim'
+    if (simulation.isError) return 'error'
+    return 'default'
+  }, [update, simulation, write, confirmation])
 
-  // const disabled = useMemo(() => {
-  //   return !authorized 
-  //   || !update.isDirty
-  //   || simulation.isFetching
-  //   || !simulation.isSuccess
-  //   || write.isPending
-  //   || (write.isSuccess && confirmation.isPending)
-  // }, [authorized, update, simulation, write])
+  const disabled = useMemo(() => {
+    return !authorized 
+    || !update.isDirty
+    || simulation.isFetching
+    || !simulation.isSuccess
+    || write.isPending
+    || (write.isSuccess && confirmation.isPending)
+  }, [authorized, update, simulation, write])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
   }, [simulation.isError])
 
-  // useEffect(() => {
-  //   // no but this _is_ getting called a bunch
-  //   if (confirmation.isSuccess) {
-  //     console.log('confirmation', confirmation.isSuccess, confirmation)
-  //     resolveToast()
-  //     setTimeout(() => {
-  //       refetchTotalDebtRatio()
-  //       refetchOnchainTargetRatios()
-  //     }, 10)
-  //   }
-  // }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnchainTargetRatios()])
+  useEffect(() => {
+    if (confirmation.isSuccess) {
+      resolveToast()
+      setTimeout(() => {
+        refetchTotalDebtRatio()
+        refetchOnchainTargetRatios()
+      }, 10)
+    }
+  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnchainTargetRatios])
 
-  // const getFinderItem = useCallback((strategy: { chainId: number, address: `0x${string}` }) => {
-  //   return items.find(item => compareEvmAddresses(item.address, strategy.address))
-  // }, [items])
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const newRatio = BigInt(e.target.value)
+    const previousRatio = update.debtRatio
+    const newTotalDebtRatio = totalDebtRatio + (newRatio - previousRatio)
+    if (newRatio < 0n || newTotalDebtRatio > 10_000n) { return }
+    updateDebtRatio({
+      chainId: strategy.chainId,
+      vault: vault?.address ?? zeroAddress,
+      strategy: strategy.address,
+      debtRatio: newRatio,
+      isDirty: newRatio !== onchainTargetRatio
+    })
+  }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio])
 
-  // const getStrategyHref = useCallback((strategy: { chainId: number, address: `0x${string}` }) => {
-  //   const item = getFinderItem(strategy)
-  //   if (item) return getItemHref(item)
-  //   return `/erc4626/${strategy.chainId}/${strategy.address}`
-  // }, [getFinderItem])
-
-  // const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newRatio = BigInt(e.target.value)
-  //   const previousRatio = update.debtRatio
-  //   const newTotalDebtRatio = totalDebtRatio + (newRatio - previousRatio)
-  //   if (newRatio < 0n || newTotalDebtRatio > 10_000n) { return }
-  //   updateDebtRatio({
-  //     chainId: strategy.chainId,
-  //     vault: vault?.address ?? zeroAddress,
-  //     strategy: strategy.address,
-  //     debtRatio: newRatio,
-  //     isDirty: newRatio !== onchainTargetRatio
-  //   })
-  // }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio])
-
-  // const onSet = useCallback(async () => {
-  //   write.writeContract(simulation.data!.request)
-  // }, [write, simulation])
+  const onSet = useCallback(async () => {
+    write.writeContract(simulation.data!.request)
+  }, [write, simulation])
 
   return <div className="w-full flex items-center gap-6">
-    {/* <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
+    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
       <div>{strategy.name}</div>
-      <div className="text-sm">{fPercent(getFinderItem(strategy)?.apy) ?? '-.--%'}</div>
-    </LinkButton> */}
+      <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
+    </LinkButton>
     <div className="w-64 text-right text-2xl font-bold">
-      {/* <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} disabled={disabled} className="w-64" /> */}
+      <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-64" />
     </div>
     <div className="flex justify-end">
-      {/* <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button> */}
+      <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
     </div>
   </div>
 }
@@ -190,12 +183,7 @@ export default function Allocation({ strategy }: { strategy: {
   address: `0x${string}`, 
   name: string 
 } }) {
-  const { vault } = useVaultFromParams()
-  const authorized = useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorized = useHasDebtManagerRole()
   if (authorized) { return <MutableAllocation strategy={strategy} /> }
   else { return <ReadonlyAllocation strategy={strategy} /> }
 }

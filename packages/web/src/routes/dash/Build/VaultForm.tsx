@@ -14,7 +14,7 @@ import AButton from '../../../components/elements/AButton'
 
 function Step_Project() {
   const { selectedProject, setSelectedProject } = useSelectedProject()
-  return <div className="flex items-start gap-12">
+  return <div className="w-full flex items-start gap-12">
     <StepLabel step={1} />
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">Select a project</p>
@@ -85,7 +85,6 @@ function Step_Name() {
 
   const recommendations = useMemo(() => {
     const [first, second] = selectedProject?.name.match(/(^.{1})|[A-Z]/g) ?? []
-    // const [first, second] = selectedProject?.name.match(/^.((?=[A-Z]).|$)/g) ?? []
     const prefix = `${first ?? ''}${second ?? ''}`.toLowerCase()
 
     return {
@@ -115,7 +114,7 @@ function Step_Name() {
 export default function VaultForm({ className }: { className?: string }) {
   const { projectIdValidation, assetValidation, categoryValidation } = useVaultFormValidation()
 
-  return <div className={cn('pb-96 flex flex-col gap-24', className)}>
+  return <div className={cn('w-full pb-96 flex flex-col gap-24', className)}>
     <Step_Project />
 
     {projectIdValidation.isValid && <FlyInFromBottom _key="step_token">
