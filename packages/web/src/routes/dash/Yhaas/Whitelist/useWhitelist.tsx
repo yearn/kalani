@@ -8,9 +8,9 @@ export const WhitelistDataSchema = z.object({
   targets: EvmAddressSchema.array(),
   setTargets: z.function().args(EvmAddressSchema.array()).returns(z.void()),
   frequency: z.number().optional(),
-  setFrequency: z.function().args(z.number()).returns(z.void()),
+  setFrequency: z.function().args(z.number().optional()).returns(z.void()),
   repo: z.string().optional(),
-  setRepo: z.function().args(z.string()).returns(z.void()),
+  setRepo: z.function().args(z.string().optional()).returns(z.void()),
   isRepoValid: z.boolean(),
   options: z.record(z.any()),
   setOptions: z.function().args(z.record(z.any())).returns(z.void())
@@ -24,9 +24,9 @@ export const useWhitelist = create<WhitelistData>(set => ({
   targets: [],
   setTargets: (targets: EvmAddress[]) => set({ targets }),
   frequency: undefined,
-  setFrequency: (frequency: number) => set({ frequency }),
+  setFrequency: (frequency?: number) => set({ frequency }),
   repo: undefined,
-  setRepo: (repo: string) => set({ repo }),
+  setRepo: (repo?: string) => set({ repo }),
   isRepoValid: false,
   options: {},
   setOptions: (options: Record<string, any>) => set({ options })

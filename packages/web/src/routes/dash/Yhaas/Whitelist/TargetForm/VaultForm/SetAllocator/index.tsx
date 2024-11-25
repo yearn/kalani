@@ -191,7 +191,7 @@ export default function SetAllocator() {
 
   const onAutomateChanged = useCallback((automate: boolean) => {
     setAutomate(automate)
-    setOptions(current => ({ ...current, automate }))
+    setOptions((current: any) => ({ ...current, automate }))
   }, [setAutomate, setOptions])
 
   useEffect(() => {
@@ -205,7 +205,7 @@ export default function SetAllocator() {
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)
     setIsValid(true)
-    setOptions(current => ({ ...current, allocator }))
+    setOptions((current: any) => ({ ...current, allocator }))
     onAutomateChanged(true)
   }, [setAllocator, setIsValid, setOptions, onAutomateChanged])
 
