@@ -3,7 +3,7 @@ import { useConfig } from 'wagmi'
 import { useMemo } from 'react'
 import { readContractsQueryOptions } from 'wagmi/query'
 import abis from '@kalani/lib/abis'
-import { useWhitelist } from '../../provider'
+import { useWhitelist } from '../../useWhitelist'
 import { useRelayers } from '../../relayers'
 import { containsRole, EvmAddress } from '@kalani/lib/types'
 

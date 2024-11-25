@@ -1,35 +1,44 @@
 import { useCallback } from 'react'
 import { useMutation, useMutationState } from '@tanstack/react-query'
 import { EvmAddress, HexString } from '@kalani/lib/types'
-import { extractSnapshot, postThing } from '../../../lib/indexer'
+import { API_URL } from '../../../lib/env'
 
 export type IndexVaultArgs = {
   asset?: EvmAddress,
   decimals?: number,
   apiVersion?: string,
+  category?: number,
   projectId?: HexString,
+  projectName?: string,
   roleManager?: EvmAddress,
   inceptBlock?: bigint,
-  inceptTime?: number
+  inceptTime?: number,
+  signature?: HexString
 }
 
 export function useIndexVault(chainId?: number, address?: EvmAddress) {
   const indexVault = useCallback(async ({
-    asset, decimals, apiVersion,
-    projectId, roleManager,
-    inceptBlock, inceptTime
+    asset, decimals, apiVersion, category,
+    projectId, projectName, roleManager,
+    inceptBlock, inceptTime, 
+    signature
   }: IndexVaultArgs) => {
-    if (!chainId || !address || !asset || !decimals || !apiVersion || !projectId || !roleManager || !inceptBlock || !inceptTime) {
+    if (!chainId || !address || !asset || !decimals || !apiVersion || !category || !projectId || !projectName || !roleManager || !inceptBlock || !inceptTime || !signature) {
       throw new Error('Missing required arguments')
     }
 
-    await postThing(chainId, address, 'vault', {
-      erc4626: true, yearn: false,
-      asset, decimals, apiVersion, projectId, roleManager,
-      inceptBlock, inceptTime
+    const response = await fetch(`${API_URL}/api/kong/index/vault`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chainId, address, asset, decimals, apiVersion, category,
+        projectId, projectName, roleManager, 
+        inceptBlock, inceptTime, signature
+      })
     })
+    if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`) }
+    return await response.json()
 
-    await extractSnapshot('yearn/3/vault', chainId, address)
   }, [chainId, address])
 
   const mutation = useMutation({

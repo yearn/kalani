@@ -1,27 +1,28 @@
 import { useMemo } from 'react'
 import { motion, Transition } from 'framer-motion'
 import { springs } from '../../lib/motion'
-import { useMounted } from '../../hooks/useMounted'
 
 export default function ScaleIn({ 
   _key,
   transition = springs.roll,
-  waitForMount,
+  parentMounted,
+  exit = 0,
   children 
 }: { 
   _key: string,
   transition?: Transition,
-  waitForMount?: boolean,
+  parentMounted?: boolean,
+  exit?: -1 | 0 | 1,
   children: React.ReactNode 
 }) {
-  const mounted = useMounted()
   const initial = useMemo(() => 
-    (!waitForMount || mounted) ? { scale: 0, opacity: 0 } : false, 
-  [waitForMount, mounted])
+    (parentMounted === true || parentMounted === undefined) ? { scale: 0, opacity: 0 } : false,
+  [parentMounted])
   return <motion.div key={`motion-${_key}`}
     transition={transition}
     initial={initial}
-    animate={{ scale: 1, opacity: 1 }} >
+    animate={{ scale: 1, opacity: 1 }} 
+    exit={{ scale: (1 - exit) * 1, opacity: (1 - exit) * 1 }}>
     {children}
   </motion.div>
 }

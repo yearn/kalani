@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useWhitelist } from './provider'
+import { useWhitelist } from './useWhitelist'
 import Addresses from '../../../../components/elements/Addresses'
 import { EvmAddress } from '@kalani/lib/types'
 

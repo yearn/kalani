@@ -6,14 +6,16 @@ export function fElipsize(text: string, length = 48) {
 
 export function fHexString(hex: string, short = false) {
   const result = `${hex.slice(0, 6)}...${hex.slice(-4)}`
-  return short ? result.slice(0, 8) : result
+  return short ? result.slice(0, 6) : result
 }
 
 export function fEvmAddress(address: string, short = false) {
   return fHexString(address, short)
 }
 
-export function fPercent(amount: number, options?: { fixed?: number, padding?: { length: number, fill?: string } }) {
+export function fPercent(amount: number | undefined | null, options?: { fixed?: number, padding?: { length: number, fill?: string } }) {
+  if (amount === undefined || amount === null) return undefined
+
   const { fixed, padding } = options ?? {}
 
   let result = ''
@@ -29,8 +31,9 @@ export function fPercent(amount: number, options?: { fixed?: number, padding?: {
   return result
 }
 
-export function fBps(bps: number, options?: { fixed?: number, padding?: { length: number, fill?: string } }) {
-  return fPercent(bps / 10_000, options)
+export function fBps(bps: number, options?: { percent?: boolean, fixed?: number, padding?: { length: number, fill?: string } }) {
+  if (options?.percent) return fPercent(bps / 10_000, options)
+  return `${bps} bps`
 }
 
 export function fUSD(amount: number, options?: { fixed?: number, full?: boolean, padding?: { length: number, fill?: string } }) {

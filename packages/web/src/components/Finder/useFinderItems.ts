@@ -7,12 +7,16 @@ import { useMemo } from 'react'
 import { isNothing } from '@kalani/lib/strings'
 
 export const FinderItemSchema = z.object({
-  label: z.enum(["vault", "strategy", "erc4626", "accountant"]),
+  label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
   chainId: z.number(),
   address: EvmAddressSchema,
   name: z.string().optional(),
   nameLower: z.string().optional(),
+  symbol: z.string().optional(),
   yearn: z.boolean().nullish(),
+  v3: z.boolean().nullish(),
+  projectId: z.string().nullish(),
+  projectName: z.string().nullish(),
   strategies: z.preprocess(
     (val) => (val === null ? undefined : val),
     z.array(EvmAddressSchema).optional()
@@ -44,10 +48,14 @@ query Query {
     chainId
     address
     name
+    symbol
     strategies
     yearn
     erc4626
+    v3
     apiVersion
+    projectId
+    projectName
     asset {
       address
       name
@@ -82,14 +90,18 @@ function toFinderItems(data: any): FinderItem[] {
   data.vaults.forEach((vault: any) => {
     const item: FinderItem = {
       label: vault.yearn 
-      ? strategyAddresses.has(vault.address.toLowerCase()) ? 'strategy' : 'vault'
-      : 'erc4626',
+      ? strategyAddresses.has(vault.address.toLowerCase()) ? 'yStrategy' : 'yVault'
+      : vault.v3 ? 'v3' : 'erc4626',
       chainId: parseInt(vault.chainId),
       address: vault.address,
       name: vault.name,
       nameLower: vault.name.toLowerCase(),
+      symbol: vault.symbol,
       strategies: vault.strategies,
       yearn: vault.yearn,
+      v3: vault.v3,
+      projectId: vault.projectId,
+      projectName: vault.projectName,
       token: {
         address: vault.asset.address,
         name: vault.asset.name,
@@ -109,7 +121,7 @@ function toFinderItems(data: any): FinderItem[] {
     vault.strategies?.forEach((strategyAddress: EvmAddress) => {
       if (strategyAddresses.has(strategyAddress.toLowerCase())) {
         const strategyItem: FinderItem = {
-          label: 'strategy',
+          label: 'yStrategy',
           chainId: parseInt(vault.chainId),
           address: strategyAddress,
           name: `${vault.name} Strategy`,
@@ -161,6 +173,7 @@ export function useFinderItems() {
   const query = useSuspenseQuery({
     queryKey: ['useFinderItems'],
     queryFn: fetchFinderItems,
+    staleTime: 1000 * 60 * 5
   })
 
   const filter = useMemo(() => {
@@ -177,4 +190,18 @@ export function useFinderItems() {
     items: query.data ?? [], 
     filter: filter ?? [] 
   }
+}
+
+function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant') {
+  switch (label) {
+    case 'yVault': return 'vault'
+    case 'yStrategy': return 'strategy'
+    case 'v3': return 'vault'
+    case 'erc4626': return 'erc4626'
+    default: return label
+  }
+}
+
+export function getItemHref(item: FinderItem) {
+  return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
 }

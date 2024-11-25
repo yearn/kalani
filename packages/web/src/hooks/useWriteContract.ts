@@ -9,6 +9,7 @@ export function useWriteContract() {
   const write = _useWriteContract({
 		mutation: {
 			onError(error) {
+        if (error.message.includes('User rejected the request')) return
         toast.error(error.name, { description: error.message })
         console.error(error)
 			},

@@ -8,7 +8,7 @@ import Skeleton from "../../../../components/Skeleton"
 import { useStrategyParams } from "../../../../hooks/useStrategy"
 import { cn } from "../../../../lib/shadcn"
 import TxChipSlide from "../../../../components/ChipSlide/TxChipSlide"
-import DateOrBlock from '../../../../components/DateOrBlock'
+import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 
 export const ReportSchema = z.object({
   chainId: z.number(),
@@ -136,7 +136,7 @@ function Suspender() {
               <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} className="bg-neutral-900 text-neutral-400" />
             </td>
             <td className="text-neutral-400">
-              <DateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
+              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
             </td>
             <td>
               <DisplayUSD usd={report.profitUsd} />

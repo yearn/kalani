@@ -14,7 +14,7 @@ export default function Toggle({
 
   return <div onClick={() => {if (!disabled) onClick?.()}} className={`
     py-2 px-4 flex items-center gap-2
-    border rounded-primary
+    border-primary rounded-primary
     ${disabled ? 'cursor-default' : 'cursor-pointer'}
     ${roleClassName.defaults} ${checked ? roleClassName.checked : roleClassName.unchecked}`}>
     {checked ? <PiCheck /> : <PiX className="opacity-35" />}

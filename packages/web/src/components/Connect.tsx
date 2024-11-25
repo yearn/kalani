@@ -1,12 +1,15 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import Button from './elements/Button'
 import { ReactNode } from 'react'
+import ChainImg from './ChainImg'
 
 export default function Connect({ 
   label = <>Connect</>,
+  short = false,
   className
 }: { 
   label?: ReactNode
+  short?: boolean
   className?: string 
 }) {
   return <ConnectButton.Custom>
@@ -49,29 +52,9 @@ export default function Connect({
                 onClick={openChainModal}
                 h="secondary"
                 type="button"
-                className={`border-transparent ${className}`}
+                className={`flex items-center gap-3 border-transparent ${short ? 'hidden' : ''} ${className}`}
               >
-                {chain.hasIcon && (
-                  <div
-                    style={{
-                      background: chain.iconBackground,
-                      width: 12,
-                      height: 12,
-                      borderRadius: 999,
-                      overflow: 'hidden',
-                      marginRight: 4,
-                    }}
-                  >
-                    {chain.iconUrl && (
-                      <img
-                        alt={chain.name ?? 'Chain icon'}
-                        src={chain.iconUrl}
-                        width={12}
-                        height={12}
-                      />
-                    )}
-                  </div>
-                )}
+                <ChainImg chainId={chain.id} size={24} />
                 {chain.name}
               </Button>
               <Button 
@@ -80,7 +63,7 @@ export default function Connect({
                 onClick={openAccountModal} 
                 type="button">
                 {account.displayName}
-                {account.displayBalance
+                {!short && account.displayBalance
                   ? ` (${account.displayBalance})`
                   : ''}
               </Button>

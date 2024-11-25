@@ -44,18 +44,21 @@ function Roles({ vault }: { vault: Vault }) {
   }, [vault, setNewAccounts])
 
   return <div className="flex flex-col gap-8">
-    <div>
-      {accounts.map((account, index) => <SetRoles 
-        key={index} 
-        chainId={account.chainId}
-        vault={account.vault} 
-        account={account.address}
-        editAddress={account.editAddress}
-      />)}
-    </div>
-    <div className="flex justify-end">
-      <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
-    </div>
+    <Section>
+      <div className="flex flex-col gap-6">
+        {accounts.map((account, index) => <SetRoles 
+          key={index} 
+          chainId={account.chainId}
+          vault={account.vault} 
+          account={account.address}
+          editAddress={account.editAddress}
+        />)}
+        <div className="flex justify-end">
+          <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
+        </div>
+      </div>
+
+    </Section>
     <Section>
       <FieldLabelPair label="Role Manager">
         <TransferRoleManager chainId={vault.chainId} vault={vault.address} />

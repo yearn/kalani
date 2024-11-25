@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
-import { useWhitelist } from './provider'
+import { useWhitelist } from './useWhitelist'
 import { useTargetInfos } from './useTargetInfos'
 import { API_URL } from '../../../../lib/env'
 

@@ -3,10 +3,10 @@ import Drawer from '../Drawer'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import ChainImg from '../../../components/ChainImg'
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import { fEvmAddress, fPercent, fUSD } from '@kalani/lib/format'
+import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import Skeleton from '../../../components/Skeleton'
 import TokenImg from '../../../components/TokenImg'
-import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
+import { FinderItem, getItemHref, useFinderItems } from '../../../components/Finder/useFinderItems'
 import MenuBar from '../../../components/MenuBar'
 import Finder from '../../../components/Finder'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
@@ -30,25 +30,22 @@ function Minibars({ series, className }: { series: number[], className?: string 
 
 function Label({ item }: { item: FinderItem }) {
   const label = useMemo(() => {
-    switch (item.label) {
-      case 'vault': return 'yearn allocator'
-      case 'strategy': return 'yearn strategy'
-      default: return item.label
-    }
+    if (item.projectId) return item.projectName ?? `project ${fHexString(item.projectId, true)}`
+    return item.label
   }, [item])
 
   const bgClassName = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'bg-secondary-900'
-      case 'strategy': return 'bg-secondary-900'
+      case 'yVault': return 'bg-secondary-900'
+      case 'yStrategy': return 'bg-secondary-900'
       default: return 'bg-neutral-900'
     }
   }, [item])
 
   const textClassName = useMemo(() => {
     switch (item.label) {
-      case 'vault': return 'text-neutral-100'
-      case 'strategy': return 'text-neutral-100'
+      case 'yVault': return 'text-neutral-100'
+      case 'yStrategy': return 'text-neutral-100'
       default: return 'text-neutral-400'
     }
   }, [item])
@@ -59,11 +56,7 @@ function Label({ item }: { item: FinderItem }) {
 }
 
 function Tile({ item }: { item: FinderItem }) {
-  const href = useMemo(() => {
-    return `/${item.label}/${item.chainId}/${item.address}`
-  }, [item])
-
-  return <a href={href} className={`group relative p-3 flex flex-col
+  return <a href={getItemHref(item)} className={`group relative p-3 flex flex-col
     gap-2 border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer`}>
     <div className="flex flex-col gap-2">
@@ -129,7 +122,7 @@ export default function Explore() {
     <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
     <div className="sm:pt-10 flex items-start">
       <div className="hidden sm:block min-w-24 border"></div>
-      <div className="isolate grow px-3 py-6 border-r border-r-primary-1000">
+      <div className="isolate grow px-3 py-10">
         <Suspense fallback={<SkeletonTiles />}>
           <Tiles />
         </Suspense>

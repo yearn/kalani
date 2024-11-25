@@ -30,7 +30,7 @@
 
 :root {
   --foreground: #fafafa;
-  --background: #040200;
+	--background: #040404;
 
   font-family: 'JetBrains Mono', monospace;
   line-height: 1.5;
@@ -303,4 +303,16 @@
 
 .theme-error {
 	@apply !border-error-400 !text-error-400;
+}
+
+.bg-grill-950 {
+	background-color: transparent;
+	background-image: radial-gradient(transparent 1px, #040404 1px);
+	background-size: 4px 4px;
+	backdrop-filter: blur(3px);
+	opacity: 1;
+}
+
+.bg-grill-900-even {
+  @apply even:bg-transparent even:bg-[radial-gradient(transparent_1px,_#101010_1px)] even:bg-[length:4px_4px] even:backdrop-blur even:opacity-100;
 }

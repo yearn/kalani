@@ -15,7 +15,7 @@ const DrawerButtonClassName = `
 p-3 flex items-center justify-center
 bg-black border-primary border-transparent rounded-primary
 hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
-group-active:text-secondary-400 group-active:border-secondary-400
+group-active:text-secondary-400 group-active:border-secondary-400 group-active:bg-black
 saber-glow
 `
 
@@ -49,7 +49,7 @@ export default function Drawer({
 }) {
   return <div className={cn(`
     py-4 flex flex-col items-center justify-start gap-6
-    bg-primary-2000 border-r-primary border-primary-1000`, className)}>
+    bg-[#040404] border-r-primary border-neutral-900`, className)}>
 
     <DrawerButton to="/" title="Home">
       <PiWallet size={26} />

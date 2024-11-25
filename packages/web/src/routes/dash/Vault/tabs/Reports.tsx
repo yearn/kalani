@@ -9,7 +9,7 @@ import { useStrategyParams } from "../../../../hooks/useStrategy"
 import { cn } from "../../../../lib/shadcn"
 import TxChipSlide from "../../../../components/ChipSlide/TxChipSlide"
 import StrategyChipSlide from '../../../../components/ChipSlide/StrategyChipSlide'
-import DateOrBlock from '../../../../components/DateOrBlock'
+import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 
 export const ReportSchema = z.object({
   chainId: z.number(),
@@ -145,7 +145,7 @@ function Suspender() {
               <StrategyChipSlide chainId={report.chainId} address={report.strategy} className="bg-neutral-900 text-neutral-400" />
             </td>
             <td className="text-neutral-400">
-              <DateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
+              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
             </td>
             <td>
               <DisplayUSD usd={report.gainUsd} />

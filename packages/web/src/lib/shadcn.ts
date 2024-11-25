@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-const borderPrimaryRegex = /([ ]|^)(\w{2}:)?border-primary/
+export const borderPrimaryRegex = /(^|\s)(\w{2}:)?border(-\w)?-primary/
 
 export function cn(...inputs: ClassValue[]) {
   const result = twMerge(clsx(inputs))

@@ -1,6 +1,5 @@
 import { PiRobot } from 'react-icons/pi'
 import Whitelist from './Whitelist'
-import { WhitelistProvider } from './Whitelist/provider'
 import { useYhaasStats } from './useYhaasStats'
 import { Suspense, useMemo } from 'react'
 import bmath from '@kalani/lib/bmath'
@@ -52,7 +51,7 @@ function Metrics() {
     return gasSaved * wethPrice
   }, [gasSaved, wethPrice])
 
-  return <div className="flex items-end gap-24">
+  return <div className="flex items-end gap-12">
     <div className="relative hidden sm:block flex flex-col items-start">
       <div className="pb-1 text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
       <div className="absolute -bottom-5 text-sm text-nowrap">
@@ -75,20 +74,15 @@ function Metrics() {
 export default function Page() {
   return <section className="flex flex-col gap-8">
     <Suspense fallback={<Skeleton className="h-48" />}>
-      <Hero className="text-zinc-950 bg-zinc-400">
+      <Hero className="text-neutral-950 bg-zinc-400">
         <Brand />
         <Metrics />
       </Hero>
     </Suspense>
 
     <div className="px-8 flex flex-col items-center gap-12">
-      <p>
-        .. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...
-      </p>
-
-      <WhitelistProvider>
-        <Whitelist />
-      </WhitelistProvider>
+      <p>.. ..... ... ....... ........ ..... ....... . .. . ...... ..... .... ........ ..... ..... ....... ... ... .... .... .... .... ........ .... ..... ..... ....... ...... ....... ....... . ... ... .. ....... ... ....... ..... ....... .. ... .... ..... .... ........ ....... .. ....... . . ..... .... .... . . .. ...... ....... ..... .... .. .... .... .. ..... ....... .... ....... ... ........ .. ... ...</p>
+      <Whitelist />
     </div>
   </section>
 }

@@ -5,7 +5,7 @@ import { Switch } from '../../../../../../../components/shadcn/switch'
 import { Label } from '../../../../../../../components/shadcn/label'
 import Dialog, { DialogButton, useDialog } from '../../../../../../../components/Dialog'
 import Button from '../../../../../../../components/elements/Button'
-import { useWhitelist } from '../../../provider'
+import { useWhitelist } from '../../../useWhitelist'
 import { fEvmAddress } from '@kalani/lib/format'
 import { cn } from '../../../../../../../lib/shadcn'
 import Input from '../../../../../../../components/elements/Input'
@@ -191,7 +191,7 @@ export default function SetAllocator() {
 
   const onAutomateChanged = useCallback((automate: boolean) => {
     setAutomate(automate)
-    setOptions(current => ({ ...current, automate }))
+    setOptions((current: any) => ({ ...current, automate }))
   }, [setAutomate, setOptions])
 
   useEffect(() => {
@@ -205,7 +205,7 @@ export default function SetAllocator() {
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)
     setIsValid(true)
-    setOptions(current => ({ ...current, allocator }))
+    setOptions((current: any) => ({ ...current, allocator }))
     onAutomateChanged(true)
   }, [setAllocator, setIsValid, setOptions, onAutomateChanged])
 

@@ -1,5 +1,5 @@
 import Input from '../../../../../components/elements/Input'
-import { useWhitelist } from '../provider'
+import { useWhitelist } from '../useWhitelist'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { PiCheckFatFill, PiWarningCircleBold } from 'react-icons/pi'
 import { isNothing } from '@kalani/lib/strings'

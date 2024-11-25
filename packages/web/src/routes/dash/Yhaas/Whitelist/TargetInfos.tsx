@@ -1,7 +1,7 @@
 import { PiCheck, PiWarning } from 'react-icons/pi'
 import FlyInFromLeft from '../../../../components/motion/FlyInFromLeft'
 import { TargetType, useTargetInfos } from './useTargetInfos'
-import { useWhitelist } from './provider'
+import { useWhitelist } from './useWhitelist'
 import { useAccount } from 'wagmi'
 import { EvmAddress } from '@kalani/lib/types'
 import { fEvmAddress } from '@kalani/lib/format'
@@ -20,7 +20,7 @@ function TargetInfo({
   targetType: TargetType | undefined 
 }) {
   const { chain } = useAccount()
-  const textColor = useMemo(() => targetType !== undefined ? 'text-green-400' : 'text-yellow-400', [targetType])
+  const textColor = useMemo(() => targetType !== undefined ? 'text-green-400' : 'text-warn-400', [targetType])
   const text = useMemo(() => {
     if (targetType === undefined) return `Yearn v3 contract on ${chain?.name} not found, ${fEvmAddress(address)}`
     return <>V3 {targetType} detected, {fEvmAddress(address)}, {name}</>
