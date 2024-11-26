@@ -90,7 +90,7 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
   })
 
   const projects = useMemo(() => {
-    const indexed = ProjectSchema.array().parse(query.data?.data?.projects ?? [])
+    const indexed = ProjectSchema.array().parse(query.data ?? [])
     const result = [
       ...indexed, 
       ...localProjects.filter(project => 
