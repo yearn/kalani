@@ -91,8 +91,9 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
 
   const projects = useMemo(() => {
     const indexed = ProjectSchema.array().parse(query.data ?? [])
+    const governed = indexed.filter(project => compareEvmAddresses(project.governance, address))
     const result = [
-      ...indexed, 
+      ...governed, 
       ...localProjects.filter(project => 
         !indexed.some(indexedProject => indexedProject.id === project.id)
       )
