@@ -18,7 +18,7 @@ import InputBps from '../../../../../components/elements/InputBps'
 import Button from '../../../../../components/elements/Button'
 import ViewBps from '../../../../../components/elements/ViewBps'
 
-function useHasDebtManagerRole() {
+export function useHasDebtManagerRole() {
   const { vault } = useVaultFromParams()
   return useHasRoles({
     chainId: vault?.chainId ?? 0,
@@ -161,8 +161,8 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   const { findFinderItem, getStrategyHref } = useFinderUtils()
   const update = useDebtRatioUpdate(strategy.address)
   return <div className="w-full flex items-center gap-6">
-    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
-      <div>{strategy.name}</div>
+    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="sm:w-64 px-6 grow h-14 flex items-center justify-between">
+      <div className="max-w-[80%] truncate">{strategy.name}</div>
       <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>
     <div className="w-64 text-2xl font-bold">

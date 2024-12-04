@@ -1,5 +1,5 @@
 import { useVaultFromParams } from '../../../../../hooks/useVault'
-import Allocation from './Allocation'
+import Allocation, { useHasDebtManagerRole } from './Allocation'
 import Button from '../../../../../components/elements/Button'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
@@ -11,6 +11,7 @@ import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
 
 function EstimatedApy() {
+  const authorized = useHasDebtManagerRole()
   const { items } = useFinderItems()
   const { updates } = useDebtRatioUpdates()
   const isDirty = useMemo(() => updates.some(a => a.isDirty), [updates])
@@ -33,16 +34,18 @@ function EstimatedApy() {
     }, 0) / 10_000
   }, [apys])
 
-  return <div className={`pr-4 text-2xl font-bold ${isDirty ? 'text-primary-400' : ''}`}>
+  return <div className={`pr-4 text-2xl font-bold ${authorized && isDirty ? 'text-primary-400' : ''}`}>
     {fPercent(weightedApy) ?? '-.--%'}
   </div>
 }
 
 function TotalAllocation() {
+  const authorized = useHasDebtManagerRole()
   const { setting: bpsSetting } = useInputBpsSettings()
   const { totalDebtRatio, isDirty } = useTotalDebtRatioUpdates()
   const { next } = useInputBpsSettings()
-  return <div onClick={next} className={`pl-4 text-2xl font-bold cursor-pointer ${isDirty ? 'text-primary-400' : ''}`}>
+  return <div onClick={authorized ? next : undefined} 
+    className={`pl-4 text-2xl font-bold cursor-pointer ${(authorized && isDirty) ? 'text-primary-400' : ''}`}>
     {fBps(Number(totalDebtRatio), { percent: bpsSetting === '%' })}
   </div>
 }

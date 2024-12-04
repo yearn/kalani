@@ -104,7 +104,6 @@ function Vitals({ vault }: { vault: Vault }) {
         <EvmAddressChipSlide chainId={vault.chainId} address={vault.accountant ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
 
-
       <LabelValueRow label="Allocator">
         <EvmAddressChipSlide chainId={vault.chainId} address={allocator ?? vault.allocator ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
