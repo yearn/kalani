@@ -19,8 +19,8 @@ export default function Whitelist() {
     <Connect label={<CTA>Connect your wallet</CTA>} />
   </div>
 
-  return <div className="pb-96 flex flex-col gap-20">
-    <div className="flex flex-col">
+  return <div className="w-full pb-96 flex flex-col gap-24">
+    <div className="hidden flex flex-col">
       <Input value={`Network: ${chain?.name}`} disabled />
       <Input value={`Role manager: ${address}`} disabled />
     </div>

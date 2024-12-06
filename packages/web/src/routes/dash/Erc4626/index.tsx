@@ -9,15 +9,6 @@ import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 
-const tabClassNames = {
-  textClassName: 'text-neutral-950 group-active:text-neutral-950/60',
-  bgClassName: `
-    [[data-open=true]_&]:bg-neutral-950 
-    group-hover:bg-neutral-950 
-    group-active:bg-neutral-950/60
-  `
-}
-
 function Suspender() {
   const { vault } = useVaultFromParams()
 
@@ -48,8 +39,8 @@ function Suspender() {
       </div>
 
       <HeroInset>
-        <Tabs className="flex gap-4">
-          <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
+        <Tabs>
+          <Tab id="vitals" isDefault={true}>Vitals</Tab>
         </Tabs>
       </HeroInset>
     </Hero>

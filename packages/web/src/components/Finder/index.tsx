@@ -8,12 +8,12 @@ import { ScrollArea } from '../shadcn/scroll-area'
 import { useNavigate } from 'react-router-dom'
 import { FinderItem, useFinderItems } from './useFinderItems'
 import ChainImg from '../ChainImg'
-import { useFinderQuery } from './useFinderQuery'
 import Skeleton from '../Skeleton'
 import { cn } from '../../lib/shadcn'
 import { useHashNav } from '../../hooks/useHashNav'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import FlyInFromBottom from '../motion/FlyInFromBottom'
+import { useFinderOptions } from './useFinderOptions'
 
 const MAX_ITEMS = 100
 
@@ -21,7 +21,8 @@ interface FinderProps {
   placeholder?: string,
   className?: string
   inputClassName?: string,
-  disableSuggestions?: boolean
+  disableSuggestions?: boolean,
+  disabled?: boolean
 }
 
 const containerClassName = `group relative z-0
@@ -63,7 +64,7 @@ const getViewName = (item: FinderItem) => {
   }
 }
 
-const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassName, disableSuggestions }) => {
+const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassName, disableSuggestions, disabled }) => {
   const nav = useHashNav('find')
   const navigate = useNavigate()
   const breakpoints = useBreakpoints()
@@ -75,7 +76,7 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
 
   const { filter } = useFinderItems()
 
-  const { query, setQuery } = useFinderQuery()
+  const { query, setQuery } = useFinderOptions()
   const [filteredItems, setFilteredItems] = useState<FinderItem[]>([])
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -92,6 +93,8 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
   }, { enableOnFormTags: true })
 
   useEffect(() => {
+    if (disabled) return
+
     const handleClickOutside = (event: MouseEvent): void => {
       if (breakpoints.sm && inputRef.current != null && !inputRef.current.contains(event.target as Node)) {
         nav.close()
@@ -102,23 +105,25 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
     return () => {
       document.removeEventListener('click', handleClickOutside)
     }
-  }, [nav, breakpoints])
+  }, [nav, breakpoints, disabled])
 
   useEffect(() => {
     setFilteredItems(filter.slice(0, MAX_ITEMS))
   }, [filter])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = e.target.value
     setQuery(value)
     setSelectedIndex(-1)
-  }
+  }, [setQuery, setSelectedIndex])
 
   const handleItemClick = useCallback((item: FinderItem): void => {
     onFind?.(item)
   }, [onFind])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (disabled) return
+
     if (e.key === 'ArrowUp') {
       e.preventDefault()
       setSelectedIndex(prev => (prev > 0 ? prev - 1 : filteredItems.length - 1))
@@ -130,7 +135,11 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
     } else if (e.key === 'Escape') {
       nav.close()
     }
-  }, [filteredItems, selectedIndex, handleItemClick, nav])
+  }, [filteredItems, selectedIndex, handleItemClick, nav, disabled])
+
+  const handleInputClick = useCallback(() => {
+    if (!disableSuggestions && !disabled) { nav.open() }
+  }, [disableSuggestions, nav, disabled])
 
   return <div data-open={nav.isOpen} className={cn(
       containerClassName, 
@@ -145,7 +154,7 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
       placeholder={placeholder}
       onChange={handleInputChange}
       onKeyDown={handleKeyDown}
-      onClick={() => nav.open()}
+      onClick={handleInputClick}
       className={cn(_inputClassName, inputClassName)}
       spellCheck={false}
       autoComplete="off"

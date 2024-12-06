@@ -15,10 +15,14 @@ export default function TokenImg(options: {
   const { chainId: optionalChainId, address, size, className, bgClassName } = options
   const { chainId: defaultChainId } = useAccount()
   const chainId = useMemo(() => optionalChainId ?? defaultChainId ?? 1, [optionalChainId, defaultChainId])
+  const src = useMemo(() => 
+    `${import.meta.env.VITE_API_URL}/api/assets/token/${chainId}/${address ?? zeroAddress}`, 
+    [chainId, address]
+  )
 
   return <ImgOrBg
     bgClassName={cn('bg-neutral-900 rounded-full', bgClassName)}
-    src={`${import.meta.env.VITE_SMOL_ASSETS}/api/token/${chainId}/${address ?? zeroAddress}/logo-128.png`}
+    src={src}
     alt={`Token ${address} image`}
     width={size ?? 32}
     height={size ?? 32}

@@ -2,9 +2,9 @@ import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../lib/env'
 import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
-import { useFinderQuery } from './useFinderQuery'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { isNothing } from '@kalani/lib/strings'
+import { useFinderOptions } from './useFinderOptions'
 
 export const FinderItemSchema = z.object({
   label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
@@ -39,11 +39,6 @@ export type FinderItem = z.infer<typeof FinderItemSchema>
 
 const QUERY = `
 query Query {
-  accountants {
-    chainId
-    address
-    vaults
-  }
   vaults(erc4626: true) {
     chainId
     address
@@ -116,37 +111,6 @@ function toFinderItems(data: any): FinderItem[] {
       addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase()
     }
     results.push(item)
-
-    // Process strategies associated with this vault
-    vault.strategies?.forEach((strategyAddress: EvmAddress) => {
-      if (strategyAddresses.has(strategyAddress.toLowerCase())) {
-        const strategyItem: FinderItem = {
-          label: 'yStrategy',
-          chainId: parseInt(vault.chainId),
-          address: strategyAddress,
-          name: `${vault.name} Strategy`,
-          nameLower: `${vault.name} Strategy`.toLowerCase(),
-          token: {
-            address: vault.asset.address,
-            name: vault.asset.name,
-            symbol: vault.asset.symbol
-          },
-          addressIndex: `${strategyAddress} ${vault.asset.address}`.toLowerCase()
-        }
-        results.push(strategyItem)
-      }
-    })
-  })
-
-  // Process accountants
-  data.accountants.forEach((accountant: any) => {
-    const item: FinderItem = {
-      label: 'accountant',
-      chainId: parseInt(accountant.chainId),
-      address: accountant.address,
-      addressIndex: accountant.address.toLowerCase()
-    }
-    results.push(item)
   })
 
   results = FinderItemSchema.array().parse(results)
@@ -168,7 +132,7 @@ async function fetchFinderItems(): Promise<FinderItem[]> {
 }
 
 export function useFinderItems() {
-  const { query: q } = useFinderQuery()
+  const { query: q, sortKey, sortDirection } = useFinderOptions()
 
   const query = useSuspenseQuery({
     queryKey: ['useFinderItems'],
@@ -176,14 +140,25 @@ export function useFinderItems() {
     staleTime: 1000 * 60 * 5
   })
 
+  const sort = useCallback((items: FinderItem[]) => {
+    const result = [...items]
+    if (sortKey === 'tvl' && sortDirection === 'asc') {
+      result.sort((a, b) => (a.tvl ?? 0) - (b.tvl ?? 0))
+    } else if (sortKey === 'apy') {
+      result.sort((a, b) => (sortDirection === 'desc' ? 1 : -1) * ((b.apy ?? 0) - (a.apy ?? 0)))
+    }
+    return result
+  }, [sortKey, sortDirection])
+
   const filter = useMemo(() => {
-    if (isNothing(q)) { return query.data }
+    if (isNothing(q)) { return sort(query.data) }
     const lowerq = q.toLowerCase()
-    return query.data?.filter((item: FinderItem) => {
+    const result = query.data?.filter((item: FinderItem) => {
       return item.nameLower?.includes(lowerq)
         || (lowerq.length > 6 && item.addressIndex.toLowerCase().includes(lowerq))
     })
-  }, [query.data, q])
+    return sort(result)
+  }, [query.data, q, sort])
 
   return { 
     ...query, 

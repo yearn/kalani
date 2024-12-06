@@ -14,15 +14,6 @@ import Skeleton from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 
-const tabClassNames = {
-  textClassName: 'text-neutral-950 group-active:text-neutral-950/60',
-  bgClassName: `
-    [[data-open=true]_&]:bg-neutral-950 
-    group-hover:bg-neutral-950 
-    group-active:bg-neutral-950/60
-  `
-}
-
 function VaultHero() {
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
@@ -42,7 +33,7 @@ function VaultHero() {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-sm">
+      <div className="flex items-center gap-6 text-sm">
         <ChainImg chainId={vault.chainId} size={28} />
         <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-neutral-950" />
         <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">
@@ -55,12 +46,12 @@ function VaultHero() {
     </div>
 
     <HeroInset>
-      <Tabs className="flex gap-4">
-        <Tab id="vitals" isDefault={true} classNames={tabClassNames}>Vitals</Tab>
-        {allocator && <Tab id="allocator" classNames={tabClassNames}>Allocator</Tab>}
-        <Tab id="fees" classNames={tabClassNames}>Fees</Tab>
-        <Tab id="reports" classNames={tabClassNames}>Reports</Tab>
-        <Tab id="roles" classNames={tabClassNames}>Roles</Tab>
+      <Tabs>
+        <Tab id="vitals" isDefault={true}>Vitals</Tab>
+        {allocator && <Tab id="allocator">Allocator</Tab>}
+        <Tab id="fees">Fees</Tab>
+        <Tab id="reports">Reports</Tab>
+        <Tab id="roles">Roles</Tab>
       </Tabs>
     </HeroInset>
   </Hero>
