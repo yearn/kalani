@@ -92,6 +92,10 @@ function Vitals({ vault }: { vault: Vault }) {
         </ViewGeneric>
       </LabelValueRow>}
 
+      <LabelValueRow label="Management fee">
+        <ViewBps bps={vault.fees?.managementFee ?? 0} className="bg-neutral-900" />
+      </LabelValueRow>
+
       <LabelValueRow label="Performance fee">
         <ViewBps bps={vault.fees?.performanceFee ?? 0} className="bg-neutral-900" />
       </LabelValueRow>

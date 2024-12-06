@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../lib/env'
-import { EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
+import { EvmAddressSchema } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
 import { isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
