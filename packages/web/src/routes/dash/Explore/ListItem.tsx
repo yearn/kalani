@@ -4,6 +4,7 @@ import { AutoTextSize } from 'auto-text-size'
 import ChainImg from '../../../components/ChainImg'
 import TokenImg from '../../../components/TokenImg'
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 
 export function Minibars({ series, className }: { series: number[], className?: string }) {
 	const maxBar = 100
@@ -47,7 +48,7 @@ function Label({ item }: { item: FinderItem }) {
 }
 
 export function ListItem({ item }: { item: FinderItem }) {
-  return <a href={getItemHref(item)} className={`
+  return <Link to={getItemHref(item)} className={`
     group relative p-3 sm:px-6 xl:px-8 xl:py-5 flex items-center gap-6 xl:gap-12
     border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer
@@ -76,5 +77,5 @@ export function ListItem({ item }: { item: FinderItem }) {
         {fPercent(item.apy ?? 0)}
       </div>
     </div>
-  </a>
+  </Link>
 }

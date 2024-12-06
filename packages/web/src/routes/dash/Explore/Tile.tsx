@@ -3,6 +3,7 @@ import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import ChainImg from '../../../components/ChainImg'
 import TokenImg from '../../../components/TokenImg'
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 
 export function Minibars({ series, className }: { series: number[], className?: string }) {
 	const maxBar = 100
@@ -46,7 +47,7 @@ function Label({ item }: { item: FinderItem }) {
 }
 
 export function Tile({ item }: { item: FinderItem }) {
-  return <a href={getItemHref(item)} className={`group relative p-3 flex flex-col
+  return <Link to={getItemHref(item)} className={`group relative p-3 flex flex-col
     gap-2 border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer`}>
     <div className="flex flex-col gap-2">
@@ -72,5 +73,5 @@ export function Tile({ item }: { item: FinderItem }) {
         </div>
       </div>
     </div>
-  </a>
+  </Link>
 }
