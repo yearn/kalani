@@ -22,12 +22,12 @@ export default function App() {
       <Routes>
         <Route index element={<Root />} />
         <Route path="home" element={<Root />} />
-        <Route path="explore" element={<Explore />} />
         <Route path="/*" element={<DashLayout />}>
           <Route path="account/:address" element={<Account />} />
           <Route path="accountant/:chainId/:address" element={<Accountant />} />
           <Route path="build" element={<Build />} />
           <Route path="erc4626/:chainId/:address" element={<Erc4626 />} />
+          <Route path="explore" element={<Explore />} />
           <Route path="project/:chainId/:id" element={<Project />} />
           <Route path="strategy/:chainId/:address" element={<Strategy />} />
           <Route path="vault/:chainId/:address" element={<Vault />} />

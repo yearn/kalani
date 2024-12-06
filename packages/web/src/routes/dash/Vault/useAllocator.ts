@@ -12,15 +12,17 @@ export function useAllocator() {
   const config = useConfig()
 
   const query = useSuspenseQuery({
-    ...readContractQueryOptions(config, {
-      chainId: vault?.chainId,
-      address: roleManager,
-      abi: abis.roleManager,
-      functionName: 'getDebtAllocator'
+    ...readContractsQueryOptions(config, {
+      contracts: [{
+        chainId: vault?.chainId,
+        address: roleManager,
+        abi: abis.roleManager,
+        functionName: 'getDebtAllocator'
+      }]
     })
   })
 
-  return { ...query, allocator: vault?.allocator ?? query.data }
+  return { ...query, allocator: vault?.allocator ?? query.data[0].result }
 }
 
 export function useMinimumChange() {

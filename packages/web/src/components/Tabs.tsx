@@ -8,32 +8,37 @@ export function Tabs({
   className?: string, 
   children: React.ReactNode 
 }) {
-  return <div className={cn(className)}>{children}</div>
-}
-
-type TabClassNames = {
-  textClassName?: string,
-  bgClassName?: string,
+  return <div className={cn(`flex gap-6`, className)}>{children}</div>
 }
 
 export function Tab({ 
   id, 
   isDefault,
-  classNames,
+  selected,
+  onClick,
+  className,
   children
 }: { 
-  id: string, 
+  id?: string, 
   isDefault?: boolean, 
-  classNames?: TabClassNames,
+  selected?: boolean,
+  onClick?: () => void,
+  className?: string,
   children: React.ReactNode 
 }) {
   const nav = useQueryNav(id, isDefault)
-  return <div data-open={nav.isOpen} onClick={nav.open} className={cn(`
-    group relative px-3 pt-1 text-sm border-b-8 border-transparent
-    flex items-center justify-center
-    cursor-pointer pointer-events-auto`, classNames?.textClassName)}>
+  return <div data-selected={selected ?? nav.isOpen} onClick={onClick ?? nav.open} className={cn(`
+    group relative my-2 px-6 text-lg
+    flex items-center justify-center gap-2
+    cursor-pointer pointer-events-auto
+    text-neutral-950 bg-neutral-950/10
+    hover:bg-neutral-950/20
+    active:bg-neutral-950/20
+    active:text-secondary-400
+    data-[selected=true]:text-secondary-400
+    data-[selected=true]:bg-neutral-950
+    rounded-full`, className)}>
     {children}
-    <div className={cn('absolute -bottom-2 w-full h-2 rounded-t-full', classNames?.bgClassName)}></div>
   </div>
 }
 

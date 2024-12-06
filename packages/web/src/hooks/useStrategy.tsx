@@ -27,10 +27,11 @@ const StrategySchema = z.object({
   depositLimit: z.bigint({ coerce: true }).optional(),
   lastReportDetail: z.object({
     blockTime: z.bigint({ coerce: true }),
-    transactionHash: HexStringSchema
+    transactionHash: HexStringSchema,
+    apr: z.object({ net: z.number() }).optional()
   }).optional(),
-  tvl: z.object({ close: z.number() }),
-  apy: z.object({ close: z.number() }).optional(),
+  tvl: z.object({ close: z.number().optional() }),
+  apy: z.object({ close: z.number().optional() }).optional(),
   fees: z.object({ performanceFee: z.number({ coerce: true }) }).optional()
 })
 
@@ -73,6 +74,9 @@ query Query($chainId: Int, $address: String) {
     lastReportDetail {
       blockTime
       transactionHash
+      apr {
+        net
+      }
     }
   }
 }

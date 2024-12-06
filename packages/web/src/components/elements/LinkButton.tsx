@@ -17,7 +17,7 @@ const LinkButton: React.FC<LinkProps> = ({ className, theme, h, children, ...pro
   const text = h === 'secondary' ? 'text-neutral-300' : 'text-neutral-0'
   const border = h === 'secondary' ? 'border-neutral-800' : h === 'tertiary' ? 'border-transparent' : 'border-transparent'
 
-  return <_Link {...props} className={cn(`
+  return <_Link {...props} className={cn(`group
     relative h-8 px-8 py-5 flex items-center justify-center
     border-primary ${border} ${bg} text-lg ${text}
     hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50

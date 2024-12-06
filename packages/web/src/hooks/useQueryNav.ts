@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export function useQueryNav(queryId: string, isDefault = false) {
+export function useQueryNav(queryId?: string, isDefault = false) {
   const navigate = useNavigate()
   const location = useLocation()
-  const isOpen = location.search === `?${queryId}`
+  const isOpen = location.search === `?${queryId ?? '--------'}`
   || (isDefault && (location.search === '' || location.search === '?'))
 
   const open = useCallback(() => {
-    navigate(`${location.pathname}?${queryId}`)
+    navigate(`${location.pathname}?${queryId ?? '--------'}`)
   }, [navigate, location.pathname, queryId])
 
   const close = useCallback(() => {

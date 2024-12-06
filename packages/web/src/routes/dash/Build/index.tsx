@@ -27,7 +27,7 @@ export default function Build() {
     <div className="px-10 2xl:px-24 py-12 flex flex-col items-center gap-12">
 
       {!isConnected && <Connect label={<CTA>Connect your wallet</CTA>} />}
-      {isConnected && <VaultForm className="max-w-3xl" />}
+      {isConnected && <VaultForm />}
 
     </div>
   </section>

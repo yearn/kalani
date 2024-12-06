@@ -65,7 +65,10 @@ export const VaultSchema = z.object({
   lastProfitUpdate: z.number({ coerce: true }).optional(),
   totalAssets: z.bigint({ coerce: true }),
   totalDebt: z.bigint({ coerce: true }).optional(),
-  fees: z.object({ performanceFee: z.number({ coerce: true }) }).optional(),
+  fees: z.object({ 
+    managementFee: z.number({ coerce: true }),
+    performanceFee: z.number({ coerce: true })
+  }).optional(),
   tvl: z.object({ close: z.number().default(0) }).optional(),
   apy: z.object({ close: z.number().default(0) }).optional(),
   strategies: StrategySchema.array(),
@@ -135,6 +138,7 @@ query Query($chainId: Int, $address: String) {
 		}
 
     fees {
+      managementFee
       performanceFee
     }
     tvl {

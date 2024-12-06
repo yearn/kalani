@@ -92,6 +92,10 @@ function Vitals({ vault }: { vault: Vault }) {
         </ViewGeneric>
       </LabelValueRow>}
 
+      <LabelValueRow label="Management fee">
+        <ViewBps bps={vault.fees?.managementFee ?? 0} className="bg-neutral-900" />
+      </LabelValueRow>
+
       <LabelValueRow label="Performance fee">
         <ViewBps bps={vault.fees?.performanceFee ?? 0} className="bg-neutral-900" />
       </LabelValueRow>
@@ -103,7 +107,6 @@ function Vitals({ vault }: { vault: Vault }) {
       <LabelValueRow label="Accountant">
         <EvmAddressChipSlide chainId={vault.chainId} address={vault.accountant ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
-
 
       <LabelValueRow label="Allocator">
         <EvmAddressChipSlide chainId={vault.chainId} address={allocator ?? vault.allocator ?? zeroAddress} className="bg-neutral-900" />

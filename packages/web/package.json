@@ -28,6 +28,7 @@
     "@visx/shape": "^3.5.0",
     "@visx/xychart": "^3.11.0",
     "@wagmi/chains": "^1.8.0",
+    "auto-text-size": "^0.2.3",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "framer-motion": "^11.3.30",
