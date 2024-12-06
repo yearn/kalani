@@ -48,7 +48,7 @@ function Label({ item }: { item: FinderItem }) {
 
 export function ListItem({ item }: { item: FinderItem }) {
   return <a href={getItemHref(item)} className={`
-    group relative p-3 sm:px-6 xl:px-16 xl:py-5 flex items-center gap-6 xl:gap-12
+    group relative p-3 sm:px-6 xl:px-8 xl:py-5 flex items-center gap-6 xl:gap-12
     border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer
     active:text-secondary-400`}>
@@ -66,7 +66,7 @@ export function ListItem({ item }: { item: FinderItem }) {
     <div className="w-[100px] flex items-center justify-center">
       <Minibars series={item.sparklines?.tvl ?? []} className="w-[80px] h-[56px]" />
     </div>
-    <div className="w-[200px]">
+    <div className="w-[140px]">
       <div className="text-2xl font-bold">
         {fUSD(item.tvl ?? 0)}
       </div>

@@ -5,7 +5,7 @@ import Vitals from './tabs/Vitals'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import ChainImg from '../../../components/ChainImg'
-import Hero, { HeroInset } from '../../../components/Hero'
+import Hero, { HeroInset, HeroTitle } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
@@ -21,8 +21,8 @@ function VaultHero() {
   if (!vault) return <></>
 
   return <Hero className="bg-secondary-400 text-neutral-950">
-    <div className="flex flex-col justify-center gap-2">
-      <div className={`text-4xl font-fancy`}>{vault.name}</div>
+    <div className="w-full flex flex-col justify-center gap-2 pb-2">
+      <HeroTitle>{vault.name}</HeroTitle>
 
       <div className="flex items-center gap-12">
         <div className="text-2xl font-bold">

@@ -68,7 +68,7 @@ export default function Explore() {
       </div>
 
       <HeroInset>
-        <Tabs className="w-full xl:pr-24 justify-end">
+        <Tabs className="w-full xl:pr-16 justify-end">
           <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} />}
             TVL
