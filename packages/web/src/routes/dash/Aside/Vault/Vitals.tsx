@@ -79,8 +79,5 @@ export default function Vitals() {
     {notifications.length > 0 && <div className="flex flex-col gap-6">
       {notifications}
     </div>}
-    {/* <div className="px-12 py-8 flex items-center justify-center border-primary border-neutral-900 rounded-primary text-neutral-700">
-      deposits x withdrawals
-    </div> */}
   </div>
 }
