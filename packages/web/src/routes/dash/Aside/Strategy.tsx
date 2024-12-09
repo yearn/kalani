@@ -5,7 +5,7 @@ import { PiRobot } from 'react-icons/pi'
 import ReactTimeago from 'react-timeago'
 import { useNavigate } from 'react-router-dom'
 import { useWhitelist } from '../Yhaas/Whitelist/useWhitelist'
-import Notification from './Notification'
+import FixItNotification from './Notification'
 import { useManagement } from '../Strategy/useManagement'
 import { useAccount } from 'wagmi'
 import { compareEvmAddresses } from '@kalani/lib/strings'
@@ -33,13 +33,13 @@ function useNotifications() {
   return useMemo(() => {
     const result: React.ReactNode[] = []
     if (!isRelayed && authorized) {
-      result.push(<Notification 
+      result.push(<FixItNotification 
         id={`strategy-vitals-yhaas-${strategy?.address}`} 
         key={`strategy-vitals-yhaas-${strategy?.address}`} 
         authorized={authorized}
         icon={PiRobot} onFix={onFixYhaas}>
           yHaaS disabled
-        </Notification>
+        </FixItNotification>
       )
     }
     return result

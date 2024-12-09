@@ -46,7 +46,8 @@ export default function Complete() {
   })
 
   const { snapshot: accountantSnapshot } = useAccountantSnapshot({
-    address: projectSnapshot.accountant
+    address: projectSnapshot.accountant,
+    vault: newAddress ?? zeroAddress
   })
 
   const onOk = useCallback(async () => {
@@ -56,8 +57,8 @@ export default function Complete() {
         ...vaultSnapshot,
         ...projectSnapshot,
         fees: {
-          managementFee: accountantSnapshot.defaultConfig.managementFee,
-          performanceFee: accountantSnapshot.defaultConfig.performanceFee
+          managementFee: accountantSnapshot.feeConfig.managementFee,
+          performanceFee: accountantSnapshot.feeConfig.performanceFee
         }
       }
     ])

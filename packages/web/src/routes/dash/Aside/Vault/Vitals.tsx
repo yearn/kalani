@@ -8,7 +8,7 @@ import { ROLES } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
-import Notification from '../Notification'
+import { FixItNotification } from '../Notification'
 import { useHasRoles } from '../../../../hooks/useHasRoles'
 import { useIsRoleManager } from '../../../../hooks/useRoleManager'
 
@@ -37,36 +37,36 @@ function useNotifications() {
   return useMemo(() => {
     const result: React.ReactNode[] = []
     if (compareEvmAddresses(vault?.accountant ?? zeroAddress, zeroAddress)) {
-      result.push(<Notification 
+      result.push(<FixItNotification 
         key={`vault-vitals-accountant-${vault?.address}`}
         id={`vault-vitals-accountant-${vault?.address}`}
         authorized={isAccountantManager} 
         icon={PiCalculator}>
           No accountant set
-        </Notification>
+        </FixItNotification>
       )
     }
 
     if (compareEvmAddresses(allocator, zeroAddress)) {
-      result.push(<Notification 
+      result.push(<FixItNotification 
         id={`vault-vitals-allocator-${vault?.address}`} 
         key={`vault-vitals-allocator-${vault?.address}`}
         authorized={isDebtManager} 
         icon={PiScales}>
           No allocator set
-        </Notification>
+        </FixItNotification>
       )
     }
     
     if (!isRelayed) {
-      result.push(<Notification 
+      result.push(<FixItNotification 
         id={`vault-vitals-yhaas-${vault?.address}`} 
         key={`vault-vitals-yhaas-${vault?.address}`}
         authorized={isRoleManager ?? false} 
         icon={PiRobot} 
         onFix={onFixYhaas}>
           yHaaS disabled
-        </Notification>
+        </FixItNotification>
       )
     }
     return result

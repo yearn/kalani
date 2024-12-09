@@ -33,7 +33,7 @@ export default function Deploy() {
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation])
 
   const onDeploy = useCallback(async () => {
     write.writeContract(simulation.data!.request)

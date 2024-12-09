@@ -273,9 +273,9 @@ export function useVault({ chainId, address }: { chainId: number, address: EvmAd
 
   const item = finderItems?.find(item => item.chainId === vault.chainId && compareEvmAddresses(item.address, vault.address))
 
-  const accounts = useMemo(() => [...data.data.accounts, ...localVault.accounts].filter((account, index, self) =>
+  const accounts = useMemo(() => [...data.data.accounts, ...(localVault?.accounts ?? [])].filter((account, index, self) =>
     index === self.findIndex((t) => t.address === account.address)
-  ), [data.data.accounts, localVault.accounts])
+  ), [data, localVault])
 
   return { query, vault: VaultSchema.parse(nullsToUndefined({
     label: item?.label ?? 'erc4626',
