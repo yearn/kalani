@@ -28,7 +28,7 @@ export default function Complete() {
   const { selectedProject } = useSelectedProject()
   const reset = useReset()
   const navigate = useNavigate()
-  const { setLocalVaults } = useLocalVaults()
+  const { upsertLocalVault } = useLocalVaults()
 
   const { snapshot: vaultSnapshot } = useVaultSnapshot({ 
     address: newAddress ?? zeroAddress,
@@ -51,20 +51,17 @@ export default function Complete() {
   })
 
   const onOk = useCallback(async () => {
-    await setLocalVaults(vaults => [
-      ...vaults, 
-      {
-        ...vaultSnapshot,
-        ...projectSnapshot,
-        fees: {
-          managementFee: accountantSnapshot.feeConfig.managementFee,
-          performanceFee: accountantSnapshot.feeConfig.performanceFee
-        }
+    await upsertLocalVault({
+      ...vaultSnapshot,
+      ...projectSnapshot,
+      fees: {
+        managementFee: accountantSnapshot.feeConfig.managementFee,
+        performanceFee: accountantSnapshot.feeConfig.performanceFee
       }
-    ])
+    })
     navigate(`/vault/${vaultSnapshot.chainId}/${vaultSnapshot.address}?allocator`, { replace: true })
     reset()
-  }, [setLocalVaults, navigate, vaultSnapshot, projectSnapshot, reset])
+  }, [upsertLocalVault, navigate, vaultSnapshot, projectSnapshot, reset])
 
   return <div className="relative mt-8 flex flex-col items-end gap-3">
     <p className="text-2xl">Your vault is ready!</p>

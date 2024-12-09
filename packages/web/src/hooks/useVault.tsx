@@ -235,15 +235,25 @@ export function useLocalVaults() {
     _setLocalVaults(vaults => setter(vaults ?? []))
     await new Promise(resolve => setTimeout(resolve, 32))
   }, [_setLocalVaults])
-  return { localVaults, setLocalVaults }
+  const findLocalVaultOrDefaults = useCallback((chainId: number, address: EvmAddress, defaults?: Partial<Vault>) => {
+    return localVaults.find(vault => vault.chainId === chainId && compareEvmAddresses(vault.address, address)) ?? {
+      chainId,
+      address,
+      ...defaults ?? {}
+    } as Vault
+  }, [localVaults])
+  const upsertLocalVault = useCallback((vault: Vault) => {
+    setLocalVaults(vaults => [...vaults.filter(v => v.chainId !== vault.chainId || !compareEvmAddresses(v.address, vault.address)), vault])
+  }, [setLocalVaults])
+  return { localVaults, setLocalVaults, findLocalVaultOrDefaults, upsertLocalVault }
 }
 
 export function useVault({ chainId, address }: { chainId: number, address: EvmAddress }) {
   const query = useVaultQuery({ chainId, address })
   const { data } = query
   const { data: finderItems } = useFinderItems()
-  const { localVaults } = useLocalVaults()
-  const localVault: Vault = useMemo(() => localVaults.find(vault => vault.chainId === chainId && compareEvmAddresses(vault.address, address)) ?? {} as Vault, [localVaults, chainId, address])
+  const { findLocalVaultOrDefaults } = useLocalVaults()
+  const localVault: Vault = findLocalVaultOrDefaults(chainId, address)
   const { localVaultStrategies } = useLocalVaultStrategies()
 
   if (!data) return { query, vault: undefined }
