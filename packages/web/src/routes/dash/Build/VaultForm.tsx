@@ -5,20 +5,23 @@ import SelectErc20 from '../../../components/SelectErc20'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
 import FlyInFromBottom from '../../../components/motion/FlyInFromBottom'
 import { Suspense, useCallback, useMemo } from 'react'
-import Actions from './Actions'
+import Deploy from './Deploy'
 import { cn } from '../../../lib/shadcn'
 import SelectProject, { useSelectedProject } from '../../../components/SelectProject'
 import { zeroAddress } from 'viem'
 import ProjectChipSlide from '../../../components/ChipSlide/ProjectClipSlide'
 import AButton from '../../../components/elements/AButton'
+import Complete, { CompleteSkeleton } from './Complete'
+import { useNameRecommendations } from './useNameRecommendations'
 
 function Step_Project() {
   const { selectedProject, setSelectedProject } = useSelectedProject()
+  const { isDeployed } = useVaultFormValidation()
   return <div className="w-full flex items-start gap-12">
     <StepLabel step={1} />
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">Select a project</p>
-      <SelectProject navkey="step_project" onSelect={setSelectedProject} />
+      <SelectProject navkey="step_project" onSelect={setSelectedProject} disabled={isDeployed} />
       <div>
         {selectedProject && <ProjectChipSlide
           chainId={selectedProject?.chainId ?? 1}
@@ -33,11 +36,12 @@ function Step_Project() {
 function Step_Token() {
   const { chain } = useAccount()
   const { asset, setAsset } = useVaultFormData()
+  const { isDeployed } = useVaultFormValidation()
   return <div className="flex items-start gap-12">
     <StepLabel step={2} />
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">What asset (erc20 token) will your vault hold?</p>
-      <SelectErc20 chainId={chain?.id} placeholder="Find asset by name or address" selected={asset} onSelect={setAsset} />
+      <SelectErc20 chainId={chain?.id} placeholder="Find asset by name or address" selected={asset} onSelect={setAsset} disabled={isDeployed} />
     </div>
   </div>
 }
@@ -54,44 +58,38 @@ const categoryClassNames: Record<number, string> = {
     active:border-red-950 active:text-red-800`,
 }
 
-function CategoryChip({ category, label }: { category: number, label: string }) {
+function CategoryChip({ category, label, disabled }: { category: number, label: string, disabled: boolean }) {
   const { category: selectedCategory, setCategory } = useVaultFormData()
   const selected = useMemo(() => selectedCategory === category, [selectedCategory, category])
-  return <div onClick={() => setCategory(category)} data-selected={selected} className={cn(
+  return <div onClick={() => !disabled && setCategory(category)} data-selected={selected} className={cn(
     `px-6 py-2 border-primary border-neutral-900 bg-neutral-900
     text-neutral-600 text-lg font-bold rounded-full cursor-pointer`, 
-    categoryClassNames[category])}>
+    categoryClassNames[category],
+    disabled && 'opacity-50'
+  )}>
     {label}
   </div>
 }
 
 function Step_Category() {
+  const { isDeployed } = useVaultFormValidation()
   return <div className="flex items-start gap-12">
     <StepLabel step={3} />
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">Choose a vault category</p>
       <div className="flex items-center gap-4">
-        <CategoryChip category={1} label="1" />
-        <CategoryChip category={2} label="2" />
-        <CategoryChip category={3} label="3" />
+        <CategoryChip category={1} label="1" disabled={isDeployed} />
+        <CategoryChip category={2} label="2" disabled={isDeployed} />
+        <CategoryChip category={3} label="3" disabled={isDeployed} />
       </div>
     </div>
   </div>
 }
 
 function Step_Name() {
-  const { name, setName, symbol, setSymbol, asset, category } = useVaultFormData()
-  const { selectedProject } = useSelectedProject()
-
-  const recommendations = useMemo(() => {
-    const [first, second] = selectedProject?.name.match(/(^.{1})|[A-Z]/g) ?? []
-    const prefix = `${first ?? ''}${second ?? ''}`.toLowerCase()
-
-    return {
-      name: `${asset?.symbol}-${category} ${selectedProject?.name}`,
-      symbol: `${prefix}${asset?.symbol}-${category}`,
-    }
-  }, [asset, category, selectedProject])
+  const { name, setName, symbol, setSymbol } = useVaultFormData()
+  const { isDeployed } = useVaultFormValidation()
+  const recommendations = useNameRecommendations()
 
   const onClickRecommendations = useCallback(() => {
     setName(recommendations.name)
@@ -103,16 +101,16 @@ function Step_Name() {
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">What's your vault's name and symbol?</p>
       <div className="text-neutral-600">
-        recommended: <AButton onClick={onClickRecommendations}>{recommendations.name}</AButton>
+        recommended: <AButton onClick={onClickRecommendations} disabled={isDeployed}>{recommendations.name}</AButton>
       </div>
-      <Input value={name} onChange={e => setName(e.target.value)} placeholder="Vault name" maxLength={128} />
-      <Input value={symbol} onChange={e => setSymbol(e.target.value)} placeholder="Vault symbol" maxLength={32} className="w-1/2" />
+      <Input value={name ?? ''} onChange={e => setName(e.target.value)} placeholder="Vault name" maxLength={128} disabled={isDeployed} />
+      <Input value={symbol ?? ''} onChange={e => setSymbol(e.target.value)} placeholder="Vault symbol" maxLength={32} className="w-1/2" disabled={isDeployed} />
     </div>
   </div>
 }
 
 export default function VaultForm({ className }: { className?: string }) {
-  const { projectIdValidation, assetValidation, categoryValidation } = useVaultFormValidation()
+  const { projectIdValidation, assetValidation, categoryValidation, isDeployed } = useVaultFormValidation()
 
   return <div className={cn('w-full pb-96 flex flex-col gap-24', className)}>
     <Step_Project />
@@ -131,7 +129,13 @@ export default function VaultForm({ className }: { className?: string }) {
 
     {projectIdValidation.isValid && <FlyInFromBottom _key="action">
       <Suspense>
-        <Actions />
+        <Deploy />
+      </Suspense>
+    </FlyInFromBottom>}
+
+    {isDeployed && <FlyInFromBottom _key="complete">
+      <Suspense fallback={<CompleteSkeleton />}>
+        <Complete />
       </Suspense>
     </FlyInFromBottom>}
   </div>

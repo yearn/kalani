@@ -154,7 +154,7 @@ const Suspender: React.FC<SelectProjectProps> = ({
 
     <div className={`absolute top-0 right-6 h-full hidden sm:flex items-center ${query.length === 0 ? 'pointer-events-none' : 'pointer-events-auto'}`}>
       {query.length > 0 && <FlyInFromBottom _key="finder-clear">
-        <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')}>
+        <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')} disabled={disabled}>
           <PiX size={24} />
         </button>
       </FlyInFromBottom>}
@@ -162,7 +162,7 @@ const Suspender: React.FC<SelectProjectProps> = ({
 
     {selected && <div className="absolute inset-2 z-10 px-2 border-primary border-transparent flex items-center gap-6 bg-neutral-950 rounded-primary pointer-events-none">
       <div className="grow truncate">{selected.name}</div>
-      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}>
+      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)} disabled={disabled}>
         <PiX size={24} />
       </button>
     </div>}

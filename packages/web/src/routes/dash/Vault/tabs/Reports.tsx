@@ -94,12 +94,12 @@ function TableSkeleton() {
     <tbody>
       {Array.from({ length: 10 }).map((_, index) => (
         <tr key={index}>
-          <td><Skeleton className="w-full h-4" /></td>
-          <td><Skeleton className="w-full h-4" /></td>
-          <td><Skeleton className="w-full h-4" /></td>
-          <td><Skeleton className="w-full h-4" /></td>
-          <td><Skeleton className="w-full h-4" /></td>
-          <td><Skeleton className="w-full h-4" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
+          <td><Skeleton className="w-full h-8 rounded-primary" /></td>
         </tr>
       ))}
     </tbody>

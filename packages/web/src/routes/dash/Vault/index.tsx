@@ -5,7 +5,7 @@ import Vitals from './tabs/Vitals'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
 import ChainImg from '../../../components/ChainImg'
-import Hero, { HeroInset, HeroTitle } from '../../../components/Hero'
+import HeroElement, { HeroInset, HeroTitle } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
@@ -13,51 +13,90 @@ import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
+import { EvmAddress } from '@kalani/lib/types'
 
-function VaultHero() {
-  const { vault } = useVaultFromParams()
-  const { allocator } = useAllocator()
+export interface VaultHeroProps {
+  name: string
+  chainId: number
+  address: EvmAddress
+  assetAddress: EvmAddress
+  tvl: number | undefined
+  apy: number | undefined
+  chip?: React.ReactNode
+  inset?: React.ReactNode
+}
 
-  if (!vault) return <></>
-
-  return <Hero className="bg-secondary-400 text-neutral-950">
+export function VaultHero({
+  name,
+  chainId,
+  address,
+  assetAddress,
+  tvl,
+  apy,
+  chip,
+  inset
+}: VaultHeroProps) {
+  return <HeroElement className="bg-secondary-400 text-neutral-950">
     <div className="w-full flex flex-col justify-center gap-2 pb-2">
-      <HeroTitle>{vault.name}</HeroTitle>
+      <HeroTitle>{name}</HeroTitle>
 
       <div className="flex items-center gap-12">
         <div className="text-2xl font-bold">
-          TVL {fUSD(vault.tvl?.close ?? 0)}
+          TVL {fUSD(tvl ?? 0)}
         </div>
         <div className="text-2xl font-bold">
-          APY {fPercent(vault.apy?.close) ?? '-.--%'}
+          APY {fPercent(apy) ?? '-.--%'}
         </div>
       </div>
 
       <div className="flex items-center gap-6 text-sm">
-        <ChainImg chainId={vault.chainId} size={28} />
-        <TokenImg chainId={vault.chainId} address={vault.asset.address} size={28} bgClassName="bg-neutral-950" />
-        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">
-          {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
-        </div>
-        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-950 text-secondary-400" />
+        <ChainImg chainId={chainId} size={28} />
+        <TokenImg chainId={chainId} address={assetAddress} size={28} bgClassName="bg-neutral-950" />
+        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400" />
+        {chip}
       </div>
 
       <div></div>
     </div>
 
-    <HeroInset>
-      <Tabs>
-        <Tab id="vitals" isDefault={true}>Vitals</Tab>
-        {allocator && <Tab id="allocator">Allocator</Tab>}
-        <Tab id="fees">Fees</Tab>
-        <Tab id="reports">Reports</Tab>
-        <Tab id="roles">Roles</Tab>
-      </Tabs>
+    <HeroInset className="pb-1">
+      {inset}
     </HeroInset>
-  </Hero>
+
+  </HeroElement>
 }
 
-function VaultContent() {
+function Hero() {
+  const { vault } = useVaultFromParams()
+  const { allocator } = useAllocator()
+
+  if (!vault) return <></>
+
+  const projectChip = (
+    <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">
+      {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
+    </div>
+  )
+
+  return <VaultHero
+    name={vault.name}
+    chainId={vault.chainId}
+    address={vault.address}
+    assetAddress={vault.asset.address}
+    tvl={vault.tvl?.close ?? 0}
+    apy={vault.apy?.close}
+    chip={projectChip}
+    inset={<Tabs>
+      <Tab id="vitals" isDefault={true}>Vitals</Tab>
+      {allocator && <Tab id="allocator">Allocator</Tab>}
+      <Tab id="fees">Fees</Tab>
+      <Tab id="reports">Reports</Tab>
+      <Tab id="roles">Roles</Tab>
+    </Tabs>}
+  />
+}
+
+function Content() {
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
 
@@ -73,10 +112,10 @@ function VaultContent() {
 }
 
 export default function Vault() {
-  return <section className="flex flex-col gap-10">
+  return <section className="flex flex-col gap-8">
     <Suspense fallback={<Skeleton className="h-48" />}>
-      <VaultHero />
-      <VaultContent />
+      <Hero />
+      <Content />
     </Suspense>
   </section>
 }

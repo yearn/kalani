@@ -158,7 +158,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
 
     <div className={`absolute top-0 right-6 h-full hidden sm:flex items-center ${query.length === 0 ? 'pointer-events-none' : 'pointer-events-auto'}`}>
       {query.length > 0 && <FlyInFromBottom _key="finder-clear">
-        <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')}>
+        <button className="flex items-center text-sm text-neutral-500 cursor-pointer" onClick={() => setQuery('')} disabled={disabled}>
           <PiX size={24} />
         </button>
       </FlyInFromBottom>}
@@ -168,7 +168,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
       <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} bgClassName={tokenBgClassName} /></div>
       <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
       <div className="grow truncate">{selected.name}</div>
-      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}>
+      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}  disabled={disabled}>
         <PiX size={24} />
       </button>
     </div>}

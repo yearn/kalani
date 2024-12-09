@@ -1,5 +1,5 @@
 import { isSomething } from '@kalani/lib/strings'
-import { Erc20, Erc20Schema, EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
+import { AccountRole, AccountRoleSchema, Erc20, Erc20Schema, EvmAddress, EvmAddressSchema } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { z } from 'zod'
 import { create } from 'zustand'
@@ -16,6 +16,12 @@ export const VaultFormDataSchema = z.object({
   setSymbol: z.function().args(z.string()).returns(z.void()),
   newAddress: EvmAddressSchema.optional(),
   setNewAddress: z.function().args(EvmAddressSchema.optional()).returns(z.void()),
+  accounts: z.array(AccountRoleSchema).optional(),
+  setAccounts: z.function().args(z.array(AccountRoleSchema).optional()).returns(z.void()),
+  inceptBlock: z.bigint({ coerce: true }).optional(),
+  setInceptBlock: z.function().args(z.bigint({ coerce: true })).returns(z.void()),
+  inceptTime: z.number({ coerce: true }).optional(),
+  setInceptTime: z.function().args(z.number({ coerce: true })).returns(z.void()),
   reset: z.function().returns(z.void())
 })
 
@@ -32,17 +38,26 @@ export const useVaultFormData = create<VaultFormData>(set => ({
   setSymbol: (symbol: string | undefined) => set({ symbol }),
   newAddress: undefined,
   setNewAddress: (newAddress: EvmAddress | undefined) => set({ newAddress }),
+  accounts: undefined,
+  setAccounts: (accounts: AccountRole[] | undefined) => set({ accounts }),
+  inceptBlock: undefined,
+  setInceptBlock: (inceptBlock: bigint | undefined) => set({ inceptBlock }),
+  inceptTime: undefined,
+  setInceptTime: (inceptTime: number | undefined) => set({ inceptTime }),
   reset: () => set({ 
     asset: undefined,
     category: 1,
     name: undefined,
     symbol: undefined,
-    newAddress: undefined
+    newAddress: undefined,
+    accounts: undefined,
+    inceptBlock: undefined,
+    inceptTime: undefined
   })
 }))
 
 export function useVaultFormValidation() {
-  const { asset, category, name, symbol } = useVaultFormData()
+  const { asset, category, name, symbol, newAddress } = useVaultFormData()
   const { selectedProject } = useSelectedProject()
 
   const projectIdValidation = useMemo(() => {
@@ -88,12 +103,17 @@ export function useVaultFormValidation() {
       && symbolValidation.isValid
   }, [projectIdValidation, assetValidation, categoryValidation, nameValidation, symbolValidation])
 
+  const isDeployed = useMemo(() => {
+    return isSomething(newAddress)
+  }, [newAddress])
+
   return {
     projectIdValidation,
     assetValidation,
     categoryValidation,
     nameValidation,
     symbolValidation,
-    isFormValid
+    isFormValid,
+    isDeployed
   }
 }
