@@ -36,6 +36,8 @@ export const ROLES = {
   EMERGENCY_MANAGER: 2n ** 13n
 }
 
+export const ALL_ROLES_MASK = Object.values(ROLES).reduce((acc, role) => acc | role, 0n)
+
 export const PSEUDO_ROLES = {
   ROLE_MANAGER: 2n ** 255n
 }

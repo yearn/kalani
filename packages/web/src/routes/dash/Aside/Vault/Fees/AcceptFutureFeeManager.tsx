@@ -9,7 +9,7 @@ import Button from '../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'
 
-export function useAcceptFutureFeeManager() {
+function useAcceptFutureFeeManager() {
   const { vault } = useVaultFromParams()
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
     abi: abis.accountant,

@@ -1,9 +1,10 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, EvmAddress } from '@kalani/lib/types'
+import { ROLES, PSEUDO_ROLES, AccountRoleSchema, EvmAddressSchema, EvmAddress, ALL_ROLES_MASK } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { KONG_GQL_URL } from '../../../lib/env'
+import { useLocalVaults } from '../../../hooks/useVault'
 
 function getRoles(permittedRolesMask: bigint): Record<string, boolean> {
   const roles: {
@@ -145,10 +146,25 @@ export function useAccountVaults(account?: EvmAddress | undefined) {
     }
   })
 
+  const { localVaults } = useLocalVaults()
   const user: User = useMemo(() => {
-    const roles = AccountRoleSchema.array().parse(data?.data?.accountRoles ?? [])
-    const vaults = VaultSchema.array().parse(data?.data?.accountVaults ?? [])
+    const roles = [
+      ...AccountRoleSchema.array().parse(data?.data?.accountRoles ?? []),
+      ...AccountRoleSchema.array().parse(localVaults.map(vault => ({
+        chainId: vault.chainId,
+        vault: vault.address,
+        address: account,
+        roleMask: ALL_ROLES_MASK
+      })))
+    ]
+
+    const vaults = [
+      ...VaultSchema.array().parse(data?.data?.accountVaults ?? []),
+      ...VaultSchema.array().parse(localVaults)
+    ]
+
     const strategies = StrategySchema.array().parse(data?.data?.accountStrategies ?? [])
+
     return UserSchema.parse({
       address: account,
       vaults: vaults.map(vault => {
@@ -162,7 +178,7 @@ export function useAccountVaults(account?: EvmAddress | undefined) {
         }
       })
     })
-  }, [data, account])
+  }, [data, localVaults, account])
 
   return user
 }
