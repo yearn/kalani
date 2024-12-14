@@ -9,7 +9,7 @@ export function HeroTitle({ className, children }: { className?: string, childre
 }
 
 export function HeroInset({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={cn(`absolute inset-0 px-2 sm:px-12 flex items-end justify-start pointer-events-none`, className)}>
+  return <div className={cn(`absolute z-[100] inset-0 px-2 sm:px-12 flex items-end justify-start pointer-events-none`, className)}>
     {children}
   </div>
 }

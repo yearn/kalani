@@ -1,54 +1,103 @@
 import { useAccountVaults } from './useAccountVaults'
-import { fUSD } from '@kalani/lib/format'
+import { fPercent, fUSD } from '@kalani/lib/format'
 import { EvmAddress } from '@kalani/lib/types'
-import Pie from './Pie'
-import Tile from './Tile'
-import Hero from '../../../components/Hero'
-import ChainImg from '../../../components/ChainImg'
-import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
+import Hero, { HeroInset } from '../../../components/Hero'
 import { useIsContract } from '../../../hooks/useIsContract'
 import { useAccount } from 'wagmi'
 import { Suspense, useMemo } from 'react'
 import Skeleton from '../../../components/Skeleton'
+import { zeroAddress } from 'viem'
+import { useAccountItems } from './useAccountItems'
+import { ListItem } from '../Explore/ListItem'
+import { PiCaretDown, PiCaretUp, PiWallet } from 'react-icons/pi'
+import { Tab, Tabs } from '../../../components/Tabs'
+import { useAccountOptions } from './useAccountOptions'
+import { cn } from '../../../lib/shadcn'
+import { compareEvmAddresses } from '@kalani/lib/strings'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
+import ChainImg from '../../../components/ChainImg'
 
 function Suspender({ address }: { address: EvmAddress }) {
   const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
   const user = useAccountVaults(address)
+  const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
   const chainId = user?.vaults[0]?.chainId ?? chainIdFromAccount ?? 1
   const isContract = useIsContract(chainId, address)
-  const aum = user?.vaults.reduce((acc, vault) => acc + vault.tvl.close, 0) ?? 0
-  const pieData = user?.vaults.map(vault => ({ label: vault.asset.symbol, value: vault.tvl.close })) ?? []
   const title = useMemo(() => isContract ? 'Multisig' : isUserWallet ? 'Your Wallet' : 'EOA', [isContract, isUserWallet])
+  const { sortKey, sortDirection, setSortKey } = useAccountOptions()
+
+  const sorted = useMemo(() => {
+    return items.sort((a, b) => {
+      if (sortKey === 'tvl') return sortDirection === 'desc' ? (b.tvl ?? 0) - (a.tvl ?? 0) : (a.tvl ?? 0) - (b.tvl ?? 0)
+      if (sortKey === 'apy') return sortDirection === 'desc' ? (b.apy ?? 0) - (a.apy ?? 0) : (a.apy ?? 0) - (b.apy ?? 0)
+      return 0
+    })
+  }, [items, sortKey, sortDirection])
+
+  const tvl = useMemo(() => {
+    return sorted.reduce((acc, item) => acc + (item.tvl ?? 0), 0)
+  }, [sorted])
+
+  const apy = useMemo(() => {
+    const totalTvl = sorted.reduce((sum, item) => sum + (item.tvl ?? 0), 0)
+    if (totalTvl === 0) return 0
+
+    const weightedApySum = sorted.reduce((acc, item) => {
+      const weight = (item.tvl ?? 0) / totalTvl
+      return acc + (item.apy ?? 0) * weight
+    }, 0)
+
+    return weightedApySum
+  }, [sorted])
 
   if (!address) return <></>
 
-  return <section className="flex flex-col gap-8">
+  return <section className="flex flex-col gap-0">
     <Hero className="bg-primary-400 text-neutral-950">
-      <div className="flex flex-col justify-center gap-2">
-        <div className={`text-4xl font-fancy`}>{title}</div>
-
-        <div className="flex items-center gap-12">
-          <div className="text-2xl font-bold">
-            AUM {fUSD(aum)}
-          </div>
-          <div className="text-2xl font-bold">
-            Vaults {String(user?.vaults.length ?? 0)}
+      <div className="w-full flex items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
+          <PiWallet size={64} />
+          <div className="flex flex-col gap-0">
+            <div className="flex items-end gap-1">
+              <div className="text-5xl font-fancy">{title.charAt(0)}</div>
+              <div className="text-4xl font-fancy">{title.slice(1)}</div>
+            </div>
+            <div className="text-xs tracking-widest">Managed projects and vaults</div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-sm">
-          <ChainImg chainId={chainId} size={28} />
-          <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-primary-400" />
+        <div className="flex items-end gap-10 pr-4">
+          <div className="text-4xl font-bold">{fUSD(tvl)}</div>
+          <div className="text-4xl font-bold">{fPercent(apy, { padding: { length: 2, fill: '0' } })}</div>
         </div>
       </div>
 
-      <div className="absolute top-0 right-0 bottom-0 left-1/2 px-12 flex items-center justify-center pointer-events-none">
-        <Pie data={pieData} size={160} className={''} />
-      </div>
+      <HeroInset>
+        <Tabs className="w-full xl:pr-16 items-end justify-between">
+          <div className="pl-20 pb-28 flex items-center gap-3 text-sm pointer-events-auto">
+            <ChainImg chainId={chainId} size={28} />
+            <EvmAddressChipSlide chainId={chainId} address={address} className="bg-primary-400 text-neutral-950" />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className={cn('pl-3', sortKey === 'tvl' ? '!text-primary-400' : 'text-black active:text-primary-400')}>
+              {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-primary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-primary-400' : 'text-transparent'} />}
+              TVL
+            </Tab>
+            <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className={cn('pl-3', sortKey === 'apy' ? '!text-primary-400' : 'text-black active:text-primary-400')}>
+              {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-primary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-primary-400' : 'text-transparent'} />}
+              APY
+            </Tab>
+          </div>
+        </Tabs>
+      </HeroInset>
     </Hero>
-    <div className="px-6 flex flex-col gap-6">
-      {user?.vaults.map((vault, i) => <Tile key={i} vault={vault} account={address} />)}
+
+    <div className="w-full p-2 sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+      {sorted.map((item) => 
+        <ListItem key={`${item.chainId}-${item.address}`} item={item} roleMask={findRoleForItem(item)?.roleMask} isRoleManager={compareEvmAddresses(item.roleManager ?? zeroAddress, address)}  />
+      )}
     </div>
   </section>
 }

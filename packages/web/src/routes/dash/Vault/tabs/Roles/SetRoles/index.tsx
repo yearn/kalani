@@ -6,7 +6,6 @@ import Toggle from './Toggle'
 import Button from '../../../../../../components/elements/Button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../../components/shadcn/accordion'
 import { fEvmAddress } from '@kalani/lib/format'
-import Dot from './Dot'
 import { PiStar, PiStarFill } from 'react-icons/pi'
 import Address from '../../../../../../components/elements/Address'
 import { useIsRoleManager, useRoleManager } from '../../../../../../hooks/useRoleManager'
@@ -14,6 +13,7 @@ import { zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import Sticker from '../../../../../../components/elements/Sticker'
 import { compareEvmAddresses } from '@kalani/lib/strings'
+import { roleClassNames } from './roleClassNames'
 
 function usePrevious({
   chainId, vault, account 
@@ -63,6 +63,16 @@ function useWrite({
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
   return { simulation, write, confirmation, resolveToast }
+}
+
+function Role({ role, granted }: { role: keyof typeof ROLES, granted: boolean }) {
+  const roleClassName = roleClassNames[role as keyof typeof roleClassNames] ?? {}
+  const checkedClassName = `${roleClassName.checked} group-active:text-inherit`
+  return <div className={`
+    text-xs ${roleClassName.defaults} ${granted ? checkedClassName : roleClassName.unchecked}
+    whitespace-nowrap pointer-events-none`}>
+    {role.replace('_MANAGER', '').replace('_', ' ')}
+  </div>
 }
 
 export default function SetRoles({
@@ -145,19 +155,28 @@ export default function SetRoles({
   }, [write, simulation])
 
   const roleManager = useRoleManager({ chainId, address: vault })
-  const isRoleManager = useCallback((address: EvmAddress) => {
-    return compareEvmAddresses(roleManager, address)
-  }, [roleManager])
+  const isRoleManager = useMemo(() => {
+    return compareEvmAddresses(roleManager, account ?? zeroAddress)
+  }, [roleManager, account])
+
+  const isRoleManagerClassName = useMemo(() => isRoleManager ? 'text-yellow-400' : 'text-neutral-600', [isRoleManager])
 
   return <Accordion type="single" className={className} collapsible>
     <AccordionItem value="item-1" className="flex flex-col gap-4">
       <AccordionTrigger>
         <div className="flex items-center gap-8">
+
           <div>{fEvmAddress(account ?? zeroAddress)}</div>
-          <div>{isRoleManager(account ?? zeroAddress) ? <PiStarFill className="fill-primary-300" /> : <PiStar className="fill-neutral-900" />}</div>
-          <div className="flex items-cemter gap-2">
-            {Object.keys(next).map((role, i) => 
-              <Dot key={i} role={role} checked={next[role]} />
+
+          <div className="h-[42px] flex items-center flex-wrap gap-2 text-xs">
+            <div className={isRoleManagerClassName}>
+              {isRoleManager ? <PiStarFill size={12} /> : <PiStar size={12} />}
+            </div>
+            <div className={isRoleManagerClassName}>ROLE MANAGER</div>
+            {Object.keys(next).map(role => <div key={role} className="flex items-center gap-2">
+              <div className="text-xs text-neutral-600">//</div>
+              <Role role={role as keyof typeof ROLES} granted={next[role]} />
+            </div>
             )}
           </div>
         </div>

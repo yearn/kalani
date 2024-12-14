@@ -30,7 +30,7 @@
 
 :root {
   --foreground: #fafafa;
-	--background: #040404;
+	--background: #09090c;
 
   font-family: 'JetBrains Mono', monospace;
   line-height: 1.5;
@@ -307,7 +307,7 @@
 
 .bg-grill-950 {
 	background-color: transparent;
-	background-image: radial-gradient(transparent 1px, #040404 1px);
+	background-image: radial-gradient(transparent 1px, #09090c 1px);
 	background-size: 4px 4px;
 	backdrop-filter: blur(3px);
 	opacity: 1;

@@ -17,7 +17,7 @@ function Suspender() {
       assetAddress={strategy.asset.address}
       tvl={strategy.tvl.close}
       apy={strategy.apy?.close}
-      chip={<div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">yearn strategy</div>}
+      chip={<div className="px-3 py-1 bg-secondary-400 text-neutral-950 rounded-full">yearn strategy</div>}
       inset={<Tabs>
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
         <Tab id="reports">Reports</Tab>

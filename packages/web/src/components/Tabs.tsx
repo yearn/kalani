@@ -31,7 +31,7 @@ export function Tab({
     group relative my-2 px-6 text-lg
     flex items-center justify-center gap-2
     cursor-pointer pointer-events-auto
-    text-neutral-950 bg-neutral-950/10
+    text-neutral-950 bg-transparent
     hover:bg-neutral-950/20
     active:bg-neutral-950/20
     active:text-secondary-400

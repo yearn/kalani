@@ -80,7 +80,7 @@ export default function Page() {
       </Hero>
     </Suspense>
 
-    <div className="px-10 2xl:px-24 py-12 flex flex-col items-center gap-12">
+    <div className="px-10 2xl:px-[18%] py-12 flex flex-col items-center gap-12">
       <Whitelist />
     </div>
   </section>

@@ -20,7 +20,9 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      <div className="w-[420px]"></div>
+      <div className="w-[420px] px-8 pt-8 pb-24">
+        <div className="w-[420px]"></div>
+      </div>
       <aside className={`fixed right-0 hidden sm:block 
         w-[420px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
         <Aside />
