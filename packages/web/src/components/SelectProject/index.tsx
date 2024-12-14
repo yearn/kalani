@@ -13,7 +13,7 @@ import { create } from 'zustand'
 import { Project, useProjects } from './useProjects'
 import Dialog, { useDialog } from '../../components/Dialog'
 import NewProject from './NewProject'
-import { useAccount, useChainId } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 type UseSelectedProject = {
   selectedProject: Project | undefined,
