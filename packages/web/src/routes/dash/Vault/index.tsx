@@ -37,9 +37,7 @@ export function VaultHero({
   inset
 }: VaultHeroProps) {
   return <HeroElement className="bg-secondary-400 text-neutral-950">
-    <div className="w-full flex flex-col justify-center gap-2 pb-2">
-      <HeroTitle>{name}</HeroTitle>
-
+    <div className="w-full flex flex-col justify-center gap-2 pb-3">
       <div className="flex items-center gap-12">
         <div className="text-2xl font-bold">
           TVL {fUSD(tvl ?? 0)}
@@ -49,14 +47,16 @@ export function VaultHero({
         </div>
       </div>
 
-      <div className="flex items-center gap-6 text-sm">
+      <div className="flex items-center gap-3 text-sm">
         <ChainImg chainId={chainId} size={28} />
         <TokenImg chainId={chainId} address={assetAddress} size={28} bgClassName="bg-neutral-950" />
-        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400" />
         {chip}
+        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400 text-neutral-950" />
       </div>
 
       <div></div>
+
+      <HeroTitle>{name}</HeroTitle>
     </div>
 
     <HeroInset className="pb-1">
@@ -73,7 +73,7 @@ function Hero() {
   if (!vault) return <></>
 
   const projectChip = (
-    <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full">
+    <div className="px-3 py-1 bg-secondary-400 text-neutral-950 rounded-full">
       {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
     </div>
   )
@@ -86,7 +86,7 @@ function Hero() {
     tvl={vault.tvl?.close ?? 0}
     apy={vault.apy?.close}
     chip={projectChip}
-    inset={<Tabs>
+    inset={<Tabs className="w-full">
       <Tab id="vitals" isDefault={true}>Vitals</Tab>
       {allocator && <Tab id="allocator">Allocator</Tab>}
       <Tab id="fees">Fees</Tab>

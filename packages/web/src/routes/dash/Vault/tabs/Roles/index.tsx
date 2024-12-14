@@ -1,13 +1,11 @@
 import { z } from 'zod'
 import { Vault, withVault } from '../../../../../hooks/useVault'
-import TransferRoleManager from './TransferRoleManager'
 import Button from '../../../../../components/elements/Button'
 import { PiPlus } from 'react-icons/pi'
 import { useIsRoleManager } from '../../../../../hooks/useRoleManager'
 import SetRoles from './SetRoles'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmAddressSchema } from '@kalani/lib/types'
-import FieldLabelPair from '../../../../../components/FieldLabelPair'
 import Section from '../../../../../components/Section'
 
 const AccountRoleItemSchema = z.object({
@@ -43,28 +41,20 @@ function Roles({ vault }: { vault: Vault }) {
     }
   }, [vault, setNewAccounts])
 
-  return <div className="flex flex-col gap-8">
-    <Section>
-      <div className="flex flex-col gap-6">
-        {accounts.map((account, index) => <SetRoles 
-          key={index} 
-          chainId={account.chainId}
-          vault={account.vault} 
-          account={account.address}
-          editAddress={account.editAddress}
-        />)}
-        <div className="flex justify-end">
-          <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
-        </div>
+  return <Section>
+    <div className="flex flex-col gap-6">
+      {accounts.map((account, index) => <SetRoles 
+        key={index} 
+        chainId={account.chainId}
+        vault={account.vault} 
+        account={account.address}
+        editAddress={account.editAddress}
+      />)}
+      <div className="flex justify-end">
+        <Button onClick={addAccount} disabled={!isRoleManager} h={'secondary'}><PiPlus /></Button>
       </div>
-
-    </Section>
-    <Section>
-      <FieldLabelPair label="Role Manager">
-        <TransferRoleManager chainId={vault.chainId} vault={vault.address} />
-      </FieldLabelPair>
-    </Section>
-  </div>
+    </div>
+  </Section>
 }
 
 export default withVault(Roles)

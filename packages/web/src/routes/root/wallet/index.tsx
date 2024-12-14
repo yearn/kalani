@@ -27,10 +27,12 @@ export default function Wallet() {
         <Account address={address ?? zeroAddress} />
       </div>
 
-      <div className="min-w-[420px] max-w-[420px]"></div>
+      <div className="w-[420px] px-8 pt-8 pb-24">
+        <div className="w-[420px]"></div>
+      </div>
       <aside className={`fixed right-0 hidden sm:block 
-        min-w-[420px] max-w-[420px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
-        <div className="flex flex-col gap-6">
+        w-[420px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
+        <div className="w-full flex flex-col gap-6">
           <h2 className="text-neutral-400">Projects</h2>
           {projects.map(project => <LinkButton 
             key={project.id} 

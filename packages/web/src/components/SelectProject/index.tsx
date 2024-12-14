@@ -13,7 +13,7 @@ import { create } from 'zustand'
 import { Project, useProjects } from './useProjects'
 import Dialog, { useDialog } from '../../components/Dialog'
 import NewProject from './NewProject'
-import { useChainId } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 
 type UseSelectedProject = {
   selectedProject: Project | undefined,
@@ -73,14 +73,14 @@ const Suspender: React.FC<SelectProjectProps> = ({
 }) => {
   const _navkey = useMemo(() => navkey ?? kabobCase(placeholder ?? 'select-project'), [navkey, placeholder])
   const _dialogId = useMemo(() => `${_navkey}-new-project`, [_navkey])
-  const activeChainId = useChainId()
+  const { chainId: activeChainId, address } = useAccount()
   const breakpoints = useBreakpoints()
   const nav = useHashNav(_navkey)
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState<string>('')
   const selected = useSelectedProject(state => state.selectedProject)
   const [cursorIndex, setCursorIndex] = useState(-1)
-  const { projects } = useProjects(chainId ?? activeChainId ?? 0)
+  const { projects } = useProjects(chainId ?? activeChainId ?? 0, address)
   const { openDialog } = useDialog(_dialogId)
 
   const filter = useMemo(() => {
