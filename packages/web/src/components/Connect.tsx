@@ -35,7 +35,7 @@ export default function Connect({
               onClick={openConnectModal} 
               type="button" 
               h="secondary"
-              className={`border-transparent ${className}`}>
+              className={`border-transparent bg-black ${className}`}>
               {label}
             </Button>
           }
@@ -52,13 +52,13 @@ export default function Connect({
                 onClick={openChainModal}
                 h="secondary"
                 type="button"
-                className={`flex items-center gap-3 border-transparent ${short ? 'hidden' : ''} ${className}`}
+                className={`flex items-center gap-3 border-transparent ${short ? 'hidden' : ''} bg-black ${className}`}
               >
                 <ChainImg chainId={chain.id} size={24} />
                 {chain.name}
               </Button>
               <Button 
-                className={`border-transparent ${className}`} 
+                className={`border-transparent bg-black ${className}`} 
                 h="secondary" 
                 onClick={openAccountModal} 
                 type="button">

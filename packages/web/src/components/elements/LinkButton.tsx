@@ -13,7 +13,7 @@ type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 }
 
 const LinkButton: React.FC<LinkProps> = ({ className, theme, h, children, ...props }) => {
-  const bg = h === 'secondary' ? 'bg-neutral-950' : h === 'tertiary' ? 'bg-neutral-950 active:bg-black' : 'bg-primary-1000'
+  const bg = h === 'secondary' ? 'bg-neutral-950' : h === 'tertiary' ? 'bg-black active:bg-black' : 'bg-primary-1000'
   const text = h === 'secondary' ? 'text-neutral-300' : 'text-neutral-0'
   const border = h === 'secondary' ? 'border-neutral-800' : h === 'tertiary' ? 'border-transparent' : 'border-transparent'
 

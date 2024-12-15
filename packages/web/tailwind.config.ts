@@ -15,7 +15,10 @@ export const primary = {
 }
 
 export const secondary = {
-  ...colors.violet
+  ...colors.violet,
+  '1000': '#161622',
+  '1500': '#0b0b12',
+  '2000': '#09090c'
 }
 
 export default {

@@ -33,7 +33,7 @@ sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:
 sm:data-[open=true]:block
 `
 
-const _inputClassName = `max-h-12
+const _inputClassName = `max-h-12 bg-black
 group-data-[open=true]:rounded-none sm:group-data-[open=true]:rounded-primary
 group-data-[open=true]:z-50 sm:group-data-[open=true]:z-auto
 pointer-events-auto`

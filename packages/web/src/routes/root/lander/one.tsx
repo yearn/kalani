@@ -53,7 +53,7 @@ export default function Lander() {
       </section>
     </div>
 
-    <div className="w-full sm:w-1/2 min-h-screen bg-primary-2000 flex items-center justify-center relative">
+    <div className="w-full sm:w-1/2 min-h-screen bg-secondary-2000 flex items-center justify-center relative">
       <section className="px-4 flex flex-col items-start justify-center gap-16 text-neutral-300">
         <Feature href="/explore" 
           icon={<PiMagnifyingGlass size={96} />} 

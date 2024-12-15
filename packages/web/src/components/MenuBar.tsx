@@ -20,7 +20,7 @@ export default function MenuBar({ className }: { className?: string }) {
   const launcher = useHashNav('launcher')
   return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col pointer-events-none', className)}>
 
-    {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-primary-2000 pointer-events-auto">
+    {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-secondary-2000 pointer-events-auto">
       <div className="px-6 py-6 flex items-center justify-end text-neutral-500">
         <PiX size={32} onClick={menu.close} />
       </div>
