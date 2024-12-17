@@ -37,7 +37,7 @@ export function Tab({
     active:text-secondary-400
     data-[selected=true]:text-secondary-400
     data-[selected=true]:bg-neutral-950
-    rounded-full`, className)}>
+    rounded-full drop-shadow-lg`, className)}>
     {children}
   </div>
 }

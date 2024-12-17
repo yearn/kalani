@@ -11,7 +11,7 @@ import Skeleton from '../../../components/Skeleton'
 import Hero from '../../../components/Hero'
 
 function Brand() {
-  return <div className="flex items-center gap-6">
+  return <div className="flex items-center gap-6 drop-shadow-lg">
     <PiRobot size={64} />
     <div className="flex flex-col gap-0">
       <div className="flex items-end gap-1">
@@ -51,7 +51,7 @@ function Metrics() {
     return gasSaved * wethPrice
   }, [gasSaved, wethPrice])
 
-  return <div className="flex items-end gap-12">
+  return <div className="flex items-end gap-12 drop-shadow-lg">
     <div className="relative hidden sm:block flex flex-col items-start">
       <div className="pb-1 text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
       <div className="absolute -bottom-5 text-sm text-nowrap">

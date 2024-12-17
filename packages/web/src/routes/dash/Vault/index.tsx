@@ -4,7 +4,6 @@ import Roles from './tabs/Roles'
 import Vitals from './tabs/Vitals'
 import Allocator from './tabs/Allocator'
 import Reports from './tabs/Reports'
-import ChainImg from '../../../components/ChainImg'
 import HeroElement, { HeroInset, HeroTitle } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
@@ -14,6 +13,7 @@ import Skeleton from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
+import { getChain } from '../../../lib/chains'
 
 export interface VaultHeroProps {
   name: string
@@ -37,26 +37,28 @@ export function VaultHero({
   inset
 }: VaultHeroProps) {
   return <HeroElement className="bg-secondary-400 text-neutral-950">
-    <div className="w-full flex flex-col justify-center gap-2 pb-3">
-      <div className="flex items-center gap-12">
-        <div className="text-2xl font-bold">
+    <div className="w-full flex flex-col justify-center gap-3 pb-4">
+      <div className="flex items-center gap-12 text-xl tracking-widest font-bold drop-shadow-lg">
+        <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>
-        <div className="text-2xl font-bold">
+        <div className="">
           APY {fPercent(apy) ?? '-.--%'}
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-sm">
-        <ChainImg chainId={chainId} size={28} />
-        <TokenImg chainId={chainId} address={assetAddress} size={28} bgClassName="bg-neutral-950" />
-        {chip}
-        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400 text-neutral-950" />
+      <div className="-mt-1 flex items-center gap-6 text-sm">
+        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">{getChain(chainId).name}</div> 
+        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400 shadow-lg" />
+        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">
+          {chip}
+        </div>
       </div>
 
-      <div></div>
-
-      <HeroTitle>{name}</HeroTitle>
+      <div className="flex items-center gap-4 text-xl drop-shadow-lg">
+        <TokenImg chainId={chainId} address={assetAddress} size={48} bgClassName="bg-neutral-950" />
+        <HeroTitle>{name}</HeroTitle>
+      </div>
     </div>
 
     <HeroInset className="pb-1">
@@ -72,11 +74,7 @@ function Hero() {
 
   if (!vault) return <></>
 
-  const projectChip = (
-    <div className="px-3 py-1 bg-secondary-400 text-neutral-950 rounded-full">
-      {vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`}
-    </div>
-  )
+  const projectChip = vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`
 
   return <VaultHero
     name={vault.name}
@@ -102,7 +100,7 @@ function Content() {
 
   if (!vault) return <></>
 
-  return <div className="w-full px-12">
+  return <div className="w-full px-8">
     <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
     <TabContent id="fees"><Fees /></TabContent>

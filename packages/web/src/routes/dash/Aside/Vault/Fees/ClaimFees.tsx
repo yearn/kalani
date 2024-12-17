@@ -90,7 +90,7 @@ export default function ClaimFees() {
 
   if (!vault) return <></>
 
-  return <div className="flex flex-col gap-6">
+  return <div className="flex flex-col gap-6 border-primary border-neutral-900 rounded-primary px-8 py-6">
     <div className="text-sm text-neutral-400">Claimable Fees</div>
     <div className="flex items-end justify-start gap-3">
       <div className="text-4xl">{fTokens(toAssetsQuery.data ?? 0n, vault.asset.decimals, { fixed: 4 })}</div>

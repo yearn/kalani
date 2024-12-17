@@ -31,7 +31,7 @@ function Suspender() {
 
   return <section className="flex flex-col gap-10">
     <Hero className="bg-indigo-400 text-neutral-950">
-      <div className="flex flex-col justify-center gap-2">
+      <div className="flex flex-col justify-center gap-2 drop-shadow-lg">
         <div className="flex items-center gap-3 text-sm">
           project
         </div>
@@ -43,7 +43,7 @@ function Suspender() {
       </div>
     </Hero>
 
-    <Section className="mx-12">
+    <Section className="mx-8">
       <div className="px-4 py-2 flex flex-col gap-6">
         <LabelValueRow label="Network">
           <ViewGeneric className="flex items-center gap-4">

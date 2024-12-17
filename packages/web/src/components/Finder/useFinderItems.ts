@@ -5,6 +5,7 @@ import { EvmAddressSchema } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
 import { isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
+import { useLocalVaults } from '../../hooks/useVault'
 
 export const FinderItemSchema = z.object({
   label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
@@ -77,6 +78,35 @@ query Query {
 }
 `
 
+function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant'): FinderItem {
+  return {
+    label,
+    chainId: parseInt(vault.chainId),
+    address: vault.address,
+    name: vault.name,
+    nameLower: vault.name.toLowerCase(),
+    symbol: vault.symbol,
+    strategies: vault.strategies,
+    yearn: vault.yearn,
+    v3: vault.v3,
+    projectId: vault.projectId,
+    projectName: vault.projectName,
+    roleManager: vault.roleManager,
+    token: {
+      address: vault.asset.address,
+      name: vault.asset.name,
+      symbol: vault.asset.symbol
+    },
+    tvl: vault.tvl?.close,
+    apy: vault.apy?.net,
+    sparklines: {
+      tvl: vault.sparklines?.tvl?.map((s: any) => s.close) ?? [],
+      apy: vault.sparklines?.apy?.map((s: any) => s.close) ?? []
+    },
+    addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase()
+  }
+}
+
 function toFinderItems(data: any): FinderItem[] {
   let results: FinderItem[] = []
 
@@ -85,34 +115,10 @@ function toFinderItems(data: any): FinderItem[] {
 
   // Process vaults
   data.vaults.forEach((vault: any) => {
-    const item: FinderItem = {
-      label: vault.yearn 
-      ? strategyAddresses.has(vault.address.toLowerCase()) ? 'yStrategy' : 'yVault'
-      : vault.v3 ? 'v3' : 'erc4626',
-      chainId: parseInt(vault.chainId),
-      address: vault.address,
-      name: vault.name,
-      nameLower: vault.name.toLowerCase(),
-      symbol: vault.symbol,
-      strategies: vault.strategies,
-      yearn: vault.yearn,
-      v3: vault.v3,
-      projectId: vault.projectId,
-      projectName: vault.projectName,
-      roleManager: vault.roleManager,
-      token: {
-        address: vault.asset.address,
-        name: vault.asset.name,
-        symbol: vault.asset.symbol
-      },
-      tvl: vault.tvl?.close,
-      apy: vault.apy?.net,
-      sparklines: {
-        tvl: vault.sparklines?.tvl?.map((s: any) => s.close) ?? [],
-        apy: vault.sparklines?.apy?.map((s: any) => s.close) ?? []
-      },
-      addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase()
-    }
+    const label = vault.yearn 
+    ? strategyAddresses.has(vault.address.toLowerCase()) ? 'yStrategy' : 'yVault'
+    : vault.v3 ? 'v3' : 'erc4626'
+    const item: FinderItem = vaultToFinderItem(vault, label)
     results.push(item)
   })
 
@@ -153,19 +159,29 @@ export function useFinderItems() {
     return result
   }, [sortKey, sortDirection])
 
+  const { localVaults } = useLocalVaults()
+
+  const items = useMemo(() => {
+    return [
+      ...query.data, 
+      ...localVaults.map(vault => vaultToFinderItem(vault, 'v3'))
+    ]
+  }, [query.data, localVaults])
+
   const filter = useMemo(() => {
-    if (isNothing(q)) { return sort(query.data) }
+    if (isNothing(q)) { return sort(items) }
+
     const lowerq = q.toLowerCase()
-    const result = query.data?.filter((item: FinderItem) => {
+    const result = items.filter((item: FinderItem) => {
       return item.nameLower?.includes(lowerq)
         || (lowerq.length > 6 && item.addressIndex.toLowerCase().includes(lowerq))
     })
     return sort(result)
-  }, [query.data, q, sort])
+  }, [items, localVaults, q, sort])
 
   return { 
     ...query, 
-    items: query.data ?? [], 
+    items: items ?? [], 
     filter: filter ?? [] 
   }
 }

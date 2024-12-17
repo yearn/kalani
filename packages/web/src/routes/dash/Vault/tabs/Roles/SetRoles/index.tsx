@@ -168,7 +168,7 @@ export default function SetRoles({
 
           <div>{fEvmAddress(account ?? zeroAddress)}</div>
 
-          <div className="h-[42px] flex items-center flex-wrap gap-2 text-xs">
+          <div className="flex items-center flex-wrap gap-2 text-xs">
             <div className={isRoleManagerClassName}>
               {isRoleManager ? <PiStarFill size={12} /> : <PiStar size={12} />}
             </div>

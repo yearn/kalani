@@ -56,7 +56,7 @@ export default function Explore() {
 
   return <section className="flex flex-col gap-0">
     <Hero className="bg-violet-400 text-neutral-950">
-      <div className="w-full flex items-center gap-6">
+      <div className="w-full flex items-center gap-6 drop-shadow-lg">
         <PiMagnifyingGlass size={64} />
         <div className="flex flex-col gap-0">
           <div className="flex items-end gap-1">

@@ -8,7 +8,7 @@ import VaultForm from './VaultForm'
 function Brand() {
   return <div className="flex items-center gap-6">
     <PiVault size={64} />
-    <div className="flex flex-col gap-0">
+    <div className="flex flex-col gap-0 drop-shadow-lg">
       <div className="flex items-end gap-1">
         <div className="text-5xl font-fancy">B</div>
         <div className="text-4xl font-fancy">uild</div>

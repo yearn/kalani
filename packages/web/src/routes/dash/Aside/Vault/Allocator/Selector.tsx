@@ -1,22 +1,16 @@
 import { zeroAddress } from 'viem'
-import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
-import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
-import { useMounted } from '../../../../hooks/useMounted'
-import { useLocalVaultStrategies, useVaultFromParams, useVaultParams } from '../../../../hooks/useVault'
-import { useAllocator, useMinimumChange } from '../../Vault/useAllocator'
-import { FinderItem, getItemHref, useFinderItems } from '../../../../components/Finder/useFinderItems'
+import { useLocalVaultStrategies, useVaultFromParams, useVaultParams } from '../../../../../hooks/useVault'
+import { FinderItem, getItemHref, useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useCallback, useEffect, useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
-import LinkButton from "../../../../components/elements/LinkButton"
 import { fPercent } from '@kalani/lib/format'
-import Button from '../../../../components/elements/Button'
-import StrategiesByAddress from './StrategiesByAddress'
+import Button from '../../../../../components/elements/Button'
 import { useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
-import { EvmAddress, ROLES } from '@kalani/lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import { UseSimulateContractParameters } from 'wagmi'
 import abis from '@kalani/lib/abis'
-import { useWriteContract } from '../../../../hooks/useWriteContract'
-import { useHasRoles } from '../../../../hooks/useHasRoles'
+import { useWriteContract } from '../../../../../hooks/useWriteContract'
+import LinkButton from '../../../../../components/elements/LinkButton'
 
 export function useAddStrategy(strategy: EvmAddress) {
   const { address: vault } = useVaultParams()
@@ -98,7 +92,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
   </div>
 }
 
-function VaultSelector() {
+export function VaultSelector() {
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
 
@@ -120,29 +114,4 @@ function VaultSelector() {
       {filter.slice(0, 4).map(item => <SelectableVault key={item.address} item={item} />)}
     </div>
   </div>
-}
-
-export default function Allocator() {
-  const { chainId, address: vault } = useVaultParams()
-  const authorized = useHasRoles({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
-  const { minimumChange } = useMinimumChange()
-  const { allocator } = useAllocator()
-  const mounted = useMounted()
-
-  if (minimumChange < 1) { return (
-    <FlyInFromBottom _key="aside-allocator-no-min-change" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
-      <div className="flex items-center justify-start gap-6 text-neutral-400">
-        Allocator <EvmAddressChipSlide chainId={chainId} address={allocator ?? zeroAddress} className="bg-neutral-900" />
-      </div>
-    </FlyInFromBottom>
-  ) } else { return (
-    <FlyInFromBottom _key="aside-allocator" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
-      <div className="flex items-center justify-start gap-6 text-neutral-400">
-        Allocator <EvmAddressChipSlide chainId={chainId} address={allocator ?? zeroAddress} className="bg-neutral-900" />
-      </div>
-      {authorized && <VaultSelector />}
-      {authorized && <StrategiesByAddress />}
-    </FlyInFromBottom>
-    )
-  }
 }

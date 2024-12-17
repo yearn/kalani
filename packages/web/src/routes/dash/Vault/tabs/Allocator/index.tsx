@@ -1,6 +1,6 @@
 import { Suspense, useMemo } from 'react'
 import { useVaultFromParams } from '../../../../../hooks/useVault'
-import { useMinimumChange } from '../../useAllocator'
+import { useAllocator, useMinimumChange } from '../../useAllocator'
 import { useAccount } from 'wagmi'
 import Section from '../../../../../components/Section'
 import Allocations from './Allocations'
@@ -10,10 +10,13 @@ import Skeleton from '../../../../../components/Skeleton'
 import { zeroAddress } from 'viem'
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
 import { ROLES } from '@kalani/lib/types'
+import LabelValueRow from '../../../../../components/elements/LabelValueRow'
+import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 
 function Suspender() {
   const { chainId } = useAccount()
   const { vault } = useVaultFromParams()
+  const { allocator } = useAllocator()
   const { minimumChange } = useMinimumChange()
   const authorized = useHasRoles({
     chainId: vault?.chainId ?? 0,
@@ -21,17 +24,26 @@ function Suspender() {
     roleMask: ROLES.DEBT_MANAGER
   })
 
-  return useMemo(() => {
-    if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <SetMinimumChange /> }
+  const content = useMemo(() => {
+    if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <p className="text-center text-neutral-600">Set a minimum change greater than 0.</p> }
     if ((vault?.strategies.length ?? 0) > 0) { return <Allocations /> }
     return <NoStrategies />
   }, [minimumChange, vault])
+
+  return <div className="flex flex-col gap-8">
+    <Section className="relative">
+      {content}
+    </Section>
+    <Section className="relative">
+      <LabelValueRow label="Allocator">
+        <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+    </Section>
+  </div>
 }
 
 export default function Allocator() {
-  return <Section className="relative">
-    <Suspense fallback={<Skeleton className="absolute inset-0 rounded-primary" />}>
-      <Suspender />
-    </Suspense>
-  </Section>
+  return <Suspense fallback={<Skeleton className="absolute inset-0 rounded-primary" />}>
+    <Suspender />
+  </Suspense>
 }
