@@ -10,6 +10,7 @@ import SelectErc20 from '../../components/SelectErc20'
 import ViewDateOrBlock from '../../components/elements/ViewDateOrBlock'
 import SelectProject, { useSelectedProject } from '../../components/SelectProject'
 import InputBps from '../../components/elements/InputBps'
+import VaultPosition from '../../components/VaultPosition'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -48,10 +49,14 @@ export default function Eg() {
   const [bps, setBps] = useState(100)
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
-    <Bg />
+    {/* <Bg /> */}
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
-      <div className="flex items-center gap-12 w-32">
+      <div>
+        <VaultPosition chainId={137} vault={'0x8b0737C91e2D38c8b1D4f82774603CD35AC7477b'} />
+      </div>
+
+      {/* <div className="flex items-center gap-12 w-32">
         <InputBps bps={bps} isValid={true} className="w-[200px]" onChange={e => setBps(Number(e.target.value))} />
       </div>
 
@@ -107,7 +112,7 @@ export default function Eg() {
         <Dialog title="Dialog Title" dialogId="example-dialog">
           <p>This is the dialog content.</p>
         </Dialog>
-      </div>
+      </div> */}
 
     </section>
   </div>

@@ -11,6 +11,7 @@ import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
 import { FixItNotification } from '../Notification'
 import { useHasRoles } from '../../../../hooks/useHasRoles'
 import { useIsRoleManager } from '../../../../hooks/useRoleManager'
+import Zap from './Zap'
 
 function useNotifications() {
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ function useNotifications() {
 
   return useMemo(() => {
     const result: React.ReactNode[] = []
-    if (compareEvmAddresses(vault?.accountant ?? zeroAddress, zeroAddress)) {
+    if (compareEvmAddresses(vault?.accountant ?? zeroAddress, zeroAddress) && isAccountantManager) {
       result.push(<FixItNotification 
         key={`vault-vitals-accountant-${vault?.address}`}
         id={`vault-vitals-accountant-${vault?.address}`}
@@ -47,7 +48,7 @@ function useNotifications() {
       )
     }
 
-    if (compareEvmAddresses(allocator, zeroAddress)) {
+    if (compareEvmAddresses(allocator, zeroAddress) && isDebtManager) {
       result.push(<FixItNotification 
         id={`vault-vitals-allocator-${vault?.address}`} 
         key={`vault-vitals-allocator-${vault?.address}`}
@@ -58,7 +59,7 @@ function useNotifications() {
       )
     }
     
-    if (!isRelayed) {
+    if (!isRelayed && (isRoleManager ?? false)) {
       result.push(<FixItNotification 
         id={`vault-vitals-yhaas-${vault?.address}`} 
         key={`vault-vitals-yhaas-${vault?.address}`}
@@ -69,6 +70,7 @@ function useNotifications() {
         </FixItNotification>
       )
     }
+
     return result
   }, [vault, allocator, isRelayed])
 }
@@ -79,5 +81,6 @@ export default function Vitals() {
     {notifications.length > 0 && <div className="flex flex-col gap-6">
       {notifications}
     </div>}
+    <Zap />
   </div>
 }

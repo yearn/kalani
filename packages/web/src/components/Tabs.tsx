@@ -28,7 +28,7 @@ export function Tab({
 }) {
   const nav = useQueryNav(id, isDefault)
   return <div data-selected={selected ?? nav.isOpen} onClick={onClick ?? nav.open} className={cn(`
-    group relative my-2 px-6 text-lg
+    group relative px-6 text-lg
     flex items-center justify-center gap-2
     cursor-pointer pointer-events-auto
     text-neutral-950 bg-transparent

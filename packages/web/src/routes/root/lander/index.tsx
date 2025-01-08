@@ -88,7 +88,7 @@ function RightHero() {
 }
 
 function LetsGo() {
-  return <div className="w-[280px] flex flex-col gap-6">
+  return <div className="w-[380px] flex flex-col gap-6">
     <div>
       <h1 className="text-2xl font-bold">Create a project</h1>
       <p className="text-neutral-500">Projects are unique groups of addresses used for deploying and managing your vaults.</p>

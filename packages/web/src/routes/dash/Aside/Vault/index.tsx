@@ -11,11 +11,18 @@ function useTabName() {
   return useMemo(() => location.search.replace('?', ''), [location])
 }
 
+function tabToContentKey(tab: string) {
+  switch(tab) {
+    case 'allocator': return 'allocator'
+    case 'fees': return 'fees'
+    default: return 'zap'
+  }
+}
+
 function useTabAsideContent() {
   const tab = useTabName()
   return useMemo(() => {
     switch(tab) {
-      case 'allocator-mock': return <></>
       case 'allocator': return <Allocator />
       case 'fees': return <Fees />
       default: return <Vitals />
@@ -26,9 +33,10 @@ function useTabAsideContent() {
 export default function Vault() {
   const tab = useTabName()
   const mounted = useMounted()
+  const contentKey = tabToContentKey(tab)
   const content = useTabAsideContent()
   return <div className="w-full">
-    <FlyInFromBottom _key={tab} parentMounted={mounted} exit={1}>
+    <FlyInFromBottom _key={contentKey} parentMounted={mounted} exit={1}>
       {content}
     </FlyInFromBottom>
   </div>

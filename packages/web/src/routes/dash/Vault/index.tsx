@@ -37,27 +37,29 @@ export function VaultHero({
   inset
 }: VaultHeroProps) {
   return <HeroElement className="bg-secondary-400 text-neutral-950">
-    <div className="w-full flex flex-col justify-center gap-3 pb-4">
-      <div className="flex items-center gap-12 text-xl tracking-widest font-bold drop-shadow-lg">
+    <div className="w-full flex flex-col justify-center gap-2 pb-4">
+
+      <div className="flex items-center gap-4 text-xl drop-shadow-lg">
+        <div><TokenImg chainId={chainId} address={assetAddress} size={64} bgClassName="bg-neutral-950" /></div>
+        <div className="w-full flex flex-col gap-3">
+          <HeroTitle>{name}</HeroTitle>
+          <div className="-mt-1 flex items-center gap-3 text-sm">
+            <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">{getChain(chainId).name}</div> 
+            <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400 shadow-lg" />
+            <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">
+              {chip}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="pl-1 flex items-center gap-12 text-3xl tracking-widest font-bold drop-shadow-lg">
         <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>
         <div className="">
           APY {fPercent(apy) ?? '-.--%'}
         </div>
-      </div>
-
-      <div className="-mt-1 flex items-center gap-6 text-sm">
-        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">{getChain(chainId).name}</div> 
-        <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400 shadow-lg" />
-        <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">
-          {chip}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4 text-xl drop-shadow-lg">
-        <TokenImg chainId={chainId} address={assetAddress} size={48} bgClassName="bg-neutral-950" />
-        <HeroTitle>{name}</HeroTitle>
       </div>
     </div>
 
@@ -84,7 +86,7 @@ function Hero() {
     tvl={vault.tvl?.close ?? 0}
     apy={vault.apy?.close}
     chip={projectChip}
-    inset={<Tabs className="w-full">
+    inset={<Tabs className="mb-2 w-full">
       <Tab id="vitals" isDefault={true}>Vitals</Tab>
       {allocator && <Tab id="allocator">Allocator</Tab>}
       <Tab id="fees">Fees</Tab>
@@ -100,7 +102,7 @@ function Content() {
 
   if (!vault) return <></>
 
-  return <div className="w-full px-8">
+  return <div className="relative w-full px-8">
     <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
     <TabContent id="fees"><Fees /></TabContent>
@@ -109,9 +111,19 @@ function Content() {
   </div>
 }
 
+function VaultSkeleton() {
+  return <div className="px-8 flex flex-col gap-8">
+    <Skeleton className="w-full h-40 my-4 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+  </div>
+}
+
 export default function Vault() {
   return <section className="flex flex-col gap-8">
-    <Suspense fallback={<Skeleton className="h-48" />}>
+    <Suspense fallback={<VaultSkeleton />}>
       <Hero />
       <Content />
     </Suspense>

@@ -4,7 +4,6 @@ import { useAllocator, useMinimumChange } from '../../useAllocator'
 import { useAccount } from 'wagmi'
 import Section from '../../../../../components/Section'
 import Allocations from './Allocations'
-import { SetMinimumChange } from './SetMinimumChange'
 import NoStrategies from './NoStrategies'
 import Skeleton from '../../../../../components/Skeleton'
 import { zeroAddress } from 'viem'
@@ -30,7 +29,7 @@ function Suspender() {
     return <NoStrategies />
   }, [minimumChange, vault])
 
-  return <div className="flex flex-col gap-8">
+  return <>
     <Section className="relative">
       {content}
     </Section>
@@ -39,11 +38,22 @@ function Suspender() {
         <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-neutral-900" />
       </LabelValueRow>
     </Section>
+  </>
+}
+
+function AllocatorSkeleton() {
+  return <div className="flex flex-col gap-8">
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
+    <Skeleton className="w-full h-24 rounded-primary" />
   </div>
 }
 
 export default function Allocator() {
-  return <Suspense fallback={<Skeleton className="absolute inset-0 rounded-primary" />}>
-    <Suspender />
-  </Suspense>
+  return <div className="flex flex-col gap-8">
+    <Suspense fallback={<AllocatorSkeleton />}>
+      <Suspender />
+    </Suspense>
+  </div>
 }

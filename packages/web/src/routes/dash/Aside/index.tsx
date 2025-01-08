@@ -12,9 +12,13 @@ import Project from './Project'
 import Build from './Build'
 import Explore from './Explore'
 
+function AsideSkeleton() {
+  return <Skeleton className="w-full h-48 rounded-primary" />
+}
+
 export default function Aside() {
   return <div className="flex flex-col items-center justify-center gap-12">
-    <Suspense fallback={<Skeleton className="absolute top-0 left-0 w-full h-48" />}>
+    <Suspense fallback={<AsideSkeleton />}>
       <Routes>
         <Route path="/account" element={<Account />} />
         <Route path="/build" element={<Build />} />

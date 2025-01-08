@@ -74,7 +74,7 @@ function Suspender({ address }: { address: EvmAddress }) {
       </div>
 
       <HeroInset>
-        {isUserWallet && <Tabs className="w-full pb-1">
+        {isUserWallet && <Tabs className="w-full pb-3">
           <Tab id="vaults" isDefault={true} className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Vaults</Tab>
           <Tab id="projects" className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Projects</Tab>
         </Tabs>}
@@ -105,7 +105,7 @@ function Suspender({ address }: { address: EvmAddress }) {
 }
 
 export default function Account({ address }: { address: EvmAddress }) {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
     <Suspender address={address} />
   </Suspense>
 }

@@ -80,7 +80,7 @@ function Suspender() {
 }
 
 export default function Project() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
     <Suspender />
   </Suspense>
 }

@@ -29,7 +29,9 @@ export default {
     ...heightSafeList(),
     'w-[24px]', 'h-[24px]',
     'w-[28px]', 'h-[28px]',
+    'w-[32px]', 'h-[32px]',
     'w-[48px]', 'h-[48px]',
+    'w-[64px]', 'h-[64px]',
     'border-primary',
     'odd:bg-grill-900'
   ],
@@ -54,8 +56,7 @@ export default {
       },
 
       width: {
-        'field-btn': '8rem',
-        'aside': '480px'
+        'field-btn': '8rem'
       },
 
       height: {

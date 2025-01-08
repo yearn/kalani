@@ -16,7 +16,7 @@ export const TOKENS: Record<number, Erc20[]> = {
   ],
   [137]: [
     { chainId: 137, address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', name: 'Dai', symbol: 'DAI', decimals: 18 },
-    { chainId: 137, address: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', name: 'USDC', symbol: 'USDC', decimals: 6 },
+    { chainId: 137, address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', name: 'USDC', symbol: 'USDC', decimals: 6 },
     { chainId: 137, address: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', name: 'Tether USD', symbol: 'USDT', decimals: 18 }
   ],
   [42161]: [

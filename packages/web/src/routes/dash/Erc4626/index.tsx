@@ -19,7 +19,7 @@ function Suspender() {
       tvl={vault.tvl?.close}
       apy={vault.apy?.close}
       chip="erc4626"
-      inset={<Tabs>
+      inset={<Tabs className="mb-2">
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
       </Tabs>}
     />
@@ -31,7 +31,7 @@ function Suspender() {
 }
 
 export default function Erc4626() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
     <Suspender />
   </Suspense>
 }

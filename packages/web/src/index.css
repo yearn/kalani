@@ -50,6 +50,10 @@
   overflow: hidden;
 }
 
+.w-aside {
+	@apply w-full sm:w-[400px] 2xl:w-[480px];
+}
+
 @keyframes rotate {
 	100% {
 		transform: rotate(1turn);

@@ -63,12 +63,11 @@ export default function Explore() {
             <div className="text-5xl font-fancy">E</div>
             <div className="text-4xl font-fancy">xplore</div>
           </div>
-          <div className="text-xs tracking-widest">Explore the universe of 4626 vaults</div>
         </div>
       </div>
 
       <HeroInset>
-        <Tabs className="w-full xl:pr-16 justify-end">
+        <Tabs className="mb-3 w-full xl:pr-16 justify-end">
           <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} />}
             TVL
