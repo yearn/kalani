@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../lib/env'
 import { EvmAddressSchema } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
-import { isNothing } from '@kalani/lib/strings'
+import { compareEvmAddresses, isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
 import { useLocalVaults } from '../../hooks/useVault'
 
@@ -26,7 +26,8 @@ export const FinderItemSchema = z.object({
   token: z.object({
     address: EvmAddressSchema,
     name: z.string(),
-    symbol: z.string()
+    symbol: z.string(),
+    decimals: z.number({ coerce: true })
   }).optional(),
   tvl: z.number().nullish(),
   apy: z.number().nullish(),
@@ -95,7 +96,8 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
     token: {
       address: vault.asset.address,
       name: vault.asset.name,
-      symbol: vault.asset.symbol
+      symbol: vault.asset.symbol,
+      decimals: vault.asset.decimals
     },
     tvl: vault.tvl?.close,
     apy: vault.apy?.net,
@@ -198,4 +200,20 @@ function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'account
 
 export function getItemHref(item: FinderItem) {
   return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
+}
+
+export function useFinderUtils() {
+  const { items } = useFinderItems()
+
+  const findFinderItem = useCallback((options: { chainId: number, address: `0x${string}` }) => {
+    return items.find(item => compareEvmAddresses(item.address, options.address))
+  }, [items])
+
+  const getHrefFor = useCallback((options: { chainId: number, address: `0x${string}` }) => {
+    const item = findFinderItem(options)
+    if (item) return getItemHref(item)
+    return `/erc4626/${options.chainId}/${options.address}`
+  }, [findFinderItem])
+
+  return { findFinderItem, getHrefFor }
 }

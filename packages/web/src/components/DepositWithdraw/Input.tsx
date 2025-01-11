@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useDepositParameters } from '../useDepositParameters'
-import useDebounce from '../../../hooks/useDebounce'
-import { cn } from '../../../lib/shadcn'
+import { useDepositParameters } from './useDepositParameters'
+import useDebounce from '../../hooks/useDebounce'
+import { cn } from '../../lib/shadcn'
 
-export function InputDisplay({
+function InputDisplay({
 	disabled,
 	onChange,
 	value,
@@ -18,7 +18,7 @@ export function InputDisplay({
 		<input
 			disabled={ disabled }
 			className={cn(`
-  relative w-full font-mono bg-transparent truncate
+  relative w-full bg-transparent truncate
   placeholder:text-neutral-500
   disabled:text-neutral-400 disabled:bg-transparent hover:disabled:border-neutral-950
   disabled:border-transparent outline-none focus:ring-0 focus:outline-none

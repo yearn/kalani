@@ -96,6 +96,12 @@
   animation: shimmer 1.5s infinite;
 }
 
+.shimmer-slow-ride {
+	background: linear-gradient(45deg, #09090c 30%, #000 60%, #09090c 70%);
+	background-size: 200% 100%;
+	animation: shimmer 16.5s infinite;
+}
+
 .theme-disabled {
 	position: relative;
 	z-index: 0;

@@ -11,7 +11,6 @@ import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
 import { FixItNotification } from '../Notification'
 import { useHasRoles } from '../../../../hooks/useHasRoles'
 import { useIsRoleManager } from '../../../../hooks/useRoleManager'
-import Zap from './Zap'
 
 function useNotifications() {
   const navigate = useNavigate()
@@ -81,6 +80,6 @@ export default function Vitals() {
     {notifications.length > 0 && <div className="flex flex-col gap-6">
       {notifications}
     </div>}
-    <Zap />
+    {'-- DepositWithdraw --'}
   </div>
 }

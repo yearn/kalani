@@ -10,7 +10,7 @@ import SelectErc20 from '../../components/SelectErc20'
 import ViewDateOrBlock from '../../components/elements/ViewDateOrBlock'
 import SelectProject, { useSelectedProject } from '../../components/SelectProject'
 import InputBps from '../../components/elements/InputBps'
-import VaultPosition from '../../components/VaultPosition'
+import DepositWithdraw from '../../components/DepositWithdraw'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -52,8 +52,8 @@ export default function Eg() {
     {/* <Bg /> */}
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
-      <div>
-        <VaultPosition chainId={137} vault={'0x8b0737C91e2D38c8b1D4f82774603CD35AC7477b'} />
+      <div className="flex flex-col gap-8">
+        <DepositWithdraw chainId={137} vault={'0xecbAb43a13d4Da5A2C7D47ec640054027E76710e'} />
       </div>
 
       {/* <div className="flex items-center gap-12 w-32">

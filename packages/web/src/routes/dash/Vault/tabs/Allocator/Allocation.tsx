@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useVaultFromParams, useVaultParams } from '../../../../../hooks/useVault'
 import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
-import { getItemHref, useFinderItems } from '../../../../../components/Finder/useFinderItems'
+import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { parseAbi, zeroAddress } from 'viem'
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
@@ -13,7 +13,6 @@ import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { fPercent } from '@kalani/lib/format'
 import LinkButton from '../../../../../components/elements/LinkButton'
-import { compareEvmAddresses } from '@kalani/lib/strings'
 import InputBps from '../../../../../components/elements/InputBps'
 import Button from '../../../../../components/elements/Button'
 import ViewBps from '../../../../../components/elements/ViewBps'
@@ -25,22 +24,6 @@ export function useHasDebtManagerRole() {
     vault: vault?.address ?? zeroAddress,
     roleMask: ROLES.DEBT_MANAGER
   })
-}
-
-function useFinderUtils() {
-  const { items } = useFinderItems()
-
-  const findFinderItem = useCallback((strategy: { chainId: number, address: `0x${string}` }) => {
-    return items.find(item => compareEvmAddresses(item.address, strategy.address))
-  }, [items])
-
-  const getStrategyHref = useCallback((strategy: { chainId: number, address: `0x${string}` }) => {
-    const item = findFinderItem(strategy)
-    if (item) return getItemHref(item)
-    return `/erc4626/${strategy.chainId}/${strategy.address}`
-  }, [findFinderItem])
-
-  return { findFinderItem, getStrategyHref }
 }
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
@@ -81,7 +64,7 @@ function MutableAllocation({ strategy }: { strategy: {
   const { updateDebtRatio } = useDebtRatioUpdates()
   const update = useDebtRatioUpdate(strategy.address)
   const { totalDebtRatio } = useTotalDebtRatioUpdates()
-  const { findFinderItem, getStrategyHref } = useFinderUtils()
+  const { findFinderItem, getHrefFor } = useFinderUtils()
 
   const { simulation, write, confirmation, resolveToast } = useSetStrategyDebtRatio(
     strategy.address, 
@@ -140,7 +123,7 @@ function MutableAllocation({ strategy }: { strategy: {
   }, [write, simulation])
 
   return <div className="w-full flex items-center gap-6">
-    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
       <div>{strategy.name}</div>
       <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>
@@ -158,10 +141,10 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   address: `0x${string}`, 
   name: string 
 } }) {
-  const { findFinderItem, getStrategyHref } = useFinderUtils()
+  const { findFinderItem, getHrefFor } = useFinderUtils()
   const update = useDebtRatioUpdate(strategy.address)
   return <div className="w-full flex items-center gap-6">
-    <LinkButton to={getStrategyHref(strategy)} h="tertiary" className="sm:w-64 px-6 grow h-14 flex items-center justify-between">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="sm:w-64 px-6 grow h-14 flex items-center justify-between">
       <div className="max-w-[80%] truncate">{strategy.name}</div>
       <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>

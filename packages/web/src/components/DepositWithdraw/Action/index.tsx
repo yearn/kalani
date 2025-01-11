@@ -10,10 +10,12 @@ import { useAccount } from 'wagmi'
 import Connect from '../../Connect'
 import CTA from '../../CTA'
 import { useVaultAsset } from '../useVaultAsset'
+import { useVaultBalance } from '../useVaultBalance'
 
 function Suspender() {
   const { chainId, vault, amount, setAmount, wallet } = useSuspendedDepositParameters()
   const { asset } = useVaultAsset(chainId!, vault!)
+  const { refetch: refetchVaultBalance } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const approve = useApprove()
   const deposit = useDeposit()
 
@@ -46,7 +48,8 @@ function Suspender() {
     approve.write.reset()
     deposit.write.reset()
     refetchBalance()
-  }, [approve, deposit, refetchBalance, setAmount])
+    refetchVaultBalance()
+  }, [approve, deposit, refetchBalance, setAmount, refetchVaultBalance])
 
   return <WriteContractButton {...action} label={label} disabled={disabled} error={error} onConfirm={onConfirm} />
 }

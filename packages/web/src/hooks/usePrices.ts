@@ -24,3 +24,8 @@ export default function usePrices(chainId: number, tokens: EvmAddress[]) {
     data: query.data ?? fallbackData
   }
 }
+
+export function usePrice(chainId: number, token: EvmAddress) {
+  const result = usePrices(chainId, [token])
+  return useMemo(() => result.data[token] ?? 0, [result.data, token])
+}
