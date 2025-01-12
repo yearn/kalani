@@ -120,26 +120,29 @@ function Deposit() {
 }
 
 function useAssetUnlocker({ chainId, vault, wallet }: { chainId: number, vault: EvmAddress, wallet: EvmAddress }) {
+  const interval = 2_000
   const { assets, apr } = useVaultBalance({ chainId, vault, wallet })
   const [unlocked, setUnlocked] = useState(assets)
 
   useEffect(() => {
-    const interval = 10_000
-    let tick = 0
+    let tick = 1
     const handle = setInterval(() => {
-      setUnlocked(assets + bmath.mulb(assets, apr * (interval * tick) / (365 * 24 * 60 * 60 * 1000)))
-      tick += 1
+      const delta = bmath.mulb(assets, apr * (interval * tick) / (365 * 24 * 60 * 60 * 1000))
+      console.log('delta', delta)
+      setUnlocked(assets + delta)
+      tick++
     }, interval)
     return () => clearInterval(handle)
   }, [assets, apr, setUnlocked])
 
-  return useMemo(() => unlocked > assets ? unlocked : assets, [unlocked, assets])
+  const result = useMemo(() => unlocked > assets ? unlocked : assets, [unlocked, assets])
+  return { interval, assets: result }
 }
 
 function VaultBalance() {
   const { chainId, vault, wallet } = useSuspendedDepositParameters()
   const { shares, decimals, assetPrice } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
-  const unlockedAssets1e18 = useAssetUnlocker({ chainId: chainId!, vault: vault!, wallet: wallet! })
+  const { interval: unlockInterval, assets: unlockedAssets1e18 } = useAssetUnlocker({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
 
   return <div className={cn(
@@ -149,10 +152,11 @@ function VaultBalance() {
     <div className="flex items-start justify-between">
       <div className="flex flex-col gap-2">
         <div data-zero={unlockedAssets === 0} className="text-5xl data-[zero=true]:text-neutral-500">
-          <Odometer value={unlockedAssets} format="(,ddd).dd" />
+          <Odometer value={unlockedAssets} format="(,ddd).dddddd" duration={unlockInterval} />
         </div>
-        <div className="text-neutral-500 text-sm">
-          $&nbsp;<Odometer value={priced(unlockedAssets1e18, decimals, assetPrice)} format="(,ddd).dd" />
+        <div className="flex items-center gap-1 text-neutral-500 text-sm">
+          <div>$</div>
+          <Odometer value={priced(unlockedAssets1e18, decimals, assetPrice)} format="(,ddd).dd" />
         </div>
       </div>
       <Suspense fallback={<Skeleton className="w-28 h-10 rounded-primary" />}>
