@@ -15,6 +15,7 @@ export const FinderItemSchema = z.object({
   nameLower: z.string().optional(),
   symbol: z.string().optional(),
   yearn: z.boolean().nullish(),
+  vaultType: z.number().nullish(),
   v3: z.boolean().nullish(),
   projectId: z.string().nullish(),
   projectName: z.string().nullish(),
@@ -55,6 +56,7 @@ query Query {
     projectId
     projectName
     roleManager: role_manager
+    vaultType
     asset {
       address
       name
@@ -89,6 +91,7 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
     symbol: vault.symbol,
     strategies: vault.strategies,
     yearn: vault.yearn,
+    vaultType: vault.vaultType,
     v3: vault.v3,
     projectId: vault.projectId,
     projectName: vault.projectName,
@@ -188,18 +191,18 @@ export function useFinderItems() {
   }
 }
 
-function labelToView(label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant') {
-  switch (label) {
+function getView(item: FinderItem) {
+  switch (item.label) {
     case 'yVault': return 'vault'
     case 'yStrategy': return 'strategy'
-    case 'v3': return 'vault'
+    case 'v3': return item.vaultType === 2 ? 'strategy' : 'vault'
     case 'erc4626': return 'erc4626'
-    default: return label
+    default: return item.label
   }
 }
 
 export function getItemHref(item: FinderItem) {
-  return `/${labelToView(item.label)}/${item.chainId}/${item.address}`
+  return `/${getView(item)}/${item.chainId}/${item.address}`
 }
 
 export function useFinderUtils() {

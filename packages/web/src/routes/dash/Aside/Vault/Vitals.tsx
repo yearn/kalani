@@ -11,6 +11,7 @@ import { useWhitelist } from '../../Yhaas/Whitelist/useWhitelist'
 import { FixItNotification } from '../Notification'
 import { useHasRoles } from '../../../../hooks/useHasRoles'
 import { useIsRoleManager } from '../../../../hooks/useRoleManager'
+import DepositWithdraw from '../../../../components/DepositWithdraw'
 
 function useNotifications() {
   const navigate = useNavigate()
@@ -75,11 +76,12 @@ function useNotifications() {
 }
 
 export default function Vitals() {
+  const { vault } = useVaultFromParams()
   const notifications = useNotifications()
   return <div className="w-full flex flex-col gap-8">
     {notifications.length > 0 && <div className="flex flex-col gap-6">
       {notifications}
     </div>}
-    {'-- DepositWithdraw --'}
+    <DepositWithdraw chainId={vault?.chainId ?? 0} vault={vault?.address ?? zeroAddress} />
   </div>
 }

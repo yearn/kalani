@@ -8,11 +8,11 @@ import bmath, { priced } from '@kalani/lib/bmath'
 import Odometer from 'react-odometerjs'
 import { useAccount } from 'wagmi'
 import { useVaultBalance } from './useVaultBalance'
-import { fTokens } from '@kalani/lib/format'
 import FlyInFromBottom from '../motion/FlyInFromBottom'
 import InputLabel from './InputLabel'
 import InputPanel from './InputPanel'
 import { formatUnits } from 'viem'
+import Base from './Base'
 
 function SwitchOption({ selected, onClick, children }: { selected: boolean, onClick: () => void, children: React.ReactNode }) {
   return <div className="relative">
@@ -53,7 +53,6 @@ function useAssetUnlocker({ chainId, vault, wallet }: { chainId: number, vault: 
     let tick = 1
     const handle = setInterval(() => {
       const delta = bmath.mulb(assets, apr * (interval * tick) / (365 * 24 * 60 * 60 * 1000))
-      console.log('delta', delta)
       setUnlocked(assets + delta)
       tick++
     }, interval)
@@ -66,7 +65,7 @@ function useAssetUnlocker({ chainId, vault, wallet }: { chainId: number, vault: 
 
 function VaultBalance() {
   const { chainId, vault, wallet } = useSuspendedParameters()
-  const { shares, decimals, assetPrice } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
+  const { shares, decimals, assetPrice, symbol } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const { interval: unlockInterval, assets: unlockedAssets1e18 } = useAssetUnlocker({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
 
@@ -74,26 +73,26 @@ function VaultBalance() {
     'p-6 flex flex-col gap-8 rounded-t-primary bg-black',
     (unlockedAssets > 0) && 'shimmer-slow-ride')}>
     <div>Your vault balance</div>
-    <div className="flex items-start justify-between">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center justify-between text-neutral-500 text-sm">
+        <Odometer value={parseFloat(formatUnits(shares, decimals))} format="(,ddd).dd" />
+        <div>shares of {symbol}</div>
+      </div>
+      <div className="flex items-center justify-between">
         <div data-zero={unlockedAssets === 0} className="text-5xl data-[zero=true]:text-neutral-500">
           <Odometer value={unlockedAssets} format="(,ddd).dddddd" duration={unlockInterval} />
         </div>
-        <div className="flex items-center gap-1 text-neutral-500 text-sm">
-          <div>$</div>
-          <Odometer value={priced(unlockedAssets1e18, decimals, assetPrice)} format="(,ddd).dd" />
-        </div>
+        <Suspense fallback={<Skeleton className="w-28 h-10 rounded-primary" />}>
+          <InputLabel />
+        </Suspense>
       </div>
-      <Suspense fallback={<Skeleton className="w-28 h-10 rounded-primary" />}>
-        <InputLabel />
-      </Suspense>
+      <div className="flex items-center gap-1 text-neutral-500 text-sm">
+        <div>$</div>
+        <Odometer value={priced(unlockedAssets1e18, decimals, assetPrice)} format="(,ddd).dd" />
+      </div>
     </div>
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-start">
       <Switch />
-      <div className="flex items-center gap-2 text-neutral-500 text-sm">
-        <Odometer value={parseFloat(formatUnits(shares, decimals))} format="(,ddd).dd" />
-        <div>shares of yUSDC</div>
-      </div>
     </div>
   </div>
 }
@@ -122,7 +121,7 @@ function Suspender({
     </Suspense>
     <div className="flex flex-col gap-8">
       <InputPanel />
-      <Action />
+      <Action chainId={chainId} />
     </div>
   </div>
 }

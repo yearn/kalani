@@ -12,6 +12,7 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { fPercent } from '@kalani/lib/format'
 import LinkButton from '../../../components/elements/LinkButton'
 import { getChain } from '../../../lib/chains'
+import DepositWithdraw from '../../../components/DepositWithdraw'
 
 function useNotifications() {
   const navigate = useNavigate()
@@ -74,5 +75,6 @@ export default function Strategy() {
         {fPercent(strategy.lastReportDetail?.apr?.net ?? 0)} APR
       </div>
     </LinkButton>
+    <DepositWithdraw chainId={strategy.chainId} vault={strategy.address} />
   </div>
 }

@@ -12,6 +12,7 @@ import { APR_ORACLE } from '@kalani/lib/addresses'
 import { useFinderUtils } from '../Finder/useFinderItems'
 
 const ReturnSchema = z.object({
+  symbol: z.string(),
   decimals: z.number({ coerce: true }),
   shares: z.bigint({ coerce: true }),
   assets: z.bigint({ coerce: true }),
@@ -41,6 +42,7 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
 
   const contracts = [
     { chainId, address: vault, abi: abis.vault, functionName: 'asset' },
+    { chainId, address: vault, abi: abis.vault, functionName: 'symbol' },
     { chainId, address: vault, abi: abis.vault, functionName: 'balanceOf', args: [wallet] },
     { chainId, address: vault, abi: abis.vault, functionName: 'convertToShares', args: [10n ** BigInt(decimals)] },
     { 
@@ -60,24 +62,27 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
   const asset = query.data?.[0]?.result as EvmAddress
   const assetPrice = usePrice(chainId, asset)
 
+  const symbol = useMemo(() => query.data?.[1]?.result as string, [query.data])
+
   const shares = useMemo(() => {
-    return (query.data?.[1]?.result as bigint | undefined) ?? 0n
+    return (query.data?.[2]?.result as bigint | undefined) ?? 0n
   }, [query.data])
 
   const assets = useMemo(() => {
-    const assetToShares1e18 = (query.data?.[2]?.result as bigint | undefined) ?? 1n
+    const assetToShares1e18 = (query.data?.[3]?.result as bigint | undefined) ?? 1n
     const assetToShares = bmath.div(assetToShares1e18, 10n ** BigInt(decimals))
     const assets = bmath.mul(shares, assetToShares)
     return BigInt(assets)
   }, [shares, query.data, decimals])
 
   const apr = useMemo(() => {
-    if (query.data?.[3].error) return historicalApr
-    const oracleApr = (query.data?.[3]?.result as bigint | undefined) ?? 0n
+    if (query.data?.[4].error) return historicalApr
+    const oracleApr = (query.data?.[4]?.result as bigint | undefined) ?? 0n
     return bmath.div(oracleApr, 10n ** 18n)
   }, [query.data, historicalApr])
 
   const parsed = useMemo(() => ReturnSchema.parse({
+    symbol,
     decimals,
     shares,
     assets,

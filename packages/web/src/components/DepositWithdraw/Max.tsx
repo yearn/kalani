@@ -20,7 +20,7 @@ export default function Max({ className }: { className?: string }) {
     }
   }, [mode, balance, decimals, assets, setAmount])
 
-  return <button type="button" onClick={onClick} className={cn(`px-3 py-1 
+  return <button type="button" onClick={onClick} className={cn(`px-4 py-1 
     flex items-center gap-3 
     bg-neutral-900 border-primary border-neutral-900
     hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50

@@ -11,6 +11,7 @@ import Skeleton from '../../../components/Skeleton'
 import Project from './Project'
 import Build from './Build'
 import Explore from './Explore'
+import Erc4626 from './Erc4626'
 
 function AsideSkeleton() {
   return <Skeleton className="w-full h-48 rounded-primary" />
@@ -26,6 +27,7 @@ export default function Aside() {
         <Route path="/project/:chainId/:id" element={<Project />} />
         <Route path="/strategy/:chainId/:address" element={<Strategy />} />
         <Route path="/vault/:chainId/:address" element={<Vault />} />
+        <Route path="/erc4626/:chainId/:address" element={<Erc4626 />} />
         <Route path="/yhaas" element={<Yhaas />} />
       </Routes>
     </Suspense>
