@@ -12,7 +12,6 @@ import FlyInFromBottom from '../motion/FlyInFromBottom'
 import InputLabel from './InputLabel'
 import InputPanel from './InputPanel'
 import { formatUnits } from 'viem'
-import Base from './Base'
 
 function SwitchOption({ selected, onClick, children }: { selected: boolean, onClick: () => void, children: React.ReactNode }) {
   return <div className="relative">

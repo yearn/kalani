@@ -70,11 +70,11 @@ export default function Explore() {
         <Tabs className="mb-3 w-full xl:pr-16 justify-end">
           <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} />}
-            TVL
+            <div>TVL</div>
           </Tab>
           <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} />}
-            APY
+            <div>APY</div>
           </Tab>
         </Tabs>
       </HeroInset>
