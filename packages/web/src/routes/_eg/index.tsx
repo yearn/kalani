@@ -49,14 +49,14 @@ export default function Eg() {
   const [bps, setBps] = useState(100)
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
-    {/* <Bg /> */}
+    <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
       <div className="flex flex-col gap-8">
         <DepositWithdraw chainId={137} vault={'0x111c149130Ee64eB33C9AA95825d92A9E3B221e6'} />
       </div>
 
-      {/* <div className="flex items-center gap-12 w-32">
+      <div className="flex items-center gap-12 w-32">
         <InputBps bps={bps} isValid={true} className="w-[200px]" onChange={e => setBps(Number(e.target.value))} />
       </div>
 
@@ -112,7 +112,7 @@ export default function Eg() {
         <Dialog title="Dialog Title" dialogId="example-dialog">
           <p>This is the dialog content.</p>
         </Dialog>
-      </div> */}
+      </div>
 
     </section>
   </div>
