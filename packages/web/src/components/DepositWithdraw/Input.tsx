@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useDepositParameters } from './useDepositParameters'
+import { useParameters } from './useParameters'
 import useDebounce from '../../hooks/useDebounce'
 import { cn } from '../../lib/shadcn'
 
@@ -39,7 +39,7 @@ function InputDisplay({
 }
 
 export function Input({ className, mode, disabled }: { className?: string, mode: 'in' | 'out', disabled?: boolean }) {
-	const { amount, setAmount } = useDepositParameters()
+	const { amount, setAmount } = useParameters()
 
 	function processInputAmount(input: string): string {
 		const result = input.replace(/[^\d.,]/g, '').replace(/,/g, '.')

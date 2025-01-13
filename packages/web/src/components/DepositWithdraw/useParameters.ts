@@ -3,7 +3,9 @@ import { EvmAddress } from '@kalani/lib/types'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 
-interface DepositParameters {
+interface Parameters {
+  mode: 'deposit' | 'withdraw'
+  setMode: (mode: 'deposit' | 'withdraw') => void
   chainId: number | undefined
   setChainId: (chainId?: number) => void
   wallet: EvmAddress | undefined
@@ -14,7 +16,9 @@ interface DepositParameters {
   setAmount: (amount: string) => void
 }
 
-export const useDepositParameters = create<DepositParameters>((set) => ({
+export const useParameters = create<Parameters>((set) => ({
+  mode: 'deposit',
+  setMode: (mode) => set({ mode }),
   chainId: undefined,
   setChainId: (chainId) => set({ chainId }),
   wallet: undefined,
@@ -25,17 +29,17 @@ export const useDepositParameters = create<DepositParameters>((set) => ({
   setAmount: (amount) => set({ amount: amount }),
 }))
 
-export function useSuspendedDepositParameters() {
+export function useSuspendedParameters() {
   const { isConnected } = useAccount()
-  const { chainId, wallet, vault, amount, setAmount } = useDepositParameters()
+  const { mode, chainId, wallet, vault, amount, setAmount } = useParameters()
 
   const parameters = useMemo(() => {
     if (!isConnected || (chainId && wallet && vault)) { return { 
-      chainId, wallet, vault, amount, setAmount
+      mode, chainId, wallet, vault, amount, setAmount
     } }
 
     throw new Promise(() => {}) // suspend
-  }, [chainId, wallet, vault, amount, setAmount])
+  }, [mode, chainId, wallet, vault, amount, setAmount])
 
   return parameters
 }

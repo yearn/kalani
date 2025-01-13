@@ -17,13 +17,12 @@ function Suspender() {
       assetAddress={strategy.asset.address}
       tvl={strategy.tvl.close}
       apy={strategy.apy?.close}
-      chip="yearn strategy"
+      chip="tokenized strategy"
       inset={<Tabs className="mb-2">
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
         <Tab id="reports">Reports</Tab>
       </Tabs>}
     />
-
 
     <div className="w-full px-8">
       <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>

@@ -1,121 +1,46 @@
 import { EvmAddress } from '@kalani/lib/types'
 import { cn } from '../../lib/shadcn'
 import Action from './Action'
-import { Input } from './Input'
-import { useDepositParameters, useSuspendedDepositParameters } from './useDepositParameters'
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import { useVaultAsset } from './useVaultAsset'
-import { useBalance } from '../../hooks/useBalance'
-import { formatUnits } from 'viem'
+import { useParameters, useSuspendedParameters } from './useParameters'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import Skeleton from '../Skeleton'
 import bmath, { priced } from '@kalani/lib/bmath'
-import { usePrice } from '../../hooks/usePrices'
-import { isSomething } from '@kalani/lib/strings'
 import Odometer from 'react-odometerjs'
 import { useAccount } from 'wagmi'
 import { useVaultBalance } from './useVaultBalance'
 import { fTokens } from '@kalani/lib/format'
+import FlyInFromBottom from '../motion/FlyInFromBottom'
+import InputLabel from './InputLabel'
+import InputPanel from './InputPanel'
+import { formatUnits } from 'viem'
 
 function SwitchOption({ selected, onClick, children }: { selected: boolean, onClick: () => void, children: React.ReactNode }) {
-  return <div data-selected={selected} onClick={onClick} className={cn(`
-    px-6 py-2 bg-transparent
-    text-neutral-400 hover:text-neutral-50 active:text-neutral-400 
-    data-[selected=true]:bg-secondary-400
-    data-[selected=true]:text-neutral-900
-    rounded-full cursor-pointer`)}>
-    {children}
+  return <div className="relative">
+    <div className="px-6 py-1 invisible">{children}</div>
+
+    <div className="absolute z-0 inset-0">
+      {selected && <FlyInFromBottom _key="switchOptionBg">
+        <div className="px-6 py-1 bg-secondary-400 rounded-full text-transparent">{children}</div>
+      </FlyInFromBottom>}
+    </div>
+
+    <div data-selected={selected} onClick={onClick} className={cn(`
+      absolute z-10 inset-0 px-6 py-1
+      text-neutral-400 hover:text-neutral-50 active:text-neutral-400 
+      bg-transparent hover:bg-neutral-900 active:bg-neutral-900
+      data-[selected=true]:!text-neutral-900
+      data-[selected=true]:!bg-transparent
+      rounded-full cursor-pointer`)}>
+      {children}
+    </div>
   </div>
 }
 
 function Switch() {
-  return <div className="w-min flex items-center gap-2 bg-black rounded-full">
-    <SwitchOption selected={true} onClick={() => {}}>Deposit</SwitchOption>
-    <SwitchOption selected={false} onClick={() => {}}>Withdraw</SwitchOption>
-  </div>
-}
-
-function Max({ className }: { className?: string }) {
-  const { chainId, vault, wallet, setAmount } = useDepositParameters()
-  const { asset } = useVaultAsset(chainId!, vault!)
-  const { balance, decimals } = useBalance({ chainId, token: asset.address, address: wallet! })
-
-  const onClick = useCallback(() => {
-    setAmount(bmath.div(balance ?? 0n, 10n ** BigInt(decimals ?? 18)).toString())
-  }, [balance, decimals, setAmount])
-
-  return <button type="button" onClick={onClick} className={cn(`px-3 py-1 
-    flex items-center gap-3 
-    bg-neutral-900 border-primary border-neutral-900
-    hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
-    active:text-secondary-400 active:border-secondary-400 active:bg-black
-    rounded-full cursor-pointer pointer-events-auto`, className)}>
-    MAX
-  </button>
-}
-
-function Balance() {
-  const { chainId, vault, wallet } = useSuspendedDepositParameters()
-  const { asset } = useVaultAsset(chainId!, vault!)
-  const { balance, decimals } = useBalance({ chainId, token: asset!.address, address: wallet! })
-  return <div className="flex items-center gap-2">
-    <div>Balance</div>
-    <Odometer value={Number(formatUnits(balance ?? 0n, decimals ?? 18))} format="(,ddd).dd" />
-  </div>
-}
-
-function AmountUSD() {
-  const { chainId, vault, amount } = useSuspendedDepositParameters()
-  const { asset } = useVaultAsset(chainId!, vault!)
-  const expanded = useMemo(() => BigInt(isSomething(amount) ? Number(amount) * 10 ** (asset!.decimals) : 0), [amount, asset])
-  const price = usePrice(chainId ?? 0, asset!.address)
-  const priced = useMemo(() => bmath.priced(expanded, asset?.decimals ?? 18, price ?? 0), [expanded, asset, price])
-  return <div className="flex items-center gap-1">
-    <div>$</div>
-    <Odometer value={priced} format="(,ddd).dd" />
-  </div>
-}
-
-function InputLabel() {
-  const { chainId, vault } = useSuspendedDepositParameters()
-  const { asset } = useVaultAsset(chainId!, vault!)
-  return <div className="text-neutral-500 text-5xl">{asset?.symbol}</div>
-}
-
-function Deposit() {
-  const { isConnected } = useAccount()
-
-  return <div className={`relative p-6
-    flex flex-col gap-3
-    border-primary border-neutral-900 bg-secondary-2000
-    hover:text-secondary-50 hover:border-secondary-50
-    focus-within:!text-secondary-400 focus-within:!border-secondary-400 focus-within:!bg-black
-    active:!text-secondary-400 active:!border-secondary-400 active:!bg-black
-    rounded-b-primary hover:rounded-primary focus-within:rounded-primary saber-glow`}>
-
-    <div className="flex items-center justify-between">
-      <Input mode="in" className="text-5xl" />
-      <div className="hidden">
-        <Suspense fallback={<Skeleton className="w-28 h-10 rounded-primary" />}>
-          <InputLabel />
-        </Suspense>
-      </div>
-    </div>
-
-    <div className="flex items-center justify-between text-neutral-500 text-sm">
-      <Suspense fallback={<Skeleton className="w-24 h-8 rounded-primary" />}>
-        {isConnected && <AmountUSD />}
-        {!isConnected && <>$ 0.00</>}
-      </Suspense>
-      <div className="flex items-center gap-4">
-        <Suspense fallback={<Skeleton className="w-24 h-8 rounded-primary" />}>
-          {isConnected && <Balance />}
-          {!isConnected && <div>Balance 0</div>}
-        </Suspense>
-        <Suspense fallback={<Skeleton className="w-16 h-8 rounded-primary" />}>
-          <Max className="px-6" />
-        </Suspense>
-      </div>
-    </div>
+  const { mode, setMode, setAmount } = useParameters()
+  return <div className="p-1 w-min flex items-center gap-6 bg-black rounded-full">
+    <SwitchOption selected={mode === 'deposit'} onClick={() => { setMode('deposit'); setAmount('') }}>Deposit</SwitchOption>
+    <SwitchOption selected={mode === 'withdraw'} onClick={() => { setMode('withdraw'); setAmount('') }}>Withdraw</SwitchOption>
   </div>
 }
 
@@ -140,13 +65,13 @@ function useAssetUnlocker({ chainId, vault, wallet }: { chainId: number, vault: 
 }
 
 function VaultBalance() {
-  const { chainId, vault, wallet } = useSuspendedDepositParameters()
+  const { chainId, vault, wallet } = useSuspendedParameters()
   const { shares, decimals, assetPrice } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const { interval: unlockInterval, assets: unlockedAssets1e18 } = useAssetUnlocker({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
 
   return <div className={cn(
-    'p-6 flex flex-col gap-8 border-primary border-b-0 border-neutral-900 rounded-t-primary bg-black',
+    'p-6 flex flex-col gap-8 rounded-t-primary bg-black',
     (unlockedAssets > 0) && 'shimmer-slow-ride')}>
     <div>Your vault balance</div>
     <div className="flex items-start justify-between">
@@ -166,7 +91,7 @@ function VaultBalance() {
     <div className="flex items-center justify-between">
       <Switch />
       <div className="flex items-center gap-2 text-neutral-500 text-sm">
-        <Odometer value={parseFloat(fTokens(shares, decimals))} format="(,ddd).dd" />
+        <Odometer value={parseFloat(formatUnits(shares, decimals))} format="(,ddd).dd" />
         <div>shares of yUSDC</div>
       </div>
     </div>
@@ -183,7 +108,7 @@ function Suspender({
   className?: string
 }) {
   const { address: wallet } = useAccount()
-  const { setChainId, setWallet, setVault } = useDepositParameters()
+  const { setChainId, setWallet, setVault } = useParameters()
 
   useEffect(() => {
     setChainId(chainId)
@@ -196,7 +121,7 @@ function Suspender({
       <VaultBalance />
     </Suspense>
     <div className="flex flex-col gap-8">
-      <Deposit />
+      <InputPanel />
       <Action />
     </div>
   </div>

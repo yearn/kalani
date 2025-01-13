@@ -1,4 +1,4 @@
-import { useDepositParameters } from '../useDepositParameters'
+import { useParameters } from '../useParameters'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useConfig, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
@@ -9,7 +9,7 @@ import { useVaultAsset } from '../useVaultAsset'
 
 export function useApprove() {
   const config = useConfig()
-  const { chainId, vault, amount, wallet } = useDepositParameters()
+  const { chainId, vault, amount, wallet } = useParameters()
   const { asset } = useVaultAsset(chainId!, vault!)
 
   const allowanceOptions = useMemo(() => {

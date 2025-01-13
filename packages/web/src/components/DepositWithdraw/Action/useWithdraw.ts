@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useWriteContract } from '../../../hooks/useWriteContract'
 import { useVaultAsset } from '../useVaultAsset'
 
-export function useDeposit() {
+export function useWithdraw() {
   const config = useConfig()
   const { chainId, vault, amount, wallet } = useParameters()
   const { asset } = useVaultAsset(chainId!, vault!)
@@ -16,10 +16,10 @@ export function useDeposit() {
     }
 
     return {
-      abi: parseAbi(['function deposit(uint256, address)']),
+      abi: parseAbi(['function withdraw(uint256, address, address)']),
       address: vault,
-      functionName: 'deposit',
-      args: [parseUnits(amount, asset.decimals), wallet!]
+      functionName: 'withdraw',
+      args: [parseUnits(amount, asset.decimals), wallet!, wallet!]
     }
   }, [config, asset, vault, amount])
 
