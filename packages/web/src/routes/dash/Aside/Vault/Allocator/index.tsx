@@ -7,6 +7,7 @@ import { ROLES } from '@kalani/lib/types'
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
 import { VaultSelector } from './Selector'
 import { SetMinimumChange } from '../../../Vault/tabs/Allocator/SetMinimumChange'
+import DepositWithdraw from '../../../../../components/DepositWithdraw'
 
 function SetMinimumChangeNotification() {
   return <div className="p-8 flex flex-col gap-8 border-primary border-warn-950 rounded-primary text-warn-400">
@@ -37,6 +38,7 @@ export default function Allocator() {
     <FlyInFromBottom _key="aside-allocator" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
       {authorizedAddStrategy && <VaultSelector />}
       {authorizedAddStrategy && <StrategiesByAddress />}
+      {!authorizedAddStrategy && <DepositWithdraw chainId={chainId} vault={vault} />}
     </FlyInFromBottom>
     )
   }

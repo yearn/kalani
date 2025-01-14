@@ -71,7 +71,7 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
   const assets = useMemo(() => {
     const assetToShares1e18 = (query.data?.[3]?.result as bigint | undefined) ?? 1n
     const assetToShares = bmath.div(assetToShares1e18, 10n ** BigInt(decimals))
-    const assets = bmath.mul(shares, assetToShares)
+    const assets = Math.floor(bmath.mul(shares, assetToShares))
     return BigInt(assets)
   }, [shares, query.data, decimals])
 

@@ -7,6 +7,7 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { AcceptFutureFeeManager } from './AcceptFutureFeeManager'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'
 import ClaimFees from './ClaimFees'
+import DepositWithdraw from '../../../../../components/DepositWithdraw'
 
 export default function Fees() {
   const mounted = useMounted()
@@ -21,5 +22,6 @@ export default function Fees() {
   return <FlyInFromBottom _key="aside-fees" parentMounted={mounted} exit={1} className="flex flex-col gap-12 w-full">
     {isFutureFeeManager && <AcceptFutureFeeManager />}
     {!isFutureFeeManager && <ClaimFees />}
+    <DepositWithdraw chainId={vault.chainId} vault={vault.address} />
   </FlyInFromBottom>
 }
