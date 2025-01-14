@@ -4,12 +4,9 @@ import Header from '../../dash/Header'
 import Account from '../../dash/Account/Account'
 import { zeroAddress } from 'viem'
 import MenuBar from '../../../components/MenuBar'
-import { useProjects } from '../../../components/SelectProject/useProjects'
-import LinkButton from '../../../components/elements/LinkButton'
 
 export default function Wallet() {
-  const { chainId, address } = useAccount()
-  const { projects } = useProjects(chainId, address)
+  const { address } = useAccount()
 
   return <div className={`
     w-full min-h-screen sm:max-h-auto
@@ -27,21 +24,13 @@ export default function Wallet() {
         <Account address={address ?? zeroAddress} />
       </div>
 
-      <div className="w-[420px] px-8 pt-8 pb-24">
-        <div className="w-[420px]"></div>
+      <div className="w-aside px-8 pt-8 pb-24">
+        <div className="w-aside"></div>
       </div>
       <aside className={`fixed right-0 hidden sm:block 
-        w-[420px] min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
+        w-aside min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
         <div className="w-full flex flex-col gap-6">
-          <h2 className="text-neutral-400">Projects</h2>
-          {projects.map(project => <LinkButton 
-            key={project.id} 
-            to={`/project/${project.chainId}/${project.id}`} 
-            h="tertiary" 
-            className="px-4 grow h-14 flex items-center justify-between"
-          >
-            {project.name}
-          </LinkButton>)}
+
         </div>
       </aside>
     </div>

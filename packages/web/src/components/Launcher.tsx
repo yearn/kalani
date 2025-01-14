@@ -66,7 +66,7 @@ export default function Launcher({
       <div onClick={nav.toggle} className={`
         border-0 sm:border-primary border-transparent group-hover:border-secondary-50
         group-active:border-secondary-400
-        p-2 bg-neutral-950 rounded-primary saber-glow`}>
+        p-2 bg-black rounded-primary saber-glow`}>
         <PiDotsNineBold size={24} />
       </div>
     </div>}
@@ -74,35 +74,27 @@ export default function Launcher({
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
       border-0 sm:border-primary border-transparent group-hover:border-secondary-50
       group-active:border-secondary-400
-      bg-neutral-900 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
+      bg-secondary-2000 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
       alignRight ? 'right-0' : '')}>
       <div className="grow flex flex-col gap-4">
         <div className="sm:hidden px-2 py-3 flex items-center justify-end">
           <PiX size={32} onClick={nav.close} />
         </div>
-        <LauncherButton className="grow sm:grow-0" href="https://yearn.fi" target="_blank" rel="noreferrer">yearn.fi</LauncherButton>
+        <LauncherButton className="grow sm:grow-0 text-secondary-400" href="https://yearn.fi" target="_blank" rel="noreferrer">
+          yearn.fi
+        </LauncherButton>
         <V3Button className="grow sm:grow-0" href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>
         <V3Button className="grow sm:grow-0" href="https://gimme.mom" target="_blank" rel="noreferrer">Gimme</V3Button>
       </div>
       <div className="contents">
         <div className="flex items-center justify-center gap-4">
-          <LauncherIconButton href="https://juiced.yearn.fi/" target="_blank" rel="noreferrer">
-            <Juice className="group-hover/button:contrast-200 group-hover/button:grayscale" /> Juiced
+          <LauncherIconButton href="https://ycrv.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
+            yCRV
           </LauncherIconButton>
 
           <LauncherIconButton href="https://yearn.fi/vaults" target="_blank" rel="noreferrer">
             <Yearn back="text-[#f472b6] group-hover/button:text-neutral-900" front="text-neutral-200" /> V2
-          </LauncherIconButton>
-        </div>
-
-        <div className="flex items-center justify-center gap-4">
-          <LauncherIconButton href="https://veyfi.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x41252E8691e964f7DE35156B68493bAb6797a275/logo-128.png" />
-            veYFI
-          </LauncherIconButton>
-          <LauncherIconButton href="https://ycrv.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
-            yCRV
           </LauncherIconButton>
         </div>
 
@@ -114,6 +106,17 @@ export default function Launcher({
           <LauncherIconButton href="https://yprisma.yearn.fi/" target="_blank" rel="noreferrer">
             <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xe3668873d944e4a949da05fc8bde419eff543882/logo-128.png" />
             yPrisma
+          </LauncherIconButton>
+        </div>
+
+        <div className="flex items-center justify-center gap-4">
+          <LauncherIconButton href="https://veyfi.yearn.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x41252E8691e964f7DE35156B68493bAb6797a275/logo-128.png" />
+            veYFI
+          </LauncherIconButton>
+
+          <LauncherIconButton href="https://juiced.yearn.fi/" target="_blank" rel="noreferrer">
+            <Juice className="group-hover/button:contrast-200 group-hover/button:grayscale" /> Juiced
           </LauncherIconButton>
         </div>
 

@@ -8,7 +8,7 @@ import VaultForm from './VaultForm'
 function Brand() {
   return <div className="flex items-center gap-6">
     <PiVault size={64} />
-    <div className="flex flex-col gap-0">
+    <div className="flex flex-col gap-0 drop-shadow-lg">
       <div className="flex items-end gap-1">
         <div className="text-5xl font-fancy">B</div>
         <div className="text-4xl font-fancy">uild</div>
@@ -21,7 +21,7 @@ function Brand() {
 export default function Build() {
   const { isConnected } = useAccount()
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-fuchsia-400 text-neutral-950">
+    <Hero className="bg-emerald-400 text-neutral-950">
       <Brand />
     </Hero>
     <div className="px-10 2xl:px-[18%] py-12 flex flex-col items-center gap-12">

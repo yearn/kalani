@@ -15,7 +15,10 @@ export const primary = {
 }
 
 export const secondary = {
-  ...colors.violet
+  ...colors.violet,
+  '1000': '#161622',
+  '1500': '#0b0b12',
+  '2000': '#09090c'
 }
 
 export default {
@@ -26,7 +29,9 @@ export default {
     ...heightSafeList(),
     'w-[24px]', 'h-[24px]',
     'w-[28px]', 'h-[28px]',
+    'w-[32px]', 'h-[32px]',
     'w-[48px]', 'h-[48px]',
+    'w-[64px]', 'h-[64px]',
     'border-primary',
     'odd:bg-grill-900'
   ],

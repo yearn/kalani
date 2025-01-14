@@ -7,6 +7,7 @@ import { useWaitForTransactionReceipt } from 'wagmi'
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import InputInteger from '../../../../../components/elements/InputInteger'
 import Button from '../../../../../components/elements/Button'
+import { cn } from '../../../../../lib/shadcn'
 
 export function useSetMinimumChange(minimumChange: bigint) {
   const { address: vault } = useVaultParams()
@@ -26,7 +27,7 @@ export function useSetMinimumChange(minimumChange: bigint) {
   return { simulation, write, confirmation, resolveToast }
 }
 
-export function SetMinimumChange() {
+export function SetMinimumChange({ className }: { className?: string }) {
   const [minimumChange, setMinimumChange] = useState(0n)
   const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
   const dirty = useMemo(() => minimumChange !== 0n, [minimumChange])
@@ -64,13 +65,10 @@ export function SetMinimumChange() {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <div className={`py-16 flex items-center justify-center`}>
-    <div className="flex flex-col gap-8">
-      <div className="text-xl">Set your vault's minimum change</div>
-      <div className="flex items-center gap-6">
-        <InputInteger value={Number(minimumChange)} onChange={e => setMinimumChange(BigInt(e.target.value))} isValid={true} />
-        <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
-      </div>
+  return <div className={cn('flex items-center justify-center', className)}>
+    <div className="flex items-center gap-6">
+      <InputInteger value={Number(minimumChange)} onChange={e => setMinimumChange(BigInt(e.target.value))} isValid={true} />
+      <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
     </div>
   </div>
 }

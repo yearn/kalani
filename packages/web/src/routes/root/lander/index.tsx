@@ -48,13 +48,13 @@ function LeftHero() {
       <div className="w-full h-full flex flex-col sm:flex-row sm:justify-center gap-16">
         <div className="w-full h-full pt-[6rem] flex flex-col items-center justify-center gap-16">
           <div className="px-8 sm:px-0 flex flex-col items-start justify-end gap-3 text-neutral-900">
-            <Wordmark className="py-2 text-3xl">Kalani</Wordmark>
-            <p className="font-bold text-5xl">
+            <Wordmark className="py-2 text-3xl text-secondary-2000">Kalani</Wordmark>
+            <p className="font-bold text-5xl text-secondary-2000">
               Get your users the best yields in DeFi
             </p>
           </div>
           <div className="w-full px-8 sm:px-0">
-            <Button className="py-6 text-2xl bg-primary-2000 shadow-xl" onClick={nav.toggle}>
+            <Button className="py-6 text-2xl bg-secondary-2000 shadow-xl" onClick={nav.toggle}>
               <CTA>🚀 Let's go</CTA>
             </Button>
           </div>
@@ -66,7 +66,7 @@ function LeftHero() {
 
 function RightHero() {
   const Highlight = ({ children }: { children: ReactNode }) => <span className="font-bold text-primary-400 group-active:text-secondary-400">{children}</span>
-  return <div className="w-full min-h-screen bg-primary-2000 flex items-center justify-center relative">
+  return <div className="w-full min-h-screen bg-secondary-2000 flex items-center justify-center relative">
     <section className="px-4 flex flex-col items-start justify-center gap-16 text-neutral-300">
       <Feature href="/build" 
         icon={<PiVault size={96} />} 
@@ -88,7 +88,7 @@ function RightHero() {
 }
 
 function LetsGo() {
-  return <div className="w-[280px] flex flex-col gap-6">
+  return <div className="w-[380px] flex flex-col gap-6">
     <div>
       <h1 className="text-2xl font-bold">Create a project</h1>
       <p className="text-neutral-500">Projects are unique groups of addresses used for deploying and managing your vaults.</p>

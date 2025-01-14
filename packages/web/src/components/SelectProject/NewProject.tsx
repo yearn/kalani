@@ -136,7 +136,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
       <Address disabled={!isConnected} placeholder="0x management (optional)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} />
       <div className="flex items-center justify-end gap-3">
         <Button h="secondary" onClick={closeDialog}>Cancel</Button>
-        <Button disabled={disabled} theme={buttonTheme} onClick={onCreate}>Create</Button>
+        <Button disabled={disabled} theme={buttonTheme} onClick={onCreate}>Create project</Button>
       </div>
     </div>}
 

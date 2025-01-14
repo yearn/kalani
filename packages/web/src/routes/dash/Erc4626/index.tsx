@@ -18,20 +18,20 @@ function Suspender() {
       assetAddress={vault.asset.address}
       tvl={vault.tvl?.close}
       apy={vault.apy?.close}
-      chip={<div className="px-3 py-1 bg-secondary-400 text-neutral-950 rounded-full">erc4626</div>}
-      inset={<Tabs>
+      chip="erc4626"
+      inset={<Tabs className="mb-2">
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
       </Tabs>}
     />
 
-    <div className="w-full px-12">
+    <div className="w-full px-8">
       <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     </div>
   </section>
 }
 
 export default function Erc4626() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
     <Suspender />
   </Suspense>
 }

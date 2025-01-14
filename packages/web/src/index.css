@@ -50,6 +50,10 @@
   overflow: hidden;
 }
 
+.w-aside {
+	@apply w-full sm:w-[400px] 2xl:w-[480px];
+}
+
 @keyframes rotate {
 	100% {
 		transform: rotate(1turn);
@@ -90,6 +94,12 @@
   background: linear-gradient(90deg, #1a1a1a 30%, #4a4a4a 60%, #1a1a1a 70%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+}
+
+.shimmer-slow-ride {
+	background: linear-gradient(45deg, #09090c 30%, #000 60%, #09090c 70%);
+	background-size: 200% 100%;
+	animation: shimmer 16.5s infinite;
 }
 
 .theme-disabled {

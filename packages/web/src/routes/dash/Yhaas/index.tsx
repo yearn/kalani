@@ -11,7 +11,7 @@ import Skeleton from '../../../components/Skeleton'
 import Hero from '../../../components/Hero'
 
 function Brand() {
-  return <div className="flex items-center gap-6">
+  return <div className="flex items-center gap-6 drop-shadow-lg">
     <PiRobot size={64} />
     <div className="flex flex-col gap-0">
       <div className="flex items-end gap-1">
@@ -51,10 +51,10 @@ function Metrics() {
     return gasSaved * wethPrice
   }, [gasSaved, wethPrice])
 
-  return <div className="flex items-end gap-12">
+  return <div className="pb-3 h-full flex items-end gap-12 drop-shadow-lg">
     <div className="relative hidden sm:block flex flex-col items-start">
-      <div className="pb-1 text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
-      <div className="absolute -bottom-5 text-sm text-nowrap">
+      <div className="text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
+      <div className="text-sm text-nowrap">
         Automations
       </div>
     </div>
@@ -64,7 +64,7 @@ function Metrics() {
       <div className="text-6xl text-nowrap">
         <Odometer value={gasSaved} format="(,ddd).dddd" /> Ξ
       </div>
-      <div className="absolute -bottom-5 text-sm text-nowrap">
+      <div className="text-sm text-nowrap">
         $ <Odometer value={gasSavedUsd} format="(,ddd).dd" />
       </div>
     </div>
@@ -73,7 +73,7 @@ function Metrics() {
 
 export default function Page() {
   return <section className="flex flex-col gap-8">
-    <Suspense fallback={<Skeleton className="h-48" />}>
+    <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
       <Hero className="text-neutral-950 bg-zinc-400">
         <Brand />
         <Metrics />

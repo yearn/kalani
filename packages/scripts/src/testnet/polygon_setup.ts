@@ -6,6 +6,7 @@ import abis from '@kalani/lib/abis'
 
 const ALICE: EvmAddress = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
 const yWMATIC: EvmAddress = '0x28F53bA70E5c8ce8D03b1FaD41E9dF11Bb646c36'
+const USDC_POLYGON: EvmAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'
 const yWMATIC_ROLE_MANAGER: EvmAddress = '0xC4ad0000E223E398DC329235e6C497Db5470B626'
 const AAVE_LENDER: EvmAddress = '0x12c3Ad898e8eB1C0ec0Bb74f9748F36C46593F68'
 const AAVE_LENDER_MANAGEMENT: EvmAddress = '0x2D57bB1Ad5EaB2caacb50e8527eb0eE504f49e48'
@@ -25,6 +26,7 @@ async function main() {
   try {
     await client.setBalance(ALICE, parseEther('1000'))
     await client.setBalance(yWMATIC_ROLE_MANAGER, parseEther('1000'))
+    await client.setErc20Balance(ALICE, USDC_POLYGON, parseEther('100000'))
     console.log('👹', 'balances set')
 
     const vault = getContract({ abi: abis.vault, address: yWMATIC, client })

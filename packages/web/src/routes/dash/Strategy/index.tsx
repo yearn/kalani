@@ -17,15 +17,14 @@ function Suspender() {
       assetAddress={strategy.asset.address}
       tvl={strategy.tvl.close}
       apy={strategy.apy?.close}
-      chip={<div className="px-3 py-1 bg-secondary-400 text-neutral-950 rounded-full">yearn strategy</div>}
-      inset={<Tabs>
+      chip="tokenized strategy"
+      inset={<Tabs className="mb-2">
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
         <Tab id="reports">Reports</Tab>
       </Tabs>}
     />
 
-
-    <div className="w-full px-12">
+    <div className="w-full px-8">
       <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
       <TabContent id="reports"><Reports /></TabContent>
     </div>
@@ -33,7 +32,7 @@ function Suspender() {
 }
 
 export default function Strategy() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
     <Suspender />
   </Suspense>
 }

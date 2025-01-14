@@ -10,7 +10,7 @@ export default function LabelValueRow({
   children: React.ReactNode
 }) {
   return <div className={cn(`px-6 py-2 w-full flex items-center justify-between 
-    rounded-primary even:bg-neutral-950`,
+    rounded-primary even:bg-secondary-1500`,
     className
   )}>
     <div>{label}</div>

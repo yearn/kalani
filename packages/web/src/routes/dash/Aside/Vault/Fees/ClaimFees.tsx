@@ -10,6 +10,30 @@ import Button from '../../../../../components/elements/Button'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
+import { ErrorBoundary } from 'react-error-boundary'
+
+function AsTokens({ balance, decimals, symbol }: { balance: bigint, decimals: number, symbol: string }) {
+  return <div className="flex items-end justify-start gap-3">
+    <div className="text-4xl">{fTokens(balance, decimals, { fixed: 2 })}</div>
+    <div className="text-sm text-neutral-400 whitespace-nowrap">{symbol}</div>
+  </div>
+}
+
+function AsAssets({ balance }: { balance: bigint }) {
+  const { vault } = useVaultFromParams()
+  const config = useConfig()
+  const toAssetsQuery = useSuspenseQuery(
+    readContractQueryOptions(config, {
+      chainId: vault?.chainId ?? 0,
+      address: vault?.address ?? zeroAddress,
+      abi: abis.vault,
+      functionName: 'convertToAssets',
+      args: [balance]
+    })
+  )
+  const decimals = vault?.asset.decimals ?? 12
+  return <AsTokens balance={toAssetsQuery.data} decimals={decimals} symbol={vault?.asset.symbol ?? ''} />
+}
 
 function useRedeemUnderlying(disabled: boolean) {
   const { vault } = useVaultFromParams()
@@ -43,25 +67,15 @@ export default function ClaimFees() {
     })
   )
 
-  const toAssetsQuery = useSuspenseQuery(
-    readContractQueryOptions(config, {
-      chainId: vault?.chainId ?? 0,
-      address: vault?.address ?? zeroAddress,
-      abi: abis.vault,
-      functionName: 'convertToAssets',
-      args: [balanceQuery.data ?? 0n]
-    })
-  )
-
-  const { simulation, write, confirmation, resolveToast } = useRedeemUnderlying(!isFeeRecipient || toAssetsQuery.data === 0n)
+  const { simulation, write, confirmation, resolveToast } = useRedeemUnderlying(!isFeeRecipient || balanceQuery.data === 0n)
 
   const disabled = useMemo(() => {
-    return (toAssetsQuery.data === 0n)
+    return (balanceQuery.data === 0n)
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [toAssetsQuery, simulation, write, confirmation])
+  }, [balanceQuery, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
     if (disabled) return 'default'
@@ -90,12 +104,11 @@ export default function ClaimFees() {
 
   if (!vault) return <></>
 
-  return <div className="flex flex-col gap-6">
+  return <div className="flex flex-col gap-6 border-primary border-neutral-900 rounded-primary px-8 py-6">
     <div className="text-sm text-neutral-400">Claimable Fees</div>
-    <div className="flex items-end justify-start gap-3">
-      <div className="text-4xl">{fTokens(toAssetsQuery.data ?? 0n, vault.asset.decimals, { fixed: 4 })}</div>
-      <div className="text-sm text-neutral-400">({vault.asset.symbol})</div>
-    </div>
+    <ErrorBoundary fallback={<AsTokens balance={balanceQuery.data ?? 0n} decimals={vault.asset.decimals} symbol={vault.symbol} />}>
+      <AsAssets balance={balanceQuery.data ?? 0n} />
+    </ErrorBoundary>
     {isFeeRecipient && <Button disabled={disabled} theme={buttonTheme} onClick={onClick}>Claim</Button>}
   </div>
 }

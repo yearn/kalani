@@ -56,26 +56,25 @@ export default function Explore() {
 
   return <section className="flex flex-col gap-0">
     <Hero className="bg-violet-400 text-neutral-950">
-      <div className="w-full flex items-center gap-6">
+      <div className="w-full flex items-center gap-6 drop-shadow-lg">
         <PiMagnifyingGlass size={64} />
         <div className="flex flex-col gap-0">
           <div className="flex items-end gap-1">
             <div className="text-5xl font-fancy">E</div>
             <div className="text-4xl font-fancy">xplore</div>
           </div>
-          <div className="text-xs tracking-widest">Explore the universe of 4626 vaults</div>
         </div>
       </div>
 
       <HeroInset>
-        <Tabs className="w-full xl:pr-16 justify-end">
+        <Tabs className="mb-3 w-full xl:pr-16 justify-end">
           <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} />}
-            TVL
+            <div>TVL</div>
           </Tab>
           <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className="pl-3">
             {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} />}
-            APY
+            <div>APY</div>
           </Tab>
         </Tabs>
       </HeroInset>
