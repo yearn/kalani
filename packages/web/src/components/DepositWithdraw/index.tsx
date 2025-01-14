@@ -78,7 +78,7 @@ function VaultBalance() {
         <div>shares of {symbol}</div>
       </div>
       <div className="flex items-center justify-between">
-        <div data-zero={unlockedAssets === 0} className="text-5xl data-[zero=true]:text-neutral-500">
+        <div data-zero={unlockedAssets === 0} className="text-4xl 2xl:text-5xl data-[zero=true]:text-neutral-500 whitespace-nowrap text-clip">
           <Odometer value={unlockedAssets} format="(,ddd).dddddd" duration={unlockInterval} />
         </div>
         <Suspense fallback={<Skeleton className="w-28 h-10 rounded-primary" />}>

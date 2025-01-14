@@ -19,7 +19,7 @@ export default function InputPanel() {
 
     <div className="flex items-center justify-between gap-1">
       <div className="flex items-center justify-between">
-        <Input mode="in" className="text-5xl" />
+        <Input mode="in" className="text-4xl 2xl:text-5xl" />
       </div>
       <Suspense fallback={<Skeleton className="w-16 h-8 rounded-primary" />}>
         <Max />
