@@ -326,3 +326,15 @@
 .bg-grill-900-even {
   @apply even:bg-transparent even:bg-[radial-gradient(transparent_1px,_#101010_1px)] even:bg-[length:4px_4px] even:backdrop-blur even:opacity-100;
 }
+
+.markdown h1 {
+	@apply text-2xl font-bold;
+}
+
+.markdown h2 {
+	@apply text-lg font-bold;
+}
+
+.markdown p {
+	@apply text-sm;
+}

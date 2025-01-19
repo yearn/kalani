@@ -12,6 +12,7 @@ import SelectProject, { useSelectedProject } from '../../components/SelectProjec
 import InputBps from '../../components/elements/InputBps'
 import DepositWithdraw from '../../components/DepositWithdraw'
 import { Switch } from '../../components/shadcn/switch'
+import Info from '../../components/Info'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -50,8 +51,12 @@ export default function Eg() {
   const [bps, setBps] = useState(100)
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
-    {/* <Bg /> */}
+    <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
+
+      <div className="flex gap-8 items-center justify-center">
+        <Info _key="test" />
+      </div>
 
       <div className="flex flex-col gap-8">
         <DepositWithdraw chainId={137} vault={'0x1491eCfADd4b54b263Bf2C3734b4c0A23195706E'} />

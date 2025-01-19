@@ -72,7 +72,7 @@ function VaultBalance() {
   return <div className={cn(
     'p-6 flex flex-col gap-8 rounded-primary bg-black',
     hasUnlockedAssets && 'shimmer-slow-ride')}>
-    <div>Your vault balance</div>
+    <div className="text-neutral-500">Your vault balance</div>
     <div className="flex flex-col gap-1">
       <div className={cn('flex items-center justify-between text-neutral-500 text-sm', !hasUnlockedAssets && 'invisible')}>
         <Odometer value={parseFloat(formatUnits(shares, decimals))} format="(,ddd).dd" />
