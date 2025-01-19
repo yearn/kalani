@@ -7,7 +7,7 @@ type TextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 
 export const TextAreaClassName = cn(`
 relative w-full px-6 py-3 text-lg
-bg-neutral-950 border-primary border-neutral-800
+bg-neutral-950 border-primary border-neutral-900
 placeholder:text-neutral-500
 
 hover:text-secondary-50 hover:bg-black hover:border-secondary-50

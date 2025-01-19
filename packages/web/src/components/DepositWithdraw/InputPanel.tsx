@@ -28,12 +28,16 @@ export default function InputPanel() {
 
     <div className="flex items-center justify-between text-neutral-500 text-sm">
       <Suspense fallback={<Skeleton className="w-24 h-8 rounded-primary" />}>
-        {isConnected && <AmountUSD />}
-        {!isConnected && <>$ 0.00</>}
+        <div className="h-8">
+          {isConnected && <AmountUSD />}
+          {!isConnected && <>$ 0.00</>}
+        </div>
       </Suspense>
       <Suspense fallback={<Skeleton className="w-24 h-8 rounded-primary" />}>
-        {isConnected && <Balance />}
-        {!isConnected && <div>Balance 0</div>}
+        <div className="h-8">
+          {isConnected && <Balance />}
+          {!isConnected && <div>Balance 0</div>}
+        </div>
       </Suspense>
     </div>
   </div>

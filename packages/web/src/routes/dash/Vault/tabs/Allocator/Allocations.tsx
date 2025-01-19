@@ -1,6 +1,5 @@
 import { useVaultFromParams } from '../../../../../hooks/useVault'
 import Allocation, { useHasDebtManagerRole } from './Allocation'
-import Button from '../../../../../components/elements/Button'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useMemo } from 'react'
@@ -34,7 +33,7 @@ function EstimatedApy() {
     }, 0) / 10_000
   }, [apys])
 
-  return <div className={`pr-4 text-2xl font-bold ${authorized && isDirty ? 'text-primary-400' : ''}`}>
+  return <div className={`text-2xl font-bold ${authorized && isDirty ? 'text-primary-400' : ''}`}>
     {fPercent(weightedApy) ?? '-.--%'}
   </div>
 }
@@ -52,30 +51,26 @@ function TotalAllocation() {
 
 export default function Allocations() {
   const { vault } = useVaultFromParams()
+
   const sortedByDefaultQueue = useMemo(() => {
     const unsorted = vault?.strategies ?? []
     const sorted: EvmAddress[] = vault?.defaultQueue ?? []
     return unsorted.sort((a, b) => sorted.indexOf(a.address) - sorted.indexOf(b.address))
   }, [vault])
-  return <div className="w-full flex flex-col gap-6">
-    <div className="w-full flex items-center gap-6">
-      <div className="grow"></div>
-      <div className="pl-2 w-64 text-neutral-400 text-sm">Allocation</div>
-      <div><Button className="invisible">Set</Button></div>
-    </div>
 
+  return <div className="w-full flex flex-col gap-primary">
     {sortedByDefaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
 
-    <div className="mt-8 w-full flex items-center gap-6">
-      <div className="pr-2 grow flex flex-col items-end gap-2">
+    <div className="p-12 w-full flex items-center gap-12">
+      <div className="grow flex flex-col items-end gap-2">
         <div className="text-sm text-neutral-400">Estimated APY</div>
         <EstimatedApy />
       </div>
-      <div className="w-64 pl-2 flex flex-col items-start gap-2">
+
+      <div className="flex flex-col items-end gap-2">
         <div className="text-sm text-neutral-400">Total allocation</div>
         <TotalAllocation />
       </div>
-      <div><Button className="invisible">Set</Button></div>
     </div>
   </div>
 }
