@@ -34,7 +34,7 @@ export default function Fees() {
 
   return <div className="flex flex-col gap-8">
     <Section>
-      <div className="px-4 py-2 flex flex-col gap-6">
+      <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Management Fee">
           {!isFeeManager && <ViewBps bps={managementFee} className="bg-neutral-900" />}
           {isFeeManager && <InputBps bps={managementFee} isValid={true} className="w-64" onChange={onChangeManagementFee} />}
@@ -65,7 +65,7 @@ export default function Fees() {
     </Section>
 
     <Section>
-      <div className="px-4 py-2 flex flex-col gap-6">
+      <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Fee Recipient">
           <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.feeRecipient} className="bg-neutral-900" />
         </LabelValueRow>

@@ -35,8 +35,7 @@ function Vitals({ vault }: { vault: Vault }) {
   })
 
   return <Section>
-    <div className="px-4 py-2 flex flex-col gap-6">
-
+    <div className="px-4 py-2 flex flex-col gap-primary">
       <LabelValueRow label="Network">
         <ViewGeneric className="flex items-center gap-4">
           <ChainImg chainId={vault.chainId} size={24} /> {getChain(vault.chainId).name}

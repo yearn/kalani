@@ -13,6 +13,7 @@ export default function Address({
   setNext,
   isNextValid,
   setIsNextValid,
+  infoKey,
   className
 }: { 
   placeholder?: string,
@@ -24,6 +25,7 @@ export default function Address({
   setNext?: (next: string) => void,
   isNextValid?: boolean,
   setIsNextValid?: (isValid: boolean) => void,
+  infoKey?: string,
   className?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
@@ -48,6 +50,7 @@ export default function Address({
       onChange={_onChange}
       placeholder={placeholder ?? '0x'}
       disabled={disabled ?? false}
+      infoKey={infoKey}
       maxLength={42}
       className="w-full text-base" />
     {hasNext && !isNextValid && <div className={`

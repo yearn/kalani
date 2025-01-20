@@ -8,6 +8,7 @@ import Notification from '../../Notification'
 import Button from '../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'
+import String from '../../../../../strings/String'
 
 function useAcceptFutureFeeManager() {
   const { vault } = useVaultFromParams()
@@ -62,7 +63,7 @@ export function AcceptFutureFeeManager() {
 
   return <div className="flex flex-col gap-4">
     <Notification actions={actions}>
-      Your address, {fEvmAddress(address ?? zeroAddress)}, has been set as this vault's fee manager, but you must accept first!
+      <String _key="new-vault-accept-fee-manager" args={[fEvmAddress(address ?? zeroAddress)]} />
     </Notification>
   </div>
 }

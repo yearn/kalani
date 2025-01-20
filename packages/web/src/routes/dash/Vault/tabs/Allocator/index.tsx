@@ -11,6 +11,8 @@ import { useHasRoles } from '../../../../../hooks/useHasRoles'
 import { ROLES } from '@kalani/lib/types'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
+import AutoAllocate from './AutoAllocate'
+import UpdateDebt from './UpdateDebt'
 
 function Suspender() {
   const { chainId } = useAccount()
@@ -33,9 +35,17 @@ function Suspender() {
     <Section className="relative">
       {content}
     </Section>
-    <Section className="relative">
+    <Section className="relative flex flex-col gap-primary">
       <LabelValueRow label="Allocator">
         <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Auto allocate">
+        <AutoAllocate />
+      </LabelValueRow>
+
+      <LabelValueRow label="Update debts">
+        <UpdateDebt />
       </LabelValueRow>
     </Section>
   </>

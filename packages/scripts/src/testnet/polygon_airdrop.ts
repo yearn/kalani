@@ -5,6 +5,7 @@ import { erc20Abi, getContract } from 'viem'
 
 const ALICE: EvmAddress = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
 const USDC_POLYGON: EvmAddress = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174'
+const USDCE_POLYGON: EvmAddress = '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359'
 
 async function main() {
   const chain: Chain = {
@@ -14,6 +15,7 @@ async function main() {
 
   const client = createTestnetClient(chain)
   await client.setErc20Balance(ALICE, USDC_POLYGON, 1_000_000n * 10n ** 6n)
+  await client.setErc20Balance(ALICE, USDCE_POLYGON, 1_000_000n * 10n ** 6n)
   const usdc = getContract({ abi: erc20Abi, address: USDC_POLYGON, client })
   console.log('👹', 'balance', await usdc.read.balanceOf([ALICE]))
 }

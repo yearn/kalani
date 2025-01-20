@@ -8,11 +8,12 @@ import { useHasRoles } from '../../../../../hooks/useHasRoles'
 import { VaultSelector } from './Selector'
 import { SetMinimumChange } from '../../../Vault/tabs/Allocator/SetMinimumChange'
 import DepositWithdraw from '../../../../../components/DepositWithdraw'
+import String from '../../../../../strings/String'
 
 function SetMinimumChangeNotification() {
   return <div className="p-8 flex flex-col gap-8 border-primary border-warn-950 rounded-primary text-warn-400">
     <p className="flex items-center gap-8 text-warn-400">
-      Your vault's Minimum Change starts at 0. To start adding strategies and making allocations, set a minimum change greater than 0.
+      <String _key="new-vault-min-change" />
     </p>
     <div className="flex justify-end gap-4 text-xs 2xl:text-md">
       <SetMinimumChange className="text-neutral-400" />

@@ -111,7 +111,7 @@ export function VaultSelector() {
   return <div className="flex flex-col gap-6">
     <div className="text-neutral-400">Available {vault?.asset.symbol} Strategies</div>
     <div className="flex flex-col gap-6">
-      {filter.slice(0, 4).map(item => <SelectableVault key={item.address} item={item} />)}
+      {filter.slice(0, 3).map(item => <SelectableVault key={item.address} item={item} />)}
     </div>
   </div>
 }

@@ -16,6 +16,9 @@ import LinkButton from '../../../../../components/elements/LinkButton'
 import InputBps from '../../../../../components/elements/InputBps'
 import Button from '../../../../../components/elements/Button'
 import ViewBps from '../../../../../components/elements/ViewBps'
+import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
+import LabelValueRow from '../../../../../components/elements/LabelValueRow'
+import ProcessReport from './ProcessReport'
 
 export function useHasDebtManagerRole() {
   const { vault } = useVaultFromParams()
@@ -122,16 +125,31 @@ function MutableAllocation({ strategy }: { strategy: {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <div className="w-full flex items-center gap-6">
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 grow h-14 flex items-center justify-between">
+  return <div className="p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
+
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 h-14 text-2xl">
       <div>{strategy.name}</div>
-      <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
     </LinkButton>
-    <div className="w-64 text-right text-2xl font-bold">
-      <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-64" />
-    </div>
-    <div className="flex justify-end">
-      <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
+
+    <div className="pl-6 w-full flex flex-col items-start gap-primary">
+      <LabelValueRow label="Address">
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+      </LabelValueRow>
+      <LabelValueRow label="APY">
+        <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
+      </LabelValueRow>
+      <LabelValueRow label="Debt">
+        <div>0</div>
+      </LabelValueRow>
+      <LabelValueRow label="Allocation">
+        <div className="flex items-center gap-6">
+          <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-64" />
+          <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
+        </div>
+      </LabelValueRow>
+      <LabelValueRow label="Process report">
+        <ProcessReport strategy={strategy.address} />
+      </LabelValueRow>
     </div>
   </div>
 }
@@ -143,16 +161,25 @@ function ReadonlyAllocation({ strategy }: { strategy: {
 } }) {
   const { findFinderItem, getHrefFor } = useFinderUtils()
   const update = useDebtRatioUpdate(strategy.address)
-  return <div className="w-full flex items-center gap-6">
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="sm:w-64 px-6 grow h-14 flex items-center justify-between">
-      <div className="max-w-[80%] truncate">{strategy.name}</div>
-      <div className="text-sm">{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
+
+  return <div className="p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 h-14 text-2xl">
+      <div>{strategy.name}</div>
     </LinkButton>
-    <div className="w-64 text-2xl font-bold">
-      <ViewBps bps={Number(update.debtRatio)} className="w-64 px-6" />
-    </div>
-    <div className="flex justify-end">
-      <Button disabled={true} className="h-14">Set</Button>
+
+    <div className="pl-6 w-full flex flex-col items-start gap-primary">
+      <LabelValueRow label="Address">
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+      </LabelValueRow>
+      <LabelValueRow label="APY">
+        <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
+      </LabelValueRow>
+      <LabelValueRow label="Debt">
+        <div>0</div>
+      </LabelValueRow>
+      <LabelValueRow label="Allocation">
+        <ViewBps bps={Number(update.debtRatio)} className="text-xl" />
+      </LabelValueRow>
     </div>
   </div>
 }

@@ -11,6 +11,8 @@ import ViewDateOrBlock from '../../components/elements/ViewDateOrBlock'
 import SelectProject, { useSelectedProject } from '../../components/SelectProject'
 import InputBps from '../../components/elements/InputBps'
 import DepositWithdraw from '../../components/DepositWithdraw'
+import { Switch } from '../../components/shadcn/switch'
+import Info from '../../components/Info'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -52,8 +54,12 @@ export default function Eg() {
     <Bg />
     <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
 
+      <div className="flex gap-8 items-center justify-center">
+        <Info _key="test" />
+      </div>
+
       <div className="flex flex-col gap-8">
-        <DepositWithdraw chainId={137} vault={'0x111c149130Ee64eB33C9AA95825d92A9E3B221e6'} />
+        <DepositWithdraw chainId={137} vault={'0x1491eCfADd4b54b263Bf2C3734b4c0A23195706E'} />
       </div>
 
       <div className="flex items-center gap-12 w-32">
@@ -63,6 +69,7 @@ export default function Eg() {
       <div className="flex items-center gap-12">
         <ViewDateOrBlock timestamp={1714857600} block={18345645} className="bg-neutral-900" />
         <ChipSlide className="bg-neutral-900" slide={<div className="whitespace-nowrap">👋 buenas!</div>}>chip slide</ChipSlide>
+        <Switch theme="error" />
       </div>
 
       <div>

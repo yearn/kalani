@@ -64,11 +64,15 @@ export default {
       },
 
       borderWidth: {
-        primary: Theme.borderWidth['2']
+        primary: Theme.borderWidth['4']
       },
 
       borderRadius: {
         primary: Theme.borderRadius['xl']
+      },
+
+      gap: {
+        primary: Theme.spacing['8']
       },
 
       dropShadow: {

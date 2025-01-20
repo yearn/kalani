@@ -15,16 +15,16 @@ import { formatUnits } from 'viem'
 
 function SwitchOption({ selected, onClick, children }: { selected: boolean, onClick: () => void, children: React.ReactNode }) {
   return <div className="relative">
-    <div className="px-6 py-1 invisible">{children}</div>
+    <div className="px-8 py-1 invisible">{children}</div>
 
     <div className="absolute z-0 inset-0">
       {selected && <FlyInFromBottom _key="switchOptionBg">
-        <div className="px-6 py-1 bg-secondary-400 rounded-full text-transparent">{children}</div>
+        <div className="px-8 py-1 bg-secondary-400 rounded-full text-transparent">{children}</div>
       </FlyInFromBottom>}
     </div>
 
     <div data-selected={selected} onClick={onClick} className={cn(`
-      absolute z-10 inset-0 px-6 py-1
+      absolute z-10 inset-0 px-8 py-1
       text-neutral-400 hover:text-neutral-50 active:text-neutral-400 
       bg-transparent hover:bg-neutral-900 active:bg-neutral-900
       data-[selected=true]:!text-neutral-900
@@ -37,7 +37,7 @@ function SwitchOption({ selected, onClick, children }: { selected: boolean, onCl
 
 function Switch() {
   const { mode, setMode, setAmount } = useParameters()
-  return <div className="p-1 w-min flex items-center gap-6 bg-black rounded-full">
+  return <div className="p-1 w-min flex items-center gap-2 bg-black rounded-full">
     <SwitchOption selected={mode === 'deposit'} onClick={() => { setMode('deposit'); setAmount('') }}>Deposit</SwitchOption>
     <SwitchOption selected={mode === 'withdraw'} onClick={() => { setMode('withdraw'); setAmount('') }}>Withdraw</SwitchOption>
   </div>
@@ -67,13 +67,14 @@ function VaultBalance() {
   const { shares, decimals, assetPrice, symbol } = useVaultBalance({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const { interval: unlockInterval, assets: unlockedAssets1e18 } = useAssetUnlocker({ chainId: chainId!, vault: vault!, wallet: wallet! })
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
+  const hasUnlockedAssets = useMemo(() => unlockedAssets > 0, [unlockedAssets])
 
   return <div className={cn(
-    'p-6 flex flex-col gap-8 rounded-t-primary bg-black',
-    (unlockedAssets > 0) && 'shimmer-slow-ride')}>
-    <div>Your vault balance</div>
+    'p-6 flex flex-col gap-8 rounded-primary bg-black',
+    hasUnlockedAssets && 'shimmer-slow-ride')}>
+    <div className="text-neutral-500">Your vault balance</div>
     <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between text-neutral-500 text-sm">
+      <div className={cn('flex items-center justify-between text-neutral-500 text-sm', !hasUnlockedAssets && 'invisible')}>
         <Odometer value={parseFloat(formatUnits(shares, decimals))} format="(,ddd).dd" />
         <div>shares of {symbol}</div>
       </div>
@@ -85,7 +86,7 @@ function VaultBalance() {
           <InputLabel />
         </Suspense>
       </div>
-      <div className="flex items-center gap-1 text-neutral-500 text-sm">
+      <div className={cn('flex items-center gap-1 text-neutral-500 text-sm', !hasUnlockedAssets && 'invisible')}>
         <div>$</div>
         <Odometer value={priced(unlockedAssets1e18, decimals, assetPrice)} format="(,ddd).dd" />
       </div>
@@ -114,8 +115,8 @@ function Suspender({
     setVault(vault)
   }, [chainId, vault, wallet, setChainId, setWallet, setVault])
 
-  return <div className={cn(`flex flex-col gap-0`, className)}>
-    <Suspense fallback={<Skeleton className="w-full h-64 rounded-t-primary" />}>
+  return <div className={cn(`relative flex flex-col gap-0`, className)}>
+    <Suspense fallback={<Skeleton className="w-full h-[282px] rounded-primary" />}>
       <VaultBalance />
     </Suspense>
     <div className="flex flex-col gap-8">

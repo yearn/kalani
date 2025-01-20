@@ -14,7 +14,7 @@ export function useHasRoles(args: { chainId: number, vault: EvmAddress, roleMask
     chainId, abi: abis.vault, address: vault, functionName: 'roles', args: [address ?? zeroAddress]
   })
 
-  const { data: userRoleMask } = useSuspenseQuery({ ...options, staleTime: 30_000 })
+  const { data: onChainRoles } = useSuspenseQuery({ ...options, staleTime: 30_000 })
 
-  return containsRole(userRoleMask, roleMask)
+  return containsRole(onChainRoles, roleMask)
 }
