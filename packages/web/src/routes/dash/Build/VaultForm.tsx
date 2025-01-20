@@ -13,6 +13,7 @@ import ProjectChipSlide from '../../../components/ChipSlide/ProjectClipSlide'
 import AButton from '../../../components/elements/AButton'
 import Complete, { CompleteSkeleton } from './Complete'
 import { useNameRecommendations } from './useNameRecommendations'
+import Info from '../../../components/Info'
 
 function Step_Project() {
   const { selectedProject, setSelectedProject } = useSelectedProject()
@@ -76,7 +77,10 @@ function Step_Category() {
   return <div className="flex items-start gap-12">
     <StepLabel step={3} />
     <div className="grow flex flex-col gap-6">
-      <p className="text-xl">Choose a vault category</p>
+      <div className="flex items-center gap-3">
+        <p className="text-xl">Choose a vault category</p>
+        <Info size={20} _key="new-vault-category" />
+      </div>
       <div className="flex items-center gap-4">
         <CategoryChip category={1} label="1" disabled={isDeployed} />
         <CategoryChip category={2} label="2" disabled={isDeployed} />

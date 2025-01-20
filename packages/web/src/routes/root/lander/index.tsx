@@ -13,6 +13,7 @@ import { springs } from '../../../lib/motion'
 import NewProject from '../../../components/SelectProject/NewProject'
 import { useHashNav } from '../../../hooks/useHashNav'
 import Connect from '../../../components/Connect'
+import String from '../../../strings/String'
 
 function Feature({
   icon, 
@@ -91,7 +92,7 @@ function LetsGo() {
   return <div className="w-[380px] flex flex-col gap-6">
     <div>
       <h1 className="text-2xl font-bold">Create a project</h1>
-      <p className="text-neutral-500">Projects are unique groups of addresses used for deploying and managing your vaults.</p>
+      <p className="text-neutral-500"><String _key="new-project-p" /></p>
     </div>
     <Connect className="w-full py-6 border-neutral-800" short />
     <NewProject dialogId="lets-go" />

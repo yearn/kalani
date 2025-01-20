@@ -1,8 +1,10 @@
 import { cn } from '../../lib/shadcn'
 import { forwardRef, InputHTMLAttributes, useMemo } from 'react'
+import Info from '../Info'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   theme?: 'default' | 'warn' | 'error'
+  infoKey?: string
   className?: string
 }
 
@@ -28,7 +30,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props },
     if (props.theme === 'error') return '!border-error-500'
     return ''
   }, [props])
-  return <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName)} />
+  return <div className="relative">
+    <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName)} />
+    {props.infoKey && <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
+      <Info _key={props.infoKey} size={24} className="absolute right-4" />
+    </div>}
+  </div>
 })
 
 Input.displayName = 'Input'
