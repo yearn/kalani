@@ -12,7 +12,7 @@ function useUpdateDebt(vault: Vault, enabled: boolean) {
     abi: parseAbi(['function update_debt() external view returns ()']),
     address: vault.address,
     functionName: 'update_debt',
-    query: { enabled }
+    query: { enabled: enabled && false }
   }), [vault, enabled])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
@@ -38,6 +38,7 @@ function Suspender({ vault }: { vault: Vault }) {
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
+    || true
   }, [authorized, simulation, write])
 
   useEffect(() => {
