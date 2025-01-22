@@ -138,9 +138,9 @@ function MutableAllocation({ strategy }: { strategy: {
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
       </LabelValueRow>
-      <LabelValueRow label="Debt">
+      {/* <LabelValueRow label="Debt">
         <div>0</div>
-      </LabelValueRow>
+      </LabelValueRow> */}
       <LabelValueRow label="Allocation">
         <div className="flex items-center gap-6">
           <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-64" />
@@ -174,9 +174,9 @@ function ReadonlyAllocation({ strategy }: { strategy: {
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
       </LabelValueRow>
-      <LabelValueRow label="Debt">
+      {/* <LabelValueRow label="Debt">
         <div>0</div>
-      </LabelValueRow>
+      </LabelValueRow> */}
       <LabelValueRow label="Allocation">
         <ViewBps bps={Number(update.debtRatio)} className="text-xl" />
       </LabelValueRow>
