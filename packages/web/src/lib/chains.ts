@@ -23,7 +23,7 @@ export const customChains = {
         blockCreated: 2465882,
       },
     },
-    iconUrl: 'public/mode.png',
+    iconUrl: '/mode.png',
     testnet: false,
   }),
 
@@ -50,7 +50,7 @@ export const customChains = {
         blockCreated: 60,
       },
     },
-    iconUrl: 'public/s.png',
+    iconUrl: '/s.png',
     testnet: false,
   })
 }
