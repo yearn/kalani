@@ -1,5 +1,5 @@
 import { Chain } from 'viem'
-import { mainnet, polygon, gnosis, arbitrum, base } from 'viem/chains'
+import { mainnet, polygon, sonic, gnosis, mode, arbitrum, base } from 'viem/chains'
 
 const testnet = Boolean(process.env.TESTNET ?? false)
 
@@ -11,8 +11,10 @@ export function getRpc(chainId: number) {
 
 export const chains: Record<number, Chain> = {
   [mainnet.id]: mainnet,
-  [polygon.id]: polygon,
   [gnosis.id]: gnosis,
+  [polygon.id]: polygon,
+  [sonic.id]: sonic,
+  [mode.id]: mode,
   [arbitrum.id]: arbitrum,
   [base.id]: base,
 }

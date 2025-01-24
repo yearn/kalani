@@ -1,4 +1,59 @@
-import { mainnet, polygon, gnosis, arbitrum, base } from '@wagmi/chains'
+import { mainnet, polygon, gnosis, arbitrum, base } from 'viem/chains'
+import { defineChain } from 'viem'
+
+export const customChains = {
+  mode: /*#__PURE__*/ defineChain({
+    id: 34443,
+    name: 'Mode Mainnet',
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    rpcUrls: {
+      default: {
+        http: ['https://mainnet.mode.network'],
+      },
+    },
+    blockExplorers: {
+      default: {
+        name: 'Mode Explorer',
+        url: 'https://explorer.mode.network',
+      },
+    },
+    contracts: {
+      multicall3: {
+        address: '0xca11bde05977b3631167028862be2a173976ca11',
+        blockCreated: 2465882,
+      },
+    },
+    iconUrl: 'public/mode.png',
+    testnet: false,
+  }),
+
+  sonic: /*#__PURE__*/ defineChain({
+    id: 146,
+    name: 'Sonic',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'Sonic',
+      symbol: 'S',
+    },
+    rpcUrls: {
+      default: { http: ['https://rpc.soniclabs.com'] },
+    },
+    blockExplorers: {
+      default: {
+        name: 'Sonic Explorer',
+        url: 'https://sonicscan.org/',
+      },
+    },
+    contracts: {
+      multicall3: {
+        address: '0xca11bde05977b3631167028862be2a173976ca11',
+        blockCreated: 60,
+      },
+    },
+    iconUrl: 'public/s.png',
+    testnet: false,
+  })
+}
 
 function rpc(chainId: number) {
   if(import.meta.env.VITE_TESTNET === 'true') {
@@ -35,6 +90,15 @@ export const _polygon = Object.assign({}, polygon, {
   }
 })
 
+export const _mode = Object.assign({}, customChains.mode, {
+  "id": 34443,
+  "rpcUrls": {
+    "default": {
+      "http": [rpc(34443)]
+    }
+  }
+})
+
 export const _arbitrum = Object.assign({}, arbitrum, {
   "id": 42161,
   "rpcUrls": {
@@ -53,7 +117,16 @@ export const _base = Object.assign({}, base, {
   }
 })
 
-export const chains = [_mainnet, _gnosis, _polygon, _arbitrum, _base] as const
+export const _sonic = Object.assign({}, customChains.sonic, {
+  "id": 146,
+  "rpcUrls": {
+    "default": {
+      "http": [rpc(146)]
+    }
+  }
+})
+
+export const chains = [_mainnet, _gnosis, _polygon, _sonic, _mode, _arbitrum, _base] as const
 
 export function getChain(chainId: number) {
   const result = chains.find(n => n.id === chainId)
