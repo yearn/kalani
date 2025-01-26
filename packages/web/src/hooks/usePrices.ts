@@ -16,7 +16,7 @@ export default function usePrices(chainId: number, tokens: EvmAddress[]) {
 
   const query = useSuspenseQuery({
     queryKey: ['ydaemon-prices', chainId, tokens],
-    queryFn: () => fetch(request).then(r => r.json())
+    queryFn: () => fetch(request).then(r => r.json()).catch(() => fallbackData)
   })
 
   return {
