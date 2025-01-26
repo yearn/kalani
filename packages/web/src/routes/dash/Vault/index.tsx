@@ -37,23 +37,25 @@ export function VaultHero({
   inset
 }: VaultHeroProps) {
   return <HeroElement className="bg-secondary-400 text-neutral-950">
-    <div className="w-full flex flex-col justify-center gap-2 pb-4">
+    <div className="w-full flex flex-col justify-center gap-0 pb-4">
 
-      <div className="flex items-center gap-4 text-xl drop-shadow-lg">
+      <div className="flex items-center gap-4 text-xl">
         <div><TokenImg chainId={chainId} address={assetAddress} size={64} bgClassName="bg-neutral-950" /></div>
-        <div className="w-full flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-1">
           <HeroTitle>{name}</HeroTitle>
-          <div className="-mt-1 flex items-center gap-3 text-sm">
-            <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">{getChain(chainId).name}</div> 
-            <EvmAddressChipSlide chainId={chainId} address={address} className="bg-neutral-950 text-secondary-400 shadow-lg" />
-            <div className="px-3 py-1 bg-neutral-950 text-secondary-400 rounded-full shadow-lg">
-              {chip}
+          <div className="-mt-1 flex items-center gap-3">
+            <div>{getChain(chainId).name}</div>
+            <div>//</div>
+            <div>
+              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400" />
             </div>
+            <div>//</div>
+            <div>{chip}</div>
           </div>
         </div>
       </div>
 
-      <div className="pl-1 flex items-center gap-12 text-3xl tracking-widest font-bold drop-shadow-lg">
+      <div className="pl-1 flex items-center gap-12 text-4xl tracking-widest font-bold drop-shadow-lg">
         <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>

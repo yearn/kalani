@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '../../lib/shadcn'
 import { springs } from '../../lib/motion'
 import FlyInFromBottom from '../motion/FlyInFromBottom'
@@ -13,6 +13,7 @@ export default function ChipSlide({
   children?: React.ReactNode
 }) {
   const [isHovered, setIsHovered] = useState(false)
+  useEffect(() => {console.log(className)}, [className])
   return <div className={cn('relative px-3 py-1 inline-flex items-center rounded-full cursor-default', className)}
     onMouseEnter={() => setIsHovered(true)} 
     onMouseLeave={() => setIsHovered(false)}>
