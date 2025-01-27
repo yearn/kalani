@@ -21,6 +21,7 @@ disabled:text-neutral-400 disabled:bg-transparent
 group-hover:disabled:text-neutral-400 group-hover:disabled:border-black
 disabled:placeholder-neutral-800 disabled:border-transparent
 
+truncate
 outline-none focus:ring-0 focus:outline-none
 rounded-primary saber-glow`)
 
@@ -31,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className, ...props },
     return ''
   }, [props])
   return <div className="relative">
-    <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName)} />
+    <input ref={ref} {...props} className={cn(InputClassName, className, borderClassName, props.infoKey && '!pr-12')} />
     {props.infoKey && <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
       <Info _key={props.infoKey} size={24} className="absolute right-4" />
     </div>}

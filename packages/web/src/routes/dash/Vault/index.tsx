@@ -43,7 +43,7 @@ export function VaultHero({
         <div><TokenImg chainId={chainId} address={assetAddress} size={64} bgClassName="bg-neutral-950" /></div>
         <div className="w-full flex flex-col gap-1">
           <HeroTitle>{name}</HeroTitle>
-          <div className="-mt-1 flex items-center gap-3">
+          <div className="-mt-1 flex items-center gap-3 font-bold">
             <div>{getChain(chainId).name}</div>
             <div>//</div>
             <div>

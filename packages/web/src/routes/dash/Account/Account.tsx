@@ -105,7 +105,7 @@ function Suspender({ address }: { address: EvmAddress }) {
 }
 
 export default function Account({ address }: { address: EvmAddress }) {
-  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
+  return <Suspense fallback={<Skeleton className="h-48" />}>
     <Suspender address={address} />
   </Suspense>
 }
