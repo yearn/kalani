@@ -85,7 +85,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
 
   return <div className="flex items-center gap-4">
     <LinkButton to={getItemHref(item)} h="tertiary" className="w-full px-4 grow h-14 flex items-center justify-between">
-      <div className="text-sm">{item.symbol}</div>
+      <div className="w-[140px] text-sm truncate">{item.name}</div>
       <div className="text-xs">{fPercent(item.apy) ?? '-.--%'}</div>
     </LinkButton>
     <Button title={buttonTitle} onClick={onAdd} theme={buttonTheme} disabled={disabled} className="w-12 h-14 text-2xl">+</Button>
