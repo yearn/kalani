@@ -14,6 +14,7 @@ export default function Address({
   isNextValid,
   setIsNextValid,
   infoKey,
+  theme = 'default',
   className
 }: { 
   placeholder?: string,
@@ -26,6 +27,7 @@ export default function Address({
   isNextValid?: boolean,
   setIsNextValid?: (isValid: boolean) => void,
   infoKey?: string,
+  theme?: 'default' | 'warn' | 'error',
   className?: string
 }) {
   const ref = useRef<HTMLInputElement>(null)
@@ -52,12 +54,13 @@ export default function Address({
       disabled={disabled ?? false}
       infoKey={infoKey}
       maxLength={42}
+      theme={theme}
       className="w-full text-base" />
-    {hasNext && !isNextValid && <div className={`
+    {!infoKey && hasNext && !isNextValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-yellow-400`}>
       <PiWarningCircle />
     </div>}
-    {hasNext && isNextValid && <div className={`
+    {!infoKey && hasNext && isNextValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-green-400`}>
       <PiCheckCircle />
     </div>}

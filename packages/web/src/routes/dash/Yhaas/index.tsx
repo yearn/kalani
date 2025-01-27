@@ -73,7 +73,7 @@ function Metrics() {
 
 export default function Page() {
   return <section className="flex flex-col gap-8">
-    <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
+    <Suspense fallback={<Skeleton className="h-48" />}>
       <Hero className="text-neutral-950 bg-zinc-400">
         <Brand />
         <Metrics />

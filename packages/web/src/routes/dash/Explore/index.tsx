@@ -40,7 +40,7 @@ function SkeletonListItems() {
   return <div className={`
     w-full p-2 sm:px-4 sm:py-8 
     flex flex-col sm:gap-8`}>
-    {Array.from({ length: FRAME_SIZE }).map((_, index) => <Skeleton key={index} className="w-full h-48 rounded-primary" />)}
+    {Array.from({ length: FRAME_SIZE }).map((_, index) => <Skeleton key={index} className="w-full h-48" />)}
   </div>
 }
 

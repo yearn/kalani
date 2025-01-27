@@ -5,7 +5,7 @@ import { useDialog } from '../Dialog'
 import Address from '../elements/Address'
 import { ROLE_MANAGER_FACTORY } from '@kalani/lib/addresses'
 import { useAccount, useReadContract, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { zeroAddress } from 'viem'
+import { isAddress, zeroAddress } from 'viem'
 import { getAddress } from 'viem'
 import { useWriteContract } from '../../hooks/useWriteContract'
 import abis from '@kalani/lib/abis'
@@ -50,15 +50,15 @@ function useWrite(
   return { simulation, write, confirmation, resolveToast }
 }
 
-function useProjectId(name: string, governance: string | undefined) {
+function useProjectId(name: string, governance: string | undefined, enabled?: boolean) {
   const { chainId } = useAccount()
   return useReadContract({
     abi: abis.roleManagerFactory,
     chainId: chainId,
     address: ROLE_MANAGER_FACTORY,
     functionName: 'getProjectId',
-    args: [name, getAddress(governance ?? zeroAddress)],
-    query: { enabled: !!governance }
+    args: [name, getAddress(enabled ? governance ?? zeroAddress : zeroAddress)],
+    query: { enabled }
   })
 }
 
@@ -71,10 +71,14 @@ function Suspender({ dialogId }: { dialogId: string }) {
   const [isManagementValid, setIsManagementValid] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
   const { closeDialog } = useDialog(dialogId)
-  const { data: projectId } = useProjectId(name, governance)
+  const { data: projectId } = useProjectId(name, governance, isGovernanceValid)
   const { simulation, write, confirmation, resolveToast } = useWrite(
     chainId ?? 1, name, governance, management, isFormValid
   )
+
+  const areSameAddress = useMemo(() => {
+    return governance && management && governance === management
+  }, [governance, management])
 
   useEffect(() => {
     if (address) { setGovernance(address) }
@@ -85,8 +89,9 @@ function Suspender({ dialogId }: { dialogId: string }) {
       name.length > 2 
       && isGovernanceValid 
       && (isNothing(management) || isManagementValid)
+      && !areSameAddress
     )
-  }, [name, isGovernanceValid, management, isManagementValid])
+  }, [name, isGovernanceValid, management, isManagementValid, areSameAddress])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -132,8 +137,8 @@ function Suspender({ dialogId }: { dialogId: string }) {
   return <div className="relative flex flex-col gap-6">
     {!confirmation.isSuccess && <div className={cn('flex flex-col gap-6')}>
       <Input disabled={!isConnected} className="theme-sim" value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
-      <Address infoKey="new-project-governance" disabled={!isConnected} placeholder="0x governance" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
-      <Address infoKey="new-project-management" disabled={!isConnected} placeholder="0x management (optional)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} />
+      <Address infoKey="new-project-governance" disabled={!isConnected} placeholder="0x governance (required)" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
+      <Address infoKey="new-project-management" disabled={!isConnected} placeholder="0x management (recommended)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} theme={areSameAddress ? 'error' : 'default'} />
       <div className="flex items-center justify-end gap-3">
         <Button h="secondary" onClick={closeDialog}>Cancel</Button>
         <Button disabled={disabled} theme={buttonTheme} onClick={onCreate}>Create project</Button>

@@ -31,7 +31,7 @@ function Suspender() {
 }
 
 export default function Erc4626() {
-  return <Suspense fallback={<Skeleton className="h-48 rounded-primary" />}>
+  return <Suspense fallback={<Skeleton className="h-48" />}>
     <Suspender />
   </Suspense>
 }
