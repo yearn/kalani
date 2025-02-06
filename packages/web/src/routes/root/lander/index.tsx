@@ -89,7 +89,7 @@ function RightHero() {
 }
 
 function LetsGo() {
-  return <div className="w-[380px] flex flex-col gap-6">
+  return <div className="w-[360px] sm:w-[380px] flex flex-col gap-6">
     <div>
       <h1 className="text-2xl font-bold">Create a project</h1>
       <p className="text-neutral-500"><String _key="new-project-p" /></p>

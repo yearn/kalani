@@ -5,6 +5,7 @@ import { cn } from '../lib/shadcn'
 import Wordmark from './Wordmark'
 import Juice from '../assets/icons/Juiced'
 import { useHashNav } from '../hooks/useHashNav'
+import Button from './elements/Button'
 
 type LauncherButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   className?: string
@@ -48,7 +49,7 @@ const V3Button = forwardRef<HTMLAnchorElement, LauncherButtonProps>(({ className
 V3Button.displayName = 'V3Button'
 
 const LauncherIconButton = forwardRef<HTMLAnchorElement, LauncherButtonProps>(({ className, children, ...props }, ref) => (
-  <a ref={ref} {...props} className={cn(`group/button w-1/2 sm:w-24 flex flex-col items-center justify-center gap-1 text-xs`, LauncherButtonClassName, className)}>{children}</a>
+  <a ref={ref} {...props} className={cn('group/button w-1/2 sm:w-24 flex flex-col items-center justify-center gap-1 text-xs', LauncherButtonClassName, className)}>{children}</a>
 ))
 
 LauncherIconButton.displayName = 'LauncherIconButton'
@@ -74,12 +75,9 @@ export default function Launcher({
       hidden data-[open=true]:flex sm:data-[open=true]:hidden sm:group-hover:flex flex-col gap-4
       border-0 sm:border-primary border-transparent group-hover:border-secondary-50
       group-active:border-secondary-400
-      bg-secondary-2000 text-neutral-400 rounded-none sm:rounded-primary saber-glow`,
+      bg-secondary-1000 text-neutral-400 rounded-none sm:rounded-primary saber-glow overflow-y-auto`,
       alignRight ? 'right-0' : '')}>
       <div className="grow flex flex-col gap-4">
-        <div className="sm:hidden px-2 py-3 flex items-center justify-end">
-          <PiX size={32} onClick={nav.close} />
-        </div>
         <LauncherButton className="grow sm:grow-0 text-secondary-400" href="https://yearn.fi" target="_blank" rel="noreferrer">
           yearn.fi
         </LauncherButton>
