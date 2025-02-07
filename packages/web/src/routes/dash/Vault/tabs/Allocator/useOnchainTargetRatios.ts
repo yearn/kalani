@@ -17,7 +17,7 @@ export function useOnchainTargetRatios() {
     chainId: strategy.chainId, address: allocator,
     functionName: 'getStrategyTargetRatio',
     args: [vault?.address ?? zeroAddress, strategy.address]
-  })), [vault])
+  })), [vault, allocator])
 
   const options = readContractsQueryOptions(config, { contracts })
   const query = useSuspenseQuery(options)

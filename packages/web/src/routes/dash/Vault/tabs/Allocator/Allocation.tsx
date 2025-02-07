@@ -2,9 +2,8 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useVaultFromParams, useVaultParams } from '../../../../../hooks/useVault'
 import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
-import { EvmAddress, ROLES } from '@kalani/lib/types'
+import { EvmAddress } from '@kalani/lib/types'
 import { parseAbi, zeroAddress } from 'viem'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
 import { useOnchainTargetRatio } from './useOnchainTargetRatios'
 import { useOnchainTargetRatios } from './useOnchainTargetRatios'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
@@ -19,15 +18,7 @@ import ViewBps from '../../../../../components/elements/ViewBps'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import ProcessReport from './ProcessReport'
-
-export function useHasDebtManagerRole() {
-  const { vault } = useVaultFromParams()
-  return useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
-}
+import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
