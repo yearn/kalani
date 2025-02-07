@@ -1,7 +1,7 @@
 {
   "new-project-p": "Projects are unique groups of addresses used for deploying and managing your vaults.",
-  "new-project-governance": "Your project's governance addresses is..",
-  "new-project-management": "Your project's management addresses is..",
+  "new-project-governance": "Your project's governance addresses has full control over vaults created from this project (ie rugging power)",
+  "new-project-management": "Your project's management addresses has less authorization and is meant for day-to-day operations. Providing a management address is recommended but optional and cannot be the same as your Governance address",
   "new-vault-category": "Optional. Use categories to..",
   "new-vault-min-change": "Your vault's Minimum Change starts at 0. To start adding strategies and making allocations, set a minimum change greater than 0.",
   "new-vault-accept-fee-manager": "Your address, {0}, has been set as this vault's fee manager, but you must accept first!"
