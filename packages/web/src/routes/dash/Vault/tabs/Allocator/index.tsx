@@ -13,6 +13,7 @@ import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import AutoAllocate from './AutoAllocate'
 import UpdateDebt from './UpdateDebt'
+import { SetMinimumChange } from './SetMinimumChange'
 
 function Suspender() {
   const { chainId } = useAccount()
@@ -38,6 +39,10 @@ function Suspender() {
     <Section className="relative flex flex-col gap-primary">
       <LabelValueRow label="Allocator">
         <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-neutral-900" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Minimum change">
+        <SetMinimumChange className="w-80" />
       </LabelValueRow>
 
       <LabelValueRow label="Auto allocate">

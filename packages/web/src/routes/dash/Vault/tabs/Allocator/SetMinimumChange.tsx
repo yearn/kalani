@@ -7,11 +7,11 @@ import { InputTokenAmount } from '../../../../../components/elements/InputTokenA
 import { useVaultFromParams } from '../../../../../hooks/useVault'
 
 export function SetMinimumChange({ className }: { className?: string }) {
-  const [minimumChange, setMinimumChange] = useState<bigint | undefined>(undefined)
-  const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
-  const dirty = useMemo(() => minimumChange !== 0n, [minimumChange])
-  const { refetch: refetchMinimumChange } = useMinimumChange()
   const { vault } = useVaultFromParams()
+  const { minimumChange: onchainMinimumChange, refetch: refetchMinimumChange } = useMinimumChange()
+  const [minimumChange, setMinimumChange] = useState<bigint | undefined>(onchainMinimumChange)
+  const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
+  const dirty = useMemo(() => minimumChange !== onchainMinimumChange, [minimumChange, onchainMinimumChange])
 
   const disabled = useMemo(() => {
     return !dirty

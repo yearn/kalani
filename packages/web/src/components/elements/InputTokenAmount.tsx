@@ -3,18 +3,7 @@ import { cn } from '../../lib/shadcn'
 import { InputClassName } from './Input'
 import bmath from '@kalani/lib/bmath'
 import { isSomething, parseInputNumberString } from '@kalani/lib/strings'
-
-// function processInputAmount(input: string): string {
-// 	const result = input.replace(/[^\d.,]/g, '').replace(/,/g, '.')
-// 	const firstPeriod = result.indexOf('.')
-// 	if (firstPeriod === -1) {
-// 		return result
-// 	} else {
-// 		const firstPart = result.slice(0, firstPeriod + 1)
-// 		const lastPart = result.slice(firstPeriod + 1).replace(/\./g, '')
-// 		return firstPart + lastPart
-// 	}
-// }
+import { formatUnits } from 'viem'
 
 export function InputTokenAmount({
 	amount,
@@ -31,7 +20,7 @@ export function InputTokenAmount({
 	disabled?: boolean,
 	className?: string
 }) {
-	const [rawInput, setRawInput] = useState<string | undefined>(amount === undefined ? undefined : String(amount))
+	const [rawInput, setRawInput] = useState<string | undefined>(amount ? formatUnits(BigInt(amount), decimals) : undefined)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const displayAmount = useMemo(() => {
@@ -51,11 +40,13 @@ export function InputTokenAmount({
 			const processedAmount = parseInputNumberString(rawInput ?? '')
 			if (!isSomething(processedAmount)) {
 				onChange?.(undefined)
+			} else if (processedAmount === '.') {
+				onChange?.(BigInt(0))
 			} else {
 				onChange?.(BigInt(parseFloat(processedAmount) * (10 ** decimals)))
 			}
 		}
-	}, [rawInput, onChange, decimals])
+	}, [rawInput, onChange, decimals, amount])
 
 	const onClickSymbol = useCallback(() => {
 		inputRef.current?.focus()

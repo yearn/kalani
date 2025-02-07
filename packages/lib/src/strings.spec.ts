@@ -10,6 +10,8 @@ describe('strings', function() {
   })
 
   it('parses input strings into number strings', async function() {
+    expect(parseInputNumberString('.')).to.eq('.')
+    expect(parseInputNumberString('.123')).to.eq('.123')
     expect(parseInputNumberString('123')).to.eq('123')
     expect(parseInputNumberString('1,234')).to.eq('1.234')
     expect(parseInputNumberString('1,234.56')).to.eq('1.23456')
