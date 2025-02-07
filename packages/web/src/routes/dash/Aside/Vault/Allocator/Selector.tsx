@@ -56,7 +56,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation.isError, simulation.error])
 
   const onAdd = useCallback(async () => {
     write.writeContract(simulation.data!.request)
@@ -88,7 +88,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
       <div className="w-[140px] text-sm truncate">{item.name}</div>
       <div className="text-xs">{fPercent(item.apy) ?? '-.--%'}</div>
     </LinkButton>
-    <Button title={buttonTitle} onClick={onAdd} theme={buttonTheme} disabled={disabled} className="w-12 h-14 text-2xl">+</Button>
+    <Button title={buttonTitle} onClick={onAdd} theme={buttonTheme} disabled={disabled} className="w-12 text-2xl">+</Button>
   </div>
 }
 

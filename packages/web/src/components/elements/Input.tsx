@@ -14,7 +14,7 @@ bg-neutral-950 border-primary border-neutral-900
 placeholder:text-neutral-500
 
 group-hover:text-secondary-50 group-hover:bg-black group-hover:border-secondary-50
-group-has-[:focus]:text-secondary-400 group-has-[:focus]:border-secondary-400
+group-has-[:focus]:text-secondary-400 group-has-[:focus]:border-secondary-400 has-[:focus]:border-secondary-400
 focus:text-secondary-400 focus:border-secondary-400 focus:bg-black
 
 disabled:text-neutral-400 disabled:bg-transparent 

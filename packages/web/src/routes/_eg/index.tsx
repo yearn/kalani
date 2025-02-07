@@ -13,6 +13,7 @@ import InputBps from '../../components/elements/InputBps'
 import DepositWithdraw from '../../components/DepositWithdraw'
 import { Switch } from '../../components/shadcn/switch'
 import Info from '../../components/Info'
+import { InputTokenAmount } from '../../components/elements/InputTokenAmount'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -25,8 +26,8 @@ export default function Eg() {
     toast.promise(
       new Promise((resolve) => setResolveToast(() => resolve)),
       {
-        loading: `Confirming transaction...`,
-        success: () => `Transaction confirmed`,
+        loading: 'Confirming transaction...',
+        success: () => 'Transaction confirmed',
         action: { label: 'View', onClick: () => {} }
       }
     )
@@ -50,16 +51,23 @@ export default function Eg() {
 
   const [bps, setBps] = useState(100)
 
+  const [amount, setAmount] = useState<bigint | undefined>(undefined)
+
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
-    <section className={`w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0`}>
+    <section className={'w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0'}>
+
+      <div className="flex flex-col items-start justify-center">
+        <InputTokenAmount symbol="yvUSDC-2" decimals={6} amount={amount} onChange={setAmount} />
+        {String(amount)}
+      </div>
 
       <div className="flex gap-8 items-center justify-center">
         <Info _key="test" />
       </div>
 
       <div className="flex flex-col gap-8">
-        <DepositWithdraw chainId={137} vault={'0x1491eCfADd4b54b263Bf2C3734b4c0A23195706E'} />
+        <DepositWithdraw chainId={137} vault={'0xA013Fbd4b711f9ded6fB09C1c0d358E2FbC2EAA0'} />
       </div>
 
       <div className="flex items-center gap-12 w-32">

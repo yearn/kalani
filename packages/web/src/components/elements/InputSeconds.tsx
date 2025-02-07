@@ -32,7 +32,7 @@ export default function InputSeconds({
     return isDaysMode 
       ? Math.floor((Number(seconds) || 0) / secondsPerDay).toString() 
       : seconds?.toString() || ''
-  }, [isDaysMode, seconds])
+  }, [isDaysMode, seconds, secondsPerDay])
 
   const _onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value

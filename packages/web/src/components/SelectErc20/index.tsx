@@ -96,7 +96,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
       || token.symbol.toLowerCase().includes(lower)
       || token.address.toLowerCase().includes(lower)
     )
-  }, [isQueryAddress, query, tokens, breakpoints.sm])
+  }, [isQueryAddress, query, tokens])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent): void => {

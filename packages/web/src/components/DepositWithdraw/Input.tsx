@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useParameters } from './useParameters'
 import useDebounce from '../../hooks/useDebounce'
 import { cn } from '../../lib/shadcn'
+import { parseInputNumberString } from '@kalani/lib/strings'
 
 function InputDisplay({
 	disabled,
@@ -29,8 +30,6 @@ function InputDisplay({
 			type="text"
 			pattern="^[0-9]*[.,]?[0-9]*$"
 			placeholder="0"
-			min="1"
-			max="79"
 			spellCheck="false"
 			onChange={ onChange }
 			value={ value }
@@ -40,18 +39,6 @@ function InputDisplay({
 
 export function Input({ className, mode, disabled }: { className?: string, mode: 'in' | 'out', disabled?: boolean }) {
 	const { amount, setAmount } = useParameters()
-
-	function processInputAmount(input: string): string {
-		const result = input.replace(/[^\d.,]/g, '').replace(/,/g, '.')
-		const firstPeriod = result.indexOf('.')
-		if (firstPeriod === -1) {
-			return result
-		} else {
-			const firstPart = result.slice(0, firstPeriod + 1)
-			const lastPart = result.slice(firstPeriod + 1).replace(/\./g, '')
-			return firstPart + lastPart
-		}
-	}
 
 	const [rawInput, setRawInput] = useState<string | undefined>(amount)
 	const onRawInputChange = useCallback(
@@ -64,7 +51,7 @@ export function Input({ className, mode, disabled }: { className?: string, mode:
 	const debouncedInput = useDebounce(rawInput, 48)
 
 	useEffect(() => {
-		const processedAmount = processInputAmount(debouncedInput ?? '')
+		const processedAmount = parseInputNumberString(debouncedInput ?? '')
 		setAmount(processedAmount)
 	}, [debouncedInput, mode, setAmount])
 
