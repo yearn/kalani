@@ -52,7 +52,7 @@ export function SetMinimumChange({ className }: { className?: string }) {
 
   return <div className={cn('flex items-center justify-center', className)}>
     <div className="flex items-center gap-6">
-      <InputTokenAmount symbol={vault?.asset.symbol ?? ''} decimals={vault?.asset.decimals ?? 0} amount={minimumChange} onChange={setMinimumChange} disabled={disabled} />
+      <InputTokenAmount symbol={vault?.asset.symbol ?? ''} decimals={vault?.asset.decimals ?? 0} amount={minimumChange} onChange={setMinimumChange} disabled={!authorizedAddStrategy} />
       <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
     </div>
   </div>
