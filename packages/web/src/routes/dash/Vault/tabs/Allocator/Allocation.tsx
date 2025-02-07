@@ -91,11 +91,11 @@ function MutableAllocation({ strategy }: { strategy: {
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, update, simulation, write])
+  }, [authorized, update, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation.isError, simulation.error])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -119,7 +119,7 @@ function MutableAllocation({ strategy }: { strategy: {
       debtRatio: newRatio,
       isDirty: newRatio !== onchainTargetRatio
     })
-  }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio])
+  }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio, strategy.address, strategy.chainId, vault?.address])
 
   const onSet = useCallback(async () => {
     write.writeContract(simulation.data!.request)
@@ -127,7 +127,8 @@ function MutableAllocation({ strategy }: { strategy: {
 
   return <div className="p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
 
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 h-14 text-2xl">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-3 px-6 h-14 text-2xl">
+      <ViewBps bps={Number(update.debtRatio)} className="text-lg" />
       <div>{strategy.name}</div>
     </LinkButton>
 
@@ -163,7 +164,8 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   const update = useDebtRatioUpdate(strategy.address)
 
   return <div className="p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="px-6 h-14 text-2xl">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-3 px-6 h-14 text-2xl">
+      <ViewBps bps={Number(update.debtRatio)} className="text-lg" />
       <div>{strategy.name}</div>
     </LinkButton>
 
