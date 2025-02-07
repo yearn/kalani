@@ -47,7 +47,7 @@ export function useMinimumChange() {
   const minimumChange = useMemo(() => {
     if (query.data[0].status === 'success') { return query.data[0].result }
     if (query.data[1].status === 'success') { return query.data[1].result[1] }
-    return 0
+    return 0n
   }, [query])
 
   return { ...query, minimumChange }
