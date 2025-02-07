@@ -48,8 +48,8 @@
     "react-tooltip": "^5.28.0",
     "sonner": "^1.5.0",
     "use-local-storage": "^3.0.0",
-    "viem": "^2.22.13",
-    "wagmi": "^2.14.9",
+    "viem": "^2.22.23",
+    "wagmi": "^2.14.10",
     "zod": "^3.23.8",
     "zustand": "^5.0.0-rc.2"
   },

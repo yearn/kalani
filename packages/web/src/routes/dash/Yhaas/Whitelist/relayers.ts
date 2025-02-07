@@ -11,6 +11,7 @@ export const RELAYERS: Record<number, EvmAddress[]> = {
   8453: ['0x46679Ba8ce6473a9E0867c52b5A50ff97579740E'],
   34443: [zeroAddress],
   42161: ['0xE0D19f6b240659da8E87ABbB73446E7B4346Baee'],
+  80094: [zeroAddress],
 }
 
 export function useRelayers(chainId?: number) {
