@@ -28,7 +28,7 @@ export function useIsRelayed(args: { vault?: EvmAddress, chainId?: number, rolem
       result.status !== 'success' || (result.status === 'success'
       && containsRole(result.result as bigint, rolemask))
     )
-  }, [targets, rolemask, relayers, query])
+  }, [rolemask, query])
 
   return { ...query, data: isRelayed }
 }

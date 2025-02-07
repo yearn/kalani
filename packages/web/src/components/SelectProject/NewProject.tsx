@@ -137,8 +137,8 @@ function Suspender({ dialogId }: { dialogId: string }) {
   return <div className="relative flex flex-col gap-6">
     {!confirmation.isSuccess && <div className={cn('flex flex-col gap-6')}>
       <Input disabled={!isConnected} className="theme-sim" value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
-      <Address infoKey="new-project-governance" disabled={!isConnected} placeholder="0x governance (required)" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
-      <Address infoKey="new-project-management" disabled={!isConnected} placeholder="0x management (recommended)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} theme={areSameAddress ? 'error' : 'default'} />
+      <Address infokey="new-project-governance" disabled={!isConnected} placeholder="0x governance (required)" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
+      <Address infokey="new-project-management" disabled={!isConnected} placeholder="0x management (recommended)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} theme={areSameAddress ? 'error' : 'default'} />
       <div className="flex items-center justify-end gap-3">
         <Button h="secondary" onClick={closeDialog}>Cancel</Button>
         <Button disabled={disabled} theme={buttonTheme} onClick={onCreate}>Create project</Button>

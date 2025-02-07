@@ -13,7 +13,7 @@ export default function Address({
   setNext,
   isNextValid,
   setIsNextValid,
-  infoKey,
+  infokey,
   theme = 'default',
   className
 }: { 
@@ -26,7 +26,7 @@ export default function Address({
   setNext?: (next: string) => void,
   isNextValid?: boolean,
   setIsNextValid?: (isValid: boolean) => void,
-  infoKey?: string,
+  infokey?: string,
   theme?: 'default' | 'warn' | 'error',
   className?: string
 }) {
@@ -52,15 +52,15 @@ export default function Address({
       onChange={_onChange}
       placeholder={placeholder ?? '0x'}
       disabled={disabled ?? false}
-      infoKey={infoKey}
+      infokey={infokey}
       maxLength={42}
       theme={theme}
       className="w-full text-base" />
-    {!infoKey && hasNext && !isNextValid && <div className={`
+    {!infokey && hasNext && !isNextValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-yellow-400`}>
       <PiWarningCircle />
     </div>}
-    {!infoKey && hasNext && isNextValid && <div className={`
+    {!infokey && hasNext && isNextValid && <div className={`
       absolute top-0 right-4 h-full flex items-center text-green-400`}>
       <PiCheckCircle />
     </div>}

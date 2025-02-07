@@ -36,5 +36,10 @@ export const TOKENS: Record<number, Erc20[]> = {
   [42161]: [
     { chainId: 42161, address: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb', name: 'Dai', symbol: 'DAI', decimals: 18 },
     { chainId: 42161, address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', name: 'USDC', symbol: 'USDC', decimals: 6 }
+  ],
+  [80094]: [
+    { chainId: 80094, address: '0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34', name: 'USDe', symbol: 'USDe', decimals: 6 },
+    { chainId: 80094, address: '0x7DCC39B4d1C53CB31e1aBc0e358b43987FEF80f7', name: 'Wrapped eETH', symbol: 'weETH', decimals: 18 },
+    { chainId: 80094, address: '0xecAc9C5F704e954931349Da37F60E39f515c11c1', name: 'Lombard Staked BTC', symbol: 'LBTC', decimals: 8 },
   ]
 }
