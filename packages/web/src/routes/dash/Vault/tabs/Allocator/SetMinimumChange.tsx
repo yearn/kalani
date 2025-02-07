@@ -5,6 +5,9 @@ import { cn } from '../../../../../lib/shadcn'
 import { useSetMinimumChange } from './useSetMinimumChange'
 import { InputTokenAmount } from '../../../../../components/elements/InputTokenAmount'
 import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useHasRoles } from '../../../../../hooks/useHasRoles'
+import { ROLES } from '@kalani/lib/types'
+import { zeroAddress } from 'viem'
 
 export function SetMinimumChange({ className }: { className?: string }) {
   const { vault } = useVaultFromParams()
@@ -12,14 +15,16 @@ export function SetMinimumChange({ className }: { className?: string }) {
   const [minimumChange, setMinimumChange] = useState<bigint | undefined>(onchainMinimumChange)
   const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
   const dirty = useMemo(() => minimumChange !== onchainMinimumChange, [minimumChange, onchainMinimumChange])
+  const authorizedAddStrategy = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.ADD_STRATEGY_MANAGER })
 
   const disabled = useMemo(() => {
-    return !dirty
+    return !authorizedAddStrategy
+    || !dirty
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [dirty, simulation, write, confirmation])
+  }, [authorizedAddStrategy, dirty, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
     if (!dirty) return 'default'
@@ -47,7 +52,7 @@ export function SetMinimumChange({ className }: { className?: string }) {
 
   return <div className={cn('flex items-center justify-center', className)}>
     <div className="flex items-center gap-6">
-      <InputTokenAmount symbol={vault?.asset.symbol ?? ''} decimals={vault?.asset.decimals ?? 0} amount={minimumChange} onChange={setMinimumChange} />
+      <InputTokenAmount symbol={vault?.asset.symbol ?? ''} decimals={vault?.asset.decimals ?? 0} amount={minimumChange} onChange={setMinimumChange} disabled={disabled} />
       <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
     </div>
   </div>
