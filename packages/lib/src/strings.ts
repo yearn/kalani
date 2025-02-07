@@ -35,3 +35,15 @@ export function kabobCase(str: string) {
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .toLowerCase()
 }
+
+export function parseInputNumberString(input: string): string {
+	const result = input.replace(/[^\d.,]/g, '').replace(/,/g, '.')
+	const firstPeriod = result.indexOf('.')
+	if (firstPeriod === -1) {
+		return result
+	} else {
+		const firstPart = result.slice(0, firstPeriod + 1)
+		const lastPart = result.slice(firstPeriod + 1).replace(/\./g, '')
+		return firstPart + lastPart
+	}
+}

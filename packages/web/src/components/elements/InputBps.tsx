@@ -4,9 +4,9 @@ import { cn } from '../../lib/shadcn'
 import useLocalStorage from 'use-local-storage'
 
 export function useInputBpsSettings() {
-  const options = ['bps', '%']
   const [setting, setSetting] = useLocalStorage('input-bps', '%')
   const next = useCallback(() => {
+    const options = ['bps', '%']
     const index = (options.indexOf(setting) + 1) % options.length
     setSetting(options[index])
   }, [setting, setSetting])
@@ -40,7 +40,7 @@ export default function InputBps({
 
   const displayValue = useMemo(() => {
     return isPercentMode 
-      ? (100.0 * (Math.floor((Number(bps) ?? 0)) / 10_000.0)).toFixed(2).toString() 
+      ? (100.0 * (Math.floor((Number(bps ?? 0))) / 10_000.0)).toFixed(2).toString() 
       : bps?.toString() ?? ''
   }, [isPercentMode, bps])
 

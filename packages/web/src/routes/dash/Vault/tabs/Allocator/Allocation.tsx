@@ -39,7 +39,7 @@ function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: b
     functionName: 'setStrategyDebtRatio',
     args: [vault, strategy, ratio],
     query: { enabled }
-  }), [strategy, ratio, enabled])
+  }), [strategy, ratio, enabled, vault, allocator])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()

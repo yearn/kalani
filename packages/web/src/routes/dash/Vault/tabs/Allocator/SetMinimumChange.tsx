@@ -1,37 +1,17 @@
-import { useVaultParams } from '../../../../../hooks/useVault'
-import { useAllocator, useMinimumChange } from '../../useAllocator'
-import { parseAbi } from 'viem'
-import { useSimulateContract, UseSimulateContractParameters } from 'wagmi'
-import { useWriteContract } from '../../../../../hooks/useWriteContract'
-import { useWaitForTransactionReceipt } from 'wagmi'
+import { useMinimumChange } from '../../useAllocator'
 import { useMemo, useState, useCallback, useEffect } from 'react'
-import InputInteger from '../../../../../components/elements/InputInteger'
 import Button from '../../../../../components/elements/Button'
 import { cn } from '../../../../../lib/shadcn'
-
-export function useSetMinimumChange(minimumChange: bigint) {
-  const { address: vault } = useVaultParams()
-  const { allocator } = useAllocator()
-
-  const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: parseAbi(['function setMinimumChange(address _vault, uint256 _minimumChange) external']),
-    address: allocator,
-    functionName: 'setMinimumChange',
-    args: [vault, minimumChange],
-    query: { enabled: !!vault }
-  }), [vault, minimumChange])
-
-  const simulation = useSimulateContract(parameters)
-  const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
-  return { simulation, write, confirmation, resolveToast }
-}
+import { useSetMinimumChange } from './useSetMinimumChange'
+import { InputTokenAmount } from '../../../../../components/elements/InputTokenAmount'
+import { useVaultFromParams } from '../../../../../hooks/useVault'
 
 export function SetMinimumChange({ className }: { className?: string }) {
-  const [minimumChange, setMinimumChange] = useState(0n)
+  const [minimumChange, setMinimumChange] = useState<bigint | undefined>(undefined)
   const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
   const dirty = useMemo(() => minimumChange !== 0n, [minimumChange])
   const { refetch: refetchMinimumChange } = useMinimumChange()
+  const { vault } = useVaultFromParams()
 
   const disabled = useMemo(() => {
     return !dirty
@@ -48,11 +28,11 @@ export function SetMinimumChange({ className }: { className?: string }) {
     if (simulation.isFetching) return 'sim'
     if (simulation.isError) return 'error'
     return 'default'
-  }, [simulation, write, confirmation])
+  }, [simulation, write, confirmation, dirty])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation.isError, simulation.error])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -67,8 +47,8 @@ export function SetMinimumChange({ className }: { className?: string }) {
 
   return <div className={cn('flex items-center justify-center', className)}>
     <div className="flex items-center gap-6">
-      <InputInteger value={Number(minimumChange)} onChange={e => setMinimumChange(BigInt(e.target.value))} isValid={true} />
-      <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
+      <InputTokenAmount symbol={vault?.asset.symbol ?? ''} decimals={vault?.asset.decimals ?? 0} amount={minimumChange} onChange={setMinimumChange} />
+      <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
     </div>
   </div>
 }

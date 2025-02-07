@@ -70,7 +70,7 @@ function VaultBalance() {
   const hasUnlockedAssets = useMemo(() => unlockedAssets > 0, [unlockedAssets])
 
   return <div className={cn(
-    'p-6 flex flex-col gap-8 rounded-primary bg-black',
+    'p-6 flex flex-col gap-8 rounded-t-primary bg-black',
     hasUnlockedAssets && 'shimmer-slow-ride')}>
     <div className="text-neutral-500">Your vault balance</div>
     <div className="flex flex-col gap-1">
@@ -115,11 +115,11 @@ function Suspender({
     setVault(vault)
   }, [chainId, vault, wallet, setChainId, setWallet, setVault])
 
-  return <div className={cn(`relative flex flex-col gap-0`, className)}>
-    <Suspense fallback={<Skeleton className="w-full h-[282px] rounded-primary" />}>
+  return <div className={cn('relative flex flex-col', className)}>
+    <Suspense fallback={<Skeleton className="w-full h-[282px] rounded-t-primary" />}>
       <VaultBalance />
     </Suspense>
-    <div className="flex flex-col gap-8">
+    <div className="-mt-2 flex flex-col gap-8">
       <InputPanel />
       <Action chainId={chainId} />
     </div>

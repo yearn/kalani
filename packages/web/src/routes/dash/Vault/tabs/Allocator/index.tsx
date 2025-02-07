@@ -29,7 +29,7 @@ function Suspender() {
     if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <p className="text-center text-neutral-600">Set a minimum change greater than 0.</p> }
     if ((vault?.strategies.length ?? 0) > 0) { return <Allocations /> }
     return <NoStrategies />
-  }, [minimumChange, vault])
+  }, [minimumChange, vault, authorized, chainId])
 
   return <>
     <Section className="relative">
