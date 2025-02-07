@@ -20,7 +20,7 @@ export function useIsRelayed(args: { vault?: EvmAddress, chainId?: number, rolem
 
   const options = readContractsQueryOptions(config, { contracts })
 
-  // @ts-expect-error "Type instantiation is excessively deep and possibly infinite. ts(2589)"
+  // @ts-ignore "Type instantiation is excessively deep and possibly infinite. ts(2589)"
   const query = useSuspenseQuery(options)
 
   const isRelayed = useMemo(() => {
