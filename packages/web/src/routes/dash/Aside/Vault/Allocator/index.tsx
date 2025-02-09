@@ -12,6 +12,7 @@ import String from '../../../../../strings/String'
 
 function SetMinimumChangeNotification() {
   return <div className="p-8 flex flex-col gap-8 border-primary border-warn-950 rounded-primary text-warn-400">
+    <h2 className="text-xl">Minimum Change</h2>
     <p className="flex items-center gap-8 text-warn-400">
       <String _key="new-vault-min-change" />
     </p>
