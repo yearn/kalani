@@ -6,12 +6,12 @@ import { useString } from '../strings/useString'
 
 export default function Info({ _key, size = 16, className }: { _key: string, size?: number, className?: string }) {
   const info = useString(_key)
-  return <div className={cn('flex text-neutral-600 hover:text-secondary-50 pointer-events-auto', className)}>
+  return <div className={cn('isolate flex text-neutral-600 hover:text-secondary-50 pointer-events-auto', className)}>
     <a data-tooltip-id={_key}>
       <PiInfoFill size={size} />
     </a>
-    <Tooltip id={_key}>
-      <Markdown className="markdown">{info}</Markdown>
+    <Tooltip id={_key} className="bg-primary-400 !bg-primary-500 !opacity-100 !rounded-primary">
+      <Markdown className="markdown max-w-[320px]">{info}</Markdown>
     </Tooltip>
   </div>
 }

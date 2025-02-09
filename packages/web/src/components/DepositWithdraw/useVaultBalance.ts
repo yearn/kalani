@@ -88,7 +88,7 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
     assets,
     assetPrice,
     apr
-  }), [chainId, vault, wallet, query.data])
+  }), [symbol, decimals, shares, assets, assetPrice, apr])
 
   return { ...query, ...parsed }
 }

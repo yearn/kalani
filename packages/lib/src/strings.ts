@@ -9,6 +9,12 @@ export function isSomething(value?: string | null): boolean {
   return !isNothing(value)
 }
 
+export function isNumber(value?: string | number | null | undefined): boolean {
+  if (typeof value === 'number') return !isNaN(value)
+  if (typeof value === 'string') return isSomething(value) && !isNaN(Number(value.replace(/,/g, '')))
+  return false
+}
+
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

@@ -1,52 +1,25 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { cn } from '../../lib/shadcn'
 import { InputClassName } from './Input'
-import bmath from '@kalani/lib/bmath'
-import { isSomething, parseInputNumberString } from '@kalani/lib/strings'
-import { formatUnits } from 'viem'
 
 export function InputTokenAmount({
 	amount,
 	symbol,
-	decimals,
 	onChange,
 	disabled,
 	className
 }: {
-	amount?: bigint | string | undefined,
+	amount?: string | undefined,
 	symbol: string,
-	decimals: number,
-	onChange?: (amount: bigint | undefined) => void,
+	onChange?: (amount: string | undefined) => void,
 	disabled?: boolean,
 	className?: string
 }) {
-	const [rawInput, setRawInput] = useState<string | undefined>(amount ? formatUnits(BigInt(amount), decimals) : undefined)
 	const inputRef = useRef<HTMLInputElement>(null)
 
-	const displayAmount = useMemo(() => {
-		if (isSomething(rawInput)) return parseInputNumberString(rawInput ?? '')
-		if (amount === undefined) return ''
-		return bmath.div(BigInt(amount), BigInt(10 ** decimals))
-	}, [rawInput, amount, decimals])
-
 	const _onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setRawInput(e.target.value)
-	}, [setRawInput])
-
-	useEffect(() => {
-		if (rawInput === undefined || rawInput === '') {
-			onChange?.(undefined)
-		} else {
-			const processedAmount = parseInputNumberString(rawInput ?? '')
-			if (!isSomething(processedAmount)) {
-				onChange?.(undefined)
-			} else if (processedAmount === '.') {
-				onChange?.(BigInt(0))
-			} else {
-				onChange?.(BigInt(parseFloat(processedAmount) * (10 ** decimals)))
-			}
-		}
-	}, [rawInput, onChange, decimals, amount])
+		onChange?.(e.target.value)
+	}, [onChange])
 
 	const onClickSymbol = useCallback(() => {
 		inputRef.current?.focus()
@@ -78,7 +51,7 @@ export function InputTokenAmount({
 			placeholder="0"
 			spellCheck="false"
 			onChange={_onChange}
-			value={displayAmount}
+			value={amount}
 		/>
     <div onClick={onClickSymbol} className={cn(`
       flex items-center justify-end

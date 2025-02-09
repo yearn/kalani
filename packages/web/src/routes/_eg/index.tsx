@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '../../components/elements/Button'
 import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
@@ -14,6 +14,7 @@ import DepositWithdraw from '../../components/DepositWithdraw'
 import { Switch } from '../../components/shadcn/switch'
 import Info from '../../components/Info'
 import { InputTokenAmount } from '../../components/elements/InputTokenAmount'
+import { parseUnits } from 'viem'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -51,14 +52,15 @@ export default function Eg() {
 
   const [bps, setBps] = useState(100)
 
-  const [amount, setAmount] = useState<bigint | undefined>(undefined)
+  const [formattedAmount, setFormattedAmount] = useState<string | undefined>(undefined)
+  const amount = useMemo(() => formattedAmount ? parseUnits(formattedAmount, 6) : undefined, [formattedAmount])
 
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
     <section className={'w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0'}>
 
       <div className="flex flex-col items-start justify-center">
-        <InputTokenAmount symbol="yvUSDC-2" decimals={6} amount={amount} onChange={setAmount} />
+        <InputTokenAmount symbol="yvUSDC-2" amount={formattedAmount} onChange={setFormattedAmount} />
         {String(amount)}
       </div>
 

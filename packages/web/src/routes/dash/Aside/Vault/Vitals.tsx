@@ -28,7 +28,7 @@ function useNotifications() {
     if (!vault) { return }
     setTargetsRaw(vault.address)
     setTargets([vault.address])
-    navigate(`/yhaas`)
+    navigate('/yhaas')
   }, [navigate, setTargets, setTargetsRaw, vault])
 
   const isAccountantManager = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.ACCOUNTANT_MANAGER })
@@ -72,7 +72,7 @@ function useNotifications() {
     }
 
     return result
-  }, [vault, allocator, isRelayed])
+  }, [vault, allocator, isRelayed, isAccountantManager, isDebtManager, isRoleManager, onFixYhaas])
 }
 
 export default function Vitals() {
