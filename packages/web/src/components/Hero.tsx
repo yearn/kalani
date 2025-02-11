@@ -3,13 +3,13 @@ import { cn } from '../lib/shadcn'
 import Screen from './Screen'
 
 export function HeroTitle({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={cn(`w-[92%] text-4xl font-fancy`, className)}>
+  return <div className={cn('w-[92%] text-4xl font-fancy', className)}>
     <AutoTextSize mode="oneline" minFontSizePx={16} maxFontSizePx={46}>{children}</AutoTextSize>
   </div>
 }
 
 export function HeroInset({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={cn(`absolute z-[100] inset-0 px-2 sm:px-12 flex items-end justify-start pointer-events-none`, className)}>
+  return <div className={cn('absolute z-[100] inset-0 px-2 sm:px-12 flex items-end justify-start pointer-events-none', className)}>
     {children}
   </div>
 }

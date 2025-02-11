@@ -14,6 +14,7 @@ import NewProject from '../../../components/SelectProject/NewProject'
 import { useHashNav } from '../../../hooks/useHashNav'
 import Connect from '../../../components/Connect'
 import String from '../../../strings/String'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
 
 function Feature({
   icon, 
@@ -102,19 +103,20 @@ function LetsGo() {
 export default function Lander() {
   const mounted = useMounted()
   const nav = useHashNav('lets-go')
+  const { sm } = useBreakpoints()
 
   return <div className="relative w-full min-h-screen flex flex-col sm:flex-row sm:overflow-hidden">
     {!nav.isOpen && <Header />}
 
     <AnimatePresence>
-      {!nav.isOpen && <FlyInFromBottom _key="left-hero" transition={springs.slowRoll} exit={1} parentMounted={mounted} 
+      {!nav.isOpen && <FlyInFromBottom _key="left-hero" breakpoint={sm} transition={springs.slowRoll} exit={1} parentMounted={mounted} 
         className="w-full sm:w-1/2 min-h-screen">
         <LeftHero />
       </FlyInFromBottom>}
     </AnimatePresence>
 
     <AnimatePresence>
-      {!nav.isOpen && <FlyInFromTop _key="right-hero" transition={springs.slowRoll} exit={1} parentMounted={mounted} 
+      {!nav.isOpen && <FlyInFromTop _key="right-hero" breakpoint={sm} transition={springs.slowRoll} exit={1} parentMounted={mounted} 
         className="w-full sm:w-1/2 min-h-screen">
         <RightHero />
       </FlyInFromTop>}

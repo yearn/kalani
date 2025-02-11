@@ -1,5 +1,5 @@
 import { useVaultFromParams } from '../../../../../hooks/useVault'
-import Allocation, { useHasDebtManagerRole } from './Allocation'
+import Allocation from './Allocation'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useMemo } from 'react'
@@ -8,6 +8,7 @@ import { EvmAddress } from '@kalani/lib/types'
 import { fBps, fPercent } from '@kalani/lib/format'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
+import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 
 function EstimatedApy() {
   const authorized = useHasDebtManagerRole()

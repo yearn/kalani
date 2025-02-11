@@ -14,7 +14,6 @@ import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
 import { getChain } from '../../../lib/chains'
-import PricePerShareChart from './PricePerShareChart'
 
 export interface VaultHeroProps {
   name: string
@@ -69,13 +68,13 @@ export function VaultHero({
     <HeroInset className="pb-1">
       {inset}
 
-      <div className="absolute bottom-0 right-12 border">
+      {/* <div className="absolute bottom-0 right-12 border">
         <PricePerShareChart series={[
           { x: '2020-01-01', y: 50 },
           { x: '2020-01-02', y: 10 },
           { x: '2020-01-03', y: 20 },
         ]} />
-      </div>
+      </div> */}
     </HeroInset>
 
   </HeroElement>

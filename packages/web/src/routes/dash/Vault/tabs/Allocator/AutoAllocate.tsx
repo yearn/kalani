@@ -5,7 +5,7 @@ import { parseAbi } from 'viem'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { Switch } from '../../../../../components/shadcn/switch'
-import { useHasDebtManagerRole } from './Allocation'
+import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import Skeleton from '../../../../../components/Skeleton'
 
 function useAutoAllocate(vault: Vault) {
@@ -53,7 +53,7 @@ function Suspender({ vault }: { vault: Vault }) {
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, simulation, write])
+  }, [authorized, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -69,14 +69,14 @@ function Suspender({ vault }: { vault: Vault }) {
   const onToggle = useCallback(() => {
     write.writeContract(simulation.data!.request)
     setChecked(!checked)
-  }, [setChecked, write, simulation])
+  }, [setChecked, write, simulation, checked])
 
   return <div>
     <Switch checked={checked} theme={theme} disabled={disabled} onClick={onToggle} />
   </div>
 }
 
-function AutoAllocate({ vault }: { vault: Vault }) {
+function Component({ vault }: { vault: Vault }) {
   return <ErrorBoundary fallback={<div>N/A</div>}>
     <Suspense fallback={<Skeleton className="h-8 w-16 rounded-full" />}>
       <Suspender vault={vault} />
@@ -84,4 +84,5 @@ function AutoAllocate({ vault }: { vault: Vault }) {
   </ErrorBoundary>
 }
 
-export default withVault(AutoAllocate)
+const AutoAllocate = withVault(Component)
+export default AutoAllocate
