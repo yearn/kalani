@@ -15,6 +15,7 @@ import { Switch } from '../../components/shadcn/switch'
 import Info from '../../components/Info'
 import { InputTokenAmount } from '../../components/elements/InputTokenAmount'
 import { parseUnits } from 'viem'
+import TokenImg from '../../components/TokenImg'
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -58,6 +59,10 @@ export default function Eg() {
   return <div className="min-h-screen pt-32 pb-48 flex items-center justify-center">
     <Bg />
     <section className={'w-full sm:w-[740px] flex flex-col gap-16 p-4 sm:p-0'}>
+
+      <div className="flex flex-col items-start justify-center">
+        <TokenImg chainId={1} address={'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'} size={48} showChain={true} bgClassName="border-orange-400" />
+      </div>
 
       <div className="flex flex-col items-start justify-center">
         <InputTokenAmount symbol="yvUSDC-2" amount={formattedAmount} onChange={setFormattedAmount} />

@@ -27,7 +27,7 @@ export default function Wallet() {
       <div className="w-aside px-8 pt-8 pb-24">
         <div className="w-aside"></div>
       </div>
-      <aside className={`fixed right-0 hidden sm:block 
+      <aside className={`fixed right-0 hidden sm:block
         w-aside min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
         <div className="w-full flex flex-col gap-6">
 

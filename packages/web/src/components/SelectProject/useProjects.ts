@@ -141,7 +141,7 @@ export function useReadProject(chainId?: number, id?: HexString, enabled = true)
     debtAllocator: readProject.data?.[3] ?? zeroAddress,
     roleManagerFactory: ROLE_MANAGER_FACTORY,
     governance
-  }), [chainId, id, name, readProject])
+  }), [chainId, id, name, readProject, governance, roleManager])
 
   return { readProject, readRoleManager, project }
 }
@@ -185,7 +185,7 @@ export function useSuspenseReadProject(chainId?: number, id?: HexString) {
     debtAllocator: readProject.data?.[3] ?? zeroAddress,
     roleManagerFactory: ROLE_MANAGER_FACTORY,
     governance
-  }), [chainId, id, name, readProject])
+  }), [chainId, id, name, readProject, governance, roleManager])
 
   return { readProject, readRoleManager, project }
 }

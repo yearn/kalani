@@ -1,13 +1,13 @@
 import { FinderItem, getItemHref } from '../../../components/Finder/useFinderItems'
 import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import { AutoTextSize } from 'auto-text-size'
-import ChainImg from '../../../components/ChainImg'
 import TokenImg from '../../../components/TokenImg'
 import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ROLES } from '@kalani/lib/types'
 import { roleClassNames } from '../Vault/tabs/Roles/SetRoles/roleClassNames'
 import { PiStar, PiStarFill } from 'react-icons/pi'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
 
 function Role({ role, granted }: { role: keyof typeof ROLES, granted: boolean }) {
   const roleClassName = roleClassNames[role as keyof typeof roleClassNames] ?? {}
@@ -23,7 +23,7 @@ function RoleMask({ roleMask, isRoleManager }: { roleMask: bigint, isRoleManager
   const granted = useCallback((role: keyof typeof ROLES) => (roleMask & ROLES[role]) === ROLES[role], [roleMask])
   const isRoleManagerClassName = useMemo(() => isRoleManager ? 'text-yellow-400' : 'text-neutral-600', [isRoleManager])
   return <div className="flex items-center flex-wrap gap-2 text-xs">
-    <div className={"text-neutral-600"}>ROLES:</div>
+    <div className={'text-neutral-600'}>ROLES:</div>
     <div className={isRoleManagerClassName}>
       {isRoleManager ? <PiStarFill size={12} /> : <PiStar size={12} />}
     </div>
@@ -78,6 +78,7 @@ function Label({ item }: { item: FinderItem }) {
 }
 
 export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, roleMask?: bigint, isRoleManager?: boolean }) {
+  const { sm } = useBreakpoints()
   return <Link to={getItemHref(item)} className={`
     group relative p-3 sm:px-6 xl:px-8 xl:py-5 flex flex-col gap-3
     border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
@@ -89,8 +90,7 @@ export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, 
           <AutoTextSize mode="box" minFontSizePx={16}>{item.name}</AutoTextSize>
         </div>
         <div className="flex items-center gap-4">
-          <ChainImg chainId={item.chainId} size={28} />
-          <TokenImg chainId={item.chainId} address={item.token?.address} size={28}  />
+          <TokenImg chainId={item.chainId} address={item.token?.address} size={32} showChain={true} bgClassName="!border-2 border-neutral-900" />
           <Label item={item} />
           <div className="p-2 bg-neutral-900 text-xs text-neutral-400 group-active:text-inherit rounded-full">{fEvmAddress(item.address)}</div>
         </div>
@@ -109,6 +109,6 @@ export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, 
         </div>
       </div>
     </div>
-    {roleMask !== undefined && <RoleMask roleMask={roleMask} isRoleManager={isRoleManager ?? false} />}
+    {roleMask !== undefined && sm && <RoleMask roleMask={roleMask} isRoleManager={isRoleManager ?? false} />}
   </Link>
 }

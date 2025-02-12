@@ -39,8 +39,8 @@ export function VaultHero({
   return <HeroElement className="bg-secondary-400 text-neutral-950">
     <div className="w-full flex flex-col justify-center gap-0 pb-4">
 
-      <div className="flex items-center gap-4 text-xl">
-        <div><TokenImg chainId={chainId} address={assetAddress} size={64} bgClassName="bg-neutral-950" /></div>
+      <div className="flex items-start gap-4 text-xl">
+        <TokenImg chainId={chainId} address={assetAddress} size={64} showChain={true} bgClassName="border-secondary-400" />
         <div className="w-full flex flex-col gap-1">
           <HeroTitle>{name}</HeroTitle>
           <div className="-mt-1 flex items-center gap-3 font-bold">

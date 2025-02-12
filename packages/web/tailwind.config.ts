@@ -3,8 +3,8 @@ import Theme from 'tailwindcss/defaultTheme'
 import animate from 'tailwindcss-animate'
 
 function heightSafeList() {
-  const maxheight = 101;
-  return Array(maxheight).fill(0).map((_, index) => `h-[${index}%]`);
+  const maxheight = 101
+  return Array(maxheight).fill(0).map((_, index) => `h-[${index}%]`)
 }
 
 export const primary = {
@@ -64,7 +64,8 @@ export default {
       },
 
       borderWidth: {
-        primary: Theme.borderWidth['4']
+        primary: Theme.borderWidth['4'],
+        [3]: '3px'
       },
 
       borderRadius: {
