@@ -84,8 +84,8 @@ export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, 
     border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer
     active:text-secondary-400`}>
-    <div className="flex items-center gap-6 xl:gap-12">
-      <div className="grow w-[300px] flex flex-col gap-2">
+    <div className="flex items-start sm:items-center justify-between sm:justify-start gap-3 sm:gap-6 xl:gap-12">
+      <div className="grow w-[220px] sm:w-[300px] flex flex-col gap-2">
         <div className="font-fancy text-2xl">
           <AutoTextSize mode="box" minFontSizePx={16}>{item.name}</AutoTextSize>
         </div>
@@ -95,17 +95,19 @@ export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, 
           <div className="p-2 bg-neutral-900 text-xs text-neutral-400 group-active:text-inherit rounded-full">{fEvmAddress(item.address)}</div>
         </div>
       </div>
-      <div className="w-[100px] flex items-center justify-center">
+      <div className="hidden sm:block w-[100px] flex items-center justify-center">
         <Minibars series={item.sparklines?.tvl ?? []} className="w-[80px] h-[56px]" />
       </div>
-      <div className="w-[140px]">
-        <div className="text-2xl font-bold">
-          {fUSD(item.tvl ?? 0)}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-12">
+        <div className="sm:w-[140px]">
+          <div className="text-lg sm:text-2xl font-bold whitespace-nowrap">
+            {fUSD(item.tvl ?? 0)}
+          </div>
         </div>
-      </div>
-      <div className="w-[100px]">
-        <div className="text-2xl font-bold">
-          {fPercent(item.apy ?? 0)}
+        <div className="sm:w-[100px]">
+          <div className="text-lg sm:text-2xl font-bold whitespace-nowrap">
+            {fPercent(item.apy ?? 0)}
+          </div>
         </div>
       </div>
     </div>

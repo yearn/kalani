@@ -18,16 +18,17 @@ export default function Wallet() {
       <div className="hidden sm:block min-w-24"></div>
 
       <div className={`
-        isolate grow w-full sm:min-h-screen
+        isolate grow sm:min-h-screen
         sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
         <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
         <Account address={address ?? zeroAddress} />
       </div>
 
-      <div className="w-aside px-8 pt-8 pb-24">
+      <div className="hidden sm:block w-aside px-8 pt-8 pb-24">
         <div className="w-aside"></div>
       </div>
-      <aside className={`fixed right-0 hidden sm:block
+
+      <aside className={`hidden sm:block fixed right-0
         w-aside min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
         <div className="w-full flex flex-col gap-6">
 

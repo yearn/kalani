@@ -10,7 +10,7 @@ export function Tabs({
   className?: string, 
   children: React.ReactNode 
 }) {
-  return <div className={cn(`flex gap-6`, className)}>{children}</div>
+  return <div className={cn('flex gap-3 sm:gap-6', className)}>{children}</div>
 }
 
 export function Tab({ 
@@ -45,7 +45,7 @@ export function Tab({
       cursor-pointer pointer-events-auto
       text-neutral-950 bg-transparent
       hover:bg-neutral-950/20
-      active:bg-neutral-950/20
+      active:bg-neutral-800/20
       active:text-secondary-400
       data-[selected=true]:text-secondary-400
       data-[selected=true]:bg-transparent
