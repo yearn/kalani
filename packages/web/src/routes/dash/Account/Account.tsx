@@ -118,13 +118,13 @@ function _Skeleton() {
         </div>
       </div>
 
-      <div className="flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
+      <div className="hidden sm:flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
         <div className="text-4xl font-bold"><Skeleton className="w-24 h-6 rounded-primary" /></div>
         <div className="text-4xl font-bold"><Skeleton className="w-24 h-6 rounded-primary" /></div>
       </div>
     </div>
 
-    <HeroInset className="flex gap-4 pb-2">
+    <HeroInset className="flex gap-4 pb-4">
       <Skeleton className="w-24 h-6 rounded-primary" />
       <Skeleton className="w-24 h-6 rounded-primary" />
     </HeroInset>

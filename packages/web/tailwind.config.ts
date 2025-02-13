@@ -68,6 +68,11 @@ export default {
         [3]: '3px'
       },
 
+      outlineWidth: {
+        primary: Theme.borderWidth['4'],
+        [3]: '3px'
+      },
+
       borderRadius: {
         primary: Theme.borderRadius['xl']
       },

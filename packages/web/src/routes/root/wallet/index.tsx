@@ -9,7 +9,7 @@ export default function Wallet() {
   const { address } = useAccount()
 
   return <div className={`
-    w-full min-h-screen sm:max-h-auto
+    w-full h-screen sm:max-h-auto
     flex sm:block flex-col justify-between`}>
     <Header className="hidden sm:block fixed z-50 inset-x-0 top-0 w-full" />
     <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
@@ -36,6 +36,6 @@ export default function Wallet() {
       </aside>
     </div>
 
-    <MenuBar className="justify-end" />
+    <MenuBar />
   </div>
 }

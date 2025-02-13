@@ -18,7 +18,7 @@ export default function MenuBar({ className }: { className?: string }) {
   const navigate = useNavigate()
   const menu = useHashNav('menu')
   const launcher = useHashNav('launcher')
-  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col pointer-events-none', className)}>
+  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-end pointer-events-none', className)}>
 
     {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-secondary-2000 pointer-events-auto">
       <div className="px-6 py-6 flex items-center justify-end text-neutral-500">
@@ -39,7 +39,13 @@ export default function MenuBar({ className }: { className?: string }) {
     </FlyInFromBottom>}
 
     {!menu.isOpen && <div className="px-6 py-4 w-full flex flex-row items-center justify-center pointer-events-none">
-      <button onClick={menu.open} className="px-8 py-3 bg-neutral-950 rounded-primary pointer-events-auto">
+      <button onClick={menu.open} className={cn(`
+        px-8 py-3 bg-neutral-950 
+        outline outline-primary outline-neutral-700/20
+        hover:outline-secondary-200
+        active:outline-secondary-400
+        active:bg-black
+        saber-glow rounded-primary pointer-events-auto`)}>
         <PiEqualsBold size={24} />
       </button>
     </div>}
