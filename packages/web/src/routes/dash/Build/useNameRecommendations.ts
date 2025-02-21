@@ -1,4 +1,4 @@
-import { useSelectedProject } from "../../../components/SelectProject"
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 import { useMemo } from 'react'
 import { useVaultFormData } from './useVaultForm'
 

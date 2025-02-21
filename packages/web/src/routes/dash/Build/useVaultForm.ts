@@ -3,7 +3,7 @@ import { AccountRole, AccountRoleSchema, Erc20, Erc20Schema, EvmAddress, EvmAddr
 import { useMemo } from 'react'
 import { z } from 'zod'
 import { create } from 'zustand'
-import { useSelectedProject } from '../../../components/SelectProject'
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 
 export const VaultFormDataSchema = z.object({
   asset: Erc20Schema.optional(),

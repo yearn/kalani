@@ -1,14 +1,15 @@
 import { zeroAddress } from 'viem'
 import { useVaultFormData } from './useVaultForm'
 import { useVaultSnapshot } from '../../../hooks/useVaultSnapshot'
-import Reset, { useReset } from './Reset'
+import Reset from './Reset'
+import { useReset } from './useReset'
 import Button from '../../../components/elements/Button'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SkeletonButton } from '../../../components/Skeleton'
 import { useNameRecommendations } from './useNameRecommendations'
 import { useLocalVaults } from '../../../hooks/useVault'
-import { useSelectedProject } from '../../../components/SelectProject'
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 import { useProjectSnapshot } from '../../../hooks/useProjectSnapshot'
 import { useAccountantSnapshot } from '../../../hooks/useAccountantSnapshot'
 
@@ -61,7 +62,7 @@ export default function Complete() {
     })
     navigate(`/vault/${vaultSnapshot.chainId}/${vaultSnapshot.address}?allocator`, { replace: true })
     reset()
-  }, [upsertLocalVault, navigate, vaultSnapshot, projectSnapshot, reset])
+  }, [upsertLocalVault, navigate, vaultSnapshot, projectSnapshot, reset, accountantSnapshot])
 
   return <div className="relative mt-8 flex flex-col items-end gap-3">
     <p className="text-2xl">Your vault is ready!</p>

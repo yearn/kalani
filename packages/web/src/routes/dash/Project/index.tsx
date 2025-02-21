@@ -1,33 +1,18 @@
-import { useParams } from 'react-router-dom'
 import Hero from '../../../components/Hero'
-import { zeroHash } from 'viem'
 import { getChain } from '../../../lib/chains'
-import { HexStringSchema } from '@kalani/lib/types'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import CopyHashChipSlide from '../../../components/ChipSlide/CopyHashChipSlide'
-import { useSuspenseReadProject } from '../../../components/SelectProject/useProjects'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 import LabelValueRow from '../../../components/elements/LabelValueRow'
 import ViewGeneric from '../../../components/elements/ViewGeneric'
 import ChainImg from '../../../components/ChainImg'
 import Section from '../../../components/Section'
-
-export function useProjectParams() {
-  const params = useParams()
-  const chainId = parseInt(params.chainId ?? '0')
-  const id = HexStringSchema.parse(params.id) ?? zeroHash
-  return { chainId, id }
-}
-
-export function useProjectByParams() {
-  const { chainId, id } = useProjectParams()
-  return useSuspenseReadProject(chainId, id)
-}
+import { useProjectByParams } from './useProjectByParams'
 
 function Suspender() {
-  const { chainId, id } = useProjectParams()
   const { project } = useProjectByParams()
+  const { chainId, id } = project
 
   return <section className="flex flex-col gap-10">
     <Hero className="bg-indigo-400 text-neutral-950">

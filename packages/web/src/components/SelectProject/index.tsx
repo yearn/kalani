@@ -9,21 +9,11 @@ import FlyInFromBottom from '../motion/FlyInFromBottom'
 import { PiX } from 'react-icons/pi'
 import { ScrollArea } from '../shadcn/scroll-area'
 import { fHexString } from '@kalani/lib/format'
-import { create } from 'zustand'
 import { Project, useProjects } from './useProjects'
-import Dialog, { useDialog } from '../../components/Dialog'
+import Dialog from '../../components/Dialog'
+import { useDialog } from '../../components/Dialog/useDialog'
 import NewProject from './NewProject'
 import { useAccount } from 'wagmi'
-
-type UseSelectedProject = {
-  selectedProject: Project | undefined,
-  setSelectedProject: (project: Project | undefined) => void
-} 
-
-export const useSelectedProject = create<UseSelectedProject>(set => ({
-  selectedProject: undefined,
-  setSelectedProject: (project: Project | undefined) => set({ selectedProject: project })
-}))
 
 interface SelectProjectProps {
   navkey?: string,
@@ -106,6 +96,11 @@ const Suspender: React.FC<SelectProjectProps> = ({
     setCursorIndex(-1)
   }
 
+  const handleItemClick = useCallback((item: Project | undefined): void => {
+    setQuery('')
+    onSelect?.(item)
+  }, [setQuery, onSelect])
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'ArrowUp') {
       e.preventDefault()
@@ -118,12 +113,7 @@ const Suspender: React.FC<SelectProjectProps> = ({
     } else if (e.key === 'Escape') {
       nav.close()
     }
-  }, [nav, filter])
-
-  const handleItemClick = useCallback((item: Project | undefined): void => {
-    setQuery('')
-    onSelect?.(item)
-  }, [setQuery, onSelect])
+  }, [nav, filter, cursorIndex, handleItemClick])
 
   const handleNewProjectClick = useCallback(async () => {
     await new Promise(resolve => setTimeout(resolve, 10))

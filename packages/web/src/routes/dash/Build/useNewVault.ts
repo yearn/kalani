@@ -4,7 +4,7 @@ import { parseAbi } from 'viem'
 import { useWriteContract } from '../../../hooks/useWriteContract'
 import { useVaultFormData, useVaultFormValidation } from './useVaultForm'
 import { zeroAddress } from 'viem'
-import { useSelectedProject } from '../../../components/SelectProject'
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 
 export function useNewVault() {
   const { selectedProject } = useSelectedProject()
@@ -18,7 +18,7 @@ export function useNewVault() {
     functionName: 'newVault',
     args: [asset?.address ?? zeroAddress, category, name, symbol],
     query: { enabled: isFormValid && !newAddress }
-  }), [isFormValid, asset, category, name, symbol, newAddress])
+  }), [isFormValid, asset, category, name, symbol, newAddress, selectedProject])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
