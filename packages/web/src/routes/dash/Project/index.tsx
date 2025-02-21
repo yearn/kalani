@@ -1,4 +1,4 @@
-import Hero from '../../../components/Hero'
+import Hero, { HeroInset } from '../../../components/Hero'
 import { getChain } from '../../../lib/chains'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import CopyHashChipSlide from '../../../components/ChipSlide/CopyHashChipSlide'
@@ -9,6 +9,7 @@ import ViewGeneric from '../../../components/elements/ViewGeneric'
 import ChainImg from '../../../components/ChainImg'
 import Section from '../../../components/Section'
 import { useProjectByParams } from './useProjectByParams'
+import { Tab, Tabs } from '../../../components/Tabs'
 
 function Suspender() {
   const { project } = useProjectByParams()
@@ -17,19 +18,19 @@ function Suspender() {
   return <section className="flex flex-col gap-10">
     <Hero className="bg-indigo-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2 drop-shadow-lg">
-        <div className="flex items-center gap-3 text-sm">
-          project
-        </div>
         <div className="text-5xl font-bold">{project.name}</div>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-          </div>
-        </div>
       </div>
+
+      <HeroInset>
+        <Tabs className="w-full pb-3 pl-2 sm:pl-0">
+          <Tab id="vitals" isDefault={true} className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vitals</Tab>
+          <Tab id="vaults" className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vaults</Tab>
+        </Tabs>
+      </HeroInset>
     </Hero>
 
-    <Section className="mx-8">
-      <div className="px-4 py-2 flex flex-col gap-primary">
+    <Section>
+      <div className="flex flex-col gap-primary">
         <LabelValueRow label="Network">
           <ViewGeneric className="flex items-center gap-4">
             <ChainImg chainId={chainId} size={24} /> {getChain(chainId).name}
@@ -64,8 +65,23 @@ function Suspender() {
   </section>
 }
 
+function _Skeleton() {
+  return <section className="flex flex-col gap-10">
+    <Hero className="bg-indigo-400 text-neutral-950">
+      <div className="flex flex-col justify-center gap-2 drop-shadow-lg">
+        <div><Skeleton className="w-48 h-12 rounded-primary" /></div>
+      </div>
+
+      <HeroInset className="flex gap-4 pb-4">
+        <Skeleton className="w-24 h-8 rounded-full" />
+        <Skeleton className="w-24 h-8 rounded-full" />
+      </HeroInset>
+    </Hero>
+  </section>
+}
+
 export default function Project() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<_Skeleton />}>
     <Suspender />
   </Suspense>
 }

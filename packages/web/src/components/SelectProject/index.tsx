@@ -14,6 +14,7 @@ import Dialog from '../../components/Dialog'
 import { useDialog } from '../../components/Dialog/useDialog'
 import NewProject from './NewProject'
 import { useAccount } from 'wagmi'
+import { useSelectedProject } from './useSelectedProject'
 
 interface SelectProjectProps {
   navkey?: string,

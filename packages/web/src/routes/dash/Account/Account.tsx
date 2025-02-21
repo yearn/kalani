@@ -125,8 +125,8 @@ function _Skeleton() {
     </div>
 
     <HeroInset className="flex gap-4 pb-4">
-      <Skeleton className="w-24 h-6 rounded-primary" />
-      <Skeleton className="w-24 h-6 rounded-primary" />
+      <Skeleton className="w-24 h-8 rounded-full" />
+      <Skeleton className="w-24 h-8 rounded-full" />
     </HeroInset>
   </Hero>
 }
