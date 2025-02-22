@@ -15,6 +15,6 @@ export default function Project() {
   }, [setSelectedProject, project, navigate])
 
   return <div>
-    <Button onClick={onClick} h="secondary">{'Deploy a new vault ->'}</Button>
+    <Button onClick={onClick} h="secondary">{`Deploy new ${project.name} vault ->`}</Button>
   </div>
 }

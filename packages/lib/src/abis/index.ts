@@ -7,6 +7,7 @@ import vault from './vault'
 import vaultFactory from './vaultFactory'
 import roleManager from './roleManager'
 import roleManagerFactory from './roleManagerFactory'
+import registry from './registry'
 
 const abis = { 
   accountant, 
@@ -15,6 +16,7 @@ const abis = {
   allocatorFactory,
   roleManager,
   roleManagerFactory,
+  registry,
   strategy,
   vault,
   vaultFactory

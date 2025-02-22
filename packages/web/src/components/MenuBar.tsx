@@ -4,9 +4,10 @@ import { useHashNav } from '../hooks/useHashNav'
 import FlyInFromBottom from './motion/FlyInFromBottom'
 import { IconType } from 'react-icons/lib'
 import Connect from './Connect'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Launcher from './Launcher'
 import Aside from '../routes/dash/Aside'
+import { useEffect } from 'react'
 
 export function MenuBarButton({ icon, title, onClick }: { icon: IconType, title: string, onClick: () => void }) {
   return <div onClick={onClick} className="w-full py-6 flex items-center active:bg-primary-600">
@@ -16,9 +17,11 @@ export function MenuBarButton({ icon, title, onClick }: { icon: IconType, title:
 }
 
 export default function MenuBar({ className }: { className?: string }) {
+  const location = useLocation()
   const navigate = useNavigate()
   const menu = useHashNav('menu')
   const launcher = useHashNav('launcher')
+  useEffect(() => console.log(location), [location])
   return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-end pointer-events-none', className)}>
 
     {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-secondary-2000 pointer-events-auto overflow-auto">
@@ -26,11 +29,10 @@ export default function MenuBar({ className }: { className?: string }) {
         <PiX size={32} onClick={menu.close} />
       </div>
 
-      <div className="mt-16">
+      {location.pathname !== '/' && <div className="mt-16">
         <Aside />
-      </div>
-
-      <div className="w-full my-16 border-b border-neutral-900"></div>
+        <div className="w-full my-16 border-b border-neutral-900"></div>
+      </div>}
 
       <div className="px-6 flex flex-col">
         <Connect />

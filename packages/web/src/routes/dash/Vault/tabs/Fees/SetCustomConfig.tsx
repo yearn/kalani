@@ -45,7 +45,7 @@ export function SetCustomConfig({ feeConfig, className }: { feeConfig: FeeConfig
   const { query: { refetch: refetchVault }, vault } = useVaultFromParams()
   const { refetch: refetchAccountant } = useAccountantForVaultFromParams()
   const { findLocalVaultOrDefaults, upsertLocalVault } = useLocalVaults()
-  const localVault = useMemo(() => findLocalVaultOrDefaults(vault?.chainId ?? 0, vault?.address ?? zeroAddress), [vault])
+  const localVault = useMemo(() => findLocalVaultOrDefaults(vault?.chainId ?? 0, vault?.address ?? zeroAddress), [vault, findLocalVaultOrDefaults])
 
   const isDirty = useMemo(() => {
     return vault?.fees?.managementFee !== feeConfig.managementFee
