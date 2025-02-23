@@ -15,11 +15,13 @@ import { zeroAddress } from 'viem'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRelayed'
 import { ROLES } from '@kalani/lib/types'
 import LabelValueRow from '../../../../components/elements/LabelValueRow'
+import { useBreakpoints } from '../../../../hooks/useBreakpoints'
 
-function Vitals({ vault }: { vault: Vault }) {
+function VitalsComponent({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
   const { totalDebtRatio } = useTotalDebtRatio()
   const { allocator } = useAllocator()
+  const { sm } = useBreakpoints()
 
   const deployed = useMemo(() => {
     if (!totalDebtRatio) { return 0 }
@@ -35,7 +37,7 @@ function Vitals({ vault }: { vault: Vault }) {
   })
 
   return <Section>
-    <div className="px-4 py-2 flex flex-col gap-primary">
+    <div className="flex flex-col gap-primary">
       <LabelValueRow label="Network">
         <ViewGeneric className="flex items-center gap-4">
           <ChainImg chainId={vault.chainId} size={24} /> {getChain(vault.chainId).name}
@@ -47,7 +49,11 @@ function Vitals({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Name">
-        <ViewGeneric>{vault.name} ({vault.symbol})</ViewGeneric>
+        <ViewGeneric className="w-[280px] sm:w-auto truncate text-right">{vault.name}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Symbol">
+        <ViewGeneric>{vault.symbol}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Asset">
@@ -58,11 +64,15 @@ function Vitals({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Asset name">
-        <ViewGeneric>{vault.asset.name} ({vault.asset.symbol})</ViewGeneric>
+        <ViewGeneric>{vault.asset.name}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset symbol">
+        <ViewGeneric>{vault.asset.symbol}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Total assets">
-        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals)}</ViewGeneric>
+        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="TVL">
@@ -127,4 +137,6 @@ function Vitals({ vault }: { vault: Vault }) {
   </Section>
 }
 
-export default withVault(Vitals)
+const Vitals = withVault(VitalsComponent)
+
+export default Vitals

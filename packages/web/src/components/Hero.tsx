@@ -4,7 +4,7 @@ import Screen from './Screen'
 
 export function HeroTitle({ className, children }: { className?: string, children: React.ReactNode }) {
   return <div className={cn('w-[92%] text-4xl font-fancy', className)}>
-    <AutoTextSize mode="oneline" minFontSizePx={16} maxFontSizePx={46}>{children}</AutoTextSize>
+    <AutoTextSize mode="oneline" maxFontSizePx={46}>{children}</AutoTextSize>
   </div>
 }
 

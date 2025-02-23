@@ -14,6 +14,7 @@ import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
 import { getChain } from '../../../lib/chains'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
 
 export interface VaultHeroProps {
   name: string
@@ -36,26 +37,28 @@ export function VaultHero({
   chip,
   inset
 }: VaultHeroProps) {
-  return <HeroElement className="bg-secondary-400 text-neutral-950">
-    <div className="w-full flex flex-col justify-center gap-0 pb-4">
+  const { sm } = useBreakpoints()
 
-      <div className="flex items-start gap-4 text-xl">
-        <TokenImg chainId={chainId} address={assetAddress} size={64} showChain={true} bgClassName="border-secondary-400" />
-        <div className="w-full flex flex-col gap-1">
+  return <HeroElement className="bg-secondary-400 text-neutral-950">
+    <div className="w-full flex flex-col justify-center gap-2 sm:gap-0 sm:pb-4">
+
+      <div className="flex items-center gap-4 text-xl">
+        <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-secondary-400" />
+        <div className="w-full flex flex-col sm:gap-1">
           <HeroTitle>{name}</HeroTitle>
-          <div className="-mt-1 flex items-center gap-3 font-bold">
-            <div>{getChain(chainId).name}</div>
-            <div>//</div>
+          <div className="-mt-2 sm:-mt-1 flex items-center sm:gap-3 font-bold">
+            <div className="hidden sm:block">{getChain(chainId).name}</div>
+            <div className="hidden sm:block">//</div>
             <div>
               <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400" />
             </div>
-            <div>//</div>
-            <div>{chip}</div>
+            <div className="hidden sm:block">//</div>
+            <div className="hidden sm:block">{chip}</div>
           </div>
         </div>
       </div>
 
-      <div className="pl-1 flex items-center gap-12 text-4xl tracking-widest font-bold drop-shadow-lg">
+      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold drop-shadow-lg">
         <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>
@@ -65,16 +68,8 @@ export function VaultHero({
       </div>
     </div>
 
-    <HeroInset className="pb-1">
+    <HeroInset>
       {inset}
-
-      {/* <div className="absolute bottom-0 right-12 border">
-        <PricePerShareChart series={[
-          { x: '2020-01-01', y: 50 },
-          { x: '2020-01-02', y: 10 },
-          { x: '2020-01-03', y: 20 },
-        ]} />
-      </div> */}
     </HeroInset>
 
   </HeroElement>
@@ -96,7 +91,7 @@ function Hero() {
     tvl={vault.tvl?.close ?? 0}
     apy={vault.apy?.close}
     chip={projectChip}
-    inset={<Tabs className="mb-2 w-full">
+    inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
       <Tab id="vitals" isDefault={true}>Vitals</Tab>
       {allocator && <Tab id="allocator">Allocator</Tab>}
       <Tab id="fees">Fees</Tab>
@@ -112,7 +107,7 @@ function Content() {
 
   if (!vault) return <></>
 
-  return <div className="relative w-full px-8">
+  return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
     <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
     <TabContent id="fees"><Fees /></TabContent>

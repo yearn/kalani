@@ -19,12 +19,12 @@ function Suspender() {
       tvl={vault.tvl?.close}
       apy={vault.apy?.close}
       chip="erc4626"
-      inset={<Tabs className="mb-2">
+      inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
         <Tab id="vitals" isDefault={true}>Vitals</Tab>
       </Tabs>}
     />
 
-    <div className="w-full px-8">
+    <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
       <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
     </div>
   </section>

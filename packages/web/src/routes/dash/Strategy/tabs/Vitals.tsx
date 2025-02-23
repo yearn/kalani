@@ -12,13 +12,15 @@ import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChip
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/StrategyForm/useIsRelayed'
 import { zeroAddress } from 'viem'
+import { useBreakpoints } from '../../../../hooks/useBreakpoints'
 
 function Suspender() {
   const { strategy } = useStrategyFromParams()
   const { data: isRelayed } = useIsRelayed({ chainId: strategy.chainId, strategy: strategy.address })
+  const { sm } = useBreakpoints()
 
   return <Section>
-    <div className="px-4 py-2 flex flex-col gap-primary">
+    <div className="flex flex-col gap-primary">
 
       <LabelValueRow label="Network">
         <ViewGeneric className="flex items-center gap-4">
@@ -31,7 +33,7 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Name">
-        <ViewGeneric>{strategy.name} ({strategy.symbol})</ViewGeneric>
+        <ViewGeneric className="w-[280px] sm:w-auto truncate text-right">{strategy.name}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Asset">
@@ -42,11 +44,15 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Asset name">
-        <ViewGeneric>{strategy.asset.name} ({strategy.asset.symbol})</ViewGeneric>
+        <ViewGeneric>{strategy.asset.name}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset symbol">
+        <ViewGeneric>{strategy.asset.symbol}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Total assets">
-        <ViewGeneric className="text-3xl font-bold">{fTokens(strategy.totalAssets, strategy.asset.decimals)}</ViewGeneric>
+        <ViewGeneric className="text-3xl font-bold">{fTokens(strategy.totalAssets, strategy.asset.decimals, { truncate: !sm })}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="TVL">

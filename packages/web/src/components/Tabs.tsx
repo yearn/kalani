@@ -2,6 +2,7 @@ import { useMounted } from '../hooks/useMounted'
 import { useQueryNav } from '../hooks/useQueryNav'
 import { cn } from '../lib/shadcn'
 import FlyInFromBottom from './motion/FlyInFromBottom'
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 export function Tabs({ 
   className, 
@@ -10,10 +11,10 @@ export function Tabs({
   className?: string, 
   children: React.ReactNode 
 }) {
-  return <div className={cn('flex gap-3 sm:gap-6', className)}>{children}</div>
+  return <ScrollContainer className={cn('flex gap-3 sm:gap-6', className)}>{children}</ScrollContainer>
 }
 
-export function Tab({ 
+export function Tab({
   id, 
   isDefault,
   selected,
