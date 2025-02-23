@@ -2,7 +2,7 @@ import Section from '../../../../components/Section'
 import { Vault, withVault } from '../../../../hooks/useVault'
 import { div, mulb } from '@kalani/lib/bmath'
 import { fTokens, fUSD } from '@kalani/lib/format'
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import { getChain } from '../../../../lib/chains'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
@@ -16,6 +16,7 @@ import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/VaultForm/useIsRe
 import { ROLES } from '@kalani/lib/types'
 import LabelValueRow from '../../../../components/elements/LabelValueRow'
 import { useBreakpoints } from '../../../../hooks/useBreakpoints'
+import Skeleton from '../../../../components/Skeleton'
 
 function VitalsComponent({ vault }: { vault: Vault }) {
   const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
@@ -137,6 +138,59 @@ function VitalsComponent({ vault }: { vault: Vault }) {
   </Section>
 }
 
-const Vitals = withVault(VitalsComponent)
+export function VitalsSkeleton() {
+  return <Section>
+    <div className="flex flex-col gap-primary">
+      <LabelValueRow label="Network">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Address">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Name">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Symbol">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset name">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset symbol">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Total assets">
+        <Skeleton className="w-24 h-11 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="TVL">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Price per share">
+        <Skeleton className="w-24 h-8 rounded-primary" />
+      </LabelValueRow>
+
+    </div>
+  </Section>
+}
+
+const Suspender = withVault(VitalsComponent)
+
+function Vitals() {
+  return <Suspense fallback={<VitalsSkeleton />}>
+    <Suspender />
+  </Suspense>
+}
 
 export default Vitals

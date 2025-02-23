@@ -4,7 +4,7 @@ import { cn } from '../lib/shadcn'
 import FlyInFromBottom from './motion/FlyInFromBottom'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-export function Tabs({ 
+export function Tabs({
   className, 
   children 
 }: { 

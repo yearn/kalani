@@ -13,6 +13,7 @@ import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import { useIsRelayed } from '../../Yhaas/Whitelist/TargetForm/StrategyForm/useIsRelayed'
 import { zeroAddress } from 'viem'
 import { useBreakpoints } from '../../../../hooks/useBreakpoints'
+import { VitalsSkeleton } from '../../Vault/tabs/Vitals'
 
 function Suspender() {
   const { strategy } = useStrategyFromParams()
@@ -96,7 +97,7 @@ function Suspender() {
 }
 
 export default function Vitals() {
-  return <Suspense fallback={<></>}>
+  return <Suspense fallback={<VitalsSkeleton />}>
     <Suspender />
   </Suspense>
 }

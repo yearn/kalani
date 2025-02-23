@@ -9,12 +9,13 @@ import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { Suspense } from 'react'
-import Skeleton from '../../../components/Skeleton'
+import Skeleton, { SkeletonTab } from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
 import { getChain } from '../../../lib/chains'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
+import { cn } from '../../../lib/shadcn'
 
 export interface VaultHeroProps {
   name: string
@@ -43,7 +44,10 @@ export function VaultHero({
     <div className="w-full flex flex-col justify-center gap-2 sm:gap-0 sm:pb-4">
 
       <div className="flex items-center gap-4 text-xl">
-        <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-secondary-400" />
+        <div className="mb-1">
+          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-secondary-400" />
+        </div>
+
         <div className="w-full flex flex-col sm:gap-1">
           <HeroTitle>{name}</HeroTitle>
           <div className="-mt-2 sm:-mt-1 flex items-center sm:gap-3 font-bold">
@@ -102,35 +106,44 @@ function Hero() {
 }
 
 function Content() {
-  const { vault } = useVaultFromParams()
-  const { allocator } = useAllocator()
-
-  if (!vault) return <></>
-
   return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
     <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
-    {allocator && <TabContent id="allocator"><Allocator /></TabContent>}
+    <TabContent id="allocator"><Allocator /></TabContent>
     <TabContent id="fees"><Fees /></TabContent>
     <TabContent id="reports"><Reports /></TabContent>
     <TabContent id="roles"><Roles /></TabContent>
   </div>
 }
 
-function VaultSkeleton() {
-  return <div className="px-8 flex flex-col gap-8">
-    <Skeleton className="w-full h-40 my-4 rounded-primary" />
-    <Skeleton className="w-full h-24 rounded-primary" />
-    <Skeleton className="w-full h-24 rounded-primary" />
-    <Skeleton className="w-full h-24 rounded-primary" />
-    <Skeleton className="w-full h-24 rounded-primary" />
-  </div>
+export function VaultHeroSkeleton() {
+  const { sm } = useBreakpoints()
+  return <HeroElement className="bg-secondary-400 text-neutral-950">
+    <div className="w-full flex flex-col justify-center gap-2 sm:pb-4">
+      <div className="flex items-center gap-4 text-xl">
+        <Skeleton className={cn(sm ? 'w-[68px] h-[64px] rounded-full' : 'w-[58px] h-[48px] rounded-full')} />
+        <div className="w-full flex flex-col gap-2 sm:gap-3">
+          <Skeleton className="w-64 sm:w-96 h-10 sm:h-12 rounded-primary" />
+          <Skeleton className="w-24 sm:w-96 h-4 rounded-primary" />
+        </div>
+      </div>
+      <Skeleton className="w-64 sm:w-96 h-8 pl-1 rounded-primary" />
+    </div>
+
+    <HeroInset>
+      <Tabs className="w-full pb-3 pl-2 sm:pl-0">
+        <SkeletonTab />
+        <SkeletonTab />
+        <SkeletonTab />
+      </Tabs>
+    </HeroInset>
+  </HeroElement>
 }
 
 export default function Vault() {
   return <section className="flex flex-col gap-8">
-    <Suspense fallback={<VaultSkeleton />}>
+    <Suspense fallback={<VaultHeroSkeleton />}>
       <Hero />
-      <Content />
     </Suspense>
+    <Content />
   </section>
 }

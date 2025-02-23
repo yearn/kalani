@@ -9,6 +9,8 @@ import ChainImg from '../../../../components/ChainImg'
 import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import LabelValueRow from '../../../../components/elements/LabelValueRow'
 import { useBreakpoints } from '../../../../hooks/useBreakpoints'
+import { Suspense } from 'react'
+import { VitalsSkeleton } from '../../Vault/tabs/Vitals'
 
 function VitalsComponent({ vault }: { vault: Vault }) {
   const { sm } = useBreakpoints()
@@ -68,6 +70,12 @@ function VitalsComponent({ vault }: { vault: Vault }) {
   </Section>
 }
 
-const Vitals = withVault(VitalsComponent)
+const Suspender = withVault(VitalsComponent)
+
+function Vitals() {
+  return <Suspense fallback={<VitalsSkeleton />}>
+    <Suspender />
+  </Suspense>
+}
 
 export default Vitals
