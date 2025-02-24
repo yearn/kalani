@@ -78,7 +78,7 @@ export default {
       },
 
       gap: {
-        primary: Theme.spacing['8']
+        primary: Theme.spacing['12']
       },
 
       dropShadow: {

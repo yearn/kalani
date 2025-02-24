@@ -29,10 +29,10 @@ function DrawerButton({ activeIfStartsWith, className, children, ...props }: Dra
     <Link {...props} className={cn(DrawerButtonClassName)}>
       {children}
     </Link>
-    <div className={`absolute inset-0 hidden group-active:flex items-center justify-start pointer-events-none`}>
+    <div className={'absolute inset-0 hidden group-active:flex items-center justify-start pointer-events-none'}>
       <div className="w-1 h-2 bg-secondary-50/20 rounded-r-full"></div>
     </div>
-    <div className={`absolute inset-0 flex items-center justify-start pointer-events-none`}>
+    <div className={'absolute inset-0 flex items-center justify-start pointer-events-none'}>
       {isActiveRoute && <ScaleIn _key="drawer-active-indicator">
         <div className="w-1 h-8 bg-secondary-50 group-active:bg-secondary-400 rounded-r-full"></div>
       </ScaleIn>}
@@ -49,7 +49,7 @@ export default function Drawer({
 }) {
   return <div className={cn(`
     py-4 flex flex-col items-center justify-start gap-6
-    bg-secondary-2000 border-r-primary border-neutral-900`, className)}>
+    bg-secondary-2000 border-r-primary border-black`, className)}>
 
     <DrawerButton to="/" title="Home">
       <PiWallet size={26} />

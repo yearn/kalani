@@ -18,7 +18,7 @@ export default function Header({
   const disableSuggestions = useMemo(() => pathname === '/explore', [pathname])
 
   return <header
-    className={cn(`bg-grill-950 border-b-primary border-neutral-900`, className)}>
+    className={cn('bg-grill-950 border-b-primary border-black', className)}>
     <div className="mx-auto w-full h-20 pl-32 pr-6 flex items-center justify-between gap-4">
       <div className="grow flex items-center justify-start">
         <Finder
@@ -29,7 +29,7 @@ export default function Header({
           disabled={!sm}
         />
       </div>
-      <div className={`flex items-center justify-end gap-4`}>
+      <div className={'flex items-center justify-end gap-4'}>
         <Connect label={<CTA>Connect</CTA>} />
         <Launcher alignRight={true} />
       </div>

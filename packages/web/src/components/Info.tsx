@@ -10,7 +10,7 @@ export default function Info({ _key, size = 16, className }: { _key: string, siz
     <a data-tooltip-id={_key}>
       <PiInfoFill size={size} />
     </a>
-    <Tooltip id={_key} className="bg-primary-400 !bg-primary-500 !opacity-100 !rounded-primary">
+    <Tooltip id={_key} className="!bg-secondary-900 !opacity-100 !rounded-primary">
       <Markdown className="markdown max-w-[320px]">{info}</Markdown>
     </Tooltip>
   </div>

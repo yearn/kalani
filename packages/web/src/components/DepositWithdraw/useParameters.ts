@@ -39,7 +39,7 @@ export function useSuspendedParameters() {
     } }
 
     throw new Promise(() => {}) // suspend
-  }, [mode, chainId, wallet, vault, amount, setAmount])
+  }, [mode, chainId, wallet, vault, amount, setAmount, isConnected])
 
   return parameters
 }

@@ -56,7 +56,7 @@ function Suspender({ vault }: { vault: Vault }) {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>Exec</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick}>Update debts</Button>
 }
 
 function Component({ vault }: { vault: Vault }) {

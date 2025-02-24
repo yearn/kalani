@@ -140,7 +140,7 @@ export function VaultHeroSkeleton() {
 }
 
 export default function Vault() {
-  return <section className="flex flex-col gap-8">
+  return <section className="flex flex-col">
     <Suspense fallback={<VaultHeroSkeleton />}>
       <Hero />
     </Suspense>

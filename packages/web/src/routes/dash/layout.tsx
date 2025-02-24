@@ -16,7 +16,7 @@ export default function Layout() {
 
       <div className={`
         isolate grow overflow-y-auto pb-24 sm:min-h-screen
-        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
+        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-black`}>
         <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
         <Outlet />
       </div>
