@@ -151,22 +151,19 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   const { findFinderItem, getHrefFor } = useFinderUtils()
   const update = useDebtRatioUpdate(strategy.address)
 
-  return <div className="p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-3 px-6 h-14 text-2xl">
-      <ViewBps bps={Number(update.debtRatio)} className="text-lg" />
-      <div>{strategy.name}</div>
+  return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="max-w-full flex items-center gap-3 px-6 h-14 text-2xl">
+      <ViewBps bps={Number(update.debtRatio)} className="hidden sm:block text-lg" />
+      <div className="truncate">{strategy.name}</div>
     </LinkButton>
 
-    <div className="pl-6 w-full flex flex-col items-start gap-primary">
+    <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
       <LabelValueRow label="Address">
         <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
       </LabelValueRow>
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
       </LabelValueRow>
-      {/* <LabelValueRow label="Debt">
-        <div>0</div>
-      </LabelValueRow> */}
       <LabelValueRow label="Allocation">
         <ViewBps bps={Number(update.debtRatio)} className="text-xl" />
       </LabelValueRow>

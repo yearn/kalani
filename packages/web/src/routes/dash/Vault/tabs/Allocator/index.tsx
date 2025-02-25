@@ -60,7 +60,7 @@ function Suspender() {
 function _Skeleton() {
   return <div className="flex flex-col sm:gap-primary">
     <Section className="relative">
-      <Skeleton className="w-full h-14 rounded-primary" />
+      <Skeleton className="w-full h-6 rounded-primary" />
     </Section>
     <Section className="relative flex flex-col gap-primary">
       <LabelValueRow label="Allocator">

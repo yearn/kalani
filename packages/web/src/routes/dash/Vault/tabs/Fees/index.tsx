@@ -4,13 +4,14 @@ import ViewBps from '../../../../../components/elements/ViewBps'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
-import { useCallback, useMemo, useState } from 'react'
+import { Suspense, useCallback, useMemo, useState } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useAccount } from 'wagmi'
 import InputBps from '../../../../../components/elements/InputBps'
 import { SetCustomConfig } from './SetCustomConfig'
+import Skeleton from '../../../../../components/Skeleton'
 
-export default function Fees() {
+function Suspender() {
   const { address } = useAccount()
   const { vault } = useVaultFromParams()
   const { snapshot: accountant } = useAccountantForVaultFromParams()
@@ -45,9 +46,9 @@ export default function Fees() {
           {isFeeManager && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
         </LabelValueRow>
 
-        {!isFeeManager && <div className="mt-4 text-sm text-neutral-400">
-          <p>• Management fees are charged continuously on the total assets under management</p>
-          <p>• Performance fees are only charged on realized profits</p>
+        {!isFeeManager && <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
+          <div>• Management fees are charged continuously on the total assets under management</div>
+          <div>• Performance fees are only charged on realized profits</div>
         </div>}
 
         {isFeeManager && <div className="px-8 pt-6 flex justify-end">
@@ -79,5 +80,50 @@ export default function Fees() {
         </LabelValueRow>
       </div>
     </Section>
+  </div>
+}
+
+function _Skeleton() {
+  return <div className="flex flex-col gap-8">
+    <Section>
+      <div className="px-4 py-2 flex flex-col gap-primary">
+        <LabelValueRow label="Management Fee">
+          <Skeleton className="w-24 h-8 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Performance Fee">
+          <Skeleton className="w-24 h-8 rounded-primary" />
+        </LabelValueRow>
+
+        <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
+          <div>• Management fees are charged continuously on the total assets under management</div>
+          <div>• Performance fees are only charged on realized profits</div>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <div className="px-4 py-2 flex flex-col gap-primary">
+        <LabelValueRow label="Fee Recipient">
+          <Skeleton className="w-24 h-8 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Fee Manager">
+          <Skeleton className="w-24 h-8 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Accountant">
+          <Skeleton className="w-24 h-8 rounded-primary" />
+        </LabelValueRow>
+      </div>
+    </Section>
+  </div>
+}
+
+export default function Fees() {
+  return <div className="flex flex-col gap-8">
+    <Suspense fallback={<_Skeleton />}>
+      <Suspender />
+    </Suspense>
   </div>
 }
