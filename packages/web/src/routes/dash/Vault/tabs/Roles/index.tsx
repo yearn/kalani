@@ -4,9 +4,10 @@ import Button from '../../../../../components/elements/Button'
 import { PiPlus } from 'react-icons/pi'
 import { useIsRoleManager } from '../../../../../hooks/useRoleManager'
 import SetRoles from './SetRoles'
-import { useCallback, useMemo, useState } from 'react'
+import { Suspense, useCallback, useMemo, useState } from 'react'
 import { EvmAddressSchema } from '@kalani/lib/types'
 import Section from '../../../../../components/Section'
+import Skeleton from '../../../../../components/Skeleton'
 
 const AccountRoleItemSchema = z.object({
   chainId: z.number(),
@@ -57,4 +58,20 @@ function Roles({ vault }: { vault: Vault }) {
   </Section>
 }
 
-export default withVault(Roles)
+function RolesSkeleton() {
+  return <Section>
+    <div className="flex flex-col gap-6">
+      <Skeleton className="w-full h-12 rounded-primary" />
+    </div>
+  </Section>
+}
+
+const Suspender = withVault(Roles)
+
+function Vitals() {
+  return <Suspense fallback={<RolesSkeleton />}>
+    <Suspender />
+  </Suspense>
+}
+
+export default Vitals

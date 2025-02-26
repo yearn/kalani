@@ -87,7 +87,6 @@ export default function SetRoles({
   const _isRoleManager = useIsRoleManager({ chainId, address: vault })
   const { roles: previous, refetch } = usePrevious({ chainId, vault, account })
   const [next, setNext] = useState<{ [key: string]: boolean }>({})
-  const [_error, setError] = useState<string | undefined>(undefined)
   const [newAccount, setNewAccount] = useState<string | undefined>(undefined)
   const [isNewAccountValid, setIsNewAccountValid] = useState<boolean>(false)
 
@@ -118,10 +117,9 @@ export default function SetRoles({
 
   useEffect(() => {
     if (simulation.isError) {
-      setError(`This will revert, see console for details.`)
       console.error(simulation.error.message)
     }
-  }, [simulation, setError])
+  }, [simulation])
  
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -164,7 +162,7 @@ export default function SetRoles({
   return <Accordion type="single" className={className} collapsible>
     <AccordionItem value="item-1" className="flex flex-col gap-4">
       <AccordionTrigger>
-        <div className="flex items-center gap-8">
+        <div className="flex items-start sm:items-center flex-col sm:flex-row gap-8">
 
           <div>{fEvmAddress(account ?? zeroAddress)}</div>
 
