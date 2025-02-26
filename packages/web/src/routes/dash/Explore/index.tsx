@@ -2,7 +2,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import Skeleton from '../../../components/Skeleton'
 import { useFinderItems } from '../../../components/Finder/useFinderItems'
-import MenuBar from '../../../components/MenuBar'
 import Finder from '../../../components/Finder'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
@@ -25,8 +24,7 @@ function ListItems() {
   }, [allItems, items])
 
   return <InfiniteScroll className={`
-    w-full p-2 sm:px-4 sm:py-8
-    flex flex-col sm:gap-8
+    p-3 flex flex-col gap-3
     !overflow-hidden`}
 		dataLength={items.length}
 		next={fetchFrame}
@@ -45,9 +43,11 @@ function SkeletonListItems() {
 }
 
 function ListLayout() {
-  return <Suspense fallback={<SkeletonListItems />}>
-    <ListItems />
-  </Suspense>
+  return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+    <Suspense fallback={<SkeletonListItems />}>
+      <ListItems />
+    </Suspense>
+  </div>
 }
 
 export default function Explore() {
@@ -80,17 +80,14 @@ export default function Explore() {
       </HeroInset>
     </Hero>
 
+    <Finder
+      className="sm:hidden !w-full pointer-events-auto"
+      inputClassName={cn('px-4 py-2 border-transparent', !sm && '!rounded-none')}
+      placeholder="vault / token / 0x"
+      disableSuggestions={true}
+      disabled={sm} />
+
     <ListLayout />
 
-    <MenuBar className="justify-start" />
-
-    <div className="sm:hidden fixed inset-0 flex flex-col justify-end pointer-events-none">
-      <Finder
-        className="!w-full pointer-events-auto"
-        inputClassName={cn('px-4 py-2 border-transparent', !sm && '!rounded-none')}
-        placeholder="vault / token / 0x"
-        disableSuggestions={true}
-        disabled={sm} />
-    </div>
   </section>
 }

@@ -9,6 +9,8 @@ import Launcher from '../Launcher'
 import Aside from '../../routes/dash/Aside'
 import { useMenuBar } from './useMenuBar'
 
+const HIDE_ASIDE_FOR_ROUTES = ['/', '/explore', '/build', '/yhaas']
+
 function MenuBarButton({ icon, title, onClick }: { icon: IconType, title: string, onClick: () => void }) {
   return <div onClick={onClick} className="w-full py-6 flex items-center active:bg-primary-600">
     <div className="px-6">{icon({ size: 48 })}</div>
@@ -30,7 +32,7 @@ export default function MenuBar({ className }: { className?: string }) {
         <PiX size={32} onClick={menu.close} />
       </div>
 
-      {location.pathname !== '/' && <div className="mt-16">
+      {!HIDE_ASIDE_FOR_ROUTES.includes(location.pathname) && <div className="mt-16">
         <Aside />
         <div className="w-full my-16 border-primary border-b border-black"></div>
       </div>}
