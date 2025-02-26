@@ -50,16 +50,16 @@ export default function MenuBar({ className }: { className?: string }) {
       </div>
     </FlyInFromBottom>}
 
-    {!menu.isOpen && <div className="px-6 py-4 w-full flex flex-row items-center justify-center pointer-events-none">
+    {!menu.isOpen && <div className="pb-8 w-full flex flex-row items-center justify-center pointer-events-none">
       <button onClick={menu.open} className={cn(`
-        px-8 py-3 bg-neutral-950
+        px-8 py-2 bg-neutral-950
         outline outline-4 outline-black/80
         hover:outline-secondary-200
         active:outline-secondary-400
         active:bg-black
         saber-glow rounded-primary pointer-events-auto`,
         theme === 'warn' && 'text-warn-400 theme-warn')}>
-        <PiEqualsBold size={24} />
+        <PiEqualsBold size={32} />
       </button>
     </div>}
 

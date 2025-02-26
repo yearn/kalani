@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import {
   BrowserRouter as Router,
   Routes,
-  Route
+  Route,
+  useLocation
 } from 'react-router-dom'
 import DashLayout from './routes/dash/layout'
 import Vault from './routes/dash/Vault'
@@ -16,9 +18,20 @@ import Build from './routes/dash/Build'
 import Root from './routes/root'
 import Project from './routes/dash/Project'
 
+function RestoreScroll() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  return null
+}
+
 export default function App() {
   return <div className="w-full min-h-screen flex items-center justify-center">
     <Router>
+      <RestoreScroll />
       <Routes>
         <Route index element={<Root />} />
         <Route path="home" element={<Root />} />
