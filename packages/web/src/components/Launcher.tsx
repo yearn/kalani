@@ -1,11 +1,10 @@
 import { Yearn } from '../assets/icons/Yearn'
-import { PiDotsNineBold, PiGithubLogoFill, PiX } from 'react-icons/pi'
+import { PiDotsNineBold, PiGithubLogoFill } from 'react-icons/pi'
 import { AnchorHTMLAttributes, forwardRef } from 'react'
 import { cn } from '../lib/shadcn'
 import Wordmark from './Wordmark'
 import Juice from '../assets/icons/Juiced'
 import { useHashNav } from '../hooks/useHashNav'
-import Button from './elements/Button'
 
 type LauncherButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   className?: string
