@@ -73,6 +73,7 @@ const Suspender: React.FC<SelectProjectProps> = ({
   const [cursorIndex, setCursorIndex] = useState(-1)
   const { projects } = useProjects(chainId ?? activeChainId ?? 0, address)
   const { openDialog } = useDialog(_dialogId)
+  const { sm } = useBreakpoints()
 
   const filter = useMemo(() => {
     if (isNothing(query)) { return projects }
@@ -100,7 +101,8 @@ const Suspender: React.FC<SelectProjectProps> = ({
   const handleItemClick = useCallback((item: Project | undefined): void => {
     setQuery('')
     onSelect?.(item)
-  }, [setQuery, onSelect])
+    if (!sm) { nav.close() }
+  }, [setQuery, onSelect, sm, nav])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'ArrowUp') {

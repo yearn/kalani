@@ -83,7 +83,7 @@ export default function Explore() {
     <Finder
       className="sm:hidden !w-full pointer-events-auto"
       inputClassName={cn('px-4 py-2 border-transparent', !sm && '!rounded-none')}
-      placeholder="vault / token / 0x"
+      placeholder={`${sm ? 'vault / token / 0x' : 'search by vault / token / 0x'}`}
       disableSuggestions={true}
       disabled={sm} />
 

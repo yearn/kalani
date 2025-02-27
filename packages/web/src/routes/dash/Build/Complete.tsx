@@ -12,10 +12,14 @@ import { useLocalVaults } from '../../../hooks/useVault'
 import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 import { useProjectSnapshot } from '../../../hooks/useProjectSnapshot'
 import { useAccountantSnapshot } from '../../../hooks/useAccountantSnapshot'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
+import { useScrollOnMount } from '../../../hooks/useScrollOnMount'
 
 export function CompleteSkeleton() {
+  const { sm } = useBreakpoints()
+  const ref = useScrollOnMount(true, sm ? 120 : 0)
   const recommendations = useNameRecommendations()
-  return <div className="relative mt-8 flex flex-col items-end gap-3">
+  return <div ref={ref} className="relative mt-8 flex flex-col items-end gap-3">
     <p className="text-2xl">Your vault is ready!</p>
     <div className="relative mt-8 flex items-center justify-end gap-6">
       <SkeletonButton>Reset</SkeletonButton>
@@ -61,12 +65,12 @@ export default function Complete() {
       }
     })
     navigate(`/vault/${vaultSnapshot.chainId}/${vaultSnapshot.address}?allocator`, { replace: true })
-    reset()
+    setTimeout(reset, 1000)
   }, [upsertLocalVault, navigate, vaultSnapshot, projectSnapshot, reset, accountantSnapshot])
 
   return <div className="relative mt-8 flex flex-col items-end gap-3">
     <p className="text-2xl">Your vault is ready!</p>
-    <div className="relative mt-8 flex items-center justify-end gap-6">
+    <div className="relative mt-8 flex flex-wrap-reverse items-center justify-end gap-6">
       <Reset />
       <Button onClick={onOk}>{`${vaultSnapshot.name} ->`}</Button>
     </div>

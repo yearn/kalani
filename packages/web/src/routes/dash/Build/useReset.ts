@@ -4,7 +4,7 @@ import { useIndexVault } from './useIndexVault'
 import { useNewVault } from './useNewVault'
 import { useVaultFormData } from './useVaultForm'
 
-export function useReset() {
+export function useReset({ scrollToTop = true }: { scrollToTop?: boolean } = {}) {
   const { reset } = useVaultFormData()
   const indexVault = useIndexVault()
   const newVault = useNewVault()
@@ -14,5 +14,8 @@ export function useReset() {
     newVault.write.reset()
     reset()
     setSelectedProject(undefined)
-  }, [indexVault, newVault, reset, setSelectedProject])
+    if (scrollToTop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [scrollToTop, indexVault, newVault, reset, setSelectedProject])
 }

@@ -27,7 +27,7 @@ export function useVaultAsset(chainId: number, vault: EvmAddress) {
     symbol: infoQuery.data[0]?.result ?? '',
     decimals: infoQuery.data[1]?.result ?? 18,
     name: infoQuery.data[2]?.result ?? ''
-  }), [addressQuery.data, infoQuery.data])
+  }), [addressQuery.data, infoQuery.data, chainId])
 
   return {
     addressQuery,
