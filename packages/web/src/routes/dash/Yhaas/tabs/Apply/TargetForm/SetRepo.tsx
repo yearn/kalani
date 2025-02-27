@@ -1,9 +1,9 @@
-import Input from '../../../../../components/elements/Input'
+import Input from '../../../../../../components/elements/Input'
 import { useWhitelist } from '../useWhitelist'
-import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
+import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
 import { PiCheckFatFill, PiWarningCircleBold } from 'react-icons/pi'
 import { isNothing } from '@kalani/lib/strings'
-import StepLabel from '../../../../../components/forms/StepLabel'
+import StepLabel from '../../../../../../components/forms/StepLabel'
 import { useMemo } from 'react'
 
 export default function SetRepo({ step }: { step: number }) {
@@ -28,9 +28,9 @@ export default function SetRepo({ step }: { step: number }) {
       <p className="text-xl">Set your github repo</p>
       <div className="w-full flex items-center gap-4">
         <div className="grow">
-          <Input placeholder="https://github.com/user/repo" onChange={(e) => w.setRepo(e.target.value)} />
+          <Input placeholder="https://github.com/user/repo" onChange={(e) => w.setRepo(e.target.value)} className="w-full" />
         </div>
-        <div className="relative w-field-btn">
+        <div className="relative w-[40px] sm:w-field-btn">
           {!isNothing(w.repo) && w.isRepoValid && <div className="absolute inset-0 flex items-center justify-center text-green-400 text-2xl">
             <FlyInFromBottom _key="set-frequency-checked">
               <PiCheckFatFill />

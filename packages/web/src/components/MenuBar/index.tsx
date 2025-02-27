@@ -8,7 +8,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Launcher from '../Launcher'
 import Aside from '../../routes/dash/Aside'
 import { useMenuBar } from './useMenuBar'
-import { isNothing } from '@kalani/lib/strings'
 import { useState, useEffect } from 'react'
 
 const HIDE_ASIDE_FOR_ROUTES = ['/', '/explore', '/build', '/yhaas']
@@ -29,20 +28,17 @@ export default function MenuBar({ className }: { className?: string }) {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
-    
+    const handleScroll = () => { setIsScrolled(window.scrollY > 0) }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-start pointer-events-none', className)}>
 
-    {!menu.isOpen && isNothing(location.hash) && <div className={`
+    {<div className={`
       w-full h-[4.5rem] px-6 flex flex-row items-center justify-between
       border-b-primary ${isScrolled ? 'border-black' : 'border-transparent'}
-      pointer-events-none bg-neutral-950`}>
+      pointer-events-none bg-grill-950`}>
       <button onClick={menu.open} className={cn('pointer-events-auto', theme === 'warn' && 'text-warn-400 theme-warn')}>
         <PiEqualsBold size={32} />
       </button>

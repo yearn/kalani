@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
 import { useSignMessage } from 'wagmi'
-import Button from '../../../../components/elements/Button'
+import Button from '../../../../../components/elements/Button'
 import { useWhitelist } from './useWhitelist'
 import { useTargetInfos } from './useTargetInfos'
 import { useApplyToWhitelist } from './useApplyToWhitelist'
 import { toast } from 'sonner'
-import A from '../../../../components/elements/A'
-import { useYhaasIssues } from '../useYhaasIssues'
+import A from '../../../../../components/elements/A'
+import { useYhaasIssues } from '../../useYhaasIssues'
 
 export default function Actions() {
   const w = useWhitelist()
@@ -43,7 +43,7 @@ export default function Actions() {
     } catch (error) {
       console.error(error)
     }
-  }, [apply, signMessageAsync, w, refetchYhaasIssues])
+  }, [apply, signMessageAsync, refetchYhaasIssues, targetInfos])
 
   const theme = useMemo(() => {
     if (apply.isPending) return 'confirm'
@@ -55,7 +55,7 @@ export default function Actions() {
     || apply.isPending, 
   [w, targetInfos, apply])
 
-  return <div className="mt-8 flex items-center justify-end gap-6">
+  return <div className="w-full mt-8 flex flex-wrap-reverse sm:flex-nowrap items-center justify-end gap-6">
     <Button onClick={onReset} h={'secondary'}>Reset</Button>
     <Button onClick={onApply} theme={theme} disabled={disabled}>Apply for Whitelist</Button>
   </div>

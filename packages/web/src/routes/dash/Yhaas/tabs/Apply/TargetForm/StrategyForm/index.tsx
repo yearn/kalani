@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
+import FlyInFromBottom from '../../../../../../../components/motion/FlyInFromBottom'
 import SetKeepers from './SetKeepers'
 import SetProfitMaxUnlockTimes from '../SetProfitMaxUnlockTimes'
 import { useIsRelayed } from './useIsRelayed'

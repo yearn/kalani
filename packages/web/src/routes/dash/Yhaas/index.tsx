@@ -1,14 +1,10 @@
 import { PiRobot } from 'react-icons/pi'
-import Whitelist from './Whitelist'
-import { useYhaasStats } from './useYhaasStats'
-import { Suspense, useMemo } from 'react'
-import bmath from '@kalani/lib/bmath'
-import { formatEther } from 'viem'
-import usePrices from '../../../hooks/usePrices'
-import Odometer from 'react-odometerjs'
-import { fNumber } from '@kalani/lib/format'
-import Skeleton from '../../../components/Skeleton'
-import Hero from '../../../components/Hero'
+import Apply from './tabs/Apply'
+import Hero, { HeroInset } from '../../../components/Hero'
+import { Tab, TabContent, Tabs } from '../../../components/Tabs'
+import Vitals from './tabs/Vitals'
+import Pending from './tabs/Pending'
+import Running from './tabs/Running'
 
 function Brand() {
   return <div className="flex items-center gap-6 drop-shadow-lg">
@@ -25,63 +21,29 @@ function Brand() {
   </div>
 }
 
-function useWethPrice() {
-  const prices = usePrices(1, ['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'])
-  return { ...prices, price: prices.data['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'] }
-}
-
-function Metrics() {
-  const { stats } = useYhaasStats()
-
-  const totalAutomations = useMemo(() => {
-    return Object.values(stats).reduce((acc, chain) => acc + chain.executors.reduce((acc, executor) => acc + executor.automations, 0), 0)
-  }, [stats])
-
-  const gasSaved = useMemo(() => {
-    const c = 1.715
-    const gasSpent = stats[1].executors.reduce((acc, executor) => acc + executor.gas, 0n)
-    const gasThatWouldHaveBeenSpent = bmath.mulb(gasSpent, c)
-    const wei = gasThatWouldHaveBeenSpent - gasSpent
-    return parseFloat(formatEther(wei))
-  }, [stats])
-
-  const { price: wethPrice } = useWethPrice()
-
-  const gasSavedUsd = useMemo(() => {
-    return gasSaved * wethPrice
-  }, [gasSaved, wethPrice])
-
-  return <div className="pb-3 h-full flex items-end gap-12 drop-shadow-lg">
-    <div className="relative hidden sm:block flex flex-col items-start">
-      <div className="text-xl">{fNumber(totalAutomations, { fixed: 0, full: true })}</div>
-      <div className="text-sm text-nowrap">
-        Automations
-      </div>
-    </div>
-
-    <div className="relative flex flex-col items-start">
-      <div className="text-xs text-nowrap">gas saved with yHaaS</div>
-      <div className="text-6xl text-nowrap">
-        <Odometer value={gasSaved} format="(,ddd).dddd" /> Ξ
-      </div>
-      <div className="text-sm text-nowrap">
-        $ <Odometer value={gasSavedUsd} format="(,ddd).dd" />
-      </div>
-    </div>
+function Content() {
+  return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+    <TabContent id="vitals"><Vitals /></TabContent>
+    <TabContent id="apply" isDefault={true}><Apply /></TabContent>
+    <TabContent id="pending"><Pending /></TabContent>
+    <TabContent id="running"><Running /></TabContent>
   </div>
 }
 
 export default function Page() {
+  const tabClassName = 'text-black active:text-zinc-400 data-[selected=true]:text-zinc-400'
   return <section className="flex flex-col gap-8">
-    <Suspense fallback={<Skeleton className="h-48" />}>
-      <Hero className="text-neutral-950 bg-zinc-400">
-        <Brand />
-        <Metrics />
-      </Hero>
-    </Suspense>
-
-    <div className="px-10 2xl:px-[18%] py-12 flex flex-col items-center gap-12">
-      <Whitelist />
-    </div>
+    <Hero className="text-neutral-950 bg-zinc-400">
+      <Brand />
+      <HeroInset>
+        <Tabs className="w-full pb-3 pl-2 sm:pl-0">
+          <Tab id="vitals" className={tabClassName}>Vitals</Tab>
+          <Tab id="apply" isDefault={true} className={tabClassName}>Apply</Tab>
+          <Tab id="pending" className={tabClassName}>Pending</Tab>
+          <Tab id="running" className={tabClassName}>Running</Tab>
+        </Tabs>
+      </HeroInset>
+    </Hero>
+    <Content />
   </section>
 }

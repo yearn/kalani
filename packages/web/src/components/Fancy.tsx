@@ -8,7 +8,7 @@ export default function Fancy({
   littleTextClassName?: string 
 }) {
   const letters = text.split('')
-  return <div className="flex flex-wrap items-end gap-1">
+  return <div className="flex flex-wrap items-end gap-0">
     {letters.map((letter, index) => (
       <div key={index} className={`${letter === letter.toUpperCase() ? bigTextClassName : littleTextClassName} font-fancy`}>
         {letter === ' ' ? '\u00A0' : letter}

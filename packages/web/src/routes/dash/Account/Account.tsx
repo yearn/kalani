@@ -96,9 +96,9 @@ function Suspender({ address }: { address: EvmAddress }) {
             key={project.id} 
             to={`/project/${project.chainId}/${project.id}`} 
             h="tertiary" 
-            className="px-4 py-12 grow flex items-center justify-start gap-4 text-3xl">
-              <ChainImg chainId={project.chainId} size={48} />
-              {project.name}
+            className="py-12 grow flex items-center justify-start text-3xl">
+              <ChainImg chainId={project.chainId} size={48} className="mr-6 sm:ml-8 sm:mr-12" />
+              <div className="max-w-full truncate">{project.name}</div>
             </LinkButton>)}
         </div>
       </TabContent>}

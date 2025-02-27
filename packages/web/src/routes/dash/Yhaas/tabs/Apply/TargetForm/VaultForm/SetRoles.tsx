@@ -5,11 +5,11 @@ import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../useWhitelist'
 import { EvmAddress, ROLES } from '@kalani/lib/types'
-import Button from '../../../../../../components/elements/Button'
+import Button from '../../../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
-import { useWriteContract } from '../../../../../../hooks/useWriteContract'
+import { useWriteContract } from '../../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
-import StepLabel from '../../../../../../components/forms/StepLabel'
+import StepLabel from '../../../../../../../components/forms/StepLabel'
 
 function useWrite(args: {
   vault: EvmAddress,
@@ -22,7 +22,7 @@ function useWrite(args: {
     address: vault, abi: abis.vault, functionName: 'set_role',
     args: [relayer, rolemask],
     query: { enabled }
-  }), [relayer, enabled])
+  }), [relayer, enabled, rolemask, vault])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
@@ -68,8 +68,8 @@ function ExecButton({ target }: { target: EvmAddress }) {
 
 function Target({ target, rolemask }: { target: EvmAddress, rolemask: bigint }) {
   const [relayer] = useRelayers()
-  return <div className="px-6 flex items-center justify-end ">
-    <div className="grow">
+  return <div className="px-6 flex flex-wrap items-center justify-end">
+    <div className="grow flex flex-wrap gap-0">
       <span className="text-neutral-400">Vault</span>
       <span className="text-neutral-600">(</span>
       {fEvmAddress(target)}

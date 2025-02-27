@@ -26,7 +26,7 @@ function Suspender() {
 }
 
 function _Skeleton() {
-  return <div className="px-8 flex flex-col gap-primary">
+  return <div className="p-3 flex flex-col gap-3">
     <Skeleton className="w-full h-32 rounded-primary" />
     <Skeleton className="w-full h-32 rounded-primary" />
     <Skeleton className="w-full h-32 rounded-primary" />

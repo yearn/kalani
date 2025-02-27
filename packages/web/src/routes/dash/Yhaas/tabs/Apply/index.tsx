@@ -1,17 +1,16 @@
-import Input from '../../../../components/elements/Input'
 import { useAccount } from 'wagmi'
-import Connect from '../../../../components/Connect'
+import Connect from '../../../../../components/Connect'
 import SetTargetAddresses from './SetTargetAddresses'
 import { Suspense } from 'react'
 import TargetInfos from './TargetInfos'
 import TargetForm from './TargetForm'
 import Actions from './Actions'
 import { useWhitelist } from './useWhitelist'
-import FlyInFromBottom from '../../../../components/motion/FlyInFromBottom'
-import StepLabel from '../../../../components/forms/StepLabel'
-import CTA from '../../../../components/CTA'
+import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
+import StepLabel from '../../../../../components/forms/StepLabel'
+import CTA from '../../../../../components/CTA'
 
-export default function Whitelist() {
+export default function Apply() {
   const { address, chain } = useAccount()
   const { targets } = useWhitelist()
 
@@ -19,13 +18,9 @@ export default function Whitelist() {
     <Connect label={<CTA>Connect your wallet</CTA>} />
   </div>
 
-  return <div className="w-full pb-96 flex flex-col gap-24">
-    <div className="hidden flex flex-col">
-      <Input value={`Network: ${chain?.name}`} disabled />
-      <Input value={`Role manager: ${address}`} disabled />
-    </div>
+  return <div className="px-6 2xl:px-[18%] py-12 flex flex-col items-end gap-12">
 
-    <div className="flex items-start gap-12">
+    <div className="w-full flex items-start gap-12">
       <StepLabel step={1} />
       <div className="grow flex flex-col gap-6">
         <p className="text-xl">What address(es) do you want to automate with yHaaS?</p>

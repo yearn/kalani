@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
+import FlyInFromBottom from '../../../../../../components/motion/FlyInFromBottom'
 import { useWhitelist } from '../useWhitelist'
 import { useTargetInfos } from '../useTargetInfos'
 import StrategyForm from './StrategyForm'
