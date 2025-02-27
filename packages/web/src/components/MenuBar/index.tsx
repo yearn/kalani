@@ -9,6 +9,7 @@ import Launcher from '../Launcher'
 import Aside from '../../routes/dash/Aside'
 import { useMenuBar } from './useMenuBar'
 import { isNothing } from '@kalani/lib/strings'
+import { useState, useEffect } from 'react'
 
 const HIDE_ASIDE_FOR_ROUTES = ['/', '/explore', '/build', '/yhaas']
 
@@ -25,8 +26,28 @@ export default function MenuBar({ className }: { className?: string }) {
   const menu = useHashNav('menu')
   const launcher = useHashNav('launcher')
   const { theme } = useMenuBar()
+  const [isScrolled, setIsScrolled] = useState(false)
 
-  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-end pointer-events-none', className)}>
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-start pointer-events-none', className)}>
+
+    {!menu.isOpen && isNothing(location.hash) && <div className={`
+      w-full h-[4.5rem] px-6 flex flex-row items-center justify-between
+      border-b-primary ${isScrolled ? 'border-black' : 'border-transparent'}
+      pointer-events-none bg-neutral-950`}>
+      <button onClick={menu.open} className={cn('pointer-events-auto', theme === 'warn' && 'text-warn-400 theme-warn')}>
+        <PiEqualsBold size={32} />
+      </button>
+      <Connect short={true} className="pointer-events-auto" />
+    </div>}
 
     {menu.isOpen && <FlyInFromBottom _key="menu-bar" className="relative grow bg-secondary-2000 pointer-events-auto overflow-auto">
       <div className="px-6 py-6 flex items-center justify-end text-neutral-700">
@@ -52,19 +73,6 @@ export default function MenuBar({ className }: { className?: string }) {
         <MenuBarButton icon={PiDotsNine} title="yEcosystem" onClick={launcher.open} />
       </div>
     </FlyInFromBottom>}
-
-    {!menu.isOpen && isNothing(location.hash) && <div className="pb-8 w-full flex flex-row items-center justify-center pointer-events-none">
-      <button onClick={menu.open} className={cn(`
-        px-8 py-2 bg-neutral-950
-        outline outline-4 outline-black/80
-        hover:outline-secondary-200
-        active:outline-secondary-400
-        active:bg-black
-        saber-glow rounded-primary pointer-events-auto`,
-        theme === 'warn' && 'text-warn-400 theme-warn')}>
-        <PiEqualsBold size={32} />
-      </button>
-    </div>}
 
     <Launcher hideToggle={true} />
   </div>
