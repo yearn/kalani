@@ -8,12 +8,17 @@ import TokenImg from '../../../../components/TokenImg'
 import ChainImg from '../../../../components/ChainImg'
 import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import LabelValueRow from '../../../../components/elements/LabelValueRow'
+import { useBreakpoints } from '../../../../hooks/useBreakpoints'
+import { Suspense } from 'react'
+import { VitalsSkeleton } from '../../Vault/tabs/Vitals'
 
-function Vitals({ vault }: { vault: Vault }) {
+function VitalsComponent({ vault }: { vault: Vault }) {
+  const { sm } = useBreakpoints()
+
   return <Section>
-    <div className="px-4 py-2 flex flex-col gap-primary">
+    <div className="flex flex-col gap-primary">
 
-    <LabelValueRow label="Network">
+      <LabelValueRow label="Network">
         <ViewGeneric className="flex items-center gap-4">
           <ChainImg chainId={vault.chainId} size={24} /> {getChain(vault.chainId).name}
         </ViewGeneric>
@@ -24,7 +29,11 @@ function Vitals({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Name">
-        <ViewGeneric>{vault.name} ({vault.symbol})</ViewGeneric>
+        <ViewGeneric className="w-[280px] sm:w-auto truncate text-right">{vault.name}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Symbol">
+        <ViewGeneric>{vault.symbol}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Asset">
@@ -35,11 +44,15 @@ function Vitals({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Asset name">
-        <ViewGeneric>{vault.asset.name} ({vault.asset.symbol})</ViewGeneric>
+        <ViewGeneric>{vault.asset.name}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Asset symbol">
+        <ViewGeneric>{vault.asset.symbol}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="Total assets">
-        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals)}</ViewGeneric>
+        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="TVL">
@@ -57,4 +70,12 @@ function Vitals({ vault }: { vault: Vault }) {
   </Section>
 }
 
-export default withVault(Vitals)
+const Suspender = withVault(VitalsComponent)
+
+function Vitals() {
+  return <Suspense fallback={<VitalsSkeleton />}>
+    <Suspender />
+  </Suspense>
+}
+
+export default Vitals

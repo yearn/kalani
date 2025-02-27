@@ -3,13 +3,13 @@ import { AccountRole, AccountRoleSchema, Erc20, Erc20Schema, EvmAddress, EvmAddr
 import { useMemo } from 'react'
 import { z } from 'zod'
 import { create } from 'zustand'
-import { useSelectedProject } from '../../../components/SelectProject'
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 
 export const VaultFormDataSchema = z.object({
   asset: Erc20Schema.optional(),
   setAsset: z.function().args(Erc20Schema.optional()).returns(z.void()),
   category: z.number().optional(),
-  setCategory: z.function().args(z.number()).returns(z.void()),
+  setCategory: z.function().args(z.number().optional()).returns(z.void()),
   name: z.string().optional(),
   setName: z.function().args(z.string()).returns(z.void()),
   symbol: z.string().optional(),
@@ -30,8 +30,8 @@ export type VaultFormData = z.infer<typeof VaultFormDataSchema>
 export const useVaultFormData = create<VaultFormData>(set => ({
   asset: undefined,
   setAsset: (asset: Erc20 | undefined) => set({ asset }),
-  category: 1,
-  setCategory: (category: number) => set({ category }),
+  category: undefined,
+  setCategory: (category: number | undefined) => set({ category }),
   name: undefined,
   setName: (name: string | undefined) => set({ name }),
   symbol: undefined,
@@ -46,7 +46,7 @@ export const useVaultFormData = create<VaultFormData>(set => ({
   setInceptTime: (inceptTime: number | undefined) => set({ inceptTime }),
   reset: () => set({ 
     asset: undefined,
-    category: 1,
+    category: undefined,
     name: undefined,
     symbol: undefined,
     newAddress: undefined,

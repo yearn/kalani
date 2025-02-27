@@ -6,10 +6,13 @@ import { useMemo } from 'react'
 import abis from '@kalani/lib/abis'
 import { VaultSchema } from './useVault'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseFields(abi: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return abi.filter((x: any) => x.type === 'function' && (x.stateMutability === 'view' || x.stateMutability === 'pure') && x.inputs.length === 0)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useVaultSnapshot(options: { chainId?: number, address: EvmAddress, [key: string]: any }) {
   const config = useConfig()
   const { chainId: optionalChainId, address, ...rest } = options
@@ -30,7 +33,7 @@ export function useVaultSnapshot(options: { chainId?: number, address: EvmAddres
       reports: [],
       debts: [],
       inceptBlock: 0n, inceptTime: 0
-    } as any
+    } as any // eslint-disable-line @typescript-eslint/no-explicit-any
 
     fields.forEach(({ name }: { name: string }, index: number) => {
       result[name] = query.data?.[index]?.result
@@ -46,11 +49,11 @@ export function useVaultSnapshot(options: { chainId?: number, address: EvmAddres
     Object.assign(result, rest)
     return result
 
-  }, [chainId, address, query.data])
+  }, [chainId, address, query.data, fields, rest])
 
   const parsed = useMemo(() => {
     return VaultSchema.safeParse({ ...object, roleManager: object.role_manager })
-  }, [object, contracts, fields])
+  }, [object])
 
   if (!parsed.success) { throw parsed.error }
 

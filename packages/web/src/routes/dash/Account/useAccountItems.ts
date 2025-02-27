@@ -75,7 +75,7 @@ export function useAccountItems(account: EvmAddress) {
         roleMask: ALL_ROLES_MASK
       }))
     ]
-  }, [query])
+  }, [query, localVaults, account])
 
   const findRoleForItem = useCallback((item: FinderItem) => {
     return roles.find(role => role.vault === item.address && role.chainId === item.chainId)

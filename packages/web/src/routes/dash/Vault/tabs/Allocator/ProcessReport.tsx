@@ -8,7 +8,7 @@ import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
 
-export function useHasReportManagerRole() {
+function useHasReportManagerRole() {
   const { vault } = useVaultFromParams()
   return useHasRoles({
     chainId: vault?.chainId ?? 0,
@@ -49,7 +49,7 @@ function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) 
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, simulation, write])
+  }, [authorized, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -66,7 +66,7 @@ function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) 
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>Exec</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick}>Process report</Button>
 }
 
 export default function ProcessReport({ strategy }: { strategy: EvmAddress }) {

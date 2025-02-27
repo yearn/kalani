@@ -2,7 +2,7 @@ import { SkeletonButton } from '../../../../../components/Skeleton'
 import { Suspense, useEffect, useCallback, useMemo } from 'react'
 import { Vault, withVault } from '../../../../../hooks/useVault'
 import Button from '../../../../../components/elements/Button'
-import { useHasDebtManagerRole } from './Allocation'
+import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { parseAbi } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
@@ -39,7 +39,7 @@ function Suspender({ vault }: { vault: Vault }) {
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
     || true
-  }, [authorized, simulation, write])
+  }, [authorized, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -56,13 +56,14 @@ function Suspender({ vault }: { vault: Vault }) {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>Exec</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick}>Update debts</Button>
 }
 
-function UpdateDebt({ vault }: { vault: Vault }) {
+function Component({ vault }: { vault: Vault }) {
   return <Suspense fallback={<SkeletonButton>Exec</SkeletonButton>}>
     <Suspender vault={vault} />
   </Suspense>
 }
 
-export default withVault(UpdateDebt)
+const UpdateDebt = withVault(Component)
+export default UpdateDebt

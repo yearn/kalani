@@ -2,18 +2,19 @@ import { useMounted } from '../hooks/useMounted'
 import { useQueryNav } from '../hooks/useQueryNav'
 import { cn } from '../lib/shadcn'
 import FlyInFromBottom from './motion/FlyInFromBottom'
+import ScrollContainer from 'react-indiana-drag-scroll'
 
-export function Tabs({ 
+export function Tabs({
   className, 
   children 
 }: { 
   className?: string, 
   children: React.ReactNode 
 }) {
-  return <div className={cn(`flex gap-6`, className)}>{children}</div>
+  return <ScrollContainer className={cn('flex gap-3 sm:gap-6', className)}>{children}</ScrollContainer>
 }
 
-export function Tab({ 
+export function Tab({
   id, 
   isDefault,
   selected,
@@ -45,7 +46,7 @@ export function Tab({
       cursor-pointer pointer-events-auto
       text-neutral-950 bg-transparent
       hover:bg-neutral-950/20
-      active:bg-neutral-950/20
+      active:bg-neutral-800/20
       active:text-secondary-400
       data-[selected=true]:text-secondary-400
       data-[selected=true]:bg-transparent

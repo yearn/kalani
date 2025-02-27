@@ -1,7 +1,7 @@
 import Button from '../../../components/elements/Button'
 import { useCallback } from 'react'
-import { useProjectByParams } from '../Project'
-import { useSelectedProject } from '../../../components/SelectProject'
+import { useProjectByParams } from '../Project/useProjectByParams'
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 import { useNavigate } from 'react-router-dom'
 
 export default function Project() {
@@ -15,6 +15,6 @@ export default function Project() {
   }, [setSelectedProject, project, navigate])
 
   return <div>
-    <Button onClick={onClick} h="secondary">{'Deploy a new vault ->'}</Button>
+    <Button onClick={onClick} h="secondary" className="!h-auto !whitespace-normal">{`Deploy new ${project.name} vault ->`}</Button>
   </div>
 }

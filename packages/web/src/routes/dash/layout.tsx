@@ -5,7 +5,9 @@ import Aside from './Aside'
 import MenuBar from '../../components/MenuBar'
 
 export default function Layout() {
-  return <div className="w-full min-h-screen">
+  return <div className={`
+    w-full h-screen sm:max-h-auto
+    flex sm:block flex-col justify-between`}>
     <Header className="hidden sm:block fixed z-50 inset-x-0 top-0 w-full" />
     <Drawer className="hidden sm:flex fixed z-50 top-0 left-0 w-24 h-screen" />
 
@@ -13,17 +15,17 @@ export default function Layout() {
       <div className="hidden sm:block min-w-24"></div>
 
       <div className={`
-        isolate grow sm:min-h-screen sm:h-full pb-24
-        sm:flex sm:flex-col sm:justify-start
-        border-r-primary border-r-neutral-900`}>
+        isolate grow overflow-y-auto pb-24 sm:min-h-screen
+        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-black`}>
         <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
         <Outlet />
       </div>
 
-      <div className="w-aside px-8 pt-8 pb-24">
+      <div className="hidden sm:block w-aside px-8 pt-8 pb-24">
         <div className="w-aside"></div>
       </div>
-      <aside className={`fixed right-0 hidden sm:block 
+
+      <aside className={`hidden sm:block fixed right-0
         w-aside min-h-screen mt-[5.1rem] px-8 pt-8 pb-24`}>
         <Aside />
       </aside>

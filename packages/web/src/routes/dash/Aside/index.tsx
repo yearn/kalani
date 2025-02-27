@@ -18,7 +18,7 @@ function AsideSkeleton() {
 }
 
 export default function Aside() {
-  return <div className="flex flex-col items-center justify-center gap-12">
+  return <div className="px-6 sm:px-0 flex flex-col items-start sm:items-center justify-center gap-12">
     <Suspense fallback={<AsideSkeleton />}>
       <Routes>
         <Route path="/account" element={<Account />} />

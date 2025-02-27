@@ -11,3 +11,9 @@ export function SkeletonButton({ className, children }: { className?: string, ch
     {children}
   </Skeleton>
 }
+
+export function SkeletonTab({ className, children }: { className?: string, children?: React.ReactNode }) {
+  return <Skeleton className={cn('w-32 h-8 rounded-full', className)}>
+    {children}
+  </Skeleton>
+}

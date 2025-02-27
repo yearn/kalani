@@ -52,7 +52,7 @@ group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secon
 rounded-primary
 `
 
-const tokenBgClassName = `bg-neutral-950 border-primary border-neutral-800 border-dashed`
+const tokenBgClassName = 'bg-neutral-950 border-primary border-neutral-800 border-dashed'
 
 function CustomToken({ chainId, address, onClick }: { chainId?: number, address: EvmAddress, onClick?: (item: Erc20) => void }) {
   const breakpoints = useBreakpoints()
@@ -115,6 +115,12 @@ const Suspender: React.FC<SelectErc20Props> = ({
     setSelectedIndex(-1)
   }
 
+  const handleItemClick = useCallback((item: Erc20 | undefined): void => {
+    setQuery('')
+    onSelect?.(item)
+    nav.close()
+  }, [setQuery, onSelect, nav])
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'ArrowUp') {
       e.preventDefault()
@@ -127,12 +133,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
     } else if (e.key === 'Escape') {
       nav.close()
     }
-  }, [nav, filter])
-
-  const handleItemClick = useCallback((item: Erc20 | undefined): void => {
-    setQuery('')
-    onSelect?.(item)
-  }, [setQuery, onSelect])
+  }, [nav, filter, selectedIndex, handleItemClick])
 
   return <div data-open={nav.isOpen} className={cn(
       containerClassName, 

@@ -20,7 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, h
     border-primary ${border} ${bg} text-lg ${text}
     hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
     active:text-secondary-400 active:border-secondary-400 active:bg-black
-    disabled:bg-neutral-950 disabled:text-neutral-600 
+    disabled:bg-neutral-950 disabled:text-neutral-800 
     disabled:hover:border-primary-950 disabled:hover:text-primary-950
     disabled:hover:bg-neutral-950
     disabled:cursor-default disabled:border-transparent

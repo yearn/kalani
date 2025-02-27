@@ -1,86 +1,52 @@
-import { useParams } from 'react-router-dom'
-import Hero from '../../../components/Hero'
-import { zeroHash } from 'viem'
-import { getChain } from '../../../lib/chains'
-import { HexStringSchema } from '@kalani/lib/types'
-import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
-import CopyHashChipSlide from '../../../components/ChipSlide/CopyHashChipSlide'
-import { useSuspenseReadProject } from '../../../components/SelectProject/useProjects'
+import Hero, { HeroInset } from '../../../components/Hero'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
-import LabelValueRow from '../../../components/elements/LabelValueRow'
-import ViewGeneric from '../../../components/elements/ViewGeneric'
-import ChainImg from '../../../components/ChainImg'
-import Section from '../../../components/Section'
-
-export function useProjectParams() {
-  const params = useParams()
-  const chainId = parseInt(params.chainId ?? '0')
-  const id = HexStringSchema.parse(params.id) ?? zeroHash
-  return { chainId, id }
-}
-
-export function useProjectByParams() {
-  const { chainId, id } = useProjectParams()
-  return useSuspenseReadProject(chainId, id)
-}
+import { useProjectByParams } from './useProjectByParams'
+import { Tab, TabContent, Tabs } from '../../../components/Tabs'
+import Vitals from './tabs/Vitals'
+import Vaults from './tabs/Vaults'
 
 function Suspender() {
-  const { chainId, id } = useProjectParams()
   const { project } = useProjectByParams()
 
+  return <section className="flex flex-col">
+    <Hero className="bg-indigo-400 text-neutral-950">
+      <div className="flex flex-col justify-center gap-2 drop-shadow-lg">
+        <div className="text-5xl font-bold">{project.name}</div>
+      </div>
+
+      <HeroInset>
+        <Tabs className="w-full pb-3 pl-2 sm:pl-0">
+          <Tab id="vitals" isDefault={true} className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vitals</Tab>
+          <Tab id="vaults" className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vaults</Tab>
+        </Tabs>
+      </HeroInset>
+    </Hero>
+
+    <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+      <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
+      <TabContent id="vaults"><Vaults /></TabContent>
+    </div>
+  </section>
+}
+
+function _Skeleton() {
   return <section className="flex flex-col gap-10">
     <Hero className="bg-indigo-400 text-neutral-950">
       <div className="flex flex-col justify-center gap-2 drop-shadow-lg">
-        <div className="flex items-center gap-3 text-sm">
-          project
-        </div>
-        <div className="text-5xl font-bold">{project.name}</div>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-          </div>
-        </div>
+        <div><Skeleton className="w-48 h-12 rounded-primary" /></div>
       </div>
+
+      <HeroInset className="flex gap-4 pb-4">
+        <Skeleton className="w-24 h-8 rounded-full" />
+        <Skeleton className="w-24 h-8 rounded-full" />
+      </HeroInset>
     </Hero>
-
-    <Section className="mx-8">
-      <div className="px-4 py-2 flex flex-col gap-primary">
-        <LabelValueRow label="Network">
-          <ViewGeneric className="flex items-center gap-4">
-            <ChainImg chainId={chainId} size={24} /> {getChain(chainId).name}
-          </ViewGeneric>
-        </LabelValueRow>
-
-        <LabelValueRow label="Id">
-          <CopyHashChipSlide hash={id} className="bg-neutral-900" />
-        </LabelValueRow>
-
-        <LabelValueRow label="Role manager">
-          <EvmAddressChipSlide chainId={chainId} address={project.roleManager} className="bg-neutral-900" />
-        </LabelValueRow>
-
-        <LabelValueRow label="Registry">
-          <EvmAddressChipSlide chainId={chainId} address={project.registry} className="bg-neutral-900" />
-        </LabelValueRow>
-
-        <LabelValueRow label="Accountant">
-          <EvmAddressChipSlide chainId={chainId} address={project.accountant} className="bg-neutral-900" />
-        </LabelValueRow>
-
-        <LabelValueRow label="Debt allocator">
-          <EvmAddressChipSlide chainId={chainId} address={project.debtAllocator} className="bg-neutral-900" />
-        </LabelValueRow>
-
-        <LabelValueRow label="Factory">
-          <EvmAddressChipSlide chainId={chainId} address={project.roleManagerFactory} className="bg-neutral-900" />
-        </LabelValueRow>
-      </div>
-    </Section>
   </section>
 }
 
 export default function Project() {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<_Skeleton />}>
     <Suspender />
   </Suspense>
 }

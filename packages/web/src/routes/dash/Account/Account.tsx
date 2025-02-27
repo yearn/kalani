@@ -15,7 +15,7 @@ import { useAccountOptions } from './useAccountOptions'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useProjects } from '../../../components/SelectProject/useProjects'
 import LinkButton from '../../../components/elements/LinkButton'
-import Section from '../../../components/Section'
+import ChainImg from '../../../components/ChainImg'
 
 function Suspender({ address }: { address: EvmAddress }) {
   const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
@@ -57,7 +57,7 @@ function Suspender({ address }: { address: EvmAddress }) {
   return <section className="flex flex-col gap-0">
     <Hero className="bg-primary-400 text-neutral-950">
       <div className="w-full flex items-center justify-between gap-6">
-        <div className="flex items-center gap-6 drop-shadow-lg">
+        <div className="flex items-center gap-6">
           <PiWallet size={64} />
           <div className="flex flex-col gap-0">
             <div className="flex items-end gap-1">
@@ -67,45 +67,72 @@ function Suspender({ address }: { address: EvmAddress }) {
           </div>
         </div>
 
-        {!isUserWallet && <div className="flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
+        {!isUserWallet && <div className="hidden flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
           <div className="text-4xl font-bold">{fUSD(tvl)}</div>
           <div className="text-4xl font-bold">{fPercent(apy, { padding: { length: 2, fill: '0' } })}</div>
         </div>}
       </div>
 
       <HeroInset>
-        {isUserWallet && <Tabs className="w-full pb-3">
+        {isUserWallet && <Tabs className="w-full pb-3 pl-2 sm:pl-0">
           <Tab id="vaults" isDefault={true} className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Vaults</Tab>
           <Tab id="projects" className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Projects</Tab>
         </Tabs>}
       </HeroInset>
     </Hero>
 
-    <div className="w-full p-2 sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+    <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
       <TabContent id="vaults" isDefault={true}>
-        {sorted.map((item) => 
-          <ListItem key={`${item.chainId}-${item.address}`} item={item} roleMask={findRoleForItem(item)?.roleMask} isRoleManager={compareEvmAddresses(item.roleManager ?? zeroAddress, address)}  />
-        )}
+        <div className="p-3 flex flex-col gap-3">
+          {sorted.map((item) =>
+            <ListItem key={`${item.chainId}-${item.address}`} item={item} roleMask={findRoleForItem(item)?.roleMask} isRoleManager={compareEvmAddresses(item.roleManager ?? zeroAddress, address)}  />
+          )}
+        </div>
       </TabContent>
 
       {isUserWallet && <TabContent id="projects">
-        <Section className="mx-8 flex flex-col gap-6">
-          {projects.map(project => <LinkButton 
+        <div className="p-3 flex flex-col gap-3">
+          {projects.map(project => <LinkButton
             key={project.id} 
             to={`/project/${project.chainId}/${project.id}`} 
             h="tertiary" 
-            className="px-4 grow h-14 flex items-center justify-between"
-            >
+            className="px-4 py-12 grow flex items-center justify-start gap-4 text-3xl">
+              <ChainImg chainId={project.chainId} size={48} />
               {project.name}
             </LinkButton>)}
-        </Section>
+        </div>
       </TabContent>}
     </div>
   </section>
 }
 
+function _Skeleton() {
+  return <Hero className="bg-primary-400 text-neutral-950">
+    <div className="w-full flex items-center justify-between gap-6">
+      <div className="flex items-center gap-6 drop-shadow-lg">
+        <PiWallet size={64} />
+        <div className="flex flex-col gap-0">
+          <div className="flex items-end gap-1">
+            <div className="text-4xl font-fancy"><Skeleton className="w-48 h-10 rounded-primary" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden sm:flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
+        <div className="text-4xl font-bold"><Skeleton className="w-24 h-6 rounded-primary" /></div>
+        <div className="text-4xl font-bold"><Skeleton className="w-24 h-6 rounded-primary" /></div>
+      </div>
+    </div>
+
+    <HeroInset className="flex gap-4 pb-4">
+      <Skeleton className="w-24 h-8 rounded-full" />
+      <Skeleton className="w-24 h-8 rounded-full" />
+    </HeroInset>
+  </Hero>
+}
+
 export default function Account({ address }: { address: EvmAddress }) {
-  return <Suspense fallback={<Skeleton className="h-48" />}>
+  return <Suspense fallback={<_Skeleton />}>
     <Suspender address={address} />
   </Suspense>
 }

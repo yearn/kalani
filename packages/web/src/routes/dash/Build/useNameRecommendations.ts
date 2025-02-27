@@ -1,4 +1,4 @@
-import { useSelectedProject } from "../../../components/SelectProject"
+import { useSelectedProject } from '../../../components/SelectProject/useSelectedProject'
 import { useMemo } from 'react'
 import { useVaultFormData } from './useVaultForm'
 
@@ -8,10 +8,11 @@ export function useNameRecommendations() {
   return useMemo(() => {
     const [first, second] = selectedProject?.name.match(/(^.{1})|[A-Z]/g) ?? []
     const prefix = `${first ?? ''}${second ?? ''}`.toLowerCase()
+    const suffix = category === 1 ? '' : `-${category}`
 
     return {
-      name: `${asset?.symbol}-${category} ${selectedProject?.name}`,
-      symbol: `${prefix}${asset?.symbol}-${category}`,
+      name: `${asset?.symbol}${suffix} ${selectedProject?.name}`,
+      symbol: `${prefix}${asset?.symbol}${suffix}`,
     }
   }, [selectedProject, asset, category])
 }

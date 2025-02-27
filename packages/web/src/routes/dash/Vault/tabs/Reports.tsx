@@ -2,14 +2,15 @@ import { z } from 'zod'
 import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
-import { Suspense } from "react"
-import { fPercent, fUSD } from "@kalani/lib/format"
-import Skeleton from "../../../../components/Skeleton"
-import { useStrategyParams } from "../../../../hooks/useStrategy"
-import { cn } from "../../../../lib/shadcn"
-import TxChipSlide from "../../../../components/ChipSlide/TxChipSlide"
+import { Suspense } from 'react'
+import { fPercent, fUSD } from '@kalani/lib/format'
+import Skeleton from '../../../../components/Skeleton'
+import { useStrategyParams } from '../../../../hooks/useStrategy'
+import { cn } from '../../../../lib/shadcn'
+import TxChipSlide from '../../../../components/ChipSlide/TxChipSlide'
 import StrategyChipSlide from '../../../../components/ChipSlide/StrategyChipSlide'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 export const ReportSchema = z.object({
   chainId: z.number(),
@@ -107,14 +108,14 @@ function TableSkeleton() {
 }
 
 function DisplayUSD({ usd, className }: { usd: number, className?: string }) {
-  return <div className={cn('relative', className)}>
+  return <div className={cn('relative whitespace-nowrap', className)}>
     <span className={classNameFor(0)}>{fUSD(usd, { padding: { length: 3, fill: '0' } })}</span>
     <span className={cn('absolute inset-0 whitespace-pre', classNameFor(usd))}>{fUSD(usd, { padding: { length: 3, fill: ' ' } })}</span>
   </div>
 }
 
 function DisplayPercent({ percent, className }: { percent: number, className?: string }) {
-  return <div className={cn('relative', className)}>
+  return <div className={cn('relative whitespace-nowrap', className)}>
     <span className={classNameFor(0)}>{fPercent(percent, { padding: { length: 3, fill: '0' } })}</span>
     <span className={cn('absolute inset-0 whitespace-pre', classNameFor(percent))}>{fPercent(percent, { padding: { length: 3, fill: ' ' } })}</span>
   </div>
@@ -164,9 +165,9 @@ function Suspender() {
 }
 
 export default function Reports() {
-  return <div>
+  return <ScrollContainer>
     <Suspense fallback={<TableSkeleton />}>
       <Suspender />
     </Suspense>
-  </div> 
+  </ScrollContainer> 
 }

@@ -3,7 +3,8 @@ import Address from '../../../../../../../components/elements/Address'
 import StepLabel from '../../../../../../../components/forms/StepLabel'
 import { Switch } from '../../../../../../../components/shadcn/switch'
 import { Label } from '../../../../../../../components/shadcn/label'
-import Dialog, { DialogButton, useDialog } from '../../../../../../../components/Dialog'
+import Dialog, { DialogButton } from '../../../../../../../components/Dialog'
+import { useDialog } from '../../../../../../../components/Dialog/useDialog'
 import Button from '../../../../../../../components/elements/Button'
 import { useWhitelist } from '../../../useWhitelist'
 import { fEvmAddress } from '@kalani/lib/format'
@@ -156,7 +157,7 @@ function CreateAllocatorDialog({
       resolveToast()
       closeDialog()
     }
-  }, [confirmation, write, onNewAllocator, resolveToast, closeDialog])
+  }, [confirmation, write, onNewAllocator, resolveToast, closeDialog, NewDebtAllocator])
 
   return <Dialog title="Create debt allocator" dialogId="create-allocator">
     <div className="flex flex-col gap-6">
@@ -191,7 +192,7 @@ export default function SetAllocator() {
 
   const onAutomateChanged = useCallback((automate: boolean) => {
     setAutomate(automate)
-    setOptions((current: any) => ({ ...current, automate }))
+    setOptions((current: object) => ({ ...current, automate }))
   }, [setAutomate, setOptions])
 
   useEffect(() => {
@@ -205,7 +206,7 @@ export default function SetAllocator() {
   const onNewAllocator = useCallback((allocator: EvmAddress) => {
     setAllocator(allocator)
     setIsValid(true)
-    setOptions((current: any) => ({ ...current, allocator }))
+    setOptions((current: object) => ({ ...current, allocator }))
     onAutomateChanged(true)
   }, [setAllocator, setIsValid, setOptions, onAutomateChanged])
 

@@ -311,6 +311,45 @@
 	}
 }
 
+.theme-warn {
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -525%;
+		width: 200%;
+		height: 1200%;
+		background-repeat: no-repeat;
+		background-image:
+			conic-gradient(
+				from 0deg at 50% 50%,
+				#f59e0b 0deg,
+				#a53e0b 90deg,
+				#f59e0b 180deg,
+				#a53e0b 270deg,
+				#f59e0b 360deg
+			);
+		animation: rotate 4s linear infinite;
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 3px;
+		top: 3px;
+		width: calc(100% - 6px);
+		height: calc(100% - 6px);
+		background: #0a0a0a;
+		border-radius: 0.5rem;
+	}
+}
+
 .theme-error {
 	@apply !border-error-400 !text-error-400;
 }

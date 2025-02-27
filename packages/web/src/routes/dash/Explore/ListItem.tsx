@@ -1,13 +1,13 @@
 import { FinderItem, getItemHref } from '../../../components/Finder/useFinderItems'
 import { fEvmAddress, fHexString, fPercent, fUSD } from '@kalani/lib/format'
 import { AutoTextSize } from 'auto-text-size'
-import ChainImg from '../../../components/ChainImg'
 import TokenImg from '../../../components/TokenImg'
 import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ROLES } from '@kalani/lib/types'
 import { roleClassNames } from '../Vault/tabs/Roles/SetRoles/roleClassNames'
 import { PiStar, PiStarFill } from 'react-icons/pi'
+import { useBreakpoints } from '../../../hooks/useBreakpoints'
 
 function Role({ role, granted }: { role: keyof typeof ROLES, granted: boolean }) {
   const roleClassName = roleClassNames[role as keyof typeof roleClassNames] ?? {}
@@ -23,7 +23,7 @@ function RoleMask({ roleMask, isRoleManager }: { roleMask: bigint, isRoleManager
   const granted = useCallback((role: keyof typeof ROLES) => (roleMask & ROLES[role]) === ROLES[role], [roleMask])
   const isRoleManagerClassName = useMemo(() => isRoleManager ? 'text-yellow-400' : 'text-neutral-600', [isRoleManager])
   return <div className="flex items-center flex-wrap gap-2 text-xs">
-    <div className={"text-neutral-600"}>ROLES:</div>
+    <div className={'text-neutral-600'}>ROLES:</div>
     <div className={isRoleManagerClassName}>
       {isRoleManager ? <PiStarFill size={12} /> : <PiStar size={12} />}
     </div>
@@ -78,37 +78,39 @@ function Label({ item }: { item: FinderItem }) {
 }
 
 export function ListItem({ item, roleMask, isRoleManager }: { item: FinderItem, roleMask?: bigint, isRoleManager?: boolean }) {
+  const { sm } = useBreakpoints()
   return <Link to={getItemHref(item)} className={`
     group relative p-3 sm:px-6 xl:px-8 xl:py-5 flex flex-col gap-3
     border-primary border-transparent hover:border-secondary-200 active:border-secondary-400
     saber-glow bg-black rounded-primary cursor-pointer
     active:text-secondary-400`}>
-    <div className="flex items-center gap-6 xl:gap-12">
-      <div className="grow w-[300px] flex flex-col gap-2">
+    <div className="flex items-start sm:items-center justify-between sm:justify-start gap-3 sm:gap-6 xl:gap-12">
+      <div className="grow w-[220px] sm:w-[300px] flex flex-col gap-2">
         <div className="font-fancy text-2xl">
           <AutoTextSize mode="box" minFontSizePx={16}>{item.name}</AutoTextSize>
         </div>
         <div className="flex items-center gap-4">
-          <ChainImg chainId={item.chainId} size={28} />
-          <TokenImg chainId={item.chainId} address={item.token?.address} size={28}  />
+          <TokenImg chainId={item.chainId} address={item.token?.address} size={32} showChain={true} bgClassName="!border-2 border-neutral-900" />
           <Label item={item} />
           <div className="p-2 bg-neutral-900 text-xs text-neutral-400 group-active:text-inherit rounded-full">{fEvmAddress(item.address)}</div>
         </div>
       </div>
-      <div className="w-[100px] flex items-center justify-center">
+      <div className="hidden sm:block w-[100px] flex items-center justify-center">
         <Minibars series={item.sparklines?.tvl ?? []} className="w-[80px] h-[56px]" />
       </div>
-      <div className="w-[140px]">
-        <div className="text-2xl font-bold">
-          {fUSD(item.tvl ?? 0)}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-12">
+        <div className="sm:w-[140px]">
+          <div className="text-lg sm:text-2xl font-bold whitespace-nowrap">
+            {fUSD(item.tvl ?? 0)}
+          </div>
         </div>
-      </div>
-      <div className="w-[100px]">
-        <div className="text-2xl font-bold">
-          {fPercent(item.apy ?? 0)}
+        <div className="sm:w-[100px]">
+          <div className="text-lg sm:text-2xl font-bold whitespace-nowrap">
+            {fPercent(item.apy ?? 0)}
+          </div>
         </div>
       </div>
     </div>
-    {roleMask !== undefined && <RoleMask roleMask={roleMask} isRoleManager={isRoleManager ?? false} />}
+    {roleMask !== undefined && sm && <RoleMask roleMask={roleMask} isRoleManager={isRoleManager ?? false} />}
   </Link>
 }

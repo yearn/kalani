@@ -44,7 +44,7 @@ export default function Connect({
               <Button h="secondary" onClick={openChainModal} type="button">
                 Wrong network
               </Button>
-            );
+            )
           }
           return (
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-4">
@@ -68,7 +68,7 @@ export default function Connect({
                   : ''}
               </Button>
             </div>
-          );
+          )
         })()
       }}
     </ConnectButton.Custom>
