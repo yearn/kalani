@@ -8,6 +8,7 @@ import { useAccount } from 'wagmi'
 import { useMemo } from 'react'
 import { ADDRESS_PROVIDER, APR_ORACLE, ROLE_MANAGER_FACTORY } from '@kalani/lib/addresses'
 import A from '../../components/elements/A'
+import { HeroIcon } from '../../components/Hero'
 
 export default function Info() {
   const { chainId: connectedChainId } = useAccount()
@@ -16,7 +17,7 @@ export default function Info() {
   return <section className="flex flex-col gap-0 sm:gap-8">
     <Hero>
       <div className="flex items-center gap-6">
-        <PiInfo size={64} />
+        <HeroIcon icon={PiInfo} className="bg-secondary-800" />
         <div className="flex flex-col gap-0">
           <Fancy text="Info" />
         </div>

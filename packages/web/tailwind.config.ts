@@ -32,6 +32,7 @@ export default {
     'w-[32px]', 'h-[32px]',
     'w-[48px]', 'h-[48px]',
     'w-[64px]', 'h-[64px]',
+    'w-[72px]', 'h-[72px]',
     'border-primary',
     'odd:bg-grill-900'
   ],

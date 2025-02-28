@@ -46,7 +46,7 @@ export function VaultHero({
 
       <div className="flex items-center gap-4 text-xl">
         <div className="mb-1">
-          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-black" />
+          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 72 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
         <div className="w-full flex flex-col sm:gap-1">

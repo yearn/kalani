@@ -1,7 +1,7 @@
 export default function Fancy({
   text = '',
-  bigTextClassName = 'text-5xl', 
-  littleTextClassName = 'text-4xl'
+  bigTextClassName = 'text-4xl sm:text-5xl', 
+  littleTextClassName = 'text-3xl sm:text-4xl'
 }: { 
   text?: string, 
   bigTextClassName?: string, 

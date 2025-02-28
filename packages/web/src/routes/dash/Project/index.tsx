@@ -1,4 +1,4 @@
-import Hero, { HeroInset } from '../../../components/Hero'
+import Hero, { HeroInset, HeroIcon } from '../../../components/Hero'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
 import { useProjectByParams } from './useProjectByParams'
@@ -14,10 +14,8 @@ function Suspender() {
   return <section className="flex flex-col">
     <Hero>
       <div className="flex items-center gap-6">
-        <PiFolderSimple size={64} />
-        <div className="flex flex-col gap-0">
-          <Fancy text={project.name} />
-        </div>
+        <HeroIcon icon={PiFolderSimple} className="bg-green-600" />
+        <Fancy text={project.name} />
       </div>
 
 

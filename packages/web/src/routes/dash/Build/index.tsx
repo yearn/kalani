@@ -4,17 +4,14 @@ import { useAccount } from 'wagmi'
 import Connect from '../../../components/Connect'
 import CTA from '../../../components/CTA'
 import VaultForm from './VaultForm'
-
+import Fancy from '../../../components/Fancy'
+ 
 function Brand() {
   return <div className="flex items-center gap-6">
-    <PiVault size={64} />
-    <div className="flex flex-col gap-0 drop-shadow-lg">
-      <div className="flex items-end gap-1">
-        <div className="text-5xl font-fancy">B</div>
-        <div className="text-4xl font-fancy">uild</div>
-      </div>
-      <div className="text-xs tracking-widest">Build vaults on Yearn v3</div>
+    <div className="p-3 rounded-full flex items-center justify-center text-black bg-primary-400">
+      <PiVault size={48} />
     </div>
+    <Fancy text="Build" />
   </div>
 }
 
