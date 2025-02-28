@@ -14,7 +14,7 @@ export default function Apply() {
   const { address, chain } = useAccount()
   const { targets } = useWhitelist()
 
-  if (!(address && chain)) return <div className="flex gap-4">
+  if (!(address && chain)) return <div className="mt-12 flex justify-center">
     <Connect label={<CTA>Connect your wallet</CTA>} />
   </div>
 
