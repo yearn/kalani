@@ -14,7 +14,7 @@ export default function Info() {
   const chainId = useMemo(() => connectedChainId ?? 1, [connectedChainId])
 
   return <section className="flex flex-col gap-0 sm:gap-8">
-    <Hero className="bg-black text-neutral-200">
+    <Hero>
       <div className="flex items-center gap-6">
         <PiInfo size={64} />
         <div className="flex flex-col gap-0">

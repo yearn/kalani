@@ -41,12 +41,12 @@ export function VaultHero({
 }: VaultHeroProps) {
   const { sm } = useBreakpoints()
 
-  return <HeroElement className="bg-secondary-400 text-neutral-950">
+  return <HeroElement>
     <div className="w-full flex flex-col justify-center gap-2 sm:gap-0 sm:pb-4">
 
       <div className="flex items-center gap-4 text-xl">
         <div className="mb-1">
-          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-secondary-400" />
+          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
         <div className="w-full flex flex-col sm:gap-1">
@@ -55,7 +55,7 @@ export function VaultHero({
             <div className="hidden sm:block">{getChain(chainId).name}</div>
             <div className="hidden sm:block">//</div>
             <div>
-              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400" />
+              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-black" />
             </div>
             <div className="hidden sm:block">//</div>
             <div className="hidden sm:block">{chip}</div>
@@ -63,7 +63,7 @@ export function VaultHero({
         </div>
       </div>
 
-      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold drop-shadow-lg">
+      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold">
         <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>
@@ -134,7 +134,7 @@ function Content() {
 
 export function VaultHeroSkeleton() {
   const { sm } = useBreakpoints()
-  return <HeroElement className="bg-secondary-400 text-neutral-950">
+  return <HeroElement>
     <div className="w-full flex flex-col justify-center gap-2 sm:pb-4">
       <div className="flex items-center gap-4 text-xl">
         <Skeleton className={cn(sm ? 'w-[68px] h-[64px] rounded-full' : 'w-[58px] h-[48px] rounded-full')} />

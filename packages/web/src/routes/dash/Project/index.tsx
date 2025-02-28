@@ -12,7 +12,7 @@ function Suspender() {
   const { project } = useProjectByParams()
 
   return <section className="flex flex-col">
-    <Hero className="bg-indigo-400 text-neutral-950">
+    <Hero>
       <div className="flex items-center gap-6">
         <PiFolderSimple size={64} />
         <div className="flex flex-col gap-0">
@@ -23,8 +23,8 @@ function Suspender() {
 
       <HeroInset>
         <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vitals" isDefault={true} className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vitals</Tab>
-          <Tab id="vaults" className="text-black active:text-secondary-400 data-[selected=true]:text-secondary-400">Vaults</Tab>
+          <Tab id="vitals" isDefault={true}>Vitals</Tab>
+          <Tab id="vaults">Vaults</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
@@ -38,7 +38,7 @@ function Suspender() {
 
 function _Skeleton() {
   return <section className="flex flex-col gap-10">
-    <Hero className="bg-indigo-400 text-neutral-950">
+    <Hero>
       <div className="flex items-center gap-6 drop-shadow-lg">
         <PiFolderSimple size={64} />
         <div className="flex flex-col gap-0">

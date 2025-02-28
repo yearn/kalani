@@ -10,7 +10,7 @@ function Page({ accountant }: { accountant: Accountant }) {
   if (!accountant) return <></>
 
   return <section className="flex flex-col gap-8">
-    <Hero className="bg-green-400 text-neutral-950">
+    <Hero>
       <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center gap-3 text-sm">
           accountant

@@ -31,16 +31,15 @@ function Content() {
 }
 
 export default function Page() {
-  const tabClassName = 'text-black active:text-zinc-400 data-[selected=true]:text-zinc-400'
   return <section className="flex flex-col gap-8">
-    <Hero className="text-neutral-950 bg-zinc-400">
+    <Hero>
       <Brand />
       <HeroInset>
         <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vitals" className={tabClassName}>Vitals</Tab>
-          <Tab id="apply" isDefault={true} className={tabClassName}>Apply</Tab>
-          <Tab id="pending" className={tabClassName}>Pending</Tab>
-          <Tab id="running" className={tabClassName}>Running</Tab>
+          <Tab id="vitals">Vitals</Tab>
+          <Tab id="apply" isDefault={true}>Apply</Tab>
+          <Tab id="pending">Pending</Tab>
+          <Tab id="running">Running</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
