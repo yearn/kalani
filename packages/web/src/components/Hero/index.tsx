@@ -2,12 +2,16 @@ import { AutoTextSize } from 'auto-text-size'
 import { cn } from '../../lib/shadcn'
 import Screen from '../Screen'
 import { IconType } from 'react-icons/lib'
-import { useHeroIconSize } from './useHeroIconSize'
+import { useMemo } from 'react'
+import { useBreakpoints } from '../../hooks/useBreakpoints'
 
 export function HeroIcon({ className, icon }: { className?: string, icon: IconType }) {
-  const size = useHeroIconSize()
+  const { sm } = useBreakpoints()
+  const size = useMemo(() => sm ? 48 : 32, [sm])
   return <div className={cn('p-3 rounded-full flex items-center justify-center text-black', className)}>
-    {icon({ size })}
+    <div className="size-[${size}px]">
+      {icon({ size })}
+    </div>
   </div>
 }
 

@@ -17,8 +17,6 @@ function Suspender() {
         <HeroIcon icon={PiFolderSimple} className="bg-green-600" />
         <Fancy text={project.name} />
       </div>
-
-
       <HeroInset>
         <Tabs className="w-full pb-3 pl-2 sm:pl-0">
           <Tab id="vitals" isDefault={true}>Vitals</Tab>
@@ -38,7 +36,7 @@ function _Skeleton() {
   return <section className="flex flex-col gap-10">
     <Hero>
       <div className="flex items-center gap-6 drop-shadow-lg">
-        <PiFolderSimple size={64} />
+        <HeroIcon icon={PiFolderSimple} className="bg-green-600" />
         <div className="flex flex-col gap-0">
           <div className="flex items-end gap-1">
             <div className="text-4xl font-fancy"><Skeleton className="w-48 h-10 rounded-primary" /></div>

@@ -65,7 +65,7 @@ export function useAccountantSnapshot(options: { chainId?: number, address: EvmA
     }
     Object.assign(result, rest)
     return result
-  }, [query.data, rest])
+  }, [query.data, rest, address, chainId])
 
   const parsed = AccountantSchema.safeParse(object)
 

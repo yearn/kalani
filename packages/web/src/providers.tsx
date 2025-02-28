@@ -18,6 +18,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { WagmiProvider } from 'wagmi'
 import { chains } from './lib/chains'
 import { secondary } from '../tailwind.config'
+import { BreakpointsProvider } from './components/BreakpointsProvider'
 
 const config = getDefaultConfig({
   appName: import.meta.env.VITE_WALLETCONNECT_PROJECT_NAME ?? 'appName',
@@ -54,7 +55,9 @@ export default function Providers ({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={theme}>
-          {children}
+          <BreakpointsProvider>
+            {children}
+          </BreakpointsProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

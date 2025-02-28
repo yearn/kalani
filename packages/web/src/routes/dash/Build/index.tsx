@@ -1,5 +1,5 @@
 import { PiVault } from 'react-icons/pi'
-import Hero from '../../../components/Hero'
+import Hero, { HeroIcon } from '../../../components/Hero'
 import { useAccount } from 'wagmi'
 import Connect from '../../../components/Connect'
 import CTA from '../../../components/CTA'
@@ -8,9 +8,7 @@ import Fancy from '../../../components/Fancy'
  
 function Brand() {
   return <div className="flex items-center gap-6">
-    <div className="p-3 rounded-full flex items-center justify-center text-black bg-primary-400">
-      <PiVault size={48} />
-    </div>
+    <HeroIcon icon={PiVault} className="bg-primary-400" />
     <Fancy text="Build" />
   </div>
 }
