@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react'
 import { KONG_GQL_URL } from '../../../lib/env'
 import { useLocalVaults } from '../../../hooks/useVault'
 import { FinderItem, useFinderItems } from '../../../components/Finder/useFinderItems'
+import { compareEvmAddresses } from '@kalani/lib/strings'
 
 const AccountVaultSchema = z.object({
   chainId: z.number(),
@@ -58,10 +59,9 @@ export function useAccountItems(account: EvmAddress) {
     const queryVaults = AccountVaultSchema.array().parse(query.data?.data?.accountVaults ?? [])
     const localVaultsParsed = AccountVaultSchema.array().parse(localVaults)
 
-    // Deduplicate by filtering out local vaults that are already in queryVaults
     const uniqueLocalVaults = localVaultsParsed.filter(localVault =>
       !queryVaults.some(queryVault =>
-        queryVault.chainId === localVault.chainId && queryVault.address === localVault.address
+        queryVault.chainId === localVault.chainId && compareEvmAddresses(queryVault.address, localVault.address)
       )
     )
 
