@@ -47,6 +47,11 @@ export default function Info() {
           https://github.com/yearn/kalani
         </A>
       </LabelValueRow>
+      <LabelValueRow label="Indexer">
+        <A href="https://github.com/yearn/kong" target="_blank" rel="noopener noreferrer" className="pl-24 sm:pl-0 text-xs sm:text-base whitespace-nowrap">
+          https://github.com/yearn/kong
+        </A>
+      </LabelValueRow>
     </Section>
   </section>
 }
