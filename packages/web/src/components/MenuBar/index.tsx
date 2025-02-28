@@ -42,7 +42,7 @@ export default function MenuBar({ className }: { className?: string }) {
 
     <Dialog dialogId={'menu'}>
       <div className="-mx-6 -mt-6 flex flex-col items-start justify-center">
-        <MenuBarButton icon={PiWallet} title="Account" onClick={() => navigate('/', { replace: true })} />
+        <MenuBarButton icon={PiWallet} title="Wallet" onClick={() => navigate('/', { replace: true })} />
         <MenuBarButton icon={PiMagnifyingGlass} title="Explore" onClick={() => navigate('/explore', { replace: true })} />
         <MenuBarButton icon={PiVault} title="Build" onClick={() => navigate('/build', { replace: true })} />
         <MenuBarButton icon={PiRobot} title="yHaaS" onClick={() => navigate('/yhaas', { replace: true })} />

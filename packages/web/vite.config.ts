@@ -28,7 +28,9 @@ const pwa = VitePWA({
     name: 'Kalani',
     short_name: 'Kalani',
     description: 'Yearn vault super center. Build, Automate, Earn. Get your users the best yields in DeFi',
-    theme_color: '#ffffff',
+    theme_color: '#09090c',
+    background_color: '#09090c',
+    display: 'standalone',
     icons: [
       {
         src: '/pwa-192x192.png',

@@ -1,8 +1,6 @@
-import { useAccountVaults } from './useAccountVaults'
 import { fPercent, fUSD } from '@kalani/lib/format'
 import { EvmAddress } from '@kalani/lib/types'
 import Hero, { HeroInset } from '../../../components/Hero'
-import { useIsContract } from '../../../hooks/useIsContract'
 import { useAccount } from 'wagmi'
 import { Suspense, useMemo } from 'react'
 import Skeleton from '../../../components/Skeleton'
@@ -16,15 +14,14 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useProjects } from '../../../components/SelectProject/useProjects'
 import LinkButton from '../../../components/elements/LinkButton'
 import ChainImg from '../../../components/ChainImg'
+import { useLocation } from 'react-router-dom'
 
 function Suspender({ address }: { address: EvmAddress }) {
   const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
-  const user = useAccountVaults(address)
   const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
-  const chainId = user?.vaults[0]?.chainId ?? chainIdFromAccount ?? 1
-  const isContract = useIsContract(chainId, address)
-  const title = useMemo(() => isContract ? 'Multisig' : isUserWallet ? 'Wallet' : 'EOA', [isContract, isUserWallet])
+  const location = useLocation()
+  const title = useMemo(() => location.pathname === '/' ? 'Wallet' : 'Account', [location])
   const { sortKey, sortDirection } = useAccountOptions()
   const { projects } = useProjects(chainIdFromAccount, addressFromAccount)
 
