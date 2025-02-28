@@ -18,7 +18,7 @@ function Suspender() {
         <div className="flex flex-col gap-0">
           <Fancy text={project.name} />
         </div>
-      </div>      
+      </div>
 
 
       <HeroInset>
