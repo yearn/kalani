@@ -55,7 +55,7 @@ export default function Explore() {
   const { sortKey, sortDirection, setSortKey } = useFinderOptions()
 
   return <section className="flex flex-col gap-0">
-    <Hero className="bg-violet-400 text-neutral-950">
+    <Hero>
       <div className="w-full flex items-center gap-6 drop-shadow-lg">
         <PiMagnifyingGlass size={64} />
         <div className="flex flex-col gap-0">
@@ -69,11 +69,11 @@ export default function Explore() {
       <HeroInset>
         <Tabs className="mb-3 w-full xl:pr-16 justify-end">
           <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
-            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-secondary-400' : 'text-transparent'} />}
+            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-neutral-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-neutral-400' : 'text-transparent'} />}
             <div>TVL</div>
           </Tab>
           <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className="pl-3">
-            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-secondary-400' : 'text-transparent'} />}
+            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-neutral-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-neutral-400' : 'text-transparent'} />}
             <div>APY</div>
           </Tab>
         </Tabs>

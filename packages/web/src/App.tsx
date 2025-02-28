@@ -17,6 +17,7 @@ import Explore from './routes/dash/Explore'
 import Build from './routes/dash/Build'
 import Root from './routes/root'
 import Project from './routes/dash/Project'
+import Info from './routes/dash/Info'
 
 function RestoreScroll() {
   const { pathname } = useLocation()
@@ -45,6 +46,7 @@ export default function App() {
           <Route path="strategy/:chainId/:address" element={<Strategy />} />
           <Route path="vault/:chainId/:address" element={<Vault />} />
           <Route path="yhaas" element={<Yhaas />} />
+          <Route path="info" element={<Info />} />
         </Route>
         <Route path="_eg" element={<Eg />} />
       </Routes>

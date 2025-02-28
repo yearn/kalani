@@ -48,7 +48,7 @@ function Step_Token() {
     const { selectedProject } = useSelectedProject()
     const { projectIdValidation, assetValidation } = useVaultFormValidation()
     const { sm } = useBreakpoints()
-    const ref = useScrollOnMount(projectIdValidation.isValid && !assetValidation.isValid, sm ? 120 : 40)
+    const ref = useScrollOnMount(projectIdValidation.isValid && !assetValidation.isValid, sm ? 120 : 160)
 
     const onSelect = useCallback(async (asset: Erc20 | undefined) => {
       setAsset(asset)
@@ -129,7 +129,7 @@ function Step_Name() {
   const recommendations = useNameRecommendations()
   const { assetValidation, nameValidation, symbolValidation } = useVaultFormValidation()
   const { sm } = useBreakpoints()
-  const ref = useScrollOnMount(assetValidation.isValid && (!nameValidation.isValid || !symbolValidation.isValid), sm ? 120 : 40)
+  const ref = useScrollOnMount(assetValidation.isValid && (!nameValidation.isValid || !symbolValidation.isValid), sm ? 120 : 160)
 
   const onClickRecommendations = useCallback(() => {
     setName(recommendations.name)

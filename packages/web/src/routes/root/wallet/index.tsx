@@ -19,8 +19,8 @@ export default function Wallet() {
 
       <div className={`
         isolate grow sm:min-h-screen
-        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-neutral-900`}>
-        <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
+        sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-black`}>
+        <div className="w-full h-[4.5rem] sm:h-[5.1rem] border-b border-transparent"></div>
         <Account address={address ?? zeroAddress} />
       </div>
 

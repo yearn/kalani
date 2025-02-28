@@ -26,7 +26,10 @@ export const useWhitelist = create<WhitelistData>(set => ({
   frequency: undefined,
   setFrequency: (frequency?: number) => set({ frequency }),
   repo: undefined,
-  setRepo: (repo?: string) => set({ repo }),
+  setRepo: (repo?: string) => {
+    const githubRepoRegex = /^(https:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/
+    set({ repo, isRepoValid: githubRepoRegex.test(repo ?? '') })
+  },
   isRepoValid: false,
   options: {},
   setOptions: (options: Record<string, any>) => set({ options })

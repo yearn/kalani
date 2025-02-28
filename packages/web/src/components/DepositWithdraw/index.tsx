@@ -69,9 +69,7 @@ function VaultBalance() {
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
   const hasUnlockedAssets = useMemo(() => unlockedAssets > 0, [unlockedAssets])
 
-  return <div className={cn(
-    'p-6 flex flex-col gap-8 rounded-t-primary bg-black',
-    hasUnlockedAssets && 'shimmer-slow-ride')}>
+  return <div className={cn('p-6 flex flex-col gap-8 rounded-t-primary bg-black shimmer-slow-ride')}>
     <div className="text-neutral-500">Your vault balance</div>
     <div className="flex flex-col gap-1">
       <div className={cn('flex items-center justify-between text-neutral-500 text-sm', !hasUnlockedAssets && 'invisible')}>
@@ -119,7 +117,7 @@ function Suspender({
     <Suspense fallback={<Skeleton className="w-full h-[282px] rounded-t-primary" />}>
       <VaultBalance />
     </Suspense>
-    <div className="-mt-2 flex flex-col gap-8">
+    <div className="-mt-2 mx-3 sm:mx-0 flex flex-col gap-8">
       <InputPanel />
       <Action chainId={chainId} />
     </div>

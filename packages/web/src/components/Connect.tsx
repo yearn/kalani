@@ -47,15 +47,15 @@ export default function Connect({
             )
           }
           return (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-4">
+            <div className="flex items-start sm:items-center gap-3 sm:gap-6 sm:gap-4">
               <Button
                 onClick={openChainModal}
                 h="secondary"
                 type="button"
-                className={`flex items-center gap-3 border-transparent ${short ? 'hidden' : ''} bg-black ${className}`}
+                className={`flex items-center gap-3 border-transparent bg-black ${className}`}
               >
                 <ChainImg chainId={chain.id} size={24} />
-                {chain.name}
+                {!short && chain.name}
               </Button>
               <Button 
                 className={`border-transparent bg-black ${className}`} 

@@ -27,8 +27,11 @@ interface SelectProjectProps {
 }
 
 const containerClassName = `group relative z-0
-data-[open=true]:fixed data-[open=true]:z-[100] data-[open=true]:inset-0 data-[open=true]:bg-neutral-900
+data-[open=true]:fixed data-[open=true]:z-[100] 
+data-[open=true]:top-[4.5rem] data-[open=true]:left-0
+data-[open=true]:right-0 data-[open=true]:bottom-0
 data-[open=true]:flex data-[open=true]:flex-col-reverse data-[open=true]:justify-between
+data-[open=true]:bg-neutral-900
 
 sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:bg-transparent
 sm:data-[open=true]:block

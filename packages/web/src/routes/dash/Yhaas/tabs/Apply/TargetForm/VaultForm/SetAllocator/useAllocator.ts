@@ -1,6 +1,6 @@
 import { EvmAddress } from '@kalani/lib/types'
 import { useQuery } from '@tanstack/react-query'
-import { KONG_GQL_URL } from '../../../../../../../lib/env'
+import { KONG_GQL_URL } from '../../../../../../../../lib/env'
 
 const QUERY = `query Query($chainId: Int!, $vault: String!) {
   allocator(chainId: $chainId, vault: $vault) { address }

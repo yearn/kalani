@@ -1,11 +1,11 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import Input from '../../../../../components/elements/Input'
-import Button from '../../../../../components/elements/Button'
+import Input from '../../../../../../components/elements/Input'
+import Button from '../../../../../../components/elements/Button'
 import { PiCheck, PiLink } from 'react-icons/pi'
 import { useAccount, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { useWriteContract } from '../../../../../hooks/useWriteContract'
+import { useWriteContract } from '../../../../../../hooks/useWriteContract'
 import { useProfitMaxUnlockTimes } from './useProfitMaxUnlockTimes'
-import { cn } from '../../../../../lib/shadcn'
+import { cn } from '../../../../../../lib/shadcn'
 import abis from '@kalani/lib/abis'
 import { useWhitelist } from '../useWhitelist'
 import { fEvmAddress } from '@kalani/lib/format'
@@ -13,7 +13,8 @@ import { capitalize, isNothing } from '@kalani/lib/strings'
 import { EvmAddress } from '@kalani/lib/types'
 import { useAutomationGuidelines } from './StrategyForm/useAutomationGuidelines'
 import { TargetType, useTargetInfos } from '../useTargetInfos'
-import StepLabel from '../../../../../components/forms/StepLabel'
+import StepLabel from '../../../../../../components/forms/StepLabel'
+import { useBreakpoints } from '../../../../../../hooks/useBreakpoints'
 
 function DaysInput({
   disabled, days, onChange, className, theme, isValid, validationMessage
@@ -66,6 +67,7 @@ function SecondsInput({
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string
 }) {
+  const { sm } = useBreakpoints()
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === '.' || event.key === ',') {
       event.preventDefault()
@@ -86,7 +88,7 @@ function SecondsInput({
       flex items-center justify-end
       text-neutral-600 text-2xl
       pointer-events-none`)}>
-      seconds
+      {sm ? 'seconds' : 's'}
     </div>
   </div>
 }
@@ -101,7 +103,7 @@ function useWrite(
     functionName: 'setProfitMaxUnlockTime',
     args: [BigInt(profitMaxUnlockTime)],
     query: { enabled }
-  }), [profitMaxUnlockTime, enabled])
+  }), [profitMaxUnlockTime, enabled, address])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -149,8 +151,8 @@ function ExecButton({ target, profitMaxUnlockTime, disabled }: { target: EvmAddr
 }
 
 function Target({ target, type, profitMaxUnlockTime, isWithinGuidelines }: { target: EvmAddress, type: TargetType, profitMaxUnlockTime: number, isWithinGuidelines: boolean }) {
-  return <div className="px-6 flex items-center justify-end ">
-    <div className="grow">
+  return <div className="px-6 flex flex-wrap items-center justify-end">
+    <div className="grow flex flex-wrap gap-0">
       <span className="text-neutral-400">{capitalize(type)}</span>
       <span className="text-neutral-600">(</span>
       {fEvmAddress(target)}
@@ -209,8 +211,8 @@ export default function SetProfitMaxUnlockTimes() {
 
       <div className="mt-8 px-6 flex items-center justify-end gap-6">
 
-        <div className="relative grid grid-cols-2 gap-6">
-          <div className="flex items-center justify-end">Automation frequency</div>
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="flex items-center sm:justify-end">Automation frequency</div>
           <DaysInput 
             days={frequency} 
             onChange={onChangeFrequency} 
@@ -219,7 +221,7 @@ export default function SetProfitMaxUnlockTimes() {
             validationMessage={`${recommendedFrequency} days or more recommended on ${chain?.name}`}
             />
 
-          <div className="flex items-center justify-end">Profit max unlock time</div>
+          <div className="flex items-center sm:justify-end">Profit max unlock time</div>
           <SecondsInput disabled={true} seconds={profitMaxUnlockTime} />
         </div>
 

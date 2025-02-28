@@ -17,7 +17,7 @@ export default function Layout() {
       <div className={`
         isolate grow overflow-y-auto pb-24 sm:min-h-screen
         sm:flex sm:flex-col sm:justify-start sm:border-r-primary sm:border-r-black`}>
-        <div className="hidden sm:block w-full h-[5.1rem] border-b border-transparent"></div>
+        <div className="w-full h-[4.5rem] sm:h-[5.1rem] border-b border-transparent"></div>
         <Outlet />
       </div>
 
@@ -31,6 +31,6 @@ export default function Layout() {
       </aside>
     </div>
 
-    <MenuBar className="justify-end" />
+    <MenuBar  />
   </div>
 }

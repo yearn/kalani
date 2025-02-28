@@ -16,7 +16,7 @@ export function HeroInset({ className, children }: { className?: string, childre
 
 export default function Hero({ className, children }: { className?: string, children: React.ReactNode }) {
   return <Screen className={cn(`relative h-48 px-4 sm:px-12 pt-6 
-    flex items-start justify-between gap-12`, className)}>
+    flex items-start justify-between gap-12 bg-black text-neutral-200`, className)}>
     {children}
   </Screen>
 }

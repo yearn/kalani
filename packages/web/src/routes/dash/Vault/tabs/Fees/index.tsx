@@ -10,6 +10,9 @@ import { useAccount } from 'wagmi'
 import InputBps from '../../../../../components/elements/InputBps'
 import { SetCustomConfig } from './SetCustomConfig'
 import Skeleton from '../../../../../components/Skeleton'
+import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
+import { AcceptFutureFeeManager } from '../../../Aside/Vault/Fees/AcceptFutureFeeManager'
+import ClaimFees from '../../../Aside/Vault/Fees/ClaimFees'
 
 function Suspender() {
   const { address } = useAccount()
@@ -18,6 +21,9 @@ function Suspender() {
   const isFeeManager = useMemo(() => compareEvmAddresses(address, accountant.feeManager), [address, accountant])
   const [managementFee, setManagementFee] = useState(vault?.fees?.managementFee ?? 0)
   const [performanceFee, setPerformanceFee] = useState(vault?.fees?.performanceFee ?? 0)
+  const { sm } = useBreakpoints()
+
+  const isFutureFeeManager = useMemo(() => compareEvmAddresses(address, accountant.futureFeeManager), [address, accountant])
 
   const onChangeManagementFee = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newFee = Number(e.target.value)
@@ -34,6 +40,15 @@ function Suspender() {
   if (!vault) return <></>
 
   return <div className="flex flex-col gap-8">
+
+    {!sm && isFutureFeeManager && <Section>
+      <AcceptFutureFeeManager />
+    </Section>}
+
+    {!sm && !isFutureFeeManager && <Section>
+      <ClaimFees />
+    </Section>}
+
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Management Fee">

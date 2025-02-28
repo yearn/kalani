@@ -44,13 +44,13 @@ export function Tab({
       group absolute z-10 inset-0 px-6 py-1 text-lg
       flex items-center justify-center gap-2
       cursor-pointer pointer-events-auto
-      text-neutral-950 bg-transparent
-      hover:bg-neutral-950/20
-      active:bg-neutral-800/20
-      active:text-secondary-400
-      data-[selected=true]:text-secondary-400
+      text-neutral-600 bg-transparent
+      hover:bg-neutral-950/60
+      active:bg-neutral-800/40
+      active:text-neutral-400
+      data-[selected=true]:text-neutral-100
       data-[selected=true]:bg-transparent
-      rounded-full drop-shadow-lg`, className)}>
+      rounded-full`, className)}>
       {children}
     </div>
   </div>

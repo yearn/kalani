@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useWhitelist } from './useWhitelist'
-import Addresses from '../../../../components/elements/Addresses'
+import Addresses from '../../../../../components/elements/Addresses'
 import { EvmAddress } from '@kalani/lib/types'
 
 export default function SetTargetAddresses() {

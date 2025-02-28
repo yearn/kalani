@@ -16,6 +16,7 @@ import { EvmAddress } from '@kalani/lib/types'
 import { getChain } from '../../../lib/chains'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
+import DepositWithdraw from '../../../components/DepositWithdraw'
 
 export interface VaultHeroProps {
   name: string
@@ -40,12 +41,12 @@ export function VaultHero({
 }: VaultHeroProps) {
   const { sm } = useBreakpoints()
 
-  return <HeroElement className="bg-secondary-400 text-neutral-950">
+  return <HeroElement>
     <div className="w-full flex flex-col justify-center gap-2 sm:gap-0 sm:pb-4">
 
       <div className="flex items-center gap-4 text-xl">
         <div className="mb-1">
-          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-secondary-400" />
+          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
         <div className="w-full flex flex-col sm:gap-1">
@@ -54,7 +55,7 @@ export function VaultHero({
             <div className="hidden sm:block">{getChain(chainId).name}</div>
             <div className="hidden sm:block">//</div>
             <div>
-              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-secondary-400" />
+              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-black" />
             </div>
             <div className="hidden sm:block">//</div>
             <div className="hidden sm:block">{chip}</div>
@@ -62,7 +63,7 @@ export function VaultHero({
         </div>
       </div>
 
-      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold drop-shadow-lg">
+      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold">
         <div className="">
           TVL {fUSD(tvl ?? 0)}
         </div>
@@ -82,6 +83,7 @@ export function VaultHero({
 function Hero() {
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
+  const { sm } = useBreakpoints()
 
   if (!vault) return <></>
 
@@ -96,7 +98,8 @@ function Hero() {
     apy={vault.apy?.close}
     chip={projectChip}
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
-      <Tab id="vitals" isDefault={true}>Vitals</Tab>
+      {!sm && <Tab id="deposits" isDefault={true}>Deposit</Tab>}
+      <Tab id="vitals" isDefault={sm}>Vitals</Tab>
       {allocator && <Tab id="allocator">Allocator</Tab>}
       <Tab id="fees">Fees</Tab>
       <Tab id="reports">Reports</Tab>
@@ -105,9 +108,23 @@ function Hero() {
   />
 }
 
+function WrapperDepositWithdraw() {
+  function Suspender() {
+    const { vault } = useVaultFromParams()
+    if (!vault) return <></>
+    return <DepositWithdraw chainId={vault.chainId} vault={vault.address} />
+  }
+
+  return <Suspense fallback={<></>}>
+    <Suspender />
+  </Suspense>
+}
+
 function Content() {
+  const { sm } = useBreakpoints()
   return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
-    <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
+    {!sm && <TabContent id="deposits" isDefault={true}><WrapperDepositWithdraw /></TabContent>}
+    <TabContent id="vitals" isDefault={sm}><Vitals /></TabContent>
     <TabContent id="allocator"><Allocator /></TabContent>
     <TabContent id="fees"><Fees /></TabContent>
     <TabContent id="reports"><Reports /></TabContent>
@@ -117,7 +134,7 @@ function Content() {
 
 export function VaultHeroSkeleton() {
   const { sm } = useBreakpoints()
-  return <HeroElement className="bg-secondary-400 text-neutral-950">
+  return <HeroElement>
     <div className="w-full flex flex-col justify-center gap-2 sm:pb-4">
       <div className="flex items-center gap-4 text-xl">
         <Skeleton className={cn(sm ? 'w-[68px] h-[64px] rounded-full' : 'w-[58px] h-[48px] rounded-full')} />

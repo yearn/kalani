@@ -104,7 +104,7 @@ export default function ClaimFees() {
 
   if (!vault) return <></>
 
-  return <div className="flex flex-col gap-6 border-primary border-neutral-900 rounded-primary px-8 py-6">
+  return <div className="flex flex-col gap-6 sm:border-primary border-neutral-900 rounded-primary px-8 py-6">
     <div className="text-sm text-neutral-400">Claimable Fees</div>
     <ErrorBoundary fallback={<AsTokens balance={balanceQuery.data ?? 0n} decimals={vault.asset.decimals} symbol={vault.symbol} />}>
       <AsAssets balance={balanceQuery.data ?? 0n} />

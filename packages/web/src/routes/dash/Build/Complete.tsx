@@ -21,7 +21,7 @@ export function CompleteSkeleton() {
   const recommendations = useNameRecommendations()
   return <div ref={ref} className="relative mt-8 flex flex-col items-end gap-3">
     <p className="text-2xl">Your vault is ready!</p>
-    <div className="relative mt-8 flex items-center justify-end gap-6">
+    <div className="relative mt-8 flex flex-wrap-reverse items-center justify-end gap-6">
       <SkeletonButton>Reset</SkeletonButton>
       <SkeletonButton>{`${recommendations.name} ->`}</SkeletonButton>
     </div>

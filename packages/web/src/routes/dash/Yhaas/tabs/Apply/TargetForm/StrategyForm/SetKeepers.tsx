@@ -6,11 +6,11 @@ import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import { useIsRelayed } from './useIsRelayed'
 import { useWhitelist } from '../../useWhitelist'
 import { EvmAddress } from '@kalani/lib/types'
-import Button from '../../../../../../components/elements/Button'
+import Button from '../../../../../../../components/elements/Button'
 import { fEvmAddress } from '@kalani/lib/format'
-import { useWriteContract } from '../../../../../../hooks/useWriteContract'
+import { useWriteContract } from '../../../../../../../hooks/useWriteContract'
 import { PiCheck } from 'react-icons/pi'
-import StepLabel from '../../../../../../components/forms/StepLabel'
+import StepLabel from '../../../../../../../components/forms/StepLabel'
 
 function useWrite(
   address: EvmAddress,
@@ -22,7 +22,7 @@ function useWrite(
     functionName: 'setKeeper',
     args: [relayer],
     query: { enabled }
-  }), [relayer, enabled])
+  }), [relayer, enabled, address])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -67,8 +67,8 @@ function ExecButton({ target }: { target: EvmAddress }) {
 
 function Target({ target }: { target: EvmAddress }) {
   const [relayer] = useRelayers()
-  return <div className="px-6 flex items-center justify-end ">
-    <div className="grow">
+  return <div className="px-6 flex flex-wrap items-center justify-end">
+    <div className="grow flex flex-wrap gap-0">
       <span className="text-neutral-400">Strategy</span>
       <span className="text-neutral-600">(</span>
       {fEvmAddress(target)}
@@ -90,7 +90,7 @@ export default function SetKeepers() {
     <StepLabel step={2} />
     <div className="grow flex flex-col gap-6">
       <p className="text-xl">Set keepers to yHaaS relayer</p>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         {targets.map((target, index) => <Target key={index} target={target} />)}
       </div>
     </div>

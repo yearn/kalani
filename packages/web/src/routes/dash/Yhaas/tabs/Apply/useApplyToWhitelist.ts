@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useWhitelist } from './useWhitelist'
 import { useTargetInfos } from './useTargetInfos'
-import { API_URL } from '../../../../lib/env'
+import { API_URL } from '../../../../../lib/env'
 
 export function useApplyToWhitelist() {
   const { address, chainId } = useAccount()

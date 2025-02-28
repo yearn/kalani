@@ -55,7 +55,7 @@ function Suspender({ address }: { address: EvmAddress }) {
   if (!address) return <></>
 
   return <section className="flex flex-col gap-0">
-    <Hero className="bg-primary-400 text-neutral-950">
+    <Hero>
       <div className="w-full flex items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <PiWallet size={64} />
@@ -75,8 +75,8 @@ function Suspender({ address }: { address: EvmAddress }) {
 
       <HeroInset>
         {isUserWallet && <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vaults" isDefault={true} className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Vaults</Tab>
-          <Tab id="projects" className="text-black active:text-primary-400 data-[selected=true]:text-primary-400">Projects</Tab>
+          <Tab id="vaults" isDefault={true}>Vaults</Tab>
+          <Tab id="projects">Projects</Tab>
         </Tabs>}
       </HeroInset>
     </Hero>
@@ -96,9 +96,9 @@ function Suspender({ address }: { address: EvmAddress }) {
             key={project.id} 
             to={`/project/${project.chainId}/${project.id}`} 
             h="tertiary" 
-            className="px-4 py-12 grow flex items-center justify-start gap-4 text-3xl">
-              <ChainImg chainId={project.chainId} size={48} />
-              {project.name}
+            className="py-12 grow flex items-center justify-start text-3xl">
+              <ChainImg chainId={project.chainId} size={48} className="mr-6 sm:ml-8 sm:mr-12" />
+              <div className="max-w-full truncate">{project.name}</div>
             </LinkButton>)}
         </div>
       </TabContent>}
@@ -107,7 +107,7 @@ function Suspender({ address }: { address: EvmAddress }) {
 }
 
 function _Skeleton() {
-  return <Hero className="bg-primary-400 text-neutral-950">
+  return <Hero>
     <div className="w-full flex items-center justify-between gap-6">
       <div className="flex items-center gap-6 drop-shadow-lg">
         <PiWallet size={64} />
