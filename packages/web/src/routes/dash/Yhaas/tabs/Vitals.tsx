@@ -1,6 +1,5 @@
 import { Suspense, useMemo } from 'react'
 import Section from '../../../../components/Section'
-import { VitalsSkeleton } from '../../Vault/tabs/Vitals'
 import LabelValueRow from '../../../../components/elements/LabelValueRow'
 import ViewGeneric from '../../../../components/elements/ViewGeneric'
 import { formatEther } from 'viem'
