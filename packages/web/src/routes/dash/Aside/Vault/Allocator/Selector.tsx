@@ -1,33 +1,12 @@
 import { zeroAddress } from 'viem'
-import { useLocalVaultStrategies, useVaultFromParams, useVaultParams } from '../../../../../hooks/useVault'
+import { useLocalVaultStrategies, useVaultFromParams } from '../../../../../hooks/useVault'
 import { FinderItem, getItemHref, useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useCallback, useEffect, useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { fPercent } from '@kalani/lib/format'
 import Button from '../../../../../components/elements/Button'
-import { useSimulateContract, useWaitForTransactionReceipt } from 'wagmi'
-import { EvmAddress } from '@kalani/lib/types'
-import { UseSimulateContractParameters } from 'wagmi'
-import abis from '@kalani/lib/abis'
-import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import LinkButton from '../../../../../components/elements/LinkButton'
-
-export function useAddStrategy(strategy: EvmAddress) {
-  const { address: vault } = useVaultParams()
-
-  const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: abis.vault,
-    address: vault ?? zeroAddress,
-    functionName: 'add_strategy',
-    args: [strategy],
-    query: { enabled: !!vault }
-  }), [vault, strategy])
-
-  const simulation = useSimulateContract(parameters)
-  const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
-  return { simulation, write, confirmation, resolveToast }
-}
+import { useAddStrategy } from './useAddStrategy'
 
 export function SelectableVault({ item }: { item: FinderItem }) {
   const { write, simulation, confirmation, resolveToast } = useAddStrategy(item.address)

@@ -23,7 +23,7 @@ const config = getDefaultConfig({
   appName: import.meta.env.VITE_WALLETCONNECT_PROJECT_NAME ?? 'appName',
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? 'projectId',
   ssr: true,
-  chains: chains as any,
+  chains: chains as any, // eslint-disable-line @typescript-eslint/no-explicit-any
   wallets: [{
     groupName: 'Popular',
     wallets: [

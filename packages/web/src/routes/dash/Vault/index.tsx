@@ -16,6 +16,7 @@ import { EvmAddress } from '@kalani/lib/types'
 import { getChain } from '../../../lib/chains'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
+import DepositWithdraw from '../../../components/DepositWithdraw'
 
 export interface VaultHeroProps {
   name: string
@@ -82,6 +83,7 @@ export function VaultHero({
 function Hero() {
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
+  const { sm } = useBreakpoints()
 
   if (!vault) return <></>
 
@@ -96,7 +98,8 @@ function Hero() {
     apy={vault.apy?.close}
     chip={projectChip}
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
-      <Tab id="vitals" isDefault={true}>Vitals</Tab>
+      {!sm && <Tab id="deposits" isDefault={true}>Deposit</Tab>}
+      <Tab id="vitals" isDefault={sm}>Vitals</Tab>
       {allocator && <Tab id="allocator">Allocator</Tab>}
       <Tab id="fees">Fees</Tab>
       <Tab id="reports">Reports</Tab>
@@ -105,9 +108,23 @@ function Hero() {
   />
 }
 
+function WrapperDepositWithdraw() {
+  function Suspender() {
+    const { vault } = useVaultFromParams()
+    if (!vault) return <></>
+    return <DepositWithdraw chainId={vault.chainId} vault={vault.address} />
+  }
+
+  return <Suspense fallback={<></>}>
+    <Suspender />
+  </Suspense>
+}
+
 function Content() {
+  const { sm } = useBreakpoints()
   return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
-    <TabContent id="vitals" isDefault={true}><Vitals /></TabContent>
+    {!sm && <TabContent id="deposits" isDefault={true}><WrapperDepositWithdraw /></TabContent>}
+    <TabContent id="vitals" isDefault={sm}><Vitals /></TabContent>
     <TabContent id="allocator"><Allocator /></TabContent>
     <TabContent id="fees"><Fees /></TabContent>
     <TabContent id="reports"><Reports /></TabContent>

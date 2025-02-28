@@ -57,7 +57,7 @@ function useAddressResults(addresses: EvmAddress[]) {
       }))
     }
     return results
-  }, [addresses, query])
+  }, [addresses, query, vault])
 
   return { query, results }
 }
@@ -82,10 +82,10 @@ export default function StrategiesByAddress() {
       name: result.name,
       symbol: result.symbol,
       strategies: [],
-      token: { address: result.asset, name: '', symbol: '' },
+      token: { address: result.asset, name: '', symbol: '', decimals: 18 },
       addressIndex: ''
     })
-  }, [])
+  }, [chainId])
 
   return <div className="flex flex-col gap-6">
     <div className="text-neutral-400">Find strategy by address</div>

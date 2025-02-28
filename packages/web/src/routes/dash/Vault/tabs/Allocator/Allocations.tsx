@@ -9,6 +9,7 @@ import { fBps, fPercent } from '@kalani/lib/format'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import { AddStrategyButton } from './NoStrategies'
 
 function EstimatedApy() {
   const authorized = useHasDebtManagerRole()
@@ -61,6 +62,10 @@ export default function Allocations() {
 
   return <div className="w-full flex flex-col gap-primary">
     {sortedByDefaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
+
+    <div className="w-full flex justify-center">
+      <AddStrategyButton />
+    </div>
 
     <div className="p-12 w-full flex items-center gap-12">
       <div className="grow flex flex-col items-end gap-2">

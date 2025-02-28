@@ -5,7 +5,6 @@ import { IconType } from 'react-icons/lib'
 import Connect from '../Connect'
 import { useNavigate } from 'react-router-dom'
 import Launcher from '../Launcher'
-import { useMenuBar } from './useMenuBar'
 import { useState, useEffect } from 'react'
 import { useDialog } from '../Dialog/useDialog'
 import Dialog from '../Dialog'
@@ -21,7 +20,6 @@ export default function MenuBar({ className }: { className?: string }) {
   const navigate = useNavigate()
   const menu = useDialog('menu')
   const launcher = useHashNav('launcher')
-  const { theme } = useMenuBar()
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
@@ -36,7 +34,7 @@ export default function MenuBar({ className }: { className?: string }) {
       w-full h-[4.5rem] pl-6 pr-3 flex flex-row items-center justify-between
       border-b-primary ${isScrolled ? 'border-black' : 'border-transparent'}
       pointer-events-none bg-grill-950`}>
-      <button onClick={menu.openDialog} className={cn('pointer-events-auto', theme === 'warn' && 'text-warn-400 theme-warn')}>
+      <button onClick={menu.openDialog} className="pointer-events-auto">
         <PiEqualsBold size={32} />
       </button>
       <Connect short={true} className="pointer-events-auto" />
