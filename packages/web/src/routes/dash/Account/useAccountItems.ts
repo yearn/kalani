@@ -55,10 +55,17 @@ export function useAccountItems(account: EvmAddress) {
   const { localVaults } = useLocalVaults()
 
   const vaults = useMemo(() => {
-    return [
-      ...AccountVaultSchema.array().parse(query.data?.data?.accountVaults ?? []),
-      ...AccountVaultSchema.array().parse(localVaults)
-    ]
+    const queryVaults = AccountVaultSchema.array().parse(query.data?.data?.accountVaults ?? [])
+    const localVaultsParsed = AccountVaultSchema.array().parse(localVaults)
+
+    // Deduplicate by filtering out local vaults that are already in queryVaults
+    const uniqueLocalVaults = localVaultsParsed.filter(localVault =>
+      !queryVaults.some(queryVault =>
+        queryVault.chainId === localVault.chainId && queryVault.address === localVault.address
+      )
+    )
+
+    return [...queryVaults, ...uniqueLocalVaults]
   }, [query, localVaults])
 
   const items = useMemo(() => {
