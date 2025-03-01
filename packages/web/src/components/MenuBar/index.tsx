@@ -28,7 +28,7 @@ export default function MenuBar({ className }: { className?: string }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-start pointer-events-none', className)}>
+  return <div className={cn('sm:hidden fixed inset-0 flex flex-col justify-start pointer-events-none', className)}>
 
     {<div className={`
       w-full h-[4.5rem] pl-6 pr-3 flex flex-row items-center justify-between

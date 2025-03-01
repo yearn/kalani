@@ -191,8 +191,8 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
                     cursor-pointer
                     hover:bg-black hover:text-secondary-200
                     ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
-                    ${index === 0 ? 'rounded-t-primary' : ''}
-                    ${index === filteredItems.length - 1 ? 'rounded-b-primary' : ''}
+                    ${index === 0 ? 'sm:rounded-t-primary' : ''}
+                    ${index === filteredItems.length - 1 ? 'sm:rounded-b-primary' : ''}
                   `}
                 >
                   <td className="w-20 px-4 py-4 text-xs text-center">
