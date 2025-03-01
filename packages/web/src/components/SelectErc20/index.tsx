@@ -27,26 +27,27 @@ interface SelectErc20Props {
   onSelect?: (item: Erc20 | undefined) => void
 }
 
-const containerClassName = `group relative z-0
+const containerClassName = `
+group relative z-0
+
 data-[open=true]:pt-16 sm:data-[open=true]:pt-0
 data-[open=true]:fixed data-[open=true]:z-[100] 
 data-[open=true]:top-[50%] data-[open=true]:left-0
 data-[open=true]:right-0 data-[open=true]:bottom-0
 data-[open=true]:bg-neutral-950
 data-[open=true]:flex data-[open=true]:flex-col-reverse data-[open=true]:justify-between
-data-[open=true]:rounded-t-primary sm:data-[open=true]:rounded-none
 
+data-[open=true]:rounded-t-primary sm:data-[open=true]:rounded-none
 data-[open=true]:border-t-2 sm:data-[open=true]:border-none
 data-[open=true]:border-neutral-800
 
-data-[open=true]:before:absolute 
-data-[open=true]:before:-top-[calc(100%+2px)] 
+data-[open=true]:before:absolute sm:data-[open=true]:before:hidden
+data-[open=true]:before:-top-[calc(100%+2px)]
 data-[open=true]:before:left-0 
 data-[open=true]:before:right-0 
 data-[open=true]:before:h-[100%]
 data-[open=true]:before:bg-black/50 
 data-[open=true]:before:backdrop-blur-sm
-sm:data-[open=true]:before:hidden
 
 sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:bg-transparent
 sm:data-[open=true]:block
@@ -55,7 +56,10 @@ sm:data-[open=true]:block
 const _inputClassName = `h-18 py-4
 group-data-[open=true]:rounded-none group-data-[open=true]:rounded-primary
 group-data-[open=true]:z-50 sm:group-data-[open=true]:z-auto
-pointer-events-auto`
+
+sm:group-data-[selected=true]:cursor-default
+pointer-events-auto
+`
 
 const suggestionsClassName = `absolute z-50 w-full mt-3
 group-data-[open=true]:grow sm:group-data-[open=true]:grow-0
@@ -155,7 +159,7 @@ const Suspender: React.FC<SelectErc20Props> = ({
     }
   }, [nav, filter, selectedIndex, handleItemClick])
 
-  return <div data-open={nav.isOpen} ref={containerRef} className={cn(
+  return <div data-open={nav.isOpen} data-selected={selected !== undefined} ref={containerRef} className={cn(
       containerClassName, 
       className
     )}>
@@ -192,15 +196,16 @@ const Suspender: React.FC<SelectErc20Props> = ({
     </div>
 
     {selected && <div className={`
-      absolute z-[100] inset-2
+      absolute z-[100] inset-2 sm:h-[52px]
 
-      group-data-[open=true]:inset-auto
       group-data-[open=true]:right-2
       group-data-[open=true]:bottom-1
       group-data-[open=true]:left-2
 
       px-2 border-primary border-transparent
-      flex items-center gap-6 bg-neutral-950 rounded-primary pointer-events-none`}>
+      flex items-center gap-6 
+      bg-neutral-950 rounded-primary 
+      pointer-events-none`}>
       <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} bgClassName={tokenBgClassName} /></div>
       <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
       <div className="grow truncate">{selected.name}</div>
