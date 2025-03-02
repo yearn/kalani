@@ -53,7 +53,8 @@ sm:data-[open=true]:relative sm:data-[open=true]:inset-auto sm:data-[open=true]:
 sm:data-[open=true]:block
 `
 
-const _inputClassName = `h-18 py-4
+const _inputClassName = `
+h-18 py-4
 group-data-[open=true]:rounded-none group-data-[open=true]:rounded-primary
 group-data-[open=true]:z-50 sm:group-data-[open=true]:z-auto
 
@@ -61,7 +62,8 @@ sm:group-data-[selected=true]:cursor-default
 pointer-events-auto
 `
 
-const suggestionsClassName = `absolute z-50 w-full mt-3
+const suggestionsClassName = `
+absolute z-50 w-full mt-3
 group-data-[open=true]:grow sm:group-data-[open=true]:grow-0
 group-data-[open=true]:relative sm:group-data-[open=true]:absolute
 group-data-[open=true]:mt-0 sm:group-data-[open=true]:mt-3
@@ -69,7 +71,8 @@ group-data-[open=true]:z-0 sm:group-data-[open=true]:z-50
 overflow-y-auto
 `
 
-const scrollAreaClassName = `w-full sm:max-h-80 overflow-auto 
+const scrollAreaClassName = `
+w-full sm:max-h-80 overflow-auto 
 bg-transparent sm:bg-neutral-900 border-primary border-secondary-200 
 group-data-[open=true]:border-transparent sm:group-data-[open=true]:border-secondary-400
 rounded-none sm:rounded-primary
@@ -202,16 +205,17 @@ const Suspender: React.FC<SelectErc20Props> = ({
       group-data-[open=true]:bottom-1
       group-data-[open=true]:left-2
 
-      px-2 border-primary border-transparent
-      flex items-center gap-6 
-      bg-neutral-950 rounded-primary 
+      border-primary border-transparent
+      flex items-center group-data-[open=true]:items-end sm:items-center sm:group-data-[open=true]:items-center gap-6
       pointer-events-none`}>
-      <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} bgClassName={tokenBgClassName} /></div>
-      <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
-      <div className="grow truncate">{selected.name}</div>
-      <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}  disabled={disabled}>
-        <PiX size={24} />
-      </button>
+      <div className="w-full h-[52px] px-2 flex items-center justify-between gap-6 bg-neutral-950 rounded-primary">
+        <div className="size-12"><TokenImg size={48} chainId={selected.chainId} address={selected.address} bgClassName={tokenBgClassName} /></div>
+        <div>{fEvmAddress(selected.address, !breakpoints.sm)}</div>
+        <div className="grow truncate">{selected.name}</div>
+        <button className="flex items-center text-sm text-neutral-500 cursor-pointer pointer-events-auto" onClick={() => handleItemClick(undefined)}  disabled={disabled}>
+          <PiX size={24} />
+        </button>
+      </div>
     </div>}
 
     {nav.isOpen && filter.length == 0 && !selected && !EvmAddressSchema.safeParse(query).success && (
@@ -246,7 +250,6 @@ const Suspender: React.FC<SelectErc20Props> = ({
                 className={`
                   px-4 py-3 flex items-center gap-6 cursor-pointer
                   hover:bg-black hover:text-secondary-200
-                  ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
                   ${index === 0 ? 'sm:rounded-t-primary' : ''}
                   ${index === filter.length - 1 ? 'sm:rounded-b-primary' : ''}
                 `}>

@@ -47,7 +47,7 @@ export default function MenuBar({ className }: { className?: string }) {
         <MenuBarButton icon={PiVault} title="Build" onClick={() => navigate('/build', { replace: true })} />
         <MenuBarButton icon={PiRobot} title="yHaaS" onClick={() => navigate('/yhaas', { replace: true })} />
         <MenuBarButton icon={PiInfo} title="Info" onClick={() => navigate('/info', { replace: true })} />
-        <MenuBarButton icon={PiDotsNine} title="yEcosystem" onClick={launcher.open} />
+        <MenuBarButton icon={PiDotsNine} title="yApps" onClick={launcher.open} />
       </div>
     </Dialog>
 
