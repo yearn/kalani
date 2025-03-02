@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import abis from '@kalani/lib/abis'
 import { z } from 'zod'
 import { zeroAddress } from 'viem'
-import { useVaultFromParams } from './useVault'
+import { useVaultFromParams } from './useVault/withVault'
 
 export const AccountantSchema = z.object({
   chainId: z.number(),

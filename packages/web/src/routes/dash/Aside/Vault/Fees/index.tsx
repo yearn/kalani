@@ -1,4 +1,4 @@
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useMounted } from '../../../../../hooks/useMounted'
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { useAccount } from 'wagmi'

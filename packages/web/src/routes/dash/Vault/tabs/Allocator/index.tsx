@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from 'react'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useAllocator, useMinimumChange } from '../../useAllocator'
 import { useAccount } from 'wagmi'
 import Section from '../../../../../components/Section'

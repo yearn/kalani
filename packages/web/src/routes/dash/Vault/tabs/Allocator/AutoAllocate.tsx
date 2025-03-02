@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
-import { Vault, withVault } from '../../../../../hooks/useVault'
+import { Vault } from '../../../../../hooks/useVault'
+import { withVault } from '../../../../../hooks/useVault/withVault'
 import { useReadContract, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { parseAbi } from 'viem'
 import { ErrorBoundary } from 'react-error-boundary'

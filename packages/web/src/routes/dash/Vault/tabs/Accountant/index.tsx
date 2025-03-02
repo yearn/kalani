@@ -1,6 +1,7 @@
 import { EvmAddressSchema } from '@kalani/lib/types'
 import { useState } from 'react'
-import { Vault, withVault } from '../../../../../hooks/useVault'
+import { Vault } from '../../../../../hooks/useVault'
+import { withVault } from '../../../../../hooks/useVault/withVault'
 import SetAddress from './SetAddress'
 import Fees from './Fees'
 import { useReadContract } from 'wagmi'

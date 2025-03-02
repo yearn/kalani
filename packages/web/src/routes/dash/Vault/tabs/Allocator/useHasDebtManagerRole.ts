@@ -1,5 +1,5 @@
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { zeroAddress } from 'viem'
 import { ROLES } from '@kalani/lib/types'
 

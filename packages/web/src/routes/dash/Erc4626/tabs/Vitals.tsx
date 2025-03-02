@@ -1,6 +1,7 @@
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
-import { Vault, withVault } from '../../../../hooks/useVault'
+import { Vault } from '../../../../hooks/useVault'
+import { withVault } from '../../../../hooks/useVault/withVault'
 import { fTokens, fUSD } from '@kalani/lib/format'
 import { getChain } from '../../../../lib/chains'
 import Section from '../../../../components/Section'
