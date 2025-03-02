@@ -167,9 +167,17 @@ export function useFinderItems() {
   const { localVaults } = useLocalVaults()
 
   const items = useMemo(() => {
+    const localVaultFinderItems = localVaults.map(vault => vaultToFinderItem(vault, 'v3'))
+
+    const uniqueLocalVaultFinderItems = localVaultFinderItems.filter(vault =>
+      !query.data.some(queryVault =>
+        queryVault.chainId === vault.chainId && compareEvmAddresses(queryVault.address, vault.address)
+      )
+    )
+
     return [
       ...query.data, 
-      ...localVaults.map(vault => vaultToFinderItem(vault, 'v3'))
+      ...uniqueLocalVaultFinderItems
     ]
   }, [query.data, localVaults])
 
@@ -182,7 +190,7 @@ export function useFinderItems() {
         || (lowerq.length > 6 && item.addressIndex.toLowerCase().includes(lowerq))
     })
     return sort(result)
-  }, [items, localVaults, q, sort])
+  }, [items, q, sort])
 
   return { 
     ...query, 

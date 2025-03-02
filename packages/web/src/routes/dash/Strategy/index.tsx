@@ -7,6 +7,13 @@ import { VaultHero, VaultHeroSkeleton } from '../Vault'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import DepositWithdraw from '../../../components/DepositWithdraw'
 
+const tabClassName = `
+bg-secondary-400/20
+data-[selected=true]:bg-secondary-400
+hover:bg-secondary-400/40
+active:bg-secondary-400/60
+`
+
 function Hero() {
   const { strategy } = useStrategyFromParams()
   const { sm } = useBreakpoints()
@@ -21,9 +28,9 @@ function Hero() {
       apy={strategy.apy?.close}
       chip="tokenized strategy"
       inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
-        {!sm && <Tab id="deposits" isDefault={true}>Deposit</Tab>}
-        <Tab id="vitals" isDefault={sm}>Vitals</Tab>
-        <Tab id="reports">Reports</Tab>
+        {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
+        <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
+        <Tab id="reports" className={tabClassName}>Reports</Tab>
       </Tabs>}
     />
   </section>

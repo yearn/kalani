@@ -1,9 +1,22 @@
 import { AutoTextSize } from 'auto-text-size'
-import { cn } from '../lib/shadcn'
-import Screen from './Screen'
+import { cn } from '../../lib/shadcn'
+import Screen from '../Screen'
+import { IconType } from 'react-icons/lib'
+import { useMemo } from 'react'
+import { useBreakpoints } from '../../hooks/useBreakpoints'
+
+export function HeroIcon({ className, icon }: { className?: string, icon: IconType }) {
+  const { sm } = useBreakpoints()
+  const size = useMemo(() => sm ? 48 : 32, [sm])
+  return <div className={cn('p-3 rounded-full flex items-center justify-center text-black', className)}>
+    <div className="size-[${size}px]">
+      {icon({ size })}
+    </div>
+  </div>
+}
 
 export function HeroTitle({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={cn('w-[92%] text-4xl font-fancy', className)}>
+  return <div className={cn('w-[92%] text-2xl sm:text-4xl font-fancy', className)}>
     <AutoTextSize mode="oneline" maxFontSizePx={46}>{children}</AutoTextSize>
   </div>
 }

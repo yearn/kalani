@@ -5,17 +5,21 @@ import { Tab, TabContent, Tabs } from '../../../components/Tabs'
 import Vitals from './tabs/Vitals'
 import Pending from './tabs/Pending'
 import Running from './tabs/Running'
+import Fancy from '../../../components/Fancy'
+import { HeroIcon } from '../../../components/Hero'
+
+const tabClassName = `
+bg-zinc-400/20
+data-[selected=true]:bg-zinc-400
+hover:bg-zinc-400/40
+active:bg-zinc-400/60
+`
 
 function Brand() {
   return <div className="flex items-center gap-6 drop-shadow-lg">
-    <PiRobot size={64} />
+    <HeroIcon icon={PiRobot} className="bg-zinc-400" />
     <div className="flex flex-col gap-0">
-      <div className="flex items-end gap-1">
-        <div className="text-4xl font-fancy">y</div>
-        <div className="text-5xl font-fancy">H</div>
-        <div className="text-4xl font-fancy">aa</div>
-        <div className="text-5xl font-fancy">S</div>
-      </div>
+      <Fancy text="yHaaS" />
       <div className="text-xs tracking-widest">Yearn Harvest as a Service</div>
     </div>
   </div>
@@ -36,10 +40,10 @@ export default function Page() {
       <Brand />
       <HeroInset>
         <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vitals">Vitals</Tab>
-          <Tab id="apply" isDefault={true}>Apply</Tab>
-          <Tab id="pending">Pending</Tab>
-          <Tab id="running">Running</Tab>
+          <Tab id="vitals" className={tabClassName}>Vitals</Tab>
+          <Tab id="apply" className={tabClassName} isDefault={true}>Apply</Tab>
+          <Tab id="pending" className={tabClassName}>Pending</Tab>
+          <Tab id="running" className={tabClassName}>Running</Tab>
         </Tabs>
       </HeroInset>
     </Hero>

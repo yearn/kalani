@@ -45,7 +45,7 @@ const QUERY = `query Query($chainId: Int) {
   }
 }`
 
-async function fetchProjects(chainId: number, nonce: string) {
+async function fetchProjects(chainId: number | undefined, nonce: string) {
   const response = await fetch(KONG_GQL_URL, {
     method: 'POST',
     headers: {
@@ -80,7 +80,6 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
   const query = useSuspenseQuery({
     queryKey: ['useProjects', chainId, address, nonce],
     queryFn: async () => {
-      if (!chainId) return []
       const { data: { projects } } = await fetchProjects(chainId, nonce)
       if (!address) return projects
       return projects.filter((project: Project) => 
@@ -95,12 +94,13 @@ export function useProjects(chainId: number | undefined, address?: EvmAddress | 
     const result = [
       ...governed, 
       ...localProjects.filter(project => 
+        (chainId === undefined || project.chainId === chainId) &&
         !indexed.some(indexedProject => indexedProject.id === project.id)
       )
     ]
     result.sort((a, b) => a.name.localeCompare(b.name))
     return result
-  }, [query, localProjects, address])
+  }, [query, localProjects, address, chainId])
 
   return { ...query, projects }
 }

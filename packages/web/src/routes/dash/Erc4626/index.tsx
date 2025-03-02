@@ -6,6 +6,13 @@ import { VaultHero, VaultHeroSkeleton } from '../Vault'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import DepositWithdraw from '../../../components/DepositWithdraw'
 
+const tabClassName = `
+bg-secondary-400/20
+data-[selected=true]:bg-secondary-400
+hover:bg-secondary-400/40
+active:bg-secondary-400/60
+`
+
 function Hero() {
   const { sm } = useBreakpoints()
   const { vault } = useVaultFromParams()
@@ -19,8 +26,8 @@ function Hero() {
     apy={vault.apy?.close}
     chip="erc4626"
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
-      {!sm && <Tab id="deposits" isDefault={true}>Deposit</Tab>}
-      <Tab id="vitals" isDefault={sm}>Vitals</Tab>
+      {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
+      <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
     </Tabs>}
   />
 }

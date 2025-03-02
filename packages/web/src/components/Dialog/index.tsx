@@ -60,7 +60,7 @@ const Dialog: React.FC<DialogProps> = ({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={handleClose}
       />
       <FlyInFromBottom _key={dialogId} className="w-full flex justify-center pointer-events-none" transition={springs.glitch}>
@@ -69,7 +69,7 @@ const Dialog: React.FC<DialogProps> = ({
           className={cn(
             `relative w-full sm:max-w-md max-h-[90vh] p-6 sm:px-8 sm:py-6
             flex flex-col gap-12
-            bg-neutral-950 border border-neutral-800
+            bg-neutral-950 border-t-2 border-neutral-800
             rounded-t-primary sm:rounded-primary
             shadow-lg overflow-y-auto pointer-events-auto`,
             className
@@ -79,7 +79,7 @@ const Dialog: React.FC<DialogProps> = ({
             <button
               onClick={handleClose}
               className="text-neutral-700">
-              <PiX size={24} />
+              <PiX size={32} />
             </button>
           </div>
           {children}

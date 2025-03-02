@@ -28,7 +28,7 @@ export default function MenuBar({ className }: { className?: string }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  return <div className={cn('sm:hidden fixed z-50 inset-0 flex flex-col justify-start pointer-events-none', className)}>
+  return <div className={cn('sm:hidden fixed inset-0 flex flex-col justify-start pointer-events-none', className)}>
 
     {<div className={`
       w-full h-[4.5rem] pl-6 pr-3 flex flex-row items-center justify-between
@@ -47,7 +47,7 @@ export default function MenuBar({ className }: { className?: string }) {
         <MenuBarButton icon={PiVault} title="Build" onClick={() => navigate('/build', { replace: true })} />
         <MenuBarButton icon={PiRobot} title="yHaaS" onClick={() => navigate('/yhaas', { replace: true })} />
         <MenuBarButton icon={PiInfo} title="Info" onClick={() => navigate('/info', { replace: true })} />
-        <MenuBarButton icon={PiDotsNine} title="yEcosystem" onClick={launcher.open} />
+        <MenuBarButton icon={PiDotsNine} title="yApps" onClick={launcher.open} />
       </div>
     </Dialog>
 

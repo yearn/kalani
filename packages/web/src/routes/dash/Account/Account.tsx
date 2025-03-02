@@ -1,6 +1,6 @@
 import { fPercent, fUSD } from '@kalani/lib/format'
 import { EvmAddress } from '@kalani/lib/types'
-import Hero, { HeroInset } from '../../../components/Hero'
+import Hero, { HeroInset, HeroIcon } from '../../../components/Hero'
 import { useAccount } from 'wagmi'
 import { Suspense, useMemo } from 'react'
 import Skeleton from '../../../components/Skeleton'
@@ -15,15 +15,23 @@ import { useProjects } from '../../../components/SelectProject/useProjects'
 import LinkButton from '../../../components/elements/LinkButton'
 import ChainImg from '../../../components/ChainImg'
 import { useLocation } from 'react-router-dom'
+import Fancy from '../../../components/Fancy'
+
+const tabClassName = `
+bg-secondary-400/20
+data-[selected=true]:bg-secondary-400
+hover:bg-secondary-400/40
+active:bg-secondary-400/60
+`
 
 function Suspender({ address }: { address: EvmAddress }) {
-  const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
+  const { address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
   const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
   const location = useLocation()
   const title = useMemo(() => location.pathname === '/' ? 'Wallet' : 'Account', [location])
   const { sortKey, sortDirection } = useAccountOptions()
-  const { projects } = useProjects(chainIdFromAccount, addressFromAccount)
+  const { projects } = useProjects(undefined, addressFromAccount)
 
   const sorted = useMemo(() => {
     return items.sort((a, b) => {
@@ -51,17 +59,12 @@ function Suspender({ address }: { address: EvmAddress }) {
 
   if (!address) return <></>
 
-  return <section className="flex flex-col gap-0">
+  return <section className="flex flex-col">
     <Hero>
       <div className="w-full flex items-center justify-between gap-6">
         <div className="flex items-center gap-6">
-          <PiWallet size={64} />
-          <div className="flex flex-col gap-0">
-            <div className="flex items-end gap-1">
-              <div className="text-5xl font-fancy">{title.charAt(0)}</div>
-              <div className="text-4xl font-fancy">{title.slice(1)}</div>
-            </div>
-          </div>
+          <HeroIcon icon={PiWallet} className="bg-secondary-400" />
+          <Fancy text={title} />
         </div>
 
         {!isUserWallet && <div className="hidden flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">
@@ -72,8 +75,8 @@ function Suspender({ address }: { address: EvmAddress }) {
 
       <HeroInset>
         {isUserWallet && <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vaults" isDefault={true}>Vaults</Tab>
-          <Tab id="projects">Projects</Tab>
+          <Tab id="vaults" isDefault={true} className={tabClassName}>Vaults</Tab>
+          <Tab id="projects" className={tabClassName}>Projects</Tab>
         </Tabs>}
       </HeroInset>
     </Hero>
@@ -107,12 +110,8 @@ function _Skeleton() {
   return <Hero>
     <div className="w-full flex items-center justify-between gap-6">
       <div className="flex items-center gap-6 drop-shadow-lg">
-        <PiWallet size={64} />
-        <div className="flex flex-col gap-0">
-          <div className="flex items-end gap-1">
-            <div className="text-4xl font-fancy"><Skeleton className="w-48 h-10 rounded-primary" /></div>
-          </div>
-        </div>
+        <HeroIcon icon={PiWallet} className="bg-secondary-400" />
+        <Fancy text="Wallet" />
       </div>
 
       <div className="hidden sm:flex items-end gap-10 pr-4 pb-0 drop-shadow-lg">

@@ -4,9 +4,11 @@ import Header from '../../dash/Header'
 import Account from '../../dash/Account/Account'
 import { zeroAddress } from 'viem'
 import MenuBar from '../../../components/MenuBar'
+import { useLockScrollOnHash } from '../../../hooks/useLockScrollOnHash'
 
 export default function Wallet() {
   const { address } = useAccount()
+  useLockScrollOnHash()
 
   return <div className={`
     w-full h-screen sm:max-h-auto
@@ -36,6 +38,6 @@ export default function Wallet() {
       </aside>
     </div>
 
-    <MenuBar />
+    <MenuBar className="z-50" />
   </div>
 }

@@ -27,11 +27,12 @@ export default {
   content: [ './src/**/*.{html,js,jsx,ts,tsx}' ],
   safelist: [
     ...heightSafeList(),
-    'w-[24px]', 'h-[24px]',
-    'w-[28px]', 'h-[28px]',
-    'w-[32px]', 'h-[32px]',
-    'w-[48px]', 'h-[48px]',
-    'w-[64px]', 'h-[64px]',
+    'w-[24px]', 'h-[24px]', 'size-[24px]',
+    'w-[28px]', 'h-[28px]', 'size-[28px]',
+    'w-[32px]', 'h-[32px]', 'size-[32px]',
+    'w-[48px]', 'h-[48px]', 'size-[48px]',
+    'w-[64px]', 'h-[64px]', 'size-[64px]',
+    'w-[72px]', 'h-[72px]', 'size-[72px]',
     'border-primary',
     'odd:bg-grill-900'
   ],

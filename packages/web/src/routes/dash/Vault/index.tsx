@@ -18,6 +18,13 @@ import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
 import DepositWithdraw from '../../../components/DepositWithdraw'
 
+const tabClassName = `
+bg-secondary-400/20
+data-[selected=true]:bg-secondary-400
+hover:bg-secondary-400/40
+active:bg-secondary-400/60
+`
+
 export interface VaultHeroProps {
   name: string
   chainId: number
@@ -46,7 +53,7 @@ export function VaultHero({
 
       <div className="flex items-center gap-4 text-xl">
         <div className="mb-1">
-          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 64 : 48} showChain={true} bgClassName="border-black" />
+          <TokenImg chainId={chainId} address={assetAddress} size={sm ? 72 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
         <div className="w-full flex flex-col sm:gap-1">
@@ -98,12 +105,12 @@ function Hero() {
     apy={vault.apy?.close}
     chip={projectChip}
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
-      {!sm && <Tab id="deposits" isDefault={true}>Deposit</Tab>}
-      <Tab id="vitals" isDefault={sm}>Vitals</Tab>
-      {allocator && <Tab id="allocator">Allocator</Tab>}
-      <Tab id="fees">Fees</Tab>
-      <Tab id="reports">Reports</Tab>
-      <Tab id="roles">Roles</Tab>
+      {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
+      <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
+      {allocator && <Tab id="allocator" className={tabClassName}>Allocator</Tab>}
+      <Tab id="fees" className={tabClassName}>Fees</Tab>
+      <Tab id="reports" className={tabClassName}>Reports</Tab>
+      <Tab id="roles" className={tabClassName}>Roles</Tab>
     </Tabs>}
   />
 }
