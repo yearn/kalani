@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { EvmAddress } from '@kalani/lib/types'
 import { create } from 'zustand'
 import { useOnchainTargetRatios } from './useOnchainTargetRatios'

@@ -1,5 +1,6 @@
 import Section from '../../../../components/Section'
-import { Vault, withVault } from '../../../../hooks/useVault'
+import { Vault } from '../../../../hooks/useVault'
+import { withVault } from '../../../../hooks/useVault/withVault'
 import { div, mulb } from '@kalani/lib/bmath'
 import { fTokens, fUSD } from '@kalani/lib/format'
 import { Suspense, useMemo } from 'react'

@@ -1,5 +1,5 @@
 import { parseAbi, zeroAddress } from 'viem'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useAccount, useConfig, useWaitForTransactionReceipt, useSimulateContract, UseSimulateContractParameters } from 'wagmi'

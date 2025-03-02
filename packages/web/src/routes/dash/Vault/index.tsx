@@ -1,4 +1,4 @@
-import { useVaultFromParams } from '../../../hooks/useVault'
+import { useVaultFromParams } from '../../../hooks/useVault/withVault'
 import { fPercent, fUSD } from '@kalani/lib/format'
 import Roles from './tabs/Roles'
 import Vitals from './tabs/Vitals'

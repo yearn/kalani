@@ -6,7 +6,7 @@ import { UseSimulateContractParameters, useAccount, useReadContracts, useSimulat
 import { EvmAddress, EvmAddressSchema, ROLES } from '@kalani/lib/types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import accountants, { TaggedAccountant } from './accountants'
-import { useVaultFromParams } from '../../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../../hooks/useVault/withVault'
 import abis from '@kalani/lib/abis'
 import { getAddress, zeroAddress } from 'viem'
 import { z } from 'zod'
@@ -71,7 +71,7 @@ function SetAddress({
   useEffect(() => {
     if (multicall.data?.every(d => d.status === 'success')) {
       setPrevious(EvmAddressSchema.parse(multicall.data![0].result))
-      let mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
+      const mask = z.bigint({ coerce: true }).parse(multicall.data![1].result)
       setRoles(mask)
     } else {
       setPrevious(undefined)

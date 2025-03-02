@@ -2,10 +2,10 @@ import { z } from 'zod'
 import { AccountRoleSchema, EvmAddressSchema, HexStringSchema, EvmAddress } from '@kalani/lib/types'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useParams } from 'react-router-dom'
-import { nullsToUndefined } from '../lib/object'
-import { useFinderItems } from '../components/Finder/useFinderItems'
+import { nullsToUndefined } from '../../lib/object'
+import { useFinderItems } from '../../components/Finder/useFinderItems'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { KONG_GQL_URL } from '../lib/env'
+import { KONG_GQL_URL } from '../../lib/env'
 import { useCallback, useMemo } from 'react'
 import useLocalStorage from 'use-local-storage'
 
@@ -256,22 +256,23 @@ export function useVault({ chainId, address }: { chainId: number, address: EvmAd
   const localVault: Vault = findLocalVaultOrDefaults(chainId, address)
   const { localVaultStrategies } = useLocalVaultStrategies()
 
-  if (!data) return { query, vault: undefined }
+  const vault = useMemo(() => {
+    const combinedVault = { ...data.data.vault, ...localVault }
+    return combinedVault
+  }, [data.data.vault, localVault])
 
-  const vault = { ...data.data.vault, ...localVault }
-  const vaultStrategies = [
-    ...data.data.vaultStrategies,
-    ...localVaultStrategies.filter(strategy => 
-      strategy.vault === vault.address
-      && !data.data.vaultStrategies.some((vaultStrategy: any) => 
-        strategy.chainId === vaultStrategy.chainId
-        && compareEvmAddresses(vaultStrategy.address, strategy.address)
-        && compareEvmAddresses(vaultStrategy.vault, strategy.vault)
+  const vaultStrategies = useMemo(() => {
+    const strategies = [
+      ...data.data.vaultStrategies,
+      ...localVaultStrategies.filter(strategy => 
+        strategy.vault === vault.address && 
+        !data.data.vaultStrategies.some((vs: any) => compareEvmAddresses(vs.address, strategy.address))
       )
-    )
-  ]
+    ]
+    return strategies
+  }, [data.data.vaultStrategies, localVaultStrategies, vault.address])
 
-  const strategies = vaultStrategies.map((strategy: any) => {
+  const strategies = useMemo(() => vaultStrategies.map((strategy: any) => {
     const debt = (vault?.debts ?? []).find((debt: any) => debt.strategy === strategy.address)
     return {
       ...strategy,
@@ -279,13 +280,15 @@ export function useVault({ chainId, address }: { chainId: number, address: EvmAd
       currentDebtUsd: debt?.currentDebtUsd ?? 0,
       targetDebtRatio: debt?.targetDebtRatio ?? 0
     }
-  })
+  }), [vaultStrategies, vault?.debts])
 
-  const item = finderItems?.find(item => item.chainId === vault.chainId && compareEvmAddresses(item.address, vault.address))
+  const item = useMemo(() => finderItems?.find(item => item.chainId === vault.chainId && compareEvmAddresses(item.address, vault.address)), [finderItems, vault])
 
   const accounts = useMemo(() => [...data.data.accounts, ...(localVault?.accounts ?? [])].filter((account, index, self) =>
     index === self.findIndex((t) => t.address === account.address)
   ), [data, localVault])
+
+  if (!data) return { query, vault: undefined }
 
   return { query, vault: VaultSchema.parse(nullsToUndefined({
     label: item?.label ?? 'erc4626',
@@ -296,15 +299,3 @@ export function useVault({ chainId, address }: { chainId: number, address: EvmAd
   }))}
 }
 
-export function useVaultFromParams() {
-  const params = useVaultParams()
-  return useVault(params)
-}
-
-export function withVault(WrappedComponent: React.ComponentType<{ vault: Vault }>) {
-  return function ComponentWithVault(props: any) {
-    const { vault } = useVaultFromParams()
-    if (!vault) return <></>
-    return <WrappedComponent vault={vault} {...props} />
-  }
-}

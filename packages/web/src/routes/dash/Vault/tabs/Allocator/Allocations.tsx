@@ -1,4 +1,4 @@
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import Allocation from './Allocation'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'

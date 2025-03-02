@@ -1,5 +1,5 @@
 import Section from '../../../../../components/Section'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import ViewBps from '../../../../../components/elements/ViewBps'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccountantSnapshot'

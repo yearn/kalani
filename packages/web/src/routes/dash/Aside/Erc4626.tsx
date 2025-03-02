@@ -1,5 +1,5 @@
 import DepositWithdraw from '../../../components/DepositWithdraw'
-import { useVaultFromParams } from '../../../hooks/useVault'
+import { useVaultFromParams } from '../../../hooks/useVault/withVault'
 import { zeroAddress } from 'viem'
 
 export default function Erc4626() {

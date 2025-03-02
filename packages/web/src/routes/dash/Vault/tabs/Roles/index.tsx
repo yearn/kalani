@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { Vault, withVault } from '../../../../../hooks/useVault'
+import { Vault } from '../../../../../hooks/useVault'
+import { withVault } from '../../../../../hooks/useVault/withVault'
 import Button from '../../../../../components/elements/Button'
 import { PiPlus } from 'react-icons/pi'
 import { useIsRoleManager } from '../../../../../hooks/useRoleManager'

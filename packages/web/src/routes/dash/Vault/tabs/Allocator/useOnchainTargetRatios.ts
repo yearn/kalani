@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useConfig } from 'wagmi'
 import { useAllocator } from '../../useAllocator'
 import { parseAbi, zeroAddress } from 'viem'

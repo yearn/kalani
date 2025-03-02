@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useVaultFromParams, useVaultParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
+import { useVaultParams } from '../../../../../hooks/useVault'
 import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { EvmAddress } from '@kalani/lib/types'

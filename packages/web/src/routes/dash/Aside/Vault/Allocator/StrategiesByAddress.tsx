@@ -9,7 +9,7 @@ import { fEvmAddress } from '@kalani/lib/format'
 import { FinderItemSchema } from '../../../../../components/Finder/useFinderItems'
 import { SelectableVault } from './Selector'
 import { z } from 'zod'
-import { useVaultFromParams } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { zeroAddress } from 'viem'
 

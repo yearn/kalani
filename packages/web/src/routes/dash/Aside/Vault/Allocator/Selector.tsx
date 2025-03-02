@@ -1,5 +1,6 @@
 import { zeroAddress } from 'viem'
-import { useLocalVaultStrategies, useVaultFromParams } from '../../../../../hooks/useVault'
+import { useLocalVaultStrategies } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { FinderItem, getItemHref, useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useCallback, useEffect, useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
@@ -58,8 +59,8 @@ export function SelectableVault({ item }: { item: FinderItem }) {
         )) return strategies
         return [...strategies, vaultStrategy]
       })
+      query.refetch()
     }
-    query.refetch()
   }, [confirmation, resolveToast, setLocalVaultStrategies, item, query, vault])
 
   return <div className="flex items-center gap-4">

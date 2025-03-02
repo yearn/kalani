@@ -1,4 +1,4 @@
-import { useVaultFromParams } from '../../../hooks/useVault'
+import { useVaultFromParams } from '../../../hooks/useVault/withVault'
 import Vitals from './tabs/Vitals'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import { Suspense } from 'react'

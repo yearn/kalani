@@ -1,6 +1,7 @@
 import { SkeletonButton } from '../../../../../components/Skeleton'
 import { Suspense, useEffect, useCallback, useMemo } from 'react'
-import { useVaultFromParams, Vault } from '../../../../../hooks/useVault'
+import { Vault } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import Button from '../../../../../components/elements/Button'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { parseAbi, zeroAddress } from 'viem'

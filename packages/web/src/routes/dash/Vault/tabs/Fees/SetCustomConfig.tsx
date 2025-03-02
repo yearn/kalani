@@ -1,6 +1,7 @@
 import { zeroAddress } from 'viem'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { useLocalVaults, useVaultFromParams } from '../../../../../hooks/useVault'
+import { useLocalVaults } from '../../../../../hooks/useVault'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { useCallback, useEffect, useMemo } from 'react'
 import abis from '@kalani/lib/abis'
