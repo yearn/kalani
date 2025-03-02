@@ -15,6 +15,14 @@ import { HeroIcon } from '../../../components/Hero'
 
 const FRAME_SIZE = 20
 
+const tabClassName = `
+pl-3
+bg-emerald-400/20
+data-[selected=true]:bg-emerald-400
+hover:bg-emerald-400/40
+active:bg-emerald-400/60
+`
+
 function ListItems() {
   const { filter: allItems } = useFinderItems()
   const [items, setItems] = useState(allItems?.slice(0, FRAME_SIZE))
@@ -65,12 +73,12 @@ export default function Explore() {
 
       <HeroInset>
         <Tabs className="mb-3 w-full xl:pr-16 justify-end">
-          <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className="pl-3">
-            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-neutral-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-neutral-400' : 'text-transparent'} />}
+          <Tab selected={sortKey === 'tvl'} onClick={() => setSortKey('tvl')} className={tabClassName}>
+            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'tvl' ? 'text-black' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'tvl' ? 'text-black' : 'text-transparent'} />}
             <div>TVL</div>
           </Tab>
-          <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className="pl-3">
-            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-neutral-400' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-neutral-400' : 'text-transparent'} />}
+          <Tab selected={sortKey === 'apy'} onClick={() => setSortKey('apy')} className={tabClassName}>
+            {sortDirection === 'desc' ? <PiCaretDown size={16} className={sortKey === 'apy' ? 'text-black' : 'text-transparent'} /> : <PiCaretUp size={16} className={sortKey === 'apy' ? 'text-black' : 'text-transparent'} />}
             <div>APY</div>
           </Tab>
         </Tabs>

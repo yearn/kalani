@@ -17,14 +17,21 @@ import ChainImg from '../../../components/ChainImg'
 import { useLocation } from 'react-router-dom'
 import Fancy from '../../../components/Fancy'
 
+const tabClassName = `
+bg-secondary-400/20
+data-[selected=true]:bg-secondary-400
+hover:bg-secondary-400/40
+active:bg-secondary-400/60
+`
+
 function Suspender({ address }: { address: EvmAddress }) {
-  const { chainId: chainIdFromAccount, address: addressFromAccount } = useAccount()
+  const { address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
   const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
   const location = useLocation()
   const title = useMemo(() => location.pathname === '/' ? 'Wallet' : 'Account', [location])
   const { sortKey, sortDirection } = useAccountOptions()
-  const { projects } = useProjects(chainIdFromAccount, addressFromAccount)
+  const { projects } = useProjects(undefined, addressFromAccount)
 
   const sorted = useMemo(() => {
     return items.sort((a, b) => {
@@ -68,8 +75,8 @@ function Suspender({ address }: { address: EvmAddress }) {
 
       <HeroInset>
         {isUserWallet && <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vaults" isDefault={true}>Vaults</Tab>
-          <Tab id="projects">Projects</Tab>
+          <Tab id="vaults" isDefault={true} className={tabClassName}>Vaults</Tab>
+          <Tab id="projects" className={tabClassName}>Projects</Tab>
         </Tabs>}
       </HeroInset>
     </Hero>

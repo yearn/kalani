@@ -8,19 +8,26 @@ import Vaults from './tabs/Vaults'
 import { PiFolderSimple } from 'react-icons/pi'
 import Fancy from '../../../components/Fancy'
 
+const tabClassName = `
+bg-green-400/20
+data-[selected=true]:bg-green-400
+hover:bg-green-400/40
+active:bg-green-400/60
+`
+
 function Suspender() {
   const { project } = useProjectByParams()
 
   return <section className="flex flex-col">
     <Hero>
       <div className="flex items-center gap-6">
-        <HeroIcon icon={PiFolderSimple} className="bg-green-600" />
+        <HeroIcon icon={PiFolderSimple} className="bg-green-400" />
         <Fancy text={project.name} />
       </div>
       <HeroInset>
         <Tabs className="w-full pb-3 pl-2 sm:pl-0">
-          <Tab id="vitals" isDefault={true}>Vitals</Tab>
-          <Tab id="vaults">Vaults</Tab>
+          <Tab id="vitals" isDefault={true} className={tabClassName}>Vitals</Tab>
+          <Tab id="vaults" className={tabClassName}>Vaults</Tab>
         </Tabs>
       </HeroInset>
     </Hero>
