@@ -36,14 +36,14 @@ export function Tab({
 
     <div className="absolute z-0 inset-0">
       {(selected ?? nav.isOpen) && <FlyInFromBottom _key="tabBg" parentMounted={isMounted}>
-        <div data-selected={selected ?? nav.isOpen} className={cn('h-[32px] px-6 py-1 text-lg flex items-center justify-center gap-2 text-black rounded-full', className)}>{children}</div>
+        <div data-selected={selected ?? nav.isOpen} className={cn('h-[32px] px-6 py-1 text-lg flex items-center justify-center gap-2 !text-black rounded-full', className)}>{children}</div>
       </FlyInFromBottom>}
     </div>
 
     <div data-selected={selected ?? nav.isOpen} onClick={onClick ?? nav.open} className={cn(className, `
       group absolute z-10 inset-0 px-6 py-1 text-lg
       flex items-center justify-center gap-2
-      text-black cursor-pointer pointer-events-auto
+      cursor-pointer pointer-events-auto
       data-[selected=true]:bg-transparent
       data-[selected=true]:text-transparent
       rounded-full`)}>

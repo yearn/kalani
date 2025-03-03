@@ -19,6 +19,7 @@ import Fancy from '../../../components/Fancy'
 
 const tabClassName = `
 bg-secondary-400/20
+text-secondary-400
 data-[selected=true]:bg-secondary-400
 hover:bg-secondary-400/40
 active:bg-secondary-400/60
