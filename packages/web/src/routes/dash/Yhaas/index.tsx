@@ -10,6 +10,7 @@ import { HeroIcon } from '../../../components/Hero'
 
 const tabClassName = `
 bg-zinc-400/20
+text-zinc-400
 data-[selected=true]:bg-zinc-400
 hover:bg-zinc-400/40
 active:bg-zinc-400/60

@@ -10,6 +10,7 @@ import Fancy from '../../../components/Fancy'
 
 const tabClassName = `
 bg-green-400/20
+text-green-400
 data-[selected=true]:bg-green-400
 hover:bg-green-400/40
 active:bg-green-400/60

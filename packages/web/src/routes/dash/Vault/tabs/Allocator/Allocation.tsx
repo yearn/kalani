@@ -155,7 +155,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
     <LinkButton to={getHrefFor(strategy)} h="tertiary" className="max-w-full flex items-center gap-3 px-6 h-14 text-2xl">
       <ViewBps bps={Number(update.debtRatio)} className="hidden sm:block text-lg" />
-      <div className="truncate">{strategy.name}</div>
+      <div className="w-[300px] sm:w-[400px] truncate">{strategy.name}</div>
     </LinkButton>
 
     <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
