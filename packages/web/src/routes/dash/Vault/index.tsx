@@ -59,7 +59,7 @@ export function VaultHero({
 
         <div className="w-full flex flex-col sm:gap-1">
           <HeroTitle>{name}</HeroTitle>
-          <div className="-mt-2 sm:-mt-1 flex items-center sm:gap-3 font-bold">
+          <div className="sm:-mt-1 flex items-center sm:gap-3 font-bold">
             <div className="hidden sm:block">{getChain(chainId).name}</div>
             <div className="hidden sm:block">//</div>
             <div>

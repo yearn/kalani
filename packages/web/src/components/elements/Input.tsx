@@ -17,9 +17,9 @@ group-hover:text-secondary-50 group-hover:bg-black group-hover:border-secondary-
 group-has-[:focus]:text-secondary-400 group-has-[:focus]:border-secondary-400 has-[:focus]:border-secondary-400
 focus:text-secondary-400 focus:border-secondary-400 focus:bg-black
 
-disabled:text-neutral-400 disabled:bg-transparent 
-group-hover:disabled:text-neutral-400 group-hover:disabled:border-black
-disabled:placeholder-neutral-800 disabled:border-transparent
+data-[disabled=true]:text-neutral-400 data-[disabled=true]:bg-transparent 
+group-hover:data-[disabled=true]:text-neutral-400 group-hover:data-[disabled=true]:border-black
+data-[disabled=true]:placeholder-neutral-800 data-[disabled=true]:border-black
 
 truncate
 outline-none focus:ring-0 focus:outline-none

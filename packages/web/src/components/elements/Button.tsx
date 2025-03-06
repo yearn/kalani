@@ -1,7 +1,7 @@
 import { forwardRef, ButtonHTMLAttributes } from 'react'
 import { cn } from '../../lib/shadcn'
 
-export type ThemeName = 'default' | 'disabled' | 'sim' | 'write' | 'confirm' | 'active' | 'secondary' | 'cta' | 'error'
+export type ThemeName = 'default' | 'disabled' | 'disabled-attention' |'sim' | 'write' | 'confirm' | 'active' | 'secondary' | 'cta' | 'error'
 export type Hierarchy = 'primary' | 'secondary' | 'tertiary'
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -20,10 +20,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ className, theme, h
     border-primary ${border} ${bg} text-lg ${text}
     hover:text-secondary-50 hover:bg-neutral-900 hover:border-secondary-50
     active:text-secondary-400 active:border-secondary-400 active:bg-black
-    disabled:bg-neutral-950 disabled:text-neutral-800 
-    disabled:hover:border-primary-950 disabled:hover:text-primary-950
-    disabled:hover:bg-neutral-950
-    disabled:cursor-default disabled:border-transparent
+
+    disabled:bg-neutral-950
+    disabled:text-black
+    disabled:hover:text-black
+    disabled:cursor-default
+    disabled:!border-black
+
     cursor-pointer rounded-primary whitespace-nowrap
     saber-glow
     ${`theme-${theme ?? 'default'}`}

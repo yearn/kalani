@@ -12,7 +12,6 @@ import { ROLES } from '@kalani/lib/types'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import AutoAllocate from './AutoAllocate'
-import UpdateDebt from './UpdateDebt'
 import { SetMinimumChange } from './SetMinimumChange'
 
 function Suspender() {
@@ -48,10 +47,6 @@ function Suspender() {
 
       <LabelValueRow label="Auto allocate">
         <AutoAllocate />
-      </LabelValueRow>
-
-      <LabelValueRow label="">
-        <UpdateDebt />
       </LabelValueRow>
     </Section>
   </>

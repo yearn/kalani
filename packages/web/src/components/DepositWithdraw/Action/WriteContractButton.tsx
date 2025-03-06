@@ -9,6 +9,7 @@ export default function WriteContractButton({
   simulation,
   label,
   onClick,
+  amountZero,
   disabled,
   error,
   resolveToast,
@@ -19,6 +20,7 @@ export default function WriteContractButton({
   simulation: UseSimulateContractReturnType
   label: string
   onClick?: () => void
+  amountZero?: boolean
   disabled?: boolean
   error?: string
   resolveToast?: () => void
@@ -34,6 +36,7 @@ export default function WriteContractButton({
   }, [error, disabled, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
+    if (amountZero) return 'disabled-attention'
     if (isSomething(error)) return 'error'
     if (disabled) return 'default'
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -41,11 +44,11 @@ export default function WriteContractButton({
     if (simulation.isFetching) return 'sim'
     if (simulation.isError) return 'error'
     return 'default'
-  }, [error, disabled, simulation, write, confirmation])
+  }, [amountZero, error, disabled, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation.isError, simulation.error])
 
   const _onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)

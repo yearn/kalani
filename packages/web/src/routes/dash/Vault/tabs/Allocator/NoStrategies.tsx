@@ -13,11 +13,12 @@ export function AddStrategyButton() {
   const { chainId, address: vault } = useVaultParams()
   const authorizedAddStrategy = useHasRoles({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
 
+  if (!authorizedAddStrategy) return <></>
+
   return <>
     <AButton onClick={dialog.openDialog} className="font-bold text-xl">Add a strategy</AButton>
     <Dialog title="Add a strategy" dialogId="add-strategy">
       <div className="flex flex-col gap-12">
-        <h1>Add a strategy</h1>
         {authorizedAddStrategy && <VaultSelector />}
         {authorizedAddStrategy && <StrategiesByAddress />}
       </div>

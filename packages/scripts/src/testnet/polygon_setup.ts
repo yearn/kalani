@@ -1,7 +1,7 @@
 import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { createTestnetClient } from '@kalani/lib/tenderly'
 import { polygon, type Chain } from 'viem/chains'
-import { getContract, parseEther } from 'viem'
+import { getContract, parseEther, parseUnits } from 'viem'
 import abis from '@kalani/lib/abis'
 
 const ALICE: EvmAddress = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8'
@@ -26,7 +26,7 @@ async function main() {
   try {
     await client.setBalance(ALICE, parseEther('1000'))
     await client.setBalance(yWMATIC_ROLE_MANAGER, parseEther('1000'))
-    await client.setErc20Balance(ALICE, USDC_POLYGON, parseEther('100000'))
+    await client.setErc20Balance(ALICE, USDC_POLYGON, parseUnits('100000', 6))
     console.log('👹', 'balances set')
 
     const vault = getContract({ abi: abis.vault, address: yWMATIC, client })
