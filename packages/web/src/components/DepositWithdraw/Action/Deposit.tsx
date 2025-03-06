@@ -25,12 +25,12 @@ export default function Deposit() {
   const overflow = useMemo(() => (parseUnits(amount, decimals ?? 18) > (balance ?? 0n)), [amount, balance, decimals])
 
   const label = useMemo(() => {
-    if (!Boolean(Number(amount))) return 'Enter an amount'
+    if (!Number(amount)) return 'Enter an amount'
     return approve.needsApproval ? `Approve ${asset.symbol}` : `Deposit ${asset.symbol}`
   }, [amount, asset, approve.needsApproval])
 
   const disabled = useMemo(() => {
-    if (!Boolean(Number(amount))) return true
+    if (!Number(amount)) return true
     return overflow
   }, [amount, overflow])
 
@@ -47,5 +47,5 @@ export default function Deposit() {
     refetchVaultBalance()
   }, [approve, deposit, refetchBalance, setAmount, refetchVaultBalance])
 
-  return <WriteContractButton {...action} label={label} disabled={disabled} error={error} onConfirm={onConfirm} />
+  return <WriteContractButton {...action} label={label} amountZero={!Number(amount)} disabled={disabled} error={error} onConfirm={onConfirm} />
 }

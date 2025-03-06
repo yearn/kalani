@@ -26,10 +26,11 @@ export function InputTokenAmount({
 		inputRef.current?.select()
 	}, [inputRef])
 
-  return <div className={cn(InputClassName, className, 'group flex items-center justify-between gap-2')}>
+  return <div data-disabled={disabled} className={cn(InputClassName, className, 'group flex items-center justify-between gap-2')}>
 		<input
 			ref={inputRef}
 			disabled={disabled}
+			data-disabled={disabled}
 			className={`w-full truncate 
 				bg-transparent text-lg
 				placeholder:text-neutral-500
@@ -38,9 +39,9 @@ export function InputTokenAmount({
 				group-has-[:focus]:text-secondary-400 group-has-[:focus]:border-secondary-400
 				focus:text-secondary-400 focus:border-secondary-400
 
-				disabled:text-neutral-400
-				group-hover:disabled:text-neutral-400 group-hover:disabled:border-black
-				disabled:placeholder-neutral-800 disabled:border-transparent
+				data-[disabled=true]:text-neutral-400
+				group-hover:data-[disabled=true]:text-neutral-400 group-hover:data-[disabled=true]:border-black
+				data-[disabled=true]:placeholder-neutral-800 data-[disabled=true]:border-transparent
 
 				outline-none focus:ring-0 focus:outline-none`}
 			inputMode="decimal"

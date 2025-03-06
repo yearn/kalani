@@ -102,6 +102,10 @@
 	animation: shimmer 16.5s infinite;
 }
 
+.theme-disabled-attention {
+	@apply !text-neutral-500;
+}
+
 .theme-disabled {
 	position: relative;
 	z-index: 0;
@@ -184,6 +188,7 @@
 	position: relative;
 	z-index: 0;
 	overflow: hidden;
+	color: #2e1065 !important;
 
 	&::before {
 		content: '';
@@ -197,16 +202,16 @@
 		background-image:
 			conic-gradient(
 				from 0deg at 50% 50%,
-				#0a0a0a 0deg,
-				#0a0a0a 60deg,
+				#000 0deg,
+				#000 60deg,
 				#2e1065 60deg,
 				#2e1065 120deg,
-				#0a0a0a 120deg,
-				#0a0a0a 180deg,
+				#000 120deg,
+				#000 180deg,
 				#2e1065 180deg,
 				#2e1065 240deg,
-				#0a0a0a 240deg,
-				#0a0a0a 300deg,
+				#000 240deg,
+				#000 300deg,
 				#2e1065 300deg,
 				#2e1065 360deg
 			);
@@ -230,6 +235,7 @@
 	position: relative;
 	z-index: 0;
 	overflow: hidden;
+	color: #a78bfa !important;
 
 	&::before {
 		content: '';
@@ -243,16 +249,16 @@
 		background-image:
 			conic-gradient(
 				from 0deg at 50% 50%,
-				#2e1065 0deg,
-				#2e1065 60deg,
+				#000 0deg,
+				#000 60deg,
 				#a78bfa 60deg,
 				#a78bfa 120deg,
-				#2e1065 120deg,
-				#2e1065 180deg,
+				#000 120deg,
+				#000 180deg,
 				#a78bfa 180deg,
 				#a78bfa 240deg,
-				#2e1065 240deg,
-				#2e1065 300deg,
+				#000 240deg,
+				#000 300deg,
 				#a78bfa 300deg,
 				#a78bfa 360deg
 			);
@@ -276,6 +282,7 @@
 	position: relative;
 	z-index: 0;
 	overflow: hidden;
+	color: #a78bfa !important;
 
 	&::before {
 		content: '';

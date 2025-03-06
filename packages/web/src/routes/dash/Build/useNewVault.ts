@@ -23,5 +23,6 @@ export function useNewVault() {
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+
   return { simulation, write, confirmation, resolveToast }
 }

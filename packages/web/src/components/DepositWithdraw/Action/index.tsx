@@ -29,7 +29,7 @@ export default function Action({ chainId }: { chainId: number }) {
   </div>
 
   return <div className="flex items-center justify-end">
-    <Suspense fallback={<SkeletonButton>Approve XYZI</SkeletonButton>}>
+    <Suspense fallback={<SkeletonButton>Approve ****</SkeletonButton>}>
       <Suspender />
     </Suspense>
   </div>

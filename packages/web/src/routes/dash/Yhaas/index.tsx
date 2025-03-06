@@ -27,7 +27,7 @@ function Brand() {
 }
 
 function Content() {
-  return <div className="w-full sm:px-4 sm:py-8 flex flex-col sm:gap-8">
+  return <div className="w-full sm:px-8 2xl:px-4 sm:py-8 flex flex-col sm:gap-8">
     <TabContent id="vitals"><Vitals /></TabContent>
     <TabContent id="apply" isDefault={true}><Apply /></TabContent>
     <TabContent id="pending"><Pending /></TabContent>

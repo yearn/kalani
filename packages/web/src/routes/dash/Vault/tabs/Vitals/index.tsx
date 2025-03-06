@@ -1,26 +1,29 @@
-import Section from '../../../../components/Section'
-import { Vault } from '../../../../hooks/useVault'
-import { withVault } from '../../../../hooks/useVault/withVault'
+import Section from '../../../../../components/Section'
+import { Vault } from '../../../../../hooks/useVault'
+import { withVault } from '../../../../../hooks/useVault/withVault'
 import { div, mulb } from '@kalani/lib/bmath'
 import { fTokens, fUSD } from '@kalani/lib/format'
 import { Suspense, useMemo } from 'react'
-import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
-import { getChain } from '../../../../lib/chains'
-import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
-import { useAllocator, useTotalDebtRatio } from '../useAllocator'
-import ViewBps from '../../../../components/elements/ViewBps'
-import ViewGeneric from '../../../../components/elements/ViewGeneric'
-import ChainImg from '../../../../components/ChainImg'
-import TokenImg from '../../../../components/TokenImg'
+import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
+import { getChain } from '../../../../../lib/chains'
+import ViewDateOrBlock from '../../../../../components/elements/ViewDateOrBlock'
+import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
+import ViewBps from '../../../../../components/elements/ViewBps'
+import ViewGeneric from '../../../../../components/elements/ViewGeneric'
+import ChainImg from '../../../../../components/ChainImg'
+import TokenImg from '../../../../../components/TokenImg'
 import { zeroAddress } from 'viem'
-import { useIsRelayed } from '../../Yhaas/tabs/Apply/TargetForm/VaultForm/useIsRelayed'
+import { useIsRelayed } from '../../../Yhaas/tabs/Apply/TargetForm/VaultForm/useIsRelayed'
 import { ROLES } from '@kalani/lib/types'
-import LabelValueRow from '../../../../components/elements/LabelValueRow'
-import { useBreakpoints } from '../../../../hooks/useBreakpoints'
-import Skeleton from '../../../../components/Skeleton'
+import LabelValueRow from '../../../../../components/elements/LabelValueRow'
+import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
+import Skeleton from '../../../../../components/Skeleton'
+import { useOnChainVitals } from './useOnCainVitals'
 
 function VitalsComponent({ vault }: { vault: Vault }) {
-  const idle = useMemo(() => (vault?.totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault])
+  const { totalAssets } = useOnChainVitals()
+
+  const idle = useMemo(() => (totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault, totalAssets])
   const { totalDebtRatio } = useTotalDebtRatio()
   const { allocator } = useAllocator()
   const { sm } = useBreakpoints()
@@ -74,7 +77,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Total assets">
-        <ViewGeneric className="text-3xl font-bold">{fTokens(vault.totalAssets, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
+        <ViewGeneric className="text-3xl font-bold">{fTokens(totalAssets, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
       </LabelValueRow>
 
       <LabelValueRow label="TVL">

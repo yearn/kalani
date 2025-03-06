@@ -22,12 +22,12 @@ export default function Withdraw() {
   const overflow = useMemo(() => (parseUnits(amount, decimals ?? 18) > (balance ?? 0n)), [amount, balance, decimals])
 
   const label = useMemo(() => {
-    if (!Boolean(Number(amount))) return 'Enter an amount'
+    if (!Number(amount)) return 'Enter an amount'
     return `Withdraw ${asset.symbol}`
   }, [amount, asset])
 
   const disabled = useMemo(() => {
-    if (!Boolean(Number(amount))) return true
+    if (!Number(amount)) return true
     return overflow
   }, [amount, overflow])
 
@@ -42,5 +42,5 @@ export default function Withdraw() {
     refetchWalletBalance()
   }, [withdraw, refetchVaultBalance, setAmount, refetchWalletBalance])
 
-  return <WriteContractButton {...action} label={label} disabled={disabled} error={error} onConfirm={onConfirm} />
+  return <WriteContractButton {...action} label={label} amountZero={!Number(amount)} disabled={disabled} error={error} onConfirm={onConfirm} />
 }

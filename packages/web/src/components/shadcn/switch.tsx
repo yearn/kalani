@@ -22,7 +22,7 @@ const Switch = React.forwardRef<
       data-[state=unchecked]:border-neutral-900
       data-[state=checked]:hover:border-secondary-50
       data-[state=unchecked]:hover:border-secondary-50
-      disabled:border-transparent
+      disabled:!border-black
 
       focus-visible:outline-none 
       focus-visible:ring-2 

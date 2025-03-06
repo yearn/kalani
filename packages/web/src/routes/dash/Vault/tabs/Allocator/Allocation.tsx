@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useVaultParams } from '../../../../../hooks/useVault'
 import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
@@ -11,7 +10,7 @@ import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
-import { fPercent } from '@kalani/lib/format'
+import { fPercent, fTokens } from '@kalani/lib/format'
 import LinkButton from '../../../../../components/elements/LinkButton'
 import InputBps from '../../../../../components/elements/InputBps'
 import Button from '../../../../../components/elements/Button'
@@ -20,6 +19,13 @@ import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressC
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import ProcessReport from './ProcessReport'
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import UpdateDebt from './UpdateDebt'
+import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
+import { useOnChainStrategyParams } from './useOnChainStrategyParams'
+import ViewGeneric from '../../../../../components/elements/ViewGeneric'
+import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
+import ReactTimeago from 'react-timeago'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -51,6 +57,9 @@ function MutableAllocation({ strategy }: { strategy: {
 } }) {
   const { vault } = useVaultFromParams()
   const authorized = useHasDebtManagerRole()
+  const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
+  const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
+  const { effectiveDebtRatioBps } = useEffectiveDebtRatioBps(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
 
   const { refetch: refetchTotalDebtRatio } = useTotalDebtRatio()
   const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
@@ -111,7 +120,7 @@ function MutableAllocation({ strategy }: { strategy: {
       debtRatio: newRatio,
       isDirty: newRatio !== onchainTargetRatio
     })
-  }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio, strategy.address, strategy.chainId, vault?.address])
+  }, [totalDebtRatio, update, updateDebtRatio, onchainTargetRatio, strategy.address, strategy.chainId, vault])
 
   const onSet = useCallback(async () => {
     write.writeContract(simulation.data!.request)
@@ -119,7 +128,7 @@ function MutableAllocation({ strategy }: { strategy: {
 
   return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
 
-    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="max-w-full flex items-center gap-3 px-6 h-14 text-2xl">
+    <LinkButton to={getHrefFor(strategy)} h="tertiary" className="max-w-full flex items-center gap-3 px-6 h-14 text-2xl font-bold">
       <ViewBps bps={Number(update.debtRatio)} className="hidden sm:block text-lg" />
       <div className="w-[300px] sm:w-[400px] truncate">{strategy.name}</div>
     </LinkButton>
@@ -131,14 +140,33 @@ function MutableAllocation({ strategy }: { strategy: {
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
       </LabelValueRow>
-      <LabelValueRow label="Allocation">
+      <LabelValueRow label="Target debt ratio">
         <div className="flex items-center gap-6">
           <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-56 sm:w-64" />
           <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
         </div>
       </LabelValueRow>
+      <LabelValueRow label="Effective debt ratio">
+        <ViewBps bps={effectiveDebtRatioBps} />
+      </LabelValueRow>
+      <LabelValueRow label="Debt">
+        <ViewGeneric>{fTokens(strategyParams.currentDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
+      </LabelValueRow>
+      <LabelValueRow label="Estimated assets">
+        <ViewGeneric>{fTokens(estimatedAssets, vault?.asset.decimals ?? 0)}</ViewGeneric>
+      </LabelValueRow>
+
+      <LabelValueRow label="Last report to vault">
+        <ViewGeneric>
+          <ReactTimeago date={Number(strategyParams.lastReport) * 1000} />
+        </ViewGeneric>
+      </LabelValueRow>
+
       <LabelValueRow label="">
-        <ProcessReport strategy={strategy.address} />
+        <div className="flex items-center gap-3 sm:gap-6">
+          <ProcessReport strategy={strategy.address} />
+          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />
+        </div>
       </LabelValueRow>
     </div>
   </div>
@@ -150,11 +178,15 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   name: string 
 } }) {
   const { findFinderItem, getHrefFor } = useFinderUtils()
-  const update = useDebtRatioUpdate(strategy.address)
+  const ratio = useOnchainTargetRatio(strategy.address)
+  const { vault } = useVaultFromParams()
+  const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
+  const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
+  const { effectiveDebtRatioBps } = useEffectiveDebtRatioBps(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
 
   return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
     <LinkButton to={getHrefFor(strategy)} h="tertiary" className="max-w-full flex items-center gap-3 px-6 h-14 text-2xl">
-      <ViewBps bps={Number(update.debtRatio)} className="hidden sm:block text-lg" />
+      <ViewBps bps={Number(ratio)} className="hidden sm:block text-lg" />
       <div className="w-[300px] sm:w-[400px] truncate">{strategy.name}</div>
     </LinkButton>
 
@@ -163,10 +195,19 @@ function ReadonlyAllocation({ strategy }: { strategy: {
         <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
       </LabelValueRow>
       <LabelValueRow label="APY">
-        <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
+        <ViewGeneric>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</ViewGeneric>
       </LabelValueRow>
-      <LabelValueRow label="Allocation">
-        <ViewBps bps={Number(update.debtRatio)} className="text-xl" />
+      <LabelValueRow label="Target debt ratio">
+        <ViewBps bps={Number(ratio)} />
+      </LabelValueRow>
+      <LabelValueRow label="Effective debt ratio">
+        <ViewBps bps={effectiveDebtRatioBps} />
+      </LabelValueRow>
+      <LabelValueRow label="Debt">
+        <ViewGeneric>{fTokens(strategyParams.currentDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
+      </LabelValueRow>
+      <LabelValueRow label="Estimated assets">
+        <ViewGeneric>{fTokens(estimatedAssets, vault?.asset.decimals ?? 0)}</ViewGeneric>
       </LabelValueRow>
     </div>
   </div>

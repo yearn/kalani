@@ -63,7 +63,7 @@ export default function Allocations() {
   return <div className="w-full flex flex-col gap-primary">
     {sortedByDefaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
 
-    <div className="w-full flex justify-center">
+    <div className="sm:hidden w-full flex justify-center">
       <AddStrategyButton />
     </div>
 
