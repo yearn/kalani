@@ -135,7 +135,7 @@ function MutableAllocation({ strategy }: { strategy: {
 
     <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
       </LabelValueRow>
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
@@ -192,7 +192,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
 
     <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
       </LabelValueRow>
       <LabelValueRow label="APY">
         <ViewGeneric>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</ViewGeneric>

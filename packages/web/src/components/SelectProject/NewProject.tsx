@@ -42,7 +42,7 @@ function useWrite(
     ],
     functionName: 'newProject',
     query: { enabled }
-  }), [chainId, name, governance, management, enabled])
+  }), [chainId, name, governance, management, enabled, getAddressOrZero])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
@@ -111,7 +111,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
-  }, [simulation.isError])
+  }, [simulation.isError, simulation.error])
 
   const onCreate = useCallback(() => {
     write.writeContract(simulation.data!.request)
@@ -136,7 +136,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
 
   return <div className="relative flex flex-col gap-6">
     {!confirmation.isSuccess && <div className={cn('flex flex-col gap-6')}>
-      <Input disabled={!isConnected} className="theme-sim" value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
+      <Input disabled={!isConnected} value={name} onChange={e => setName(e.target.value)} placeholder="Project name" maxLength={128} />
       <Address infokey="new-project-governance" disabled={!isConnected} placeholder="0x governance (required)" next={governance} setNext={setGovernance} isNextValid={isGovernanceValid} setIsNextValid={setIsGovernanceValid} />
       <Address infokey="new-project-management" disabled={!isConnected} placeholder="0x management (recommended)" next={management} setNext={setManagement} isNextValid={isManagementValid} setIsNextValid={setIsManagementValid} theme={areSameAddress ? 'error' : 'default'} />
       <div className="mt-8 flex items-center justify-end gap-3">

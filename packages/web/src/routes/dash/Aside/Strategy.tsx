@@ -28,7 +28,7 @@ function useNotifications() {
     if (!strategy) { return }
     setTargetsRaw(strategy.address)
     setTargets([strategy.address])
-    navigate(`/yhaas`)
+    navigate('/yhaas')
   }, [strategy, navigate, setTargets, setTargetsRaw])
 
   return useMemo(() => {
@@ -64,7 +64,7 @@ export default function Strategy() {
     </div>}
     <LinkButton h="secondary" to={latestReportHref} 
       target="_blank" rel="noreferrer"
-      className={'p-10 flex items-center justify-between border-primary border-neutral-900 rounded-primary'}>
+      className={'p-10 flex items-center justify-between border-primary border-black rounded-primary'}>
       <div>
         <div className="text-lg font-bold text-neutral-400 group-active:text-inherit">Latest Report</div>
         <div className="flex">

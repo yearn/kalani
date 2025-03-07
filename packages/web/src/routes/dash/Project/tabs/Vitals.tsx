@@ -20,27 +20,27 @@ export default function Vitals() {
       </LabelValueRow>
 
       <LabelValueRow label="Id">
-        <CopyHashChipSlide hash={id} className="bg-neutral-900" />
+        <CopyHashChipSlide hash={id} />
       </LabelValueRow>
 
       <LabelValueRow label="Role manager">
-        <EvmAddressChipSlide chainId={chainId} address={project.roleManager} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={project.roleManager} />
       </LabelValueRow>
 
       <LabelValueRow label="Registry">
-        <EvmAddressChipSlide chainId={chainId} address={project.registry} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={project.registry} />
       </LabelValueRow>
 
       <LabelValueRow label="Accountant">
-        <EvmAddressChipSlide chainId={chainId} address={project.accountant} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={project.accountant} />
       </LabelValueRow>
 
       <LabelValueRow label="Debt allocator">
-        <EvmAddressChipSlide chainId={chainId} address={project.debtAllocator} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={project.debtAllocator} />
       </LabelValueRow>
 
       <LabelValueRow label="Factory">
-        <EvmAddressChipSlide chainId={chainId} address={project.roleManagerFactory} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={project.roleManagerFactory} />
       </LabelValueRow>
     </div>
   </Section>

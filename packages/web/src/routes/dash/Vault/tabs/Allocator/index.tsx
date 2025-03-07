@@ -38,7 +38,7 @@ function Suspender() {
 
     <Section className="relative flex flex-col gap-primary">
       <LabelValueRow label="Allocator">
-        <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={vault?.chainId ?? 0} address={allocator ?? vault?.allocator ?? zeroAddress} className="bg-black" />
       </LabelValueRow>
 
       <LabelValueRow label="Minimum change" infoKey={minimumChange < 1 ? 'new-vault-min-change' : 'minimum-change'}>

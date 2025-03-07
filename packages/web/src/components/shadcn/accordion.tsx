@@ -47,7 +47,7 @@ const AccordionContent = React.forwardRef<
     ref={ref}
     className={`
       p-8 overflow-hidden text-sm transition-all 
-      border-primary border-neutral-900 rounded-primary
+      border-primary border-black rounded-primary
       data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down`}
     {...props}
   >
