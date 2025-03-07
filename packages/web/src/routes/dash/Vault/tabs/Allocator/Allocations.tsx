@@ -5,11 +5,26 @@ import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useMemo } from 'react'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { EvmAddress } from '@kalani/lib/types'
+import { readContractQueryOptions } from 'wagmi/query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { fBps, fPercent } from '@kalani/lib/format'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { AddStrategyButton } from './NoStrategies'
+import { useConfig } from 'wagmi'
+import { parseAbi, zeroAddress } from 'viem'
+
+function useOnChainDefaultQueue(chainId: number, vault: EvmAddress) {
+  const config = useConfig()
+  const query = useSuspenseQuery(readContractQueryOptions(config, {
+    abi: parseAbi(['function default_queue() external view returns (address[])']),
+    chainId: chainId,
+    address: vault,
+    functionName: 'default_queue'
+  }))
+  return { ...query, defaultQueue: query.data }
+}
 
 function EstimatedApy() {
   const authorized = useHasDebtManagerRole()
@@ -53,6 +68,7 @@ function TotalAllocation() {
 
 export default function Allocations() {
   const { vault } = useVaultFromParams()
+  const { defaultQueue } = useOnChainDefaultQueue(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
 
   const sortedByDefaultQueue = useMemo(() => {
     const unsorted = vault?.strategies ?? []

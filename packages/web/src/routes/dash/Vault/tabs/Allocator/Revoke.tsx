@@ -1,7 +1,6 @@
 import { SkeletonButton } from '../../../../../components/Skeleton'
 import { Suspense, useEffect, useCallback, useMemo } from 'react'
 import Button from '../../../../../components/elements/Button'
-import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { useChainId, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { parseAbi } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
@@ -9,15 +8,16 @@ import { EvmAddress } from '@kalani/lib/types'
 import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
 import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
+import { useHasRevokeRole } from './useHasRevokeRole'
 
-function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint, enabled: boolean) {
+function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: parseAbi(['function update_debt(address strategy, uint256 target_debt) external returns ()']),
+    abi: parseAbi(['function revoke(address strategy) external returns ()']),
     address: vault,
-    functionName: 'update_debt',
-    args: [strategy, targetDebt],
+    functionName: 'revoke',
+    args: [strategy],
     query: { enabled: enabled }
-  }), [vault, enabled, strategy, targetDebt])
+  }), [vault, enabled, strategy])
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
@@ -26,12 +26,12 @@ function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigi
   return { simulation, write, confirmation, resolveToast }
 }
 
-function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
+function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddress }) {
   const chainId = useChainId()
-  const authorized = useHasDebtManagerRole()
-  const { simulation, write, confirmation, resolveToast } = useUpdateDebt(vault, strategy, targetDebt, authorized)
+  const authorized = useHasRevokeRole()
+  const { simulation, write, confirmation, resolveToast } = useRevoke(vault, strategy, authorized)
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
-  const { refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
+  const { strategyParams, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)
 
   const theme = useMemo(() => {
@@ -44,12 +44,12 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
 
   const disabled = useMemo(() => {
     return !authorized 
-    || targetDebt === 0n
+    || strategyParams.currentDebt > 0n
     || simulation.isFetching
     || simulation.isError
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, targetDebt, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
+  }, [authorized, strategyParams, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -61,15 +61,19 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
     }
   }, [confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets])
 
+  useEffect(() => {
+    if (simulation.isError) { console.error(simulation.error) }
+  }, [simulation.isError, simulation.error])
+
   const onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>Update debt</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick}>Revoke</Button>
 }
 
-export default function UpdateDebt({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
-  return <Suspense fallback={<SkeletonButton>Update debt</SkeletonButton>}>
-    <Suspender vault={vault} strategy={strategy} targetDebt={targetDebt} />
+export default function Revoke({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddress }) {
+  return <Suspense fallback={<SkeletonButton>Revoke</SkeletonButton>}>
+    <Suspender vault={vault} strategy={strategy} />
   </Suspense>
 }

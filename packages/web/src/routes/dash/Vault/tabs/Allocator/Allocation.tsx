@@ -26,6 +26,7 @@ import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import ViewGeneric from '../../../../../components/elements/ViewGeneric'
 import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
 import ReactTimeago from 'react-timeago'
+import Revoke from './Revoke'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -164,6 +165,7 @@ function MutableAllocation({ strategy }: { strategy: {
 
       <LabelValueRow label="">
         <div className="flex items-center gap-3 sm:gap-6">
+          <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <ProcessReport strategy={strategy.address} />
           <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />
         </div>
