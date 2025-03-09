@@ -13,12 +13,15 @@ import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import AutoAllocate from './AutoAllocate'
 import { SetMinimumChange } from './SetMinimumChange'
+import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 
 function Suspender() {
   const { chainId } = useAccount()
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
   const { minimumChange } = useMinimumChange()
+  const { defaultQueue } = useDefaultQueueComposite()
+
   const authorized = useHasRoles({
     chainId: vault?.chainId ?? 0,
     vault: vault?.address ?? zeroAddress,
@@ -27,9 +30,9 @@ function Suspender() {
 
   const content = useMemo(() => {
     if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <p className="text-center text-warn-600">Set a minimum change greater than 0!</p> }
-    if ((vault?.strategies.length ?? 0) > 0) { return <Allocations /> }
+    if ((defaultQueue.length ?? 0) > 0) { return <Allocations /> }
     return <NoStrategies />
-  }, [minimumChange, vault, authorized, chainId])
+  }, [minimumChange, vault, authorized, chainId, defaultQueue])
 
   return <>
     <Section className="relative">

@@ -29,7 +29,7 @@ function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigi
 function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
   const chainId = useChainId()
   const authorized = useHasDebtManagerRole()
-  const { simulation, write, confirmation, resolveToast } = useUpdateDebt(vault, strategy, targetDebt, authorized)
+  const { simulation, write, confirmation, resolveToast } = useUpdateDebt(vault, strategy, targetDebt, authorized && targetDebt > 0n)
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)

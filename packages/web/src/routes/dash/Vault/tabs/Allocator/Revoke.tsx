@@ -9,12 +9,13 @@ import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
 import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
 import { useHasRevokeRole } from './useHasRevokeRole'
+import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 
 function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: parseAbi(['function revoke(address strategy) external returns ()']),
+    abi: parseAbi(['function revoke_strategy(address strategy) external returns ()']),
     address: vault,
-    functionName: 'revoke',
+    functionName: 'revoke_strategy',
     args: [strategy],
     query: { enabled: enabled }
   }), [vault, enabled, strategy])
@@ -33,6 +34,7 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { strategyParams, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)
+  const { refetch: refetchDefaultQueueComposite } = useDefaultQueueComposite()
 
   const theme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -58,8 +60,9 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
       refetchEffectiveDebtRatioBps()
       refetchStrategyParams()
       refetchEstimatedAssets()
+      refetchDefaultQueueComposite()
     }
-  }, [confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets])
+  }, [confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets, refetchDefaultQueueComposite])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }

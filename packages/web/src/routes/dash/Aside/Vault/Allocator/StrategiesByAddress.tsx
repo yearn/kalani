@@ -12,6 +12,7 @@ import { z } from 'zod'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { zeroAddress } from 'viem'
+import { useDefaultQueueComposite } from '../../../Vault/tabs/Allocator/useDefaultQueueComposite'
 
 const AddressResultSchema = z.object({
   address: EvmAddressSchema,
@@ -27,6 +28,7 @@ type AddressResult = z.infer<typeof AddressResultSchema>
 
 function useAddressResults(addresses: EvmAddress[]) {
   const { vault } = useVaultFromParams()
+  const { defaultQueue } = useDefaultQueueComposite()
   const config = useConfig()
 
   const contracts = useMemo(() => addresses.map(address => ([
@@ -50,14 +52,14 @@ function useAddressResults(addresses: EvmAddress[]) {
         address: addresses[i],
         isErc4626: slice.every((result: any) => result.status === 'success' || !result.error?.message.includes('returned no data')),
         isSameAsset: asset.status === 'success' && compareEvmAddresses(asset.result!.toString(), vault?.asset.address ?? zeroAddress),
-        isAlreadyAdded: vault?.strategies.some(strategy => compareEvmAddresses(strategy.address, addresses[i])),
+        isAlreadyAdded: defaultQueue.some(strategy => compareEvmAddresses(strategy.address, addresses[i])),
         name: name.status === 'success' ? name.result!.toString() : undefined,
         symbol: symbol.status === 'success' ? symbol.result!.toString() : undefined,
         asset: asset.status === 'success' ? asset.result!.toString() : undefined
       }))
     }
     return results
-  }, [addresses, query, vault])
+  }, [addresses, query, vault, defaultQueue])
 
   return { query, results }
 }
@@ -91,16 +93,16 @@ export default function StrategiesByAddress() {
     <div className="text-neutral-400">Find strategy by address</div>
     <Addresses onChange={onChange} next={inputRaw} setNext={setInputRaw} className="w-full" />
     {results.map(result => <div key={result.address} className="w-full">
-      {!result.isErc4626 && <div className="w-72 px-2 text-warn-400">
+      {!result.isErc4626 && <div className="w-72 px-2 text-error-400">
         {fEvmAddress(result.address)} is not an ERC4626 vault!
       </div>}
 
-      {!result.isSameAsset && <div className="w-72 px-2 text-warn-400">
-        {fEvmAddress(result.address)} uses a different asset than the vault!
+      {!result.isSameAsset && <div className="w-72 px-2 text-error-400">
+        {fEvmAddress(result.address)} uses a different asset than the vault
       </div>}
 
-      {result.isAlreadyAdded && <div className="w-72 px-2 text-warn-400"> 
-        {fEvmAddress(result.address)} is already added to the vault!
+      {result.isAlreadyAdded && <div className="w-72 px-2 text-green-400"> 
+        {fEvmAddress(result.address)} has been added to the vault
       </div>}
 
       {result.isErc4626 && result.isSameAsset && !result.isAlreadyAdded && <SelectableVault item={resultToFinderItem(result)} />}
