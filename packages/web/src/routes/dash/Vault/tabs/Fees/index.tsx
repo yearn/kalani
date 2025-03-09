@@ -52,12 +52,12 @@ function Suspender() {
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Management Fee">
-          {!isFeeManager && <ViewBps bps={managementFee} className="bg-neutral-900" />}
+          {!isFeeManager && <ViewBps bps={managementFee} />}
           {isFeeManager && <InputBps bps={managementFee} isValid={true} className="w-64" onChange={onChangeManagementFee} />}
         </LabelValueRow>
 
         <LabelValueRow label="Performance Fee">
-          {!isFeeManager && <ViewBps bps={performanceFee} className="bg-neutral-900" />}
+          {!isFeeManager && <ViewBps bps={performanceFee} />}
           {isFeeManager && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
         </LabelValueRow>
 
@@ -83,15 +83,15 @@ function Suspender() {
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Fee Recipient">
-          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.feeRecipient} className="bg-neutral-900" />
+          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.feeRecipient} />
         </LabelValueRow>
 
         <LabelValueRow label="Fee Manager">
-          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.feeManager} className="bg-neutral-900" />
+          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.feeManager} />
         </LabelValueRow>
 
         <LabelValueRow label="Accountant">
-          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.address} className="bg-neutral-900" />
+          <EvmAddressChipSlide chainId={accountant.chainId} address={accountant.address} />
         </LabelValueRow>
       </div>
     </Section>

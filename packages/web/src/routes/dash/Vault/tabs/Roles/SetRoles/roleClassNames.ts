@@ -1,4 +1,4 @@
-const uncheckedClassName = `text-neutral-600 border-neutral-800`
+const uncheckedClassName = `text-neutral-600 border-black`
 
 export const roleClassNames = {
   'ROLE_MANAGER': {

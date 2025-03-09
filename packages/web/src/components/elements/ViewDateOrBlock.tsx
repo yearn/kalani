@@ -31,7 +31,7 @@ function useDateOrBlockFormat(timestamp: number, block: number | bigint) {
 export default function ViewDateOrBlock({ timestamp, block, className }: { timestamp: number, block: number | bigint, className?: string }) {
   const { setting, next } = useDateOrBlockSettings()
   const format = useDateOrBlockFormat(timestamp, block)
-  return <div onClick={next} title={setting} className={cn('px-3 py-1 inline-flex items-center rounded-full cursor-pointer whitespace-nowrap', className)}>
+  return <div onClick={next} title={setting} className={cn('px-3 py-1 inline-flex items-center bg-black rounded-full cursor-pointer whitespace-nowrap', className)}>
     {format}
   </div>
 }

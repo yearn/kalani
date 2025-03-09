@@ -26,7 +26,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={vault.chainId} address={vault.address} />
       </LabelValueRow>
 
       <LabelValueRow label="Name">
@@ -40,7 +40,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
       <LabelValueRow label="Asset">
         <div className="flex items-center justify-end gap-4">
           <TokenImg chainId={vault.chainId} address={vault.asset.address} size={24} bgClassName="bg-neutral-900" />
-          <EvmAddressChipSlide chainId={vault.chainId} address={vault.asset.address} className="bg-neutral-900" />
+          <EvmAddressChipSlide chainId={vault.chainId} address={vault.asset.address} />
         </div>
       </LabelValueRow>
 
@@ -65,7 +65,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
       </LabelValueRow>
 
       <LabelValueRow label="Inception">
-        <ViewDateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} className="bg-neutral-900" />
+        <ViewDateOrBlock timestamp={vault.inceptTime} block={vault.inceptBlock} />
       </LabelValueRow>
     </div>
   </Section>

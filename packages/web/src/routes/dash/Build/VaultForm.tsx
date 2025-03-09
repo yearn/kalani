@@ -32,7 +32,7 @@ function Step_Project() {
         {selectedProject && <ProjectChipSlide
           chainId={selectedProject?.chainId ?? 1}
           id={selectedProject?.id ?? zeroAddress}
-          className="bg-neutral-600"
+          className="bg-black"
         />}
       </div>
     </div>

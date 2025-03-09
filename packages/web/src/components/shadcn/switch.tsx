@@ -19,7 +19,7 @@ const Switch = React.forwardRef<
       saber-glow
 
       data-[state=checked]:border-secondary-950
-      data-[state=unchecked]:border-neutral-900
+      data-[state=unchecked]:border-black
       data-[state=checked]:hover:border-secondary-50
       data-[state=unchecked]:hover:border-secondary-50
       disabled:!border-black

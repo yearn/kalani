@@ -25,8 +25,9 @@ function SwitchOption({ selected, onClick, children }: { selected: boolean, onCl
 
     <div data-selected={selected} onClick={onClick} className={cn(`
       absolute z-10 inset-0 px-8 py-1
-      text-neutral-400 hover:text-neutral-50 active:text-neutral-400 
-      bg-transparent hover:bg-neutral-900 active:bg-neutral-900
+      text-secondary-400 hover:text-secondary-400 active:text-secondary-400
+      bg-transparent hover:bg-secondary-400/20 active:bg-secondary-400/60
+
       data-[selected=true]:!text-neutral-900
       data-[selected=true]:!bg-transparent
       rounded-full cursor-pointer`)}>
@@ -69,7 +70,7 @@ function VaultBalance() {
   const unlockedAssets = useMemo(() => bmath.div(unlockedAssets1e18, 10n ** BigInt(decimals)), [unlockedAssets1e18, decimals])
   const hasUnlockedAssets = useMemo(() => unlockedAssets > 0, [unlockedAssets])
 
-  return <div className={cn('p-6 flex flex-col gap-8 rounded-t-primary bg-black shimmer-slow-ride')}>
+  return <div className={cn('mx-3 sm:mx-0 py-6 px-7 flex flex-col gap-8 sm:rounded-t-primary bg-black shimmer-slow-ride')}>
     <div className="text-neutral-500">Your vault balance</div>
     <div className="flex flex-col gap-1">
       <div className={cn('flex items-center justify-between text-neutral-500 text-sm', !hasUnlockedAssets && 'invisible')}>

@@ -134,10 +134,10 @@ function Suspender() {
         {reports.map((report, index) => (
           <tr key={index}>
             <td className="flex justify-between">
-              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} className="bg-neutral-900 text-neutral-400" />
+              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} />
             </td>
-            <td className="text-neutral-400">
-              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
+            <td>
+              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
             </td>
             <td>
               <DisplayUSD usd={report.profitUsd} />

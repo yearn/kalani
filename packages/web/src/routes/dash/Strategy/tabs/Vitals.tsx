@@ -30,7 +30,7 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
       </LabelValueRow>
 
       <LabelValueRow label="Name">
@@ -39,8 +39,8 @@ function Suspender() {
 
       <LabelValueRow label="Asset">
         <div className="flex items-center justify-end gap-4">
-          <TokenImg chainId={strategy.chainId} address={strategy.asset.address} size={24} bgClassName="bg-neutral-900" />
-          <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.asset.address} className="bg-neutral-900" />
+          <TokenImg chainId={strategy.chainId} address={strategy.asset.address} size={24} />
+          <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.asset.address} />
         </div>
       </LabelValueRow>
 
@@ -65,19 +65,19 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Performance fee">
-        <ViewBps bps={strategy.fees?.performanceFee ?? 0} className="bg-neutral-900" />
+        <ViewBps bps={strategy.fees?.performanceFee ?? 0} />
       </LabelValueRow>
 
       <LabelValueRow label="Management">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.management ?? zeroAddress} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.management ?? zeroAddress} />
       </LabelValueRow>
 
       <LabelValueRow label="Keeper">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.keeper ?? zeroAddress} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.keeper ?? zeroAddress} />
       </LabelValueRow>
 
       <LabelValueRow label="Health check">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.healthCheck ?? zeroAddress} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.healthCheck ?? zeroAddress} />
       </LabelValueRow>
 
       <LabelValueRow label="yHaaS automation">
@@ -90,7 +90,7 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Inception">
-        <ViewDateOrBlock timestamp={strategy.inceptTime} block={strategy.inceptBlock} className="bg-neutral-900" />
+        <ViewDateOrBlock timestamp={strategy.inceptTime} block={strategy.inceptBlock} />
       </LabelValueRow>
     </div>
   </Section>

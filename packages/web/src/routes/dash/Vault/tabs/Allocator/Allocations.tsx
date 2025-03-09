@@ -1,4 +1,3 @@
-import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import Allocation from './Allocation'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
@@ -10,6 +9,7 @@ import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { AddStrategyButton } from './NoStrategies'
+import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 
 function EstimatedApy() {
   const authorized = useHasDebtManagerRole()
@@ -52,16 +52,10 @@ function TotalAllocation() {
 }
 
 export default function Allocations() {
-  const { vault } = useVaultFromParams()
-
-  const sortedByDefaultQueue = useMemo(() => {
-    const unsorted = vault?.strategies ?? []
-    const sorted: EvmAddress[] = vault?.defaultQueue ?? []
-    return unsorted.sort((a, b) => sorted.indexOf(a.address) - sorted.indexOf(b.address))
-  }, [vault])
+  const { defaultQueue } = useDefaultQueueComposite()
 
   return <div className="w-full flex flex-col gap-primary">
-    {sortedByDefaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
+    {defaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
 
     <div className="sm:hidden w-full flex justify-center">
       <AddStrategyButton />

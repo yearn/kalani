@@ -26,6 +26,7 @@ import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import ViewGeneric from '../../../../../components/elements/ViewGeneric'
 import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
 import ReactTimeago from 'react-timeago'
+import Revoke from './Revoke'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -135,7 +136,7 @@ function MutableAllocation({ strategy }: { strategy: {
 
     <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
       </LabelValueRow>
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
@@ -164,6 +165,7 @@ function MutableAllocation({ strategy }: { strategy: {
 
       <LabelValueRow label="">
         <div className="flex items-center gap-3 sm:gap-6">
+          <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <ProcessReport strategy={strategy.address} />
           <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />
         </div>
@@ -192,7 +194,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
 
     <div className="sm:pl-6 w-full flex flex-col items-start gap-primary">
       <LabelValueRow label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
       </LabelValueRow>
       <LabelValueRow label="APY">
         <ViewGeneric>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</ViewGeneric>

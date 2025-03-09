@@ -11,7 +11,7 @@ export default function InputPanel() {
 
   return <div className={`
     relative p-6 flex flex-col gap-3
-    border-primary border-neutral-900 bg-secondary-2000
+    border-primary border-black bg-secondary-2000
     hover:text-secondary-50 hover:border-secondary-50
     focus-within:!text-secondary-400 focus-within:!border-secondary-400 focus-within:!bg-black
     active:!text-secondary-400 active:!border-secondary-400 active:!bg-black

@@ -140,13 +140,13 @@ function Suspender() {
         {reports.map((report, index) => (
           <tr key={index}>
             <td>
-              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} className="bg-neutral-900 text-neutral-400" />
+              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} />
             </td>
             <td>
-              <StrategyChipSlide chainId={report.chainId} address={report.strategy} className="bg-neutral-900 text-neutral-400" />
+              <StrategyChipSlide chainId={report.chainId} address={report.strategy} />
             </td>
-            <td className="text-neutral-400">
-              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} className="bg-neutral-900 text-neutral-400" />
+            <td>
+              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
             </td>
             <td>
               <DisplayUSD usd={report.gainUsd} />

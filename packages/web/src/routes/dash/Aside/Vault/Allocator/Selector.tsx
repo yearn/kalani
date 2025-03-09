@@ -8,11 +8,13 @@ import { fPercent } from '@kalani/lib/format'
 import Button from '../../../../../components/elements/Button'
 import LinkButton from '../../../../../components/elements/LinkButton'
 import { useAddStrategy } from './useAddStrategy'
+import { useDefaultQueueComposite } from '../../../Vault/tabs/Allocator/useDefaultQueueComposite'
 
 export function SelectableVault({ item }: { item: FinderItem }) {
   const { write, simulation, confirmation, resolveToast } = useAddStrategy(item.address)
   const { setLocalVaultStrategies } = useLocalVaultStrategies()
   const { query, vault } = useVaultFromParams()
+  const { refetch: refetchDefaultQueue } = useDefaultQueueComposite()
 
   const buttonTitle = useMemo(() => {
     if (simulation.isError) return 'Error, check console!'
@@ -60,8 +62,9 @@ export function SelectableVault({ item }: { item: FinderItem }) {
         return [...strategies, vaultStrategy]
       })
       query.refetch()
+      refetchDefaultQueue()
     }
-  }, [confirmation, resolveToast, setLocalVaultStrategies, item, query, vault])
+  }, [confirmation, resolveToast, setLocalVaultStrategies, item, query, vault, refetchDefaultQueue])
 
   return <div className="flex items-center gap-4">
     <LinkButton to={getItemHref(item)} h="tertiary" className="w-full px-4 grow h-14 flex items-center justify-between">
@@ -75,6 +78,7 @@ export function SelectableVault({ item }: { item: FinderItem }) {
 export function VaultSelector() {
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
+  const { defaultQueue } = useDefaultQueueComposite()
 
   const filter = useMemo(() => {
     if (!vault) return []
@@ -82,9 +86,9 @@ export function VaultSelector() {
       item.chainId === vault.chainId
       && compareEvmAddresses(item.token?.address ?? zeroAddress, vault.asset.address)
       && !compareEvmAddresses(item.address, vault.address)
-      && !vault.strategies.some(strategy => compareEvmAddresses(strategy.address, item.address))
+      && !defaultQueue.some(strategy => compareEvmAddresses(strategy.address, item.address))
     )
-  }, [items, vault])
+  }, [items, vault, defaultQueue])
 
   if (filter.length === 0) return <></>
 

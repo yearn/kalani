@@ -95,7 +95,7 @@ function LetsGo() {
       <h1 className="text-2xl font-bold">Create a project</h1>
       <p className="text-neutral-500"><String _key="new-project-p" /></p>
     </div>
-    <Connect className="w-full py-6 border-neutral-800" short />
+    <Connect className="w-full py-6 border-black bg-neutral-950" short />
     <NewProject dialogId="lets-go" />
   </div>
 }
