@@ -7,7 +7,7 @@ export function useVaultFromParams() {
 }
 
 export function withVault(WrappedComponent: React.ComponentType<{ vault: Vault }>) {
-  return function ComponentWithVault(props: any) {
+  return function ComponentWithVault(props: object) {
     const { vault } = useVaultFromParams()
     if (!vault) return <></>
     return <WrappedComponent vault={vault} {...props} />

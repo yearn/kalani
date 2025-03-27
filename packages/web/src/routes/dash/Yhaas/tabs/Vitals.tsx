@@ -59,7 +59,7 @@ function Suspender() {
       </LabelValueRow>
 
       <LabelValueRow label="Relayer">
-        <EvmAddressChipSlide chainId={chainId ?? 1} address={relayers[0]} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId ?? 1} address={relayers[0]} />
       </LabelValueRow>
     </div>
   </Section>

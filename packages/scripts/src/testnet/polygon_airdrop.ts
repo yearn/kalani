@@ -14,8 +14,8 @@ async function main() {
   } as const
 
   const client = createTestnetClient(chain)
-  await client.setErc20Balance(ALICE, USDC_POLYGON, 1_000_000n * 10n ** 6n)
-  await client.setErc20Balance(ALICE, USDCE_POLYGON, 1_000_000n * 10n ** 6n)
+  await client.setErc20Balance(ALICE, USDC_POLYGON, 0n * 10n ** 6n)
+  await client.setErc20Balance(ALICE, USDCE_POLYGON, 0n * 10n ** 6n)
   const usdc = getContract({ abi: erc20Abi, address: USDC_POLYGON, client })
   console.log('👹', 'balance', await usdc.read.balanceOf([ALICE]))
 }

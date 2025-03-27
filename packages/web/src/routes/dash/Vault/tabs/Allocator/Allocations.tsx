@@ -10,11 +10,16 @@ import { useInputBpsSettings } from '../../../../../components/elements/InputBps
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { AddStrategyButton } from './NoStrategies'
 import { useDefaultQueueComposite } from './useDefaultQueueComposite'
+import Section from '../../../../../components/Section'
+import AllocationsPie from './AllocationsPie'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
+import { useMounted } from '../../../../../hooks/useMounted'
 
 function EstimatedApy() {
+  const { vault } = useVaultFromParams()
   const authorized = useHasDebtManagerRole()
   const { items } = useFinderItems()
-  const { updates } = useDebtRatioUpdates()
+  const { updates } = useDebtRatioUpdates({ vault })
   const isDirty = useMemo(() => updates.some(a => a.isDirty), [updates])
 
   const apys = useMemo(() => {
@@ -52,25 +57,53 @@ function TotalAllocation() {
 }
 
 export default function Allocations() {
-  const { defaultQueue } = useDefaultQueueComposite()
+  const mounted = useMounted()
+  const { defaultQueue, colors } = useDefaultQueueComposite()
+  const { vault } = useVaultFromParams()
+  const { updates: debtRatios } = useDebtRatioUpdates({ vault })
+  const { totalDebtRatio } = useTotalDebtRatioUpdates()
+
+  const pieData = useMemo(() => {
+    const result: { label: string, value: number, color: string }[] = [
+      { label: 'idle', value: Number(10_000n - totalDebtRatio), color: '#000000' },
+    ]
+
+    defaultQueue.map((strategy, index) => {
+      const debtRatio = debtRatios.find(a => compareEvmAddresses(a.strategy, strategy.address))
+      if (debtRatio) {
+        result.push({ label: debtRatio.strategy, value: Number(debtRatio.debtRatio), color: colors[index] })
+      } else {
+        console.error('default queue strategy not found in debt ratios', strategy.address)
+      }
+    })
+
+    return result.filter(a => a.value > 0)
+  }, [debtRatios, totalDebtRatio, colors, defaultQueue])
 
   return <div className="w-full flex flex-col gap-primary">
-    {defaultQueue.map(strategy => <Allocation key={strategy.address} strategy={strategy} />)}
 
-    <div className="sm:hidden w-full flex justify-center">
+    <div className="sticky top-[68px] sm:top-[78px] z-10 sm:-mx-4 sm:px-32 bg-grill-950 border-b-primary border-b-black">
+      <div className="py-3 sm:py-4 pr-6 w-full flex items-center gap-8">
+        <div className="grow flex flex-col items-end gap-2">
+          <div className="text-xs sm:text-sm text-neutral-400 whitespace-nowrap">Estimated APY</div>
+          <EstimatedApy />
+        </div>
+
+        <div className="flex flex-col items-end gap-2">
+          <div className="text-xs sm:text-sm text-neutral-400 whitespace-nowrap">Total allocation</div>
+          <TotalAllocation />
+        </div>
+
+        <div>
+          <AllocationsPie data={pieData} size={100} animate={!mounted} />
+        </div>
+      </div>
+    </div>
+
+    {defaultQueue.map((strategy, index) => <Section key={strategy.address} className={`${index === 0 ? 'border-t-transparent' : ''}`}><Allocation strategy={strategy} /></Section>)}
+
+    <Section className="sm:hidden w-full flex justify-center">
       <AddStrategyButton />
-    </div>
-
-    <div className="p-12 w-full flex items-center gap-12">
-      <div className="grow flex flex-col items-end gap-2">
-        <div className="text-sm text-neutral-400">Estimated APY</div>
-        <EstimatedApy />
-      </div>
-
-      <div className="flex flex-col items-end gap-2">
-        <div className="text-sm text-neutral-400">Total allocation</div>
-        <TotalAllocation />
-      </div>
-    </div>
+    </Section>
   </div>
 }

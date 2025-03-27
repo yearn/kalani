@@ -29,15 +29,13 @@ function Suspender() {
   })
 
   const content = useMemo(() => {
-    if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <p className="text-center text-warn-600">Set a minimum change greater than 0!</p> }
+    if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <Section><p className="text-center text-warn-600">Set a minimum change greater than 0!</p></Section> }
     if ((defaultQueue.length ?? 0) > 0) { return <Allocations /> }
-    return <NoStrategies />
+    return <Section><NoStrategies /></Section>
   }, [minimumChange, vault, authorized, chainId, defaultQueue])
 
   return <>
-    <Section className="relative">
-      {content}
-    </Section>
+    {content}
 
     <Section className="relative flex flex-col gap-primary">
       <LabelValueRow label="Allocator">

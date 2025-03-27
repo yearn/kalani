@@ -8,7 +8,6 @@ import { parseAbi, zeroAddress } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { EvmAddress, ROLES } from '@kalani/lib/types'
 import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
 
 function useHasReportManagerRole() {
   const { vault } = useVaultFromParams()
@@ -36,7 +35,6 @@ function useProcessReport(vault: Vault, strategy: EvmAddress, enabled: boolean) 
 function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) {
   const authorized = useHasReportManagerRole()
   const { simulation, write, confirmation, resolveToast } = useProcessReport(vault, strategy, authorized)
-  const { sm } = useBreakpoints()
 
   const theme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -70,7 +68,7 @@ function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) 
   }, [write, simulation])
 
   return <Button theme={theme} disabled={disabled} onClick={onClick}>
-    {sm ? 'Report to vault' : 'Harvest'}
+    Report to vault
   </Button>
 }
 
