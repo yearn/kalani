@@ -115,7 +115,7 @@ function Suspender({
   }, [chainId, vault, wallet, setChainId, setWallet, setVault])
 
   return <div className={cn('relative flex flex-col', className)}>
-    <Suspense fallback={<Skeleton className="w-full h-[282px] rounded-t-primary" />}>
+    <Suspense fallback={<div className="px-3 sm:px-0"><Skeleton className="w-full h-[272px] sm:h-[281px] rounded-t-primary" /></div>}>
       <VaultBalance />
     </Suspense>
     <div className="-mt-2 mx-3 sm:mx-0 flex flex-col gap-8">

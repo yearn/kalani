@@ -9,11 +9,11 @@ import Fancy from '../../../components/Fancy'
 import { HeroIcon } from '../../../components/Hero'
 
 const tabClassName = `
-bg-zinc-400/20
-text-zinc-400
+bg-neutral-950
+text-neutral-400
 data-[selected=true]:bg-zinc-400
-hover:bg-zinc-400/40
-active:bg-zinc-400/60
+hover:bg-neutral-800
+active:bg-neutral-900
 `
 
 function Brand() {

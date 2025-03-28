@@ -9,11 +9,11 @@ import { PiFolderSimple } from 'react-icons/pi'
 import Fancy from '../../../components/Fancy'
 
 const tabClassName = `
-bg-green-400/20
-text-green-400
+bg-neutral-950
+text-neutral-400
 data-[selected=true]:bg-green-400
-hover:bg-green-400/40
-active:bg-green-400/60
+hover:bg-neutral-800
+active:bg-neutral-900
 `
 
 function Suspender() {
