@@ -37,9 +37,7 @@ export interface VaultHeroProps {
 export function VaultHero({
   name,
   chainId,
-  address,
   assetAddress,
-  chip,
   inset
 }: VaultHeroProps) {
   const { sm } = useBreakpoints()

@@ -3,7 +3,6 @@ import { PiDotsNineBold, PiGithubLogoFill } from 'react-icons/pi'
 import { AnchorHTMLAttributes, forwardRef } from 'react'
 import { cn } from '../lib/shadcn'
 import Wordmark from './Wordmark'
-import Juice from '../assets/icons/Juiced'
 import { useHashNav } from '../hooks/useHashNav'
 
 type LauncherButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
