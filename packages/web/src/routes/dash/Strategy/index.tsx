@@ -8,11 +8,11 @@ import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import DepositWithdraw from '../../../components/DepositWithdraw'
 
 const tabClassName = `
-bg-secondary-400/20
-text-secondary-400
+bg-neutral-950
+text-neutral-400
 data-[selected=true]:bg-secondary-400
-hover:bg-secondary-400/40
-active:bg-secondary-400/60
+hover:bg-neutral-800
+active:bg-neutral-900
 `
 
 function Hero() {

@@ -16,7 +16,7 @@ export function HeroIcon({ className, icon }: { className?: string, icon: IconTy
 }
 
 export function HeroTitle({ className, children }: { className?: string, children: React.ReactNode }) {
-  return <div className={cn('w-[92%] text-2xl sm:text-4xl font-fancy', className)}>
+  return <div className={cn('w-[300px] sm:w-[92%] text-2xl sm:text-4xl font-fancy', className)}>
     <AutoTextSize mode="oneline" maxFontSizePx={46}>{children}</AutoTextSize>
   </div>
 }

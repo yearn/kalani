@@ -18,11 +18,11 @@ import { useLocation } from 'react-router-dom'
 import Fancy from '../../../components/Fancy'
 
 const tabClassName = `
-bg-secondary-400/20
-text-secondary-400
+bg-neutral-950
+text-neutral-400
 data-[selected=true]:bg-secondary-400
-hover:bg-secondary-400/40
-active:bg-secondary-400/60
+hover:bg-neutral-800
+active:bg-neutral-900
 `
 
 function Suspender({ address }: { address: EvmAddress }) {

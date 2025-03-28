@@ -1,5 +1,4 @@
 import { useVaultFromParams } from '../../../hooks/useVault/withVault'
-import { fPercent, fUSD } from '@kalani/lib/format'
 import Roles from './tabs/Roles'
 import Vitals from './tabs/Vitals'
 import Allocator from './tabs/Allocator'
@@ -7,23 +6,21 @@ import Reports from './tabs/Reports'
 import HeroElement, { HeroInset, HeroTitle } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
-import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 import { Suspense } from 'react'
 import Skeleton, { SkeletonTab } from '../../../components/Skeleton'
 import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
-import { getChain } from '../../../lib/chains'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
 import DepositWithdraw from '../../../components/DepositWithdraw'
 
 const tabClassName = `
-bg-secondary-400/20
-text-secondary-400
+bg-neutral-950
+text-neutral-400
 data-[selected=true]:bg-secondary-400
-hover:bg-secondary-400/40
-active:bg-secondary-400/60
+hover:bg-neutral-800
+active:bg-neutral-900
 `
 
 export interface VaultHeroProps {
@@ -42,8 +39,6 @@ export function VaultHero({
   chainId,
   address,
   assetAddress,
-  tvl,
-  apy,
   chip,
   inset
 }: VaultHeroProps) {
@@ -57,26 +52,8 @@ export function VaultHero({
           <TokenImg chainId={chainId} address={assetAddress} size={sm ? 72 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
-        <div className="w-full flex flex-col sm:gap-1">
+        <div className="w-[300px] sm:w-full flex flex-col sm:gap-1">
           <HeroTitle>{name}</HeroTitle>
-          <div className="sm:-mt-1 flex items-center sm:gap-3 font-bold">
-            <div className="hidden sm:block">{getChain(chainId).name}</div>
-            <div className="hidden sm:block">//</div>
-            <div>
-              <EvmAddressChipSlide chainId={chainId} address={address} className="bg-black" />
-            </div>
-            <div className="hidden sm:block">//</div>
-            <div className="hidden sm:block">{chip}</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="pl-1 flex items-center gap-12 text-2xl sm:text-4xl sm:tracking-widest font-bold">
-        <div className="">
-          TVL {fUSD(tvl ?? 0)}
-        </div>
-        <div className="">
-          APY {fPercent(apy) ?? '-.--%'}
         </div>
       </div>
     </div>
@@ -95,8 +72,6 @@ function Hero() {
 
   if (!vault) return <></>
 
-  const projectChip = vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`
-
   return <VaultHero
     name={vault.name}
     chainId={vault.chainId}
@@ -104,7 +79,6 @@ function Hero() {
     assetAddress={vault.asset.address}
     tvl={vault.tvl?.close ?? 0}
     apy={vault.apy?.close}
-    chip={projectChip}
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
       {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
       <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
@@ -144,14 +118,10 @@ export function VaultHeroSkeleton() {
   const { sm } = useBreakpoints()
   return <HeroElement>
     <div className="w-full flex flex-col justify-center gap-2 sm:pb-4">
-      <div className="flex items-center gap-4 text-xl">
+      <div className="flex items-center gap-6 text-xl">
         <Skeleton className={cn(sm ? 'w-[68px] h-[64px] rounded-full' : 'w-[58px] h-[48px] rounded-full')} />
-        <div className="w-full flex flex-col gap-2 sm:gap-3">
-          <Skeleton className="w-64 sm:w-96 h-10 sm:h-12 rounded-primary" />
-          <Skeleton className="w-24 sm:w-96 h-4 rounded-primary" />
-        </div>
+        <Skeleton className="w-64 sm:w-96 h-10 sm:h-12 rounded-primary" />
       </div>
-      <Skeleton className="w-64 sm:w-96 h-8 pl-1 rounded-primary" />
     </div>
 
     <HeroInset>

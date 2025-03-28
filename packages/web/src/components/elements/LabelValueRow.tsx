@@ -15,7 +15,7 @@ export default function LabelValueRow({
 }) {
   return <div className={cn(`
     px-2 sm:px-6 py-2 w-full flex flex-wrap gap-3 items-center
-    text-xl sm:text-2xl rounded-primary even:bg-secondary-1500`,
+    text-xl xl:text-2xl rounded-primary even:bg-secondary-1500`,
     className
   )}>
     <div className={cn('flex gap-2 items-center', isNothing(label) && 'hidden')}>
