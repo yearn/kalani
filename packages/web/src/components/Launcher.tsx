@@ -99,7 +99,7 @@ export default function Launcher({
             yETH
           </LauncherIconButton>
           <LauncherIconButton href="https://resupply.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Resupply" src="/public/resupply.png" />
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Resupply" src="/resupply.png" />
             Resupply
           </LauncherIconButton>
         </div>
@@ -111,7 +111,7 @@ export default function Launcher({
           </LauncherIconButton>
 
           <LauncherIconButton href="https://bearn.sucks/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Bearn" src="/public/bearn.png" />
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Bearn" src="/bearn.png" />
             Bearn
           </LauncherIconButton>
         </div>
