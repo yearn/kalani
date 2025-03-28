@@ -81,7 +81,6 @@ export default function Launcher({
           yearn.fi
         </LauncherButton>
         <V3Button className="grow sm:grow-0" href="https://yearn.fi/v3" target="_blank" rel="noreferrer">V3</V3Button>
-        <V3Button className="grow sm:grow-0" href="https://gimme.mom" target="_blank" rel="noreferrer">Gimme</V3Button>
       </div>
       <div className="contents">
         <div className="flex items-center justify-center gap-4">
@@ -97,12 +96,12 @@ export default function Launcher({
 
         <div className="flex items-center justify-center gap-4">
           <LauncherIconButton href="https://yeth.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x1BED97CBC3c24A4fb5C069C6E311a967386131f7/logo-128.png" />
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="yETH" src="https://assets.smold.app/api/token/1/0x1BED97CBC3c24A4fb5C069C6E311a967386131f7/logo-128.png" />
             yETH
           </LauncherIconButton>
-          <LauncherIconButton href="https://yprisma.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xe3668873d944e4a949da05fc8bde419eff543882/logo-128.png" />
-            yPrisma
+          <LauncherIconButton href="https://resupply.fi/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Resupply" src="/public/resupply.png" />
+            Resupply
           </LauncherIconButton>
         </div>
 
@@ -112,8 +111,9 @@ export default function Launcher({
             veYFI
           </LauncherIconButton>
 
-          <LauncherIconButton href="https://juiced.yearn.fi/" target="_blank" rel="noreferrer">
-            <Juice className="group-hover/button:contrast-200 group-hover/button:grayscale" /> Juiced
+          <LauncherIconButton href="https://bearn.sucks/" target="_blank" rel="noreferrer">
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Bearn" src="/public/bearn.png" />
+            Bearn
           </LauncherIconButton>
         </div>
 

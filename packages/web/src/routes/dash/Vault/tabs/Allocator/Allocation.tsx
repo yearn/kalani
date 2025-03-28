@@ -146,7 +146,7 @@ function MutableAllocation({ strategy }: { strategy: {
       </LinkButton>
 
       <Button data-open={isOpen} h="tertiary" className="group grow !px-0 sm:px-auto flex items-center justify-center" onClick={() => setIsOpen(current => !current)}>
-        <PiCaretDownBold className="group-data-[open=true]:rotate-180 text-4xl group-hover:!text-secondary-100 group-active:!text-secondary-400" style={{ color }} />
+        <PiCaretDownBold className="group-data-[open=true]:rotate-180 text-4xl" />
       </Button>
     </div>
 
