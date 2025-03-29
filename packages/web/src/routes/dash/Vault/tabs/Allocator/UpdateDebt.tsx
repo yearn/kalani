@@ -29,6 +29,7 @@ function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigi
 function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
   const chainId = useChainId()
   const authorized = useHasDebtManagerRole()
+  const { strategyParams: { maxDebt } } = useOnChainStrategyParams(chainId, vault, strategy)
   const { simulation, write, confirmation, resolveToast } = useUpdateDebt(vault, strategy, targetDebt, authorized && targetDebt > 0n)
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
@@ -45,11 +46,12 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
   const disabled = useMemo(() => {
     return !authorized 
     || targetDebt === 0n
+    || maxDebt === 0n
     || simulation.isFetching
     || simulation.isError
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, targetDebt, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
+  }, [authorized, targetDebt, maxDebt, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -60,6 +62,10 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
       refetchEstimatedAssets()
     }
   }, [confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets])
+
+  useEffect(() => {
+    if (simulation.isError) { console.error(simulation.error) }
+  }, [simulation])
 
   const onClick = useCallback(() => {
     write.writeContract(simulation.data!.request)

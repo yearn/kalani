@@ -14,6 +14,7 @@ import { EvmAddress } from '@kalani/lib/types'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
 import { cn } from '../../../lib/shadcn'
 import DepositWithdraw from '../../../components/DepositWithdraw'
+import EvmAddressChipSlide from '../../../components/ChipSlide/EvmAddressChipSlide'
 
 const tabClassName = `
 bg-neutral-950
@@ -37,6 +38,7 @@ export interface VaultHeroProps {
 export function VaultHero({
   name,
   chainId,
+  address,
   assetAddress,
   inset
 }: VaultHeroProps) {
@@ -50,8 +52,11 @@ export function VaultHero({
           <TokenImg chainId={chainId} address={assetAddress} size={sm ? 72 : 48} showChain={true} bgClassName="border-black" />
         </div>
 
-        <div className="w-[300px] sm:w-full flex flex-col sm:gap-1">
+        <div className="relative w-[300px] sm:w-full flex flex-col sm:gap-1">
           <HeroTitle>{name}</HeroTitle>
+          <div className="absolute -bottom-[1.5rem]">
+            <EvmAddressChipSlide chainId={chainId} address={address} className="!py-0 text-base bg-black" />
+          </div>
         </div>
       </div>
     </div>
