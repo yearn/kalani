@@ -7,7 +7,7 @@ import { readContractsQueryOptions } from 'wagmi/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { EvmAddress } from '@kalani/lib/types'
 
-export function useOnchainTargetRatios() {
+export function useOnChainTargetRatios() {
   const { vault } = useVaultFromParams()
   const config = useConfig()
   const { allocator } = useAllocator()
@@ -37,14 +37,14 @@ export function useOnchainTargetRatios() {
     return result
   }, [query, vault])
 
-  const getOnchainTargetRatio = useCallback((strategy: EvmAddress) => {
+  const getOnChainTargetRatio = useCallback((strategy: EvmAddress) => {
     return onChainTargetRatios.find(a => a.strategy === strategy)?.debtRatio ?? 0n
   }, [onChainTargetRatios])
 
-  return { ...query, onChainTargetRatios, getOnchainTargetRatio }
+  return { ...query, onChainTargetRatios, getOnChainTargetRatio }
 }
 
-export function useOnchainTargetRatio(strategy: EvmAddress) {
-  const { getOnchainTargetRatio } = useOnchainTargetRatios()
-  return useMemo(() => getOnchainTargetRatio(strategy), [getOnchainTargetRatio, strategy])
+export function useOnChainTargetRatio(strategy: EvmAddress) {
+  const { getOnChainTargetRatio: getOnChainTargetRatio } = useOnChainTargetRatios()
+  return useMemo(() => getOnChainTargetRatio(strategy), [getOnChainTargetRatio, strategy])
 }

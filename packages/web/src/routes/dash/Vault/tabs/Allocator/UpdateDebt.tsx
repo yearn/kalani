@@ -3,12 +3,15 @@ import { Suspense, useEffect, useCallback, useMemo } from 'react'
 import Button from '../../../../../components/elements/Button'
 import { useHasDebtManagerRole } from './useHasDebtManagerRole'
 import { useChainId, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { parseAbi } from 'viem'
+import { formatUnits, parseAbi } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { EvmAddress } from '@kalani/lib/types'
 import { useEffectiveDebtRatioBps } from './useEffectiveDebtRatioBps'
 import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
+import { useMinimumChange } from '../../useAllocator'
+import bmath from '@kalani/lib/bmath'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 
 function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
@@ -28,12 +31,34 @@ function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigi
 
 function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
   const chainId = useChainId()
+  const { vault: vaultIndex } = useVaultFromParams()
   const authorized = useHasDebtManagerRole()
-  const { strategyParams: { maxDebt } } = useOnChainStrategyParams(chainId, vault, strategy)
-  const { simulation, write, confirmation, resolveToast } = useUpdateDebt(vault, strategy, targetDebt, authorized && targetDebt > 0n)
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
-  const { refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
+  const { strategyParams: { maxDebt, currentDebt }, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)
+  const { minimumChange } = useMinimumChange()
+
+  const debtCanChange = useMemo(() => {
+    const gtMinChange = bmath.abs(targetDebt - currentDebt) > minimumChange
+    if (targetDebt > currentDebt) {
+      return targetDebt <= maxDebt && gtMinChange
+    } else {
+      return gtMinChange
+    }
+  }, [minimumChange, targetDebt, currentDebt, maxDebt])
+
+  const { simulation, write, confirmation, resolveToast } = useUpdateDebt(
+    vault, strategy, targetDebt, 
+    authorized && debtCanChange
+  )
+
+  const label = useMemo(() => {
+    if (targetDebt > currentDebt) {
+      return `+ debt ${formatUnits(targetDebt - currentDebt, vaultIndex?.asset.decimals ?? 18)} ${vaultIndex?.asset.symbol}`
+    } else {
+      return `- debt ${formatUnits(currentDebt - targetDebt, vaultIndex?.asset.decimals ?? 18)} ${vaultIndex?.asset.symbol}`
+    }
+  }, [targetDebt, currentDebt, vaultIndex])
 
   const theme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -45,13 +70,12 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
 
   const disabled = useMemo(() => {
     return !authorized 
-    || targetDebt === 0n
-    || maxDebt === 0n
+    || !debtCanChange
     || simulation.isFetching
     || simulation.isError
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, targetDebt, maxDebt, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
+  }, [authorized, debtCanChange, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -71,7 +95,7 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>Update debt</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick}>{label}</Button>
 }
 
 export default function UpdateDebt({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {

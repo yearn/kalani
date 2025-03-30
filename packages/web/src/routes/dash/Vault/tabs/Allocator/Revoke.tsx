@@ -12,7 +12,7 @@ import { useHasRevokeRole } from './useHasRevokeRole'
 import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useLocalVaultStrategies } from '../../../../../hooks/useVault'
-import { useOnchainTargetRatio } from './useOnchainTargetRatios'
+import { useOnChainTargetRatio } from './useOnChainTargetRatios'
 
 function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
@@ -33,7 +33,7 @@ function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
 function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddress }) {
   const chainId = useChainId()
   const authorized = useHasRevokeRole()
-  const targetRatio = useOnchainTargetRatio(strategy)
+  const targetRatio = useOnChainTargetRatio(strategy)
   const { effectiveDebtRatioBps, refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { strategyParams, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)

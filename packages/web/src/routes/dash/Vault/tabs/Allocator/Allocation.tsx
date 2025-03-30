@@ -4,8 +4,8 @@ import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { EvmAddress } from '@kalani/lib/types'
 import { parseAbi, zeroAddress } from 'viem'
-import { useOnchainTargetRatio } from './useOnchainTargetRatios'
-import { useOnchainTargetRatios } from './useOnchainTargetRatios'
+import { useOnChainTargetRatio } from './useOnChainTargetRatios'
+import { useOnChainTargetRatios } from './useOnChainTargetRatios'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
@@ -32,6 +32,8 @@ import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
 import { useDefaultQueueColor } from './useDefaultQueueComposite'
 import { PiCaretDownBold, PiWarningCircleBold } from 'react-icons/pi'
 import { SetMaxDebt } from './SetMaxDebt'
+import { useOnChainVault } from '../../../../../hooks/useOnChainVault'
+import bmath from '@kalani/lib/bmath'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -63,6 +65,7 @@ function MutableAllocation({ strategy }: { strategy: {
   name: string 
 } }) {
   const { vault } = useVaultFromParams()
+  const { vault: __vault } = useOnChainVault(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
   const authorized = useHasDebtManagerRole()
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -71,8 +74,8 @@ function MutableAllocation({ strategy }: { strategy: {
   const color = useDefaultQueueColor(strategy.address)
 
   const { refetch: refetchTotalDebtRatio } = useTotalDebtRatio()
-  const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
-  const onchainTargetRatio = useOnchainTargetRatio(strategy.address)
+  const { refetch: refetchOnChainTargetRatios } = useOnChainTargetRatios()
+  const onchainTargetRatio = useOnChainTargetRatio(strategy.address)
 
   const { updateDebtRatio } = useDebtRatioUpdates({ vault })
   const update = useDebtRatioUpdate(strategy.address)
@@ -112,10 +115,10 @@ function MutableAllocation({ strategy }: { strategy: {
       resolveToast()
       setTimeout(() => {
         refetchTotalDebtRatio()
-        refetchOnchainTargetRatios()
+        refetchOnChainTargetRatios()
       }, 10)
     }
-  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnchainTargetRatios])
+  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnChainTargetRatios])
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newRatio = BigInt(e.target.value)
@@ -136,6 +139,13 @@ function MutableAllocation({ strategy }: { strategy: {
   }, [write, simulation])
 
   const [isOpen, setIsOpen] = useState(false)
+
+  const targetDebt = useMemo(() => {
+    if (update.debtRatio === 0n) { return 0n }
+    const debtRatioDecimal = bmath.div(update.debtRatio, 10_000n)
+    const debt = bmath.mul(__vault.totalAssets, debtRatioDecimal)
+    return bmath.min(BigInt(Math.floor(debt)), strategyParams.maxDebt)
+  }, [update.debtRatio, strategyParams.maxDebt, __vault])
 
   const isWarning = useMemo(() => {
     return update.debtRatio === 0n || strategyParams.maxDebt === 0n
@@ -195,14 +205,14 @@ function MutableAllocation({ strategy }: { strategy: {
 
       {sm && <div className="w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
         <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
-        {/* <ProcessReport strategy={strategy.address} /> */}
-        <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />          
+        <ProcessReport strategy={strategy.address} />
+        <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />          
       </div>}
 
       {!sm && <ScrollContainer horizontal className="w-full" style={{ maxWidth: '86vw' }}>
         <div className="relative flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
           <ProcessReport strategy={strategy.address} />
-          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />          
+          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />          
           <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <div className="sticky z-10 top-0 right-0 min-w-2 h-12 bg-neutral-950/20"></div>
         </div>
@@ -217,7 +227,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   name: string 
 } }) {
   const { findFinderItem, getHrefFor } = useFinderUtils()
-  const ratio = useOnchainTargetRatio(strategy.address)
+  const ratio = useOnChainTargetRatio(strategy.address)
   const { vault } = useVaultFromParams()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)

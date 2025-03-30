@@ -100,7 +100,9 @@ export default function Allocations() {
       </div>
     </div>
 
-    {defaultQueue.map((strategy, index) => <Section key={strategy.address} className={`${index === 0 ? 'border-t-transparent' : ''}`}><Allocation strategy={strategy} /></Section>)}
+    {defaultQueue.map((strategy, index) => <Section key={strategy.address} className={`${index === 0 ? 'border-t-transparent' : ''}`}>
+      <Allocation strategy={strategy} />
+    </Section>)}
 
     <Section className="sm:hidden w-full flex justify-center">
       <AddStrategyButton />
