@@ -3,7 +3,7 @@ import { useVaultParams } from '../../../../../hooks/useVault'
 import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { EvmAddress } from '@kalani/lib/types'
-import { parseAbi, zeroAddress } from 'viem'
+import { maxUint256, parseAbi, zeroAddress } from 'viem'
 import { useOnChainTargetRatio } from './useOnChainTargetRatios'
 import { useOnChainTargetRatios } from './useOnChainTargetRatios'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
@@ -245,7 +245,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
       </LinkButton>
 
       <Button data-open={isOpen} h="tertiary" className="group grow !px-0 sm:px-auto flex items-center justify-center" onClick={() => setIsOpen(current => !current)}>
-        <PiCaretDownBold className="group-data-[open=true]:rotate-180 text-4xl group-hover:!text-secondary-100 group-active:!text-secondary-400" style={{ color }} />
+        <PiCaretDownBold className="group-data-[open=true]:rotate-180 text-4xl group-hover:!text-secondary-100 group-active:!text-secondary-400" />
       </Button>
     </div>
 
@@ -264,7 +264,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
         <ViewBps bps={effectiveDebtRatioBps} />
       </LabelValueRow>
       <LabelValueRow label="Max Debt" infoKey="max-debt">
-        <ViewGeneric>{fTokens(strategyParams.maxDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
+        <ViewGeneric>{strategyParams.maxDebt === maxUint256 ? 'MAX' : fTokens(strategyParams.maxDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
       </LabelValueRow>
       <LabelValueRow label="Debt">
         <ViewGeneric>{fTokens(strategyParams.currentDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
