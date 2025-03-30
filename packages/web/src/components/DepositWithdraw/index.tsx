@@ -25,8 +25,9 @@ function SwitchOption({ selected, onClick, children }: { selected: boolean, onCl
 
     <div data-selected={selected} onClick={onClick} className={cn(`
       absolute z-10 inset-0 px-8 py-1
-      text-secondary-400 hover:text-secondary-400 active:text-secondary-400
-      bg-transparent hover:bg-secondary-400/20 active:bg-secondary-400/60
+      bg-transparent text-neutral-400 
+      hover:bg-neutral-800
+      active:bg-neutral-900
 
       data-[selected=true]:!text-neutral-900
       data-[selected=true]:!bg-transparent
