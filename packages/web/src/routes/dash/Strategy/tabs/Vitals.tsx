@@ -22,12 +22,12 @@ function Suspender() {
 
   return <div className="flex flex-col gap-primary">
     <div className="hidden sm:flex flex-row gap-primary px-8 text-2xl xl:text-4xl">
-      <div className="grow p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
         <div>TVL</div>
         <div>{fUSD(strategy.tvl?.close ?? 0)}</div>
       </div>
 
-      <div className="grow p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
         <div>APY</div>
         <div>{fPercent(strategy.apy?.close ?? 0)}</div>
       </div>

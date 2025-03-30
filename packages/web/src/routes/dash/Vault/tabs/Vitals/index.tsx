@@ -51,12 +51,12 @@ function VitalsComponent({ vault }: { vault: Vault }) {
 
   return <div className="flex flex-col gap-primary">
     <div className="hidden sm:flex flex-row gap-primary px-8 text-2xl xl:text-4xl">
-      <div className="grow p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
         <div>TVL</div>
         <div>{fUSD(vault.tvl?.close ?? 0)}</div>
       </div>
 
-      <div className="grow p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
         <div>APY</div>
         <div>{fPercent(vault.apy?.close ?? 0)}</div>
       </div>
@@ -179,50 +179,68 @@ function VitalsComponent({ vault }: { vault: Vault }) {
 }
 
 export function VitalsSkeleton() {
-  return <Section>
-    <div className="flex flex-col gap-primary">
-      <LabelValueRow label="Network">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
+  return <div className="flex flex-col gap-primary">
+    <div className="hidden sm:flex flex-row gap-primary px-8 text-2xl xl:text-4xl">
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+        <div>TVL</div>
+        <div><Skeleton className="w-36 h-10 rounded-primary" /></div>
+      </div>
 
-      <LabelValueRow label="Address">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Name">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Symbol">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Asset">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Asset name">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Asset symbol">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Total assets">
-        <Skeleton className="w-24 h-11 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="TVL">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
-      <LabelValueRow label="Price per share">
-        <Skeleton className="w-24 h-8 rounded-primary" />
-      </LabelValueRow>
-
+      <div className="w-1/2 p-8 2xl:px-24 flex flex-col items-start justify-between xl:flex-row xl:items-center border-primary border-transparent sm:border-black rounded-primary">
+        <div>APY</div>
+        <div><Skeleton className="w-36 h-10 rounded-primary" /></div>
+      </div>
     </div>
-  </Section>
+
+    <Section>
+      <div className="flex flex-col gap-primary">
+        <LabelValueRow label="Type">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Network">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Address">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Name">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Symbol">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Asset">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Asset name">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Asset symbol">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Total assets">
+          <Skeleton className="w-24 h-11 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="TVL">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+        <LabelValueRow label="Price per share">
+          <Skeleton className="w-24 h-10 rounded-primary" />
+        </LabelValueRow>
+
+      </div>
+    </Section>
+  </div>
 }
 
 const Suspender = withVault(VitalsComponent)
