@@ -10,6 +10,9 @@ import { useOnChainStrategyParams } from './useOnChainStrategyParams'
 import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
 import { useHasRevokeRole } from './useHasRevokeRole'
 import { useDefaultQueueComposite } from './useDefaultQueueComposite'
+import { compareEvmAddresses } from '@kalani/lib/strings'
+import { useLocalVaultStrategies } from '../../../../../hooks/useVault'
+import { useOnChainTargetRatio } from './useOnChainTargetRatios'
 
 function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
@@ -30,11 +33,13 @@ function useRevoke(vault: EvmAddress, strategy: EvmAddress, enabled: boolean) {
 function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddress }) {
   const chainId = useChainId()
   const authorized = useHasRevokeRole()
-  const { simulation, write, confirmation, resolveToast } = useRevoke(vault, strategy, authorized)
-  const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
+  const targetRatio = useOnChainTargetRatio(strategy)
+  const { effectiveDebtRatioBps, refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { strategyParams, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)
   const { refetch: refetchDefaultQueueComposite } = useDefaultQueueComposite()
+  const { setLocalVaultStrategies } = useLocalVaultStrategies()
+  const { simulation, write, confirmation, resolveToast } = useRevoke(vault, strategy, authorized && strategyParams.currentDebt === 0n)
 
   const theme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -47,11 +52,13 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
   const disabled = useMemo(() => {
     return !authorized 
     || strategyParams.currentDebt > 0n
+    || effectiveDebtRatioBps > 0n
+    || targetRatio > 0n
     || simulation.isFetching
     || simulation.isError
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [authorized, strategyParams, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending])
+  }, [authorized, strategyParams, simulation.isFetching, simulation.isError, write.isPending, write.isSuccess, confirmation.isPending, effectiveDebtRatioBps, targetRatio])
 
   useEffect(() => {
     if (confirmation.isSuccess) {
@@ -61,8 +68,16 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
       refetchStrategyParams()
       refetchEstimatedAssets()
       refetchDefaultQueueComposite()
+
+      setLocalVaultStrategies(current => {
+        const index = current.findIndex(s => s.chainId === chainId && compareEvmAddresses(s.address, strategy))
+        if (index === -1) return current
+        const newStrategies = [...current]
+        newStrategies.splice(index, 1)
+        return newStrategies
+      })
     }
-  }, [confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets, refetchDefaultQueueComposite])
+  }, [chainId, confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets, refetchDefaultQueueComposite, setLocalVaultStrategies, strategy])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }

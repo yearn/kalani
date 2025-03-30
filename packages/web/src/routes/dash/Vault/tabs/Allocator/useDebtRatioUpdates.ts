@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { EvmAddress } from '@kalani/lib/types'
 import { create } from 'zustand'
-import { useOnchainTargetRatios } from './useOnchainTargetRatios'
+import { useOnChainTargetRatios } from './useOnChainTargetRatios'
 import { zeroAddress } from 'viem'
 import { Vault } from '../../../../../hooks/useVault'
 
@@ -37,7 +37,7 @@ type UseDebtRatioUpdatesProps = {
 
 export function useDebtRatioUpdates(props: UseDebtRatioUpdatesProps) {
   const { vault } = props ?? {}
-  const { onChainTargetRatios } = useOnchainTargetRatios()
+  const { onChainTargetRatios } = useOnChainTargetRatios()
   const { updates: _updates, updateDebtRatio } = useDebtRatioUpdatesStore(state => state)
 
   const updates = useMemo(() => {

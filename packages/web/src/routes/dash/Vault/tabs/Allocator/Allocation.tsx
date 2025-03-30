@@ -4,8 +4,8 @@ import { useAllocator, useTotalDebtRatio } from '../../useAllocator'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { EvmAddress } from '@kalani/lib/types'
 import { parseAbi, zeroAddress } from 'viem'
-import { useOnchainTargetRatio } from './useOnchainTargetRatios'
-import { useOnchainTargetRatios } from './useOnchainTargetRatios'
+import { useOnChainTargetRatio } from './useOnChainTargetRatios'
+import { useOnChainTargetRatios } from './useOnChainTargetRatios'
 import { useDebtRatioUpdates } from './useDebtRatioUpdates'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
@@ -30,7 +30,10 @@ import Revoke from './Revoke'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
 import { useDefaultQueueColor } from './useDefaultQueueComposite'
-import { PiCaretDownBold } from 'react-icons/pi'
+import { PiCaretDownBold, PiWarningCircleBold } from 'react-icons/pi'
+import { SetMaxDebt } from './SetMaxDebt'
+import { useOnChainVault } from '../../../../../hooks/useOnChainVault'
+import bmath from '@kalani/lib/bmath'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -62,6 +65,7 @@ function MutableAllocation({ strategy }: { strategy: {
   name: string 
 } }) {
   const { vault } = useVaultFromParams()
+  const { vault: __vault } = useOnChainVault(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
   const authorized = useHasDebtManagerRole()
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -70,8 +74,8 @@ function MutableAllocation({ strategy }: { strategy: {
   const color = useDefaultQueueColor(strategy.address)
 
   const { refetch: refetchTotalDebtRatio } = useTotalDebtRatio()
-  const { refetch: refetchOnchainTargetRatios } = useOnchainTargetRatios()
-  const onchainTargetRatio = useOnchainTargetRatio(strategy.address)
+  const { refetch: refetchOnChainTargetRatios } = useOnChainTargetRatios()
+  const onchainTargetRatio = useOnChainTargetRatio(strategy.address)
 
   const { updateDebtRatio } = useDebtRatioUpdates({ vault })
   const update = useDebtRatioUpdate(strategy.address)
@@ -111,10 +115,10 @@ function MutableAllocation({ strategy }: { strategy: {
       resolveToast()
       setTimeout(() => {
         refetchTotalDebtRatio()
-        refetchOnchainTargetRatios()
+        refetchOnChainTargetRatios()
       }, 10)
     }
-  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnchainTargetRatios])
+  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnChainTargetRatios])
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newRatio = BigInt(e.target.value)
@@ -136,13 +140,27 @@ function MutableAllocation({ strategy }: { strategy: {
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const targetDebt = useMemo(() => {
+    if (update.debtRatio === 0n) { return 0n }
+    const debtRatioDecimal = bmath.div(update.debtRatio, 10_000n)
+    const debt = bmath.mul(__vault.totalAssets, debtRatioDecimal)
+    return bmath.min(BigInt(Math.floor(debt)), strategyParams.maxDebt)
+  }, [update.debtRatio, strategyParams.maxDebt, __vault])
+
+  const isWarning = useMemo(() => {
+    return update.debtRatio === 0n || strategyParams.maxDebt === 0n
+  }, [update.debtRatio, strategyParams.maxDebt])
+
   return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
 
     <div className="w-full flex items-center justify-between gap-6">
       <LinkButton to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-1 sm:gap-3 pl-0 pr-8 h-14">
-        <div className="w-4 sm:w-6 h-14 rounded-l-primary group-hover:!bg-secondary-100 group-active:!bg-secondary-400" style={{ backgroundColor: color }} />
+        <div className="relative w-4 sm:w-6 h-14 rounded-l-primary group-hover:!bg-secondary-100 group-active:!bg-secondary-400" style={{ backgroundColor: color }} />
         <ViewBps bps={Number(update.debtRatio)} className="text-xs sm:text-lg" />
         <div className="w-[160px] sm:w-[400px] truncate sm:text-2xl font-bold">{strategy.name}</div>
+        {isWarning && <div className="absolute inset-0 pr-2 flex items-center justify-end">
+          <PiWarningCircleBold size={24} className="text-warn-400" />
+        </div>}
       </LinkButton>
 
       <Button data-open={isOpen} h="tertiary" className="group grow !px-0 sm:px-auto flex items-center justify-center" onClick={() => setIsOpen(current => !current)}>
@@ -158,16 +176,21 @@ function MutableAllocation({ strategy }: { strategy: {
       <LabelValueRow label="APY">
         <div>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</div>
       </LabelValueRow>
-      <LabelValueRow label="Target debt ratio">
-        <div className="flex items-center gap-6">
+      <LabelValueRow label="Target debt ratio" infoKey="target-debt-ratio" theme={update.debtRatio === 0n && 'warning'}>
+        <div className="flex items-center gap-4 sm:gap-6">
           <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-56 sm:w-64" />
-          <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="h-14">Set</Button>
+          <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
         </div>
       </LabelValueRow>
       <LabelValueRow label="Effective debt ratio">
         <ViewBps bps={effectiveDebtRatioBps} />
       </LabelValueRow>
-      <LabelValueRow label="Debt">
+
+      <LabelValueRow label="Max debt" infoKey="max-debt" theme={strategyParams.maxDebt === 0n && 'warning'}>
+        <SetMaxDebt strategy={strategy.address} />
+      </LabelValueRow>
+
+      <LabelValueRow label="Current debt">
         <ViewGeneric>{fTokens(strategyParams.currentDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
       </LabelValueRow>
       <LabelValueRow label="Estimated assets">
@@ -183,13 +206,13 @@ function MutableAllocation({ strategy }: { strategy: {
       {sm && <div className="w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
         <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
         <ProcessReport strategy={strategy.address} />
-        <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />          
+        <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />          
       </div>}
 
       {!sm && <ScrollContainer horizontal className="w-full" style={{ maxWidth: '86vw' }}>
         <div className="relative flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
           <ProcessReport strategy={strategy.address} />
-          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={update.debtRatio} />          
+          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />          
           <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <div className="sticky z-10 top-0 right-0 min-w-2 h-12 bg-neutral-950/20"></div>
         </div>
@@ -204,7 +227,7 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   name: string 
 } }) {
   const { findFinderItem, getHrefFor } = useFinderUtils()
-  const ratio = useOnchainTargetRatio(strategy.address)
+  const ratio = useOnChainTargetRatio(strategy.address)
   const { vault } = useVaultFromParams()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -234,11 +257,14 @@ function ReadonlyAllocation({ strategy }: { strategy: {
       <LabelValueRow label="APY">
         <ViewGeneric>{fPercent(findFinderItem(strategy)?.apy) ?? '-.--%'}</ViewGeneric>
       </LabelValueRow>
-      <LabelValueRow label="Target debt ratio">
+      <LabelValueRow label="Target debt ratio" infoKey="target-debt-ratio">
         <ViewBps bps={Number(ratio)} />
       </LabelValueRow>
       <LabelValueRow label="Effective debt ratio">
         <ViewBps bps={effectiveDebtRatioBps} />
+      </LabelValueRow>
+      <LabelValueRow label="Max Debt" infoKey="max-debt">
+        <ViewGeneric>{fTokens(strategyParams.maxDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
       </LabelValueRow>
       <LabelValueRow label="Debt">
         <ViewGeneric>{fTokens(strategyParams.currentDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>

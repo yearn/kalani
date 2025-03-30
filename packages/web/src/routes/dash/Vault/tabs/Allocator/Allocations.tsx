@@ -83,7 +83,7 @@ export default function Allocations() {
   return <div className="w-full flex flex-col gap-primary">
 
     <div className="sticky top-[68px] sm:top-[78px] z-10 sm:-mx-4 sm:px-32 bg-grill-950 border-b-primary border-b-black">
-      <div className="py-3 sm:py-4 pr-6 w-full flex items-center gap-8">
+      <div className="py-3 sm:py-4 pr-6 w-full flex items-center gap-6 sm:gap-24">
         <div className="grow flex flex-col items-end gap-2">
           <div className="text-xs sm:text-sm text-neutral-400 whitespace-nowrap">Estimated APY</div>
           <EstimatedApy />
@@ -100,7 +100,9 @@ export default function Allocations() {
       </div>
     </div>
 
-    {defaultQueue.map((strategy, index) => <Section key={strategy.address} className={`${index === 0 ? 'border-t-transparent' : ''}`}><Allocation strategy={strategy} /></Section>)}
+    {defaultQueue.map((strategy, index) => <Section key={strategy.address} className={`${index === 0 ? 'border-t-transparent' : ''}`}>
+      <Allocation strategy={strategy} />
+    </Section>)}
 
     <Section className="sm:hidden w-full flex justify-center">
       <AddStrategyButton />
