@@ -18,6 +18,7 @@ export default function InputBps({
   disabled,
   onChange,
   className,
+  outerClassName,
   isValid,
   validationMessage
 }: {
@@ -26,7 +27,8 @@ export default function InputBps({
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
   className?: string,
   isValid?: boolean,
-  validationMessage?: string
+  validationMessage?: string,
+  outerClassName?: string
 }) {
   const { setting, next } = useInputBpsSettings()
   const isPercentMode = useMemo(() => setting === '%', [setting])
@@ -57,7 +59,7 @@ export default function InputBps({
     }
   }, [isPercentMode, onChange, max])
 
-  return <div className="group relative">
+  return <div className={cn('group relative', outerClassName)}>
     <Input
       disabled={disabled}
       value={displayValue}
