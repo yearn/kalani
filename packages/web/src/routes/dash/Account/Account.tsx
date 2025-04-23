@@ -86,7 +86,7 @@ function Suspender({ address }: { address: EvmAddress }) {
       <TabContent id="vaults" isDefault={true}>
         <div className="p-3 flex flex-col gap-3">
           {sorted.map((item) =>
-            <ListItem key={`${item.chainId}-${item.address}`} item={item} roleMask={findRoleForItem(item)?.roleMask} isRoleManager={compareEvmAddresses(item.roleManager ?? zeroAddress, address)}  />
+            <ListItem key={`${item.chainId}-${item.address}`} item={item} />
           )}
         </div>
       </TabContent>
