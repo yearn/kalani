@@ -10,7 +10,6 @@ import { ListItem } from '../Explore/ListItem'
 import { PiWallet } from 'react-icons/pi'
 import { Tab, TabContent, Tabs } from '../../../components/Tabs'
 import { useAccountOptions } from './useAccountOptions'
-import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useProjects } from '../../../components/SelectProject/useProjects'
 import LinkButton from '../../../components/elements/LinkButton'
 import ChainImg from '../../../components/ChainImg'
@@ -28,7 +27,7 @@ active:bg-neutral-900
 function Suspender({ address }: { address: EvmAddress }) {
   const { address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
-  const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
+  const { items } = useAccountItems(address ?? zeroAddress)
   const location = useLocation()
   const title = useMemo(() => location.pathname === '/' ? 'Wallet' : 'Account', [location])
   const { sortKey, sortDirection } = useAccountOptions()
