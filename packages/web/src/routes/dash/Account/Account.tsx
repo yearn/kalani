@@ -10,7 +10,6 @@ import { ListItem } from '../Explore/ListItem'
 import { PiWallet } from 'react-icons/pi'
 import { Tab, TabContent, Tabs } from '../../../components/Tabs'
 import { useAccountOptions } from './useAccountOptions'
-import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useProjects } from '../../../components/SelectProject/useProjects'
 import LinkButton from '../../../components/elements/LinkButton'
 import ChainImg from '../../../components/ChainImg'
@@ -28,7 +27,7 @@ active:bg-neutral-900
 function Suspender({ address }: { address: EvmAddress }) {
   const { address: addressFromAccount } = useAccount()
   const isUserWallet = useMemo(() => addressFromAccount === address, [addressFromAccount, address])
-  const { items, findRoleForItem } = useAccountItems(address ?? zeroAddress)
+  const { items } = useAccountItems(address ?? zeroAddress)
   const location = useLocation()
   const title = useMemo(() => location.pathname === '/' ? 'Wallet' : 'Account', [location])
   const { sortKey, sortDirection } = useAccountOptions()
@@ -86,7 +85,7 @@ function Suspender({ address }: { address: EvmAddress }) {
       <TabContent id="vaults" isDefault={true}>
         <div className="p-3 flex flex-col gap-3">
           {sorted.map((item) =>
-            <ListItem key={`${item.chainId}-${item.address}`} item={item} roleMask={findRoleForItem(item)?.roleMask} isRoleManager={compareEvmAddresses(item.roleManager ?? zeroAddress, address)}  />
+            <ListItem key={`${item.chainId}-${item.address}`} item={item} />
           )}
         </div>
       </TabContent>

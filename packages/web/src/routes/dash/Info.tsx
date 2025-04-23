@@ -25,13 +25,13 @@ export default function Info() {
     </Hero>
     <Section className="flex flex-col gap-primary">
       <LabelValueRow label="Role manager factory">
-        <EvmAddressChipSlide chainId={chainId} address={ROLE_MANAGER_FACTORY} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={ROLE_MANAGER_FACTORY} />
       </LabelValueRow>
       <LabelValueRow label="APR oracle">
-        <EvmAddressChipSlide chainId={chainId} address={APR_ORACLE} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={APR_ORACLE} />
       </LabelValueRow>
       <LabelValueRow label="Address provider">
-        <EvmAddressChipSlide chainId={chainId} address={ADDRESS_PROVIDER} className="bg-neutral-900" />
+        <EvmAddressChipSlide chainId={chainId} address={ADDRESS_PROVIDER} />
       </LabelValueRow>
       <LabelValueRow label="Vaults">
         <A href="https://github.com/yearn/yearn-vaults-v3" target="_blank" rel="noopener noreferrer" className="text-xs sm:text-base whitespace-nowrap">

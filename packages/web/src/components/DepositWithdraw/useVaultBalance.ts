@@ -44,7 +44,7 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
     { chainId, address: vault, abi: abis.vault, functionName: 'asset' },
     { chainId, address: vault, abi: abis.vault, functionName: 'symbol' },
     { chainId, address: vault, abi: abis.vault, functionName: 'balanceOf', args: [wallet] },
-    { chainId, address: vault, abi: abis.vault, functionName: 'convertToShares', args: [10n ** BigInt(decimals)] },
+    { chainId, address: vault, abi: abis.vault, functionName: 'convertToAssets', args: [10n ** BigInt(decimals)] },
     { 
       chainId, 
       address: APR_ORACLE, 
@@ -69,9 +69,9 @@ export function useVaultBalance(options: { chainId: number, vault: EvmAddress, w
   }, [query.data])
 
   const assets = useMemo(() => {
-    const assetToShares1e18 = (query.data?.[3]?.result as bigint | undefined) ?? 1n
-    const assetToShares = bmath.div(assetToShares1e18, 10n ** BigInt(decimals))
-    const assets = Math.floor(bmath.mul(shares, assetToShares))
+    const pps1e18 = (query.data?.[3]?.result as bigint | undefined) ?? 1n
+    const pps = bmath.div(pps1e18, 10n ** BigInt(decimals))
+    const assets = Math.floor(bmath.mul(shares, pps))
     return BigInt(assets)
   }, [shares, query.data, decimals])
 
