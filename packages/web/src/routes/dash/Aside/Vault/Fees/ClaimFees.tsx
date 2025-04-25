@@ -12,26 +12,31 @@ import { useAccountantForVaultFromParams } from '../../../../../hooks/useAccount
 import { ErrorBoundary } from 'react-error-boundary'
 import SetMaxLoss from './SetMaxLoss'
 import { useClaim, useClaimable } from './useClaimable'
+import Distribute from './Distribute'
+import Odometer from 'react-odometerjs'
 
 function AsTokens({ balance, decimals, symbol }: { balance: bigint, decimals: number, symbol: string }) {
-  return <div className="flex items-end justify-start gap-3">
-    <div className="text-4xl">{fTokens(balance, decimals, { fixed: 2 })}</div>
-    <div className="text-sm text-neutral-400 whitespace-nowrap">{symbol}</div>
+  return <div className="flex items-center justify-start gap-3">
+    <div className="text-4xl">
+      <Odometer value={Number(fTokens(balance, decimals, { fixed: 6 }))} format="(,ddd).dddddd" />
+    </div>
+    <div className="text-4xl text-neutral-400 whitespace-nowrap">{symbol}</div>
   </div>
 }
 
 function AsAssets({ balance }: { balance: bigint }) {
   const { vault } = useVaultFromParams()
   const config = useConfig()
-  const toAssetsQuery = useSuspenseQuery(
-    readContractQueryOptions(config, {
+  const toAssetsQuery = useSuspenseQuery({
+    ...readContractQueryOptions(config, {
       chainId: vault?.chainId ?? 0,
       address: vault?.address ?? zeroAddress,
       abi: abis.vault,
       functionName: 'convertToAssets',
       args: [balance]
-    })
-  )
+    }),
+    refetchInterval: 5000
+  })
   const decimals = vault?.asset.decimals ?? 12
   return <AsTokens balance={toAssetsQuery.data} decimals={decimals} symbol={vault?.asset.symbol ?? ''} />
 }
@@ -94,7 +99,9 @@ export default function ClaimFees() {
         <Button disabled={disabled} theme={buttonTheme} onClick={onClick}>Claim</Button>
         <div data-visible={!!simError} className="data-[visible=false]:invisible px-4 text-xs text-error-400 text-right">{simError ?? 'error'}</div>
       </div>}
+      <SetMaxLoss />
     </div>
-    <SetMaxLoss />
+
+    <Distribute />
   </div>
 }
