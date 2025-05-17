@@ -9,7 +9,7 @@ import Odometer from 'react-odometerjs'
 export default function AmountUSD() {
   const { chainId, vault, amount } = useSuspendedParameters()
   const { asset } = useVaultAsset(chainId!, vault!)
-  const expanded = useMemo(() => BigInt(isNumber(amount) ? Number(amount) * 10 ** (asset!.decimals) : 0), [amount, asset])
+  const expanded = useMemo(() => BigInt(Math.floor(isNumber(amount) ? Number(amount) * 10 ** (asset!.decimals) : 0)), [amount, asset])
   const price = usePrice(chainId ?? 0, asset!.address)
   const priced = useMemo(() => bmath.priced(expanded, asset?.decimals ?? 18, price ?? 0), [expanded, asset, price])
   return <div className="flex items-start gap-1 text-neutral-500 text-sm">

@@ -156,7 +156,8 @@ function MutableAllocation({ strategy }: { strategy: {
     <div className="w-full flex items-center justify-between gap-6">
       <LinkButton to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-1 sm:gap-3 pl-0 pr-8 h-14">
         <div className="relative w-4 sm:w-6 h-14 rounded-l-primary group-hover:!bg-secondary-100 group-active:!bg-secondary-400" style={{ backgroundColor: color }} />
-        <ViewBps bps={Number(update.debtRatio)} className="text-xs sm:text-lg" />
+        <ViewBps bps={Number(update.debtRatio)} className="text-xs" />
+        <ViewBps bps={Number(effectiveDebtRatioBps)} className="text-xs" />
         <div className="w-[160px] sm:w-[400px] truncate sm:text-2xl font-bold">{strategy.name}</div>
         {isWarning && <div className="absolute inset-0 pr-2 flex items-center justify-end">
           <PiWarningCircleBold size={24} className="text-warn-400" />
@@ -238,9 +239,10 @@ function ReadonlyAllocation({ strategy }: { strategy: {
   return <div className="sm:p-3 flex flex-col items-start gap-4 border-primary border-transparent rounded-primary">
 
     <div className="w-full flex items-center justify-between gap-6">
-      <LinkButton data-zero={ratio === 0n} to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-1 sm:gap-3 pl-0 pr-8 h-14 data-[zero=true]:!text-neutral-800">
+      <LinkButton data-zero={strategyParams.currentDebt === 0n && ratio === 0n} to={getHrefFor(strategy)} h="tertiary" className="flex items-center gap-1 sm:gap-3 pl-0 pr-8 h-14 data-[zero=true]:!text-neutral-800">
         <div className="w-4 sm:w-6 h-14 rounded-l-primary group-hover:!bg-secondary-100 group-active:!bg-secondary-400" style={{ backgroundColor: color }} />
-        <ViewBps bps={Number(ratio)} className="text-xs sm:text-lg" />
+        <ViewBps bps={Number(ratio)} className="text-xs" />
+        <ViewBps bps={Number(effectiveDebtRatioBps)} className="text-xs" />
         <div className="w-[160px] sm:w-[400px] truncate sm:text-2xl font-bold">{strategy.name}</div>
       </LinkButton>
 

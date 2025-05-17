@@ -14,6 +14,9 @@ import Section from '../../../../../components/Section'
 import AllocationsPie from './AllocationsPie'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useMounted } from '../../../../../hooks/useMounted'
+import bmath from '@kalani/lib/bmath'
+import { zeroAddress } from 'viem'
+import { useTotalAssets } from './useEffectiveDebtRatioBps'
 
 function EstimatedApy() {
   const { vault } = useVaultFromParams()
@@ -62,8 +65,9 @@ export default function Allocations() {
   const { vault } = useVaultFromParams()
   const { updates: debtRatios } = useDebtRatioUpdates({ vault })
   const { totalDebtRatio } = useTotalDebtRatioUpdates()
+  const { totalAssets } = useTotalAssets(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
 
-  const pieData = useMemo(() => {
+  const targetDebtPieData = useMemo(() => {
     const result: { label: string, value: number, color: string }[] = [
       { label: 'idle', value: Number(10_000n - totalDebtRatio), color: '#000000' },
     ]
@@ -80,6 +84,26 @@ export default function Allocations() {
     return result.filter(a => a.value > 0)
   }, [debtRatios, totalDebtRatio, colors, defaultQueue])
 
+  const realDebtPieData = useMemo(() => {
+    if (totalAssets === 0n) return []
+    const totalDebt = vault?.totalDebt ?? 0n
+    const idle = bmath.div(totalAssets - totalDebt, totalAssets)
+    const idleBps = Math.round(Number(idle) * 10_000)
+
+    const result: { label: string, value: number, color: string }[] = [
+      { label: 'idle', value: idleBps, color: '#000000' },
+    ]
+
+    defaultQueue.map((strategy, index) => {
+      const currentDebt = strategy.currentDebt ?? 0n
+      const realDeptRatio = bmath.div(currentDebt, totalAssets)
+      const realDeptRatioBps = Math.round(Number(realDeptRatio) * 10_000)
+      result.push({ label: strategy.address, value: realDeptRatioBps, color: colors[index] })
+    })
+
+    return result.filter(a => a.value > 0)
+  }, [vault, colors, defaultQueue, totalAssets])
+
   return <div className="w-full flex flex-col gap-primary">
 
     <div className="sticky top-[68px] sm:top-[78px] z-10 sm:-mx-4 sm:px-32 bg-grill-950 border-b-primary border-b-black">
@@ -90,12 +114,20 @@ export default function Allocations() {
         </div>
 
         <div className="flex flex-col items-end gap-2">
-          <div className="text-xs sm:text-sm text-neutral-400 whitespace-nowrap">Total allocation</div>
+          <div className="text-xs sm:text-sm text-neutral-400 whitespace-nowrap">Target allocation</div>
           <TotalAllocation />
         </div>
 
-        <div>
-          <AllocationsPie data={pieData} size={100} animate={!mounted} />
+        <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <AllocationsPie data={targetDebtPieData} size={100} animate={!mounted} />
+            <div className="text-xs text-neutral-400 whitespace-nowrap">Target</div>
+          </div>
+
+          <div className="flex flex-col items-center gap-2">
+            <AllocationsPie data={realDebtPieData} size={100} animate={!mounted} />
+            <div className="text-xs text-neutral-400 whitespace-nowrap">Effective</div>
+          </div>
         </div>
       </div>
     </div>

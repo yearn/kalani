@@ -16,6 +16,7 @@ export default function Max({ className }: { className?: string }) {
     if (mode === 'deposit') {
       setAmount(formatUnits(balance ?? 0n, decimals ?? 18))
     } else {
+      console.log('formatUnits(assets, decimals ?? 18)', formatUnits(assets, decimals ?? 18))
       setAmount(formatUnits(assets, decimals ?? 18))
     }
   }, [mode, balance, decimals, assets, setAmount])
