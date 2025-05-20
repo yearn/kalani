@@ -1,5 +1,5 @@
 import { AnchorHTMLAttributes, ReactNode, useMemo } from 'react'
-import { PiInfo, PiMagnifyingGlass, PiRobot, PiVault, PiWallet } from 'react-icons/pi'
+import { PiInfo, PiMagnifyingGlass, PiVault, PiWallet } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
 import { Link, useLocation } from 'react-router-dom'
 import ScaleIn from '../../components/motion/ScaleIn'
@@ -63,10 +63,6 @@ export default function Drawer({
 
     <DrawerButton to="/build" title="Build">
       <PiVault size={26} />
-    </DrawerButton>
-
-    <DrawerButton to="/yhaas" title="Automation">
-      <PiRobot size={26} />
     </DrawerButton>
 
     <DrawerButton to="/info" title="Info">

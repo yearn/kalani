@@ -1,4 +1,4 @@
-import { PiDotsNine, PiEqualsBold, PiInfo, PiMagnifyingGlass, PiRobot, PiVault, PiWallet } from 'react-icons/pi'
+import { PiDotsNine, PiEqualsBold, PiInfo, PiMagnifyingGlass, PiVault, PiWallet } from 'react-icons/pi'
 import { cn } from '../../lib/shadcn'
 import { useHashNav } from '../../hooks/useHashNav'
 import { IconType } from 'react-icons/lib'
@@ -45,7 +45,6 @@ export default function MenuBar({ className }: { className?: string }) {
         <MenuBarButton icon={PiWallet} title="Wallet" onClick={() => navigate('/', { replace: true })} />
         <MenuBarButton icon={PiMagnifyingGlass} title="Explore" onClick={() => navigate('/explore', { replace: true })} />
         <MenuBarButton icon={PiVault} title="Build" onClick={() => navigate('/build', { replace: true })} />
-        <MenuBarButton icon={PiRobot} title="yHaaS" onClick={() => navigate('/yhaas', { replace: true })} />
         <MenuBarButton icon={PiInfo} title="Info" onClick={() => navigate('/info', { replace: true })} />
         <MenuBarButton icon={PiDotsNine} title="yApps" onClick={launcher.open} />
       </div>

@@ -4,7 +4,6 @@ import {
 } from 'react-router-dom'
 import Vault from './Vault'
 import Strategy from './Strategy'
-import Yhaas from './Yhaas'
 import Account from './Account'
 import { Suspense } from 'react'
 import Skeleton from '../../../components/Skeleton'
@@ -28,7 +27,6 @@ export default function Aside() {
         <Route path="/strategy/:chainId/:address" element={<Strategy />} />
         <Route path="/vault/:chainId/:address" element={<Vault />} />
         <Route path="/erc4626/:chainId/:address" element={<Erc4626 />} />
-        <Route path="/yhaas" element={<Yhaas />} />
       </Routes>
     </Suspense>
   </div>

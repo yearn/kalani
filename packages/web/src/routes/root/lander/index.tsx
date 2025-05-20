@@ -1,7 +1,7 @@
 import Header from './Header'
 import Bg from './Bg'
 import Wordmark from '../../../components/Wordmark'
-import { PiVault, PiRobot, PiMoneyWavy } from 'react-icons/pi'
+import { PiVault, PiMoneyWavy } from 'react-icons/pi'
 import { ReactNode } from 'react'
 import Button from '../../../components/elements/Button'
 import CTA from '../../../components/CTA'
@@ -28,7 +28,7 @@ function Feature({
   href: string
 }) {
   return <a href={href} className={`group
-    h-full p-6 flex items-center justify-center gap-6 sm:gap-8
+    h-full px-6 py-12 flex items-center justify-center gap-6 sm:gap-8
     border-primary border-transparent hover:border-secondary-200 
     active:border-secondary-400 active:text-secondary-400
     saber-glow rounded-primary`}>
@@ -74,11 +74,6 @@ function RightHero() {
         icon={<PiVault size={96} />} 
         title="Build" 
         description=<>Build <Highlight>vaults</Highlight> on Yearn V3 protocol, allocate to any 4626 vault or strategy</>
-      />
-      <Feature href="/yhaas" 
-        icon={<PiRobot size={96} />} 
-        title="Automate" 
-        description=<>Automate the <Highlight>tending and harvesting</Highlight> of your vaults with Yearn yHaaS</>
       />
       <Feature href="/" 
         icon={<PiMoneyWavy size={96} />} 

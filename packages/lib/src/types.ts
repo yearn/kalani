@@ -62,18 +62,3 @@ export const AccountRoleSchema = z.object({
 })
 
 export type AccountRole = z.infer<typeof AccountRoleSchema>
-
-export const YhaasExecutorSchema = z.object({
-  address: z.string(),
-  block: z.bigint({ coerce: true }),
-  automations: z.number({ coerce: true }),
-  gas: z.bigint({ coerce: true })
-})
-
-export type YhaasExecutor = z.infer<typeof YhaasExecutorSchema>
-
-export const AutomationStatsSchema = z.record(
-  z.string(), z.object({ executors: YhaasExecutorSchema.array() })
-)
-
-export type AutomationStats = z.infer<typeof AutomationStatsSchema>
