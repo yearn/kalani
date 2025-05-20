@@ -2,7 +2,7 @@ import Header from './Header'
 import Bg from './Bg'
 import Finder from '../../../components/Finder'
 import Wordmark from '../../../components/Wordmark'
-import { PiMagnifyingGlass, PiVault, PiRobot } from 'react-icons/pi'
+import { PiMagnifyingGlass, PiVault } from 'react-icons/pi'
 import { ReactNode } from 'react'
 
 function Feature({
@@ -64,11 +64,6 @@ export default function Lander() {
           icon={<PiVault size={96} />} 
           title="Build" 
           description=<>Build your own 4626 vaults using <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn V3</span> protocol</>
-        />
-        <Feature href="/yhaas" 
-          icon={<PiRobot size={96} />} 
-          title="Automate" 
-          description=<>Automate your vaults and strategies with <span className="font-bold text-primary-400 group-active:text-secondary-400">Yearn yHaaS</span></>
         />
       </section>
     </div>

@@ -11,7 +11,6 @@ import Strategy from './routes/dash/Strategy'
 import Account from './routes/dash/Account'
 import Accountant from './routes/dash/Accountant'
 import Erc4626 from './routes/dash/Erc4626'
-import Yhaas from './routes/dash/Yhaas'
 import Eg from './routes/_eg'
 import Explore from './routes/dash/Explore'
 import Build from './routes/dash/Build'
@@ -45,7 +44,6 @@ export default function App() {
           <Route path="project/:chainId/:id" element={<Project />} />
           <Route path="strategy/:chainId/:address" element={<Strategy />} />
           <Route path="vault/:chainId/:address" element={<Vault />} />
-          <Route path="yhaas" element={<Yhaas />} />
           <Route path="info" element={<Info />} />
         </Route>
         <Route path="_eg" element={<Eg />} />

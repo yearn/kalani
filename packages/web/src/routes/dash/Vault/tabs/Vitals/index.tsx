@@ -13,8 +13,6 @@ import ViewGeneric from '../../../../../components/elements/ViewGeneric'
 import ChainImg from '../../../../../components/ChainImg'
 import TokenImg from '../../../../../components/TokenImg'
 import { zeroAddress } from 'viem'
-import { useIsRelayed } from '../../../Yhaas/tabs/Apply/TargetForm/VaultForm/useIsRelayed'
-import { ROLES } from '@kalani/lib/types'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
 import Skeleton from '../../../../../components/Skeleton'
@@ -28,8 +26,6 @@ function VitalsComponent({ vault }: { vault: Vault }) {
   const { allocator } = useAllocator()
   const { sm } = useBreakpoints()
 
-  // const type = vault.yearn ? 'Yearn Allocator' : `${vault.projectName} Allocator`
-
   const type = useMemo(() => {
     if (vault.yearn) { return 'Yearn Allocator' }
     if (vault.projectName) { return `${vault.projectName} Allocator` }
@@ -42,12 +38,6 @@ function VitalsComponent({ vault }: { vault: Vault }) {
     const totalAllocated = mulb(vault?.totalAssets ?? 0n, Number(totalDebtRatio) / 10_000)
     return Math.floor(Number(div(vault?.totalDebt ?? 0n, totalAllocated)) * 10_000)
   }, [vault, totalDebtRatio])
-
-  const { data: isRelayed } = useIsRelayed({
-    vault: vault?.address ?? zeroAddress,
-    chainId: vault?.chainId,
-    rolemask: ROLES.REPORTING_MANAGER
-  })
 
   return <div className="flex flex-col gap-primary">
     <div className="hidden sm:flex flex-row gap-primary px-8 text-2xl xl:text-4xl">
@@ -159,11 +149,6 @@ function VitalsComponent({ vault }: { vault: Vault }) {
 
         <LabelValueRow label="Allocator">
           <EvmAddressChipSlide chainId={vault.chainId} address={allocator ?? vault.allocator ?? zeroAddress} />
-        </LabelValueRow>
-
-        <LabelValueRow label="yHaaS automation">
-          {isRelayed ? <ViewGeneric className="text-green-400">Enabled</ViewGeneric>
-            : <ViewGeneric className="text-warn-400">Disabled</ViewGeneric>}
         </LabelValueRow>
 
         <LabelValueRow label="Version">

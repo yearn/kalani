@@ -10,14 +10,12 @@ import LabelValueRow from '../../../../components/elements/LabelValueRow'
 import TokenImg from '../../../../components/TokenImg'
 import EvmAddressChipSlide from '../../../../components/ChipSlide/EvmAddressChipSlide'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
-import { useIsRelayed } from '../../Yhaas/tabs/Apply/TargetForm/StrategyForm/useIsRelayed'
 import { zeroAddress } from 'viem'
 import { useBreakpoints } from '../../../../hooks/useBreakpoints'
 import { VitalsSkeleton } from '../../Vault/tabs/Vitals'
 
 function Suspender() {
   const { strategy } = useStrategyFromParams()
-  const { data: isRelayed } = useIsRelayed({ chainId: strategy.chainId, strategy: strategy.address })
   const { sm } = useBreakpoints()
 
   return <div className="flex flex-col gap-primary">
@@ -102,11 +100,6 @@ function Suspender() {
 
         <LabelValueRow label="Health check">
           <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.healthCheck ?? zeroAddress} />
-        </LabelValueRow>
-
-        <LabelValueRow label="yHaaS automation">
-          {isRelayed ? <ViewGeneric className="text-green-400">Enabled</ViewGeneric>
-            : <ViewGeneric className="text-warn-400">Disabled</ViewGeneric>}
         </LabelValueRow>
 
         <LabelValueRow label="Version">
