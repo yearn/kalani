@@ -79,6 +79,33 @@ export const customChains = {
     },
     iconUrl: '/bera.png',
     testnet: false,
+  }),
+
+  katana: /*#__PURE__*/ defineChain({
+    id: 747474,
+    name: 'Katana',
+    nativeCurrency: {
+      decimals: 18,
+      name: 'Ether',
+      symbol: 'ETH',
+    },
+    rpcUrls: {
+      default: { http: ['https://rpc.katanarpc.com'] },
+    },
+    blockExplorers: {
+      default: {
+        name: 'Katana Explorer',
+        url: 'https://explorer.katanarpc.com',
+      },
+    },
+    contracts: {
+      multicall3: {
+        address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+        blockCreated: 1898013,
+      },
+    },
+    iconUrl: '/katana.png',
+    testnet: false,
   })
 }
 
@@ -162,7 +189,16 @@ export const _berachain = Object.assign({}, customChains.berachain, {
   }
 })
 
-export const chains = [_mainnet, _gnosis, _polygon, _sonic, _base, _mode, _arbitrum, _berachain] as const
+export const _katana = Object.assign({}, customChains.katana, {
+  'id': 747474,
+  'rpcUrls': {
+    'default': {
+      'http': [rpc(747474)]
+    }
+  }
+})
+
+export const chains = [_mainnet, _gnosis, _polygon, _sonic, _base, _mode, _arbitrum, _berachain, _katana] as const
 
 export function getChain(chainId: number) {
   const result = chains.find(n => n.id === chainId)
