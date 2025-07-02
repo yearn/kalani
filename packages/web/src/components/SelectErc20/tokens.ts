@@ -51,5 +51,13 @@ export const TOKENS: Record<number, Erc20[]> = {
     { chainId: 80094, address: '0xFCBD14DC51f0A4d49d5E53C2E0950e0bC26d0Dce', name: 'Honey', symbol: 'HONEY', decimals: 18 },
     { chainId: 80094, address: '0x7DCC39B4d1C53CB31e1aBc0e358b43987FEF80f7', name: 'Wrapped eETH', symbol: 'weETH', decimals: 18 },
     { chainId: 80094, address: '0xecAc9C5F704e954931349Da37F60E39f515c11c1', name: 'Lombard Staked BTC', symbol: 'LBTC', decimals: 8 },
+  ],
+
+  [747474]: [
+    { chainId: 747474, address: '0x203A662b0BD271A6ed5a60EdFbd04bFce608FD36', name: 'Vault Bridge USDC', symbol: 'vbUSDC', decimals: 6 },
+    { chainId: 747474, address: '0x2DCa96907fde857dd3D816880A0df407eeB2D2F2', name: 'Vault Bridge Tether USD', symbol: 'vbUSDT', decimals: 18 },
+    { chainId: 747474, address: '0x62D6A123E8D19d06d68cf0d2294F9A3A0362c6b3', name: 'Bridged USDS', symbol: 'vbUSDS', decimals: 18 },
+    { chainId: 747474, address: '0x0913DA6Da4b42f538B445599b46Bb4622342Cf52', name: 'Vault Bridge WBTC', symbol: 'vbWBTC', decimals: 8 },
+    { chainId: 747474, address: '0xEE7D8BCFb72bC1880D0Cf19822eB0A2e6577aB62', name: 'Vault Bridge ETH', symbol: 'vbETH', decimals: 18 },
   ]
 }
