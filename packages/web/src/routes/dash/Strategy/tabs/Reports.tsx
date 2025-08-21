@@ -3,9 +3,10 @@ import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
 import { Suspense } from 'react'
-import { fPercent, fUSD } from '@kalani/lib/format'
+import { fPercent, fNumber } from '@kalani/lib/format'
+import { formatUnits } from 'viem'
 import Skeleton from '../../../../components/Skeleton'
-import { useStrategyParams } from '../../../../hooks/useStrategy'
+import { useStrategyFromParams } from '../../../../hooks/useStrategy'
 import { cn } from '../../../../lib/shadcn'
 import TxChipSlide from '../../../../components/ChipSlide/TxChipSlide'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
@@ -60,10 +61,13 @@ async function fetchReports(chainId: number, address: string): Promise<Report[]>
   return ReportSchema.array().parse(json.data.strategyReports)
 }
 
-function useReports(chainId: number, address: string) {
+function useReports(chainId: number | undefined, address: string | undefined) {
   const query = useSuspenseQuery({
     queryKey: ['useReports', chainId, address],
-    queryFn: async () => fetchReports(chainId, address)
+    queryFn: async () => {
+      if (!chainId || !address) return []
+      return fetchReports(chainId, address)
+    }
   })
   return {
     ...query,
@@ -102,10 +106,17 @@ function TableSkeleton() {
   </table>
 }
 
-function DisplayUSD({ usd, className }: { usd: number, className?: string }) {
+function DisplayTokens({ amount, decimals, symbol, className }: { amount: number, decimals: number, symbol: string, className?: string }) {
+  const amountBigInt = BigInt(Math.floor(amount))
+  const units = formatUnits(amountBigInt, decimals)
+  const number = Number(units)
+  const addSpace = number < 1000 && Number.isFinite(number)
+  const formattedNumber = fNumber(number, { padding: { length: 3, fill: '0' } })
+  const formattedNumberSpaced = fNumber(number, { padding: { length: 3, fill: ' ' } })
+  
   return <div className={cn('relative whitespace-nowrap', className)}>
-    <span className={classNameFor(0)}>{fUSD(usd, { padding: { length: 3, fill: '0' } })}</span>
-    <span className={cn('absolute inset-0 whitespace-pre', classNameFor(usd))}>{fUSD(usd, { padding: { length: 3, fill: ' ' } })}</span>
+    <span className={classNameFor(0)}>{formattedNumber}{addSpace ? '\u00A0' : ''} <span className="opacity-60">{symbol}</span></span>
+    <span className={cn('absolute inset-0 whitespace-pre', classNameFor(amount))}>{formattedNumberSpaced}{addSpace ? '\u00A0' : ''} <span className="opacity-60">{symbol}</span></span>
   </div>
 }
 
@@ -117,8 +128,11 @@ function DisplayPercent({ percent, className }: { percent: number, className?: s
 }
 
 function Suspender() {
-  const { chainId, address } = useStrategyParams()
-  const { reports } = useReports(chainId, address)
+  const { strategy } = useStrategyFromParams()
+  const { reports } = useReports(strategy?.chainId, strategy?.address)
+
+  if (!strategy) return <></>
+
   return <div className="flex flex-col gap-2">
     <table className="w-full border-separate border-spacing-4">
       <thead>
@@ -140,10 +154,10 @@ function Suspender() {
               <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
             </td>
             <td>
-              <DisplayUSD usd={report.profitUsd} />
+              <DisplayTokens amount={report.profit} decimals={strategy.asset.decimals} symbol={strategy.asset.symbol} />
             </td>
             <td>
-              <DisplayUSD usd={report.lossUsd} />
+              <DisplayTokens amount={report.loss} decimals={strategy.asset.decimals} symbol={strategy.asset.symbol} />
             </td>
             <td className={classNameFor(report.apr?.net ?? 0)}>
               <DisplayPercent percent={report.apr?.net ?? 0} />
