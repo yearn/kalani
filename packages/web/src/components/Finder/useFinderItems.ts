@@ -88,7 +88,7 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
     address: vault.address,
     name: vault.name,
     nameLower: vault.name.toLowerCase(),
-    symbol: vault.symbol,
+    symbol: vault.symbol ?? 'NULL',
     strategies: vault.strategies,
     yearn: vault.yearn,
     vaultType: vault.vaultType,
