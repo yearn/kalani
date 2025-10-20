@@ -51,6 +51,8 @@ function useAssetUnlocker({ chainId, vault, wallet }: { chainId: number, vault: 
   const [unlocked, setUnlocked] = useState(assets)
 
   useEffect(() => {
+    const disabled = true
+    if (disabled) { return }
     let tick = 1
     const handle = setInterval(() => {
       const delta = bmath.mulb(assets, apr * (interval * tick) / (365 * 24 * 60 * 60 * 1000))
