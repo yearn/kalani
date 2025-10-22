@@ -1,7 +1,7 @@
 import Header from './Header'
 import Bg from './Bg'
 import Wordmark from '../../../components/Wordmark'
-import { PiVault, PiMoneyWavy } from 'react-icons/pi'
+import { PiVault, PiMoneyWavy, PiScales } from 'react-icons/pi'
 import { ReactNode } from 'react'
 import Button from '../../../components/elements/Button'
 import CTA from '../../../components/CTA'
@@ -28,7 +28,7 @@ function Feature({
   href: string
 }) {
   return <a href={href} className={`group
-    h-full px-6 py-12 flex items-center justify-center gap-6 sm:gap-8
+    h-full px-6 py-6 flex items-center justify-center gap-6 sm:gap-8
     border-primary border-transparent hover:border-secondary-200 
     active:border-secondary-400 active:text-secondary-400
     saber-glow rounded-primary`}>
@@ -69,15 +69,20 @@ function LeftHero() {
 function RightHero() {
   const Highlight = ({ children }: { children: ReactNode }) => <span className="font-bold text-primary-400 group-active:text-secondary-400">{children}</span>
   return <div className="w-full min-h-screen bg-secondary-2000 flex items-center justify-center relative">
-    <section className="px-4 flex flex-col items-start justify-center gap-16 text-neutral-300">
-      <Feature href="/build" 
-        icon={<PiVault size={96} />} 
-        title="Build" 
-        description=<>Build <Highlight>vaults</Highlight> on Yearn V3 protocol, allocate to any 4626 vault or strategy</>
+    <section className="px-4 flex flex-col items-start justify-center gap-12 text-neutral-300">
+      <Feature href="/build"
+        icon={<PiVault size={96} />}
+        title="Build"
+        description=<>Build <Highlight>vaults</Highlight> on the battle tested Yearn Finance V3 protocol</>
       />
-      <Feature href="/" 
-        icon={<PiMoneyWavy size={96} />} 
-        title="Earn" 
+      <Feature href="/vault/1/0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204?allocator"
+        icon={<PiScales size={96} />}
+        title="Allocate"
+        description=<>Allocate your vault's assets to any <Highlight>4626 vault</Highlight> or strategy</>
+      />
+      <Feature href="/vault/1/0xc56413869c6CDf96496f2b1eF801fEDBdFA7dDB0?fees"
+        icon={<PiMoneyWavy size={96} />}
+        title="Earn"
         description=<>Earn management <Highlight>fees</Highlight> on your vaults, claim them in the app</>
       />
     </section>
