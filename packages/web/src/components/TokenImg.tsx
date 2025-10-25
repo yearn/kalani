@@ -18,7 +18,7 @@ export default function TokenImg(options: {
   const { chainId: defaultChainId } = useAccount()
   const chainId = useMemo(() => optionalChainId ?? defaultChainId ?? 1, [optionalChainId, defaultChainId])
   const src = useMemo(() => 
-    `${import.meta.env.VITE_API_URL}/api/assets/token/${chainId}/${address ?? zeroAddress}`, 
+    `${import.meta.env.VITE_ASSETS_CDN}/tokens/${chainId}/${(address ?? zeroAddress).toLowerCase()}/logo.svg`, 
     [chainId, address]
   )
 

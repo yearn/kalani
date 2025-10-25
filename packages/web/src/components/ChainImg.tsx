@@ -18,7 +18,7 @@ export default function ChainImg({
 }) {
   const src = useMemo(() => {
     if(customs[chainId]) return `/${customs[chainId]}`
-    return `${import.meta.env.VITE_SMOL_ASSETS}/api/chain/${chainId}/logo-128.png`
+    return `${import.meta.env.VITE_ASSETS_CDN}/chains/${chainId}/logo.svg`
   }, [chainId])
 
   return <img
