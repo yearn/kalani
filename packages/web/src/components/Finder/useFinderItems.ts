@@ -20,6 +20,7 @@ export const FinderItemSchema = z.object({
   projectId: z.string().nullish(),
   projectName: z.string().nullish(),
   roleManager: EvmAddressSchema.nullish(),
+  origin: z.string().nullish(),
   strategies: z.preprocess(
     (val) => (val === null ? undefined : val),
     z.array(EvmAddressSchema).optional()
@@ -57,6 +58,7 @@ query Query {
     projectName
     roleManager: role_manager
     vaultType
+    origin
     asset {
       address
       name
@@ -96,6 +98,7 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
     projectId: vault.projectId,
     projectName: vault.projectName,
     roleManager: vault.roleManager,
+    origin: vault.origin,
     token: {
       address: vault.asset.address,
       name: vault.asset.name,

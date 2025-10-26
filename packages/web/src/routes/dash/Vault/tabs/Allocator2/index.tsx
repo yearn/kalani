@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from 'react'
+import { Suspense, useMemo, useState, useEffect } from 'react'
 import { useDefaultQueueComposite } from '../Allocator/useDefaultQueueComposite'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
@@ -13,12 +13,13 @@ import { StrategyDetailProvider } from './StrategyDetailProvider'
 import Skeleton from '../../../../../components/Skeleton'
 import { SetDefaultQueue } from './SetDefaultQueue'
 import Info from '../../../../../components/Info'
+import { AddStrategy } from './AddStrategy'
 
 function StrategyTableHeader() {
   return (
     <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 mb-12">
       <div className="w-6"></div>
-      <h2 className="font-semibold text-neutral-400 flex items-center gap-2">
+      <h2 className="font-bold text-neutral-400 flex items-center gap-2">
         Strategy queue
         <Info _key="strategy-queue" size={16} />
       </h2>
@@ -40,7 +41,7 @@ function Suspender() {
     return defaultQueue.map((strategy) => {
       const currentDebt = strategy.currentDebt ?? 0n
       const allocation = totalAssets > 0n
-        ? Number(bmath.div(currentDebt, totalAssets)) * 100
+        ? Number(bmath.div(currentDebt, totalAssets))
         : 0
 
       const item = items.find(a => compareEvmAddresses(a.address, strategy.address))
@@ -56,6 +57,19 @@ function Suspender() {
 
   const [orderedStrategies, setOrderedStrategies] = useState(() => strategies)
   const [expandedStrategies, setExpandedStrategies] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    const currentAddresses = new Set(orderedStrategies.map(s => s.address))
+    const newAddresses = new Set(strategies.map(s => s.address))
+
+    const hasChanged = currentAddresses.size !== newAddresses.size ||
+      [...newAddresses].some(addr => !currentAddresses.has(addr))
+
+    if (hasChanged) {
+      setOrderedStrategies(strategies)
+    }
+
+  }, [strategies, orderedStrategies])
 
   const toggleExpand = (address: string) => {
     setExpandedStrategies(prev => {
@@ -78,6 +92,9 @@ function Suspender() {
           return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} />
         })}
       </Reorder.Group>
+      <div className="mt-8">
+        <AddStrategy />
+      </div>
       <div className="flex items-center justify-end my-12">
         <SetDefaultQueue orderedStrategies={orderedStrategies} />
       </div>
@@ -110,7 +127,7 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand }: { strategy: any
         </button>
         <div className="flex items-center text-xl">#{index} {strategy.name}</div>
         <div className="text-right text-2xl">{fPercent(strategy.apy)}</div>
-        <div className="text-right text-2xl">{strategy.allocation.toFixed(2)}%</div>
+        <div className="text-right text-2xl">{fPercent(strategy.allocation, { padding: { length: 2, fill: '0' } })}</div>
         <div
           className="flex items-center justify-center text-right cursor-grab active:cursor-grabbing"
           onPointerDown={(e) => dragControls.start(e)}
