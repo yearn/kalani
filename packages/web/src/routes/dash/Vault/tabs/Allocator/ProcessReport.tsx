@@ -67,7 +67,7 @@ function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) 
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>
+  return <Button theme={theme} disabled={disabled} onClick={onClick} className="!py-2">
     Report to vault
   </Button>
 }

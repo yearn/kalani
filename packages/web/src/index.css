@@ -30,7 +30,7 @@
 
 :root {
   --foreground: #fafafa;
-	--background: #09090c;
+	--background: #0b0b12;
 
   font-family: 'JetBrains Mono', monospace;
   line-height: 1.5;
@@ -67,6 +67,10 @@
   100% {
     background-position: 200% 0;
   }
+}
+
+.bg-dark {
+	@apply bg-secondary-1500
 }
 
 .saber-glow {

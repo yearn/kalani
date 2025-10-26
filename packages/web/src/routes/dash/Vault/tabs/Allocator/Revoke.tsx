@@ -87,7 +87,7 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button h="secondary" theme={theme} disabled={disabled} onClick={onClick} className="text-error-600">Revoke</Button>
+  return <Button h="secondary" theme={theme} disabled={disabled} onClick={onClick} className="!py-2 text-error-600">Revoke</Button>
 }
 
 export default function Revoke({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddress }) {

@@ -87,7 +87,7 @@ function Hero() {
       {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
       <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
       {allocator && <Tab id="allocator" className={tabClassName}>Allocator</Tab>}
-      <Tab id="allocator2" className={tabClassName}>Allocator 2</Tab>
+      <Tab id="allocator2" className={tabClassName}>Strategies</Tab>
       <Tab id="fees" className={tabClassName}>Fees</Tab>
       <Tab id="reports" className={tabClassName}>Reports</Tab>
       <Tab id="roles" className={tabClassName}>Roles</Tab>

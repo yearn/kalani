@@ -95,7 +95,7 @@ function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strateg
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>{label}</Button>
+  return <Button theme={theme} disabled={disabled} onClick={onClick} className="!py-2">{label}</Button>
 }
 
 export default function UpdateDebt({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
