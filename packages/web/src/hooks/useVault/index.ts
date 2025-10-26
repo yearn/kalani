@@ -78,7 +78,8 @@ export const VaultSchema = z.object({
   projectId: HexStringSchema.optional(),
   projectName: z.string().optional(),
   yearn: z.boolean().nullish(),
-  v3: z.boolean().nullish()
+  v3: z.boolean().nullish(),
+  origin: z.string().optional()
 })
 
 export type Vault = z.infer<typeof VaultSchema>
@@ -127,6 +128,7 @@ query Query($chainId: Int, $address: String) {
     defaultQueue: get_default_queue
     projectId
     projectName
+    origin
     yearn
     v3
 
