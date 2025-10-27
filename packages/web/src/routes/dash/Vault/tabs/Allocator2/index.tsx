@@ -14,6 +14,7 @@ import Skeleton from '../../../../../components/Skeleton'
 import { SetDefaultQueue } from './SetDefaultQueue'
 import Info from '../../../../../components/Info'
 import { AddStrategy } from './AddStrategy'
+import { AllocatorPanel } from './AllocatorPanel'
 
 function StrategyTableHeader() {
   return (
@@ -84,21 +85,25 @@ function Suspender() {
   }
 
   return (
-    <div className="w-full px-12">
-      <StrategyTableHeader />
-      <Reorder.Group axis="y" values={orderedStrategies} onReorder={setOrderedStrategies} className="space-y-8">
-        {orderedStrategies.map((strategy, index) => {
-          const isOpen = expandedStrategies.has(strategy.address)
-          return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} />
-        })}
-      </Reorder.Group>
-      <div className="mt-8">
-        <AddStrategy />
+    <>
+      <div className="w-full px-12">
+        <StrategyTableHeader />
+        <Reorder.Group axis="y" values={orderedStrategies} onReorder={setOrderedStrategies} className="space-y-8">
+          {orderedStrategies.map((strategy, index) => {
+            const isOpen = expandedStrategies.has(strategy.address)
+            return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} />
+          })}
+        </Reorder.Group>
+        <div className="mt-8">
+          <AddStrategy />
+        </div>
+        <div className="flex items-center justify-end mt-12 mb-2">
+          <SetDefaultQueue orderedStrategies={orderedStrategies} />
+        </div>
       </div>
-      <div className="flex items-center justify-end my-12">
-        <SetDefaultQueue orderedStrategies={orderedStrategies} />
-      </div>
-    </div>
+
+      <AllocatorPanel />
+    </>
   )
 }
 
