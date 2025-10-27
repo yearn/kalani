@@ -3,7 +3,6 @@ import { useDefaultQueueComposite } from '../Allocator/useDefaultQueueComposite'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
 import { compareEvmAddresses } from '@kalani/lib/strings'
-import bmath from '@kalani/lib/bmath'
 import { fPercent } from '@kalani/lib/format'
 import { PiDotsSixVertical, PiCaretDownBold } from 'react-icons/pi'
 import { Reorder, motion, useDragControls } from 'framer-motion'
@@ -14,6 +13,7 @@ import Skeleton from '../../../../../components/Skeleton'
 import { SetDefaultQueue } from './SetDefaultQueue'
 import Info from '../../../../../components/Info'
 import { AddStrategy } from './AddStrategy'
+import { useEffectiveDebtRatios } from './useEffectiveDebtRatios'
 import { AllocatorPanel } from './AllocatorPanel'
 
 function StrategyTableHeader() {
@@ -35,26 +35,26 @@ function Suspender() {
   const { defaultQueue } = useDefaultQueueComposite()
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
-
-  const totalAssets = vault?.totalAssets ?? 0n
+  const { effectiveDebtRatios } = useEffectiveDebtRatios(
+    vault?.chainId ?? 0,
+    vault?.address ?? '0x0000000000000000000000000000000000000000',
+    defaultQueue
+  )
 
   const strategies = useMemo(() => {
     return defaultQueue.map((strategy) => {
-      const currentDebt = strategy.currentDebt ?? 0n
-      const allocation = totalAssets > 0n
-        ? Number(bmath.div(currentDebt, totalAssets))
-        : 0
+      const effectiveDebtRatio = effectiveDebtRatios[strategy.address] ?? 0
 
       const item = items.find(a => compareEvmAddresses(a.address, strategy.address))
       const apy = item?.apy ?? 0
 
       return {
         ...strategy,
-        allocation,
+        effectiveDebtRatio,
         apy
       }
     })
-  }, [defaultQueue, totalAssets, items])
+  }, [defaultQueue, effectiveDebtRatios, items])
 
   const [orderedStrategies, setOrderedStrategies] = useState(() => strategies)
   const [expandedStrategies, setExpandedStrategies] = useState<Set<string>>(new Set())
@@ -132,7 +132,7 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand }: { strategy: any
         </button>
         <div className="flex items-center text-xl">#{index} {strategy.name}</div>
         <div className="text-right text-2xl">{fPercent(strategy.apy)}</div>
-        <div className="text-right text-2xl">{fPercent(strategy.allocation, { padding: { length: 2, fill: '0' } })}</div>
+        <div className="text-right text-2xl">{fPercent(strategy.effectiveDebtRatio, { padding: { length: 2, fill: '0' } })}</div>
         <div
           className="flex items-center justify-center text-right cursor-grab active:cursor-grabbing"
           onPointerDown={(e) => dragControls.start(e)}
