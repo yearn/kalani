@@ -27,7 +27,7 @@ export function AllocatorPanel() {
         <UseDefaultQueue />
       </LabelValueRow>
 
-      <LabelValueRow label="Auto allocate">
+      <LabelValueRow label="Auto allocate" infoKey="auto-allocate">
         <AutoAllocate />
       </LabelValueRow>
     </Section>

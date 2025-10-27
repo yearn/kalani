@@ -46,7 +46,7 @@ function Suspender() {
         <SetMinimumChange className="w-80" />
       </LabelValueRow>
 
-      <LabelValueRow label="Auto allocate">
+      <LabelValueRow label="Auto allocate" infoKey="auto-allocate">
         <AutoAllocate />
       </LabelValueRow>
     </Section>
