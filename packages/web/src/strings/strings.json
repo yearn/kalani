@@ -9,5 +9,6 @@
   "target-debt-ratio": "Target Debt Ratio is the desired allocation of the vault's assets this strategy should be lent at any given time, adjusted for gains or losses.",
   "effective-debt-ratio": "Effective Debt Ratio is the percentage of the vault's total assets currently held by this strategy adjusted for gains or losses.",
   "max-debt": "Max Debt is the maximum amount of assets this strategy can borrow from the vault. For most strategies we recommend MAX (unlimited) for max debt. For high risk strategies max debt is used as a safety mechanism.",
-  "strategy-queue": "The Strategy Queue defines the default order in which strategies are called during withdrawals and auto-allocations. When a user withdraws funds, the vault attempts to pull assets from strategies in this order until the withdrawal is satisfied. When the vault auto-allocates idle funds, it deposits into strategies following this same order."
+  "strategy-queue": "The Strategy Queue defines the default order in which strategies are called during withdrawals and auto-allocations. When a user withdraws funds, the vault attempts to pull assets from strategies in this order until the withdrawal is satisfied. When the vault auto-allocates idle funds, it deposits into strategies following this same order.",
+  "use-default-queue": "When enabled, the vault will always use the default strategy queue for withdrawals, regardless of any custom withdrawal queue passed by users. This ensures consistent withdrawal ordering and prevents users from bypassing the vault's intended strategy priority."
 }

@@ -6,6 +6,7 @@ import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import { SetMinimumChange } from '../Allocator/SetMinimumChange'
 import AutoAllocate from '../Allocator/AutoAllocate'
+import UseDefaultQueue from './UseDefaultQueue'
 
 export function AllocatorPanel() {
   const { vault } = useVaultFromParams()
@@ -20,6 +21,10 @@ export function AllocatorPanel() {
 
       <LabelValueRow label="Minimum change" infoKey={minimumChange < 1 ? 'new-vault-min-change' : 'minimum-change'}>
         <SetMinimumChange className="w-80" />
+      </LabelValueRow>
+
+      <LabelValueRow label="Use default queue" infoKey="use-default-queue">
+        <UseDefaultQueue />
       </LabelValueRow>
 
       <LabelValueRow label="Auto allocate">
