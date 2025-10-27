@@ -2,7 +2,7 @@ import { useVaultFromParams } from '../../../hooks/useVault/withVault'
 import Roles from './tabs/Roles'
 import Vitals from './tabs/Vitals'
 import Allocator from './tabs/Allocator'
-import Allocator2 from './tabs/Allocator2'
+import Strategies from './tabs/Strategies'
 import Reports from './tabs/Reports'
 import HeroElement, { HeroInset, HeroTitle } from '../../../components/Hero'
 import { Tabs, Tab, TabContent } from '../../../components/Tabs'
@@ -87,7 +87,7 @@ function Hero() {
       {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
       <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
       {allocator && <Tab id="allocator" className={tabClassName}>Allocator</Tab>}
-      <Tab id="allocator2" className={tabClassName}>Strategies</Tab>
+      <Tab id="strategies" className={tabClassName}>Strategies</Tab>
       <Tab id="fees" className={tabClassName}>Fees</Tab>
       <Tab id="reports" className={tabClassName}>Reports</Tab>
       <Tab id="roles" className={tabClassName}>Roles</Tab>
@@ -113,7 +113,7 @@ function Content() {
     {!sm && <TabContent id="deposits" isDefault={true}><WrapperDepositWithdraw /></TabContent>}
     <TabContent id="vitals" isDefault={sm}><Vitals /></TabContent>
     <TabContent id="allocator"><Allocator /></TabContent>
-    <TabContent id="allocator2"><Allocator2 /></TabContent>
+    <TabContent id="strategies"><Strategies /></TabContent>
     <TabContent id="fees"><Fees /></TabContent>
     <TabContent id="reports"><Reports /></TabContent>
     <TabContent id="roles"><Roles /></TabContent>

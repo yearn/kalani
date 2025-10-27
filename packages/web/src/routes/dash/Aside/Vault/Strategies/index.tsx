@@ -1,8 +1,8 @@
-export default function Allocator2() {
+export default function Strategies() {
   return (
     <div className="w-full flex items-center justify-center p-6">
       <div className="text-xl font-semibold">
-        Allocator 2
+        Strategies
       </div>
     </div>
   )
