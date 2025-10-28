@@ -7,8 +7,7 @@ import Allocations from './Allocations'
 import NoStrategies from './NoStrategies'
 import Skeleton from '../../../../../components/Skeleton'
 import { zeroAddress } from 'viem'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { ROLES } from '@kalani/lib/types'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import AutoAllocate from './AutoAllocate'
@@ -22,11 +21,7 @@ function Suspender() {
   const { minimumChange } = useMinimumChange()
   const { defaultQueue } = useDefaultQueueComposite()
 
-  const authorized = useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
 
   const content = useMemo(() => {
     if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) { return <Section><p className="text-center text-warn-600">Set a minimum change greater than 0!</p></Section> }

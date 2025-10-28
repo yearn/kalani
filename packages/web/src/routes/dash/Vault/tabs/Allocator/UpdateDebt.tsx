@@ -1,7 +1,7 @@
 import { SkeletonButton } from '../../../../../components/Skeleton'
 import { Suspense, useEffect, useCallback, useMemo } from 'react'
 import Button from '../../../../../components/elements/Button'
-import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { useChainId, useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { formatUnits, parseAbi } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
@@ -32,7 +32,7 @@ function useUpdateDebt(vault: EvmAddress, strategy: EvmAddress, targetDebt: bigi
 function Suspender({ vault, strategy, targetDebt }: { vault: EvmAddress, strategy: EvmAddress, targetDebt: bigint }) {
   const chainId = useChainId()
   const { vault: vaultIndex } = useVaultFromParams()
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { refetch: refetchEffectiveDebtRatioBps } = useEffectiveDebtRatioBps(chainId, vault, strategy)
   const { strategyParams: { maxDebt, currentDebt }, refetch: refetchStrategyParams } = useOnChainStrategyParams(chainId, vault, strategy)
   const { refetch: refetchEstimatedAssets } = useOnChainEstimatedAssets(chainId, vault, strategy)

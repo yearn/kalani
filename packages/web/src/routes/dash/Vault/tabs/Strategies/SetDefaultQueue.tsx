@@ -5,7 +5,7 @@ import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { EvmAddress } from '@kalani/lib/types'
 import abis from '@kalani/lib/abis'
 import Button from '../../../../../components/elements/Button'
-import { useHasQueueManagerRole } from './useHasQueueManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useDefaultQueueComposite } from '../Allocator/useDefaultQueueComposite'
 
@@ -34,7 +34,7 @@ function useSetDefaultQueue(strategies: EvmAddress[]) {
 export function SetDefaultQueue({ orderedStrategies, className }: SetDefaultQueueProps) {
   const { query: { refetch: refetchVault } } = useVaultFromParams()
   const { defaultQueue: onChainDefaultQueue, refetch: refetchDefaultQueue } = useDefaultQueueComposite()
-  const authorized = useHasQueueManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.QUEUE_MANAGER)
 
   const strategyAddresses = useMemo(() =>
     orderedStrategies.map(s => s.address),

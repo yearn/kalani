@@ -6,7 +6,7 @@ import { parseAbi } from 'viem'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { Switch } from '../../../../../components/shadcn/switch'
-import { useHasQueueManagerRole } from './useHasQueueManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import Skeleton from '../../../../../components/Skeleton'
 
 function useUseDefaultQueue(vault: Vault) {
@@ -35,7 +35,7 @@ function useSetUseDefaultQueue(vault: Vault, useDefaultQueue: boolean, enabled: 
 function Suspender({ vault }: { vault: Vault }) {
   const { useDefaultQueue } = useUseDefaultQueue(vault)
   const [checked, setChecked] = useState(useDefaultQueue)
-  const authorized = useHasQueueManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.QUEUE_MANAGER)
   const { simulation, write, confirmation, resolveToast } = useSetUseDefaultQueue(vault, !checked, authorized)
 
   useEffect(() => setChecked(useDefaultQueue), [useDefaultQueue, setChecked])

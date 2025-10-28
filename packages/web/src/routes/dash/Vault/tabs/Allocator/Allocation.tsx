@@ -18,7 +18,7 @@ import ViewBps from '../../../../../components/elements/ViewBps'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import ProcessReport from './ProcessReport'
-import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import UpdateDebt from './UpdateDebt'
 import { useOnChainEstimatedAssets } from './useOnChainEstimatedAssets'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
@@ -66,7 +66,7 @@ function MutableAllocation({ strategy }: { strategy: {
 } }) {
   const { vault } = useVaultFromParams()
   const { vault: __vault } = useOnChainVault(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -280,10 +280,10 @@ function ReadonlyAllocation({ strategy }: { strategy: {
 
 export default function Allocation({ strategy }: { strategy: {
   chainId: number, 
-  address: `0x${string}`, 
-  name: string 
+  address: `0x${string}`,
+  name: string
 } }) {
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   if (authorized) { return <MutableAllocation strategy={strategy} /> }
   else { return <ReadonlyAllocation strategy={strategy} /> }
 }

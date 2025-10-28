@@ -6,13 +6,13 @@ import { useOnChainEstimatedAssets } from '../Allocator/useOnChainEstimatedAsset
 import { useOnChainTargetRatio, useOnChainTargetRatios } from '../Allocator/useOnChainTargetRatios'
 import { useDebtRatioUpdates } from '../Allocator/useDebtRatioUpdates'
 import { useTotalDebtRatioUpdates } from '../Allocator/useTotalDebtRatioUpdates'
-import { useHasDebtManagerRole } from '../Allocator/useHasDebtManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { useFinderUtils } from '../../../../../components/Finder/useFinderItems'
 import { useTotalDebtRatio, useAllocator } from '../../useAllocator'
 import { useVaultParams } from '../../../../../hooks/useVault'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
-import { parseAbi, zeroAddress } from 'viem'
+import { maxUint256, parseAbi, zeroAddress } from 'viem'
 import { fTokens } from '@kalani/lib/format'
 import LabelValueRow from '../../../../../components/elements/LabelValueRow'
 import EvmAddressChipSlide from '../../../../../components/ChipSlide/EvmAddressChipSlide'
@@ -59,7 +59,7 @@ function useDebtRatioUpdate(strategy: EvmAddress) {
 function StrategyDetailContent() {
   const { strategy } = useStrategyDetail()
   const { vault } = useVaultFromParams()
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -131,8 +131,8 @@ function StrategyDetailContent() {
   }, [write, simulation])
 
   return (
-    <div className="w-full flex flex-col items-start px-8 pb-8">
-      <LabelValueRow labelClassName="py-4 text-lg text-primary-400" label="Actions ⚡">
+    <div className="w-full flex flex-col items-start px-8 py-4 pb-8 space-y-2">
+      {authorized && <LabelValueRow labelClassName="py-4 text-lg text-primary-400" label="">
         {sm && <div className="w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
           <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={0n} />
@@ -147,10 +147,10 @@ function StrategyDetailContent() {
             <div className="sticky z-10 top-0 right-0 min-w-2 h-12 bg-neutral-950/20"></div>
           </div>
         </ScrollContainer>}
-      </LabelValueRow>
+      </LabelValueRow>}
 
       <LabelValueRow labelClassName="text-lg" label="Address">
-        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} />
+        <EvmAddressChipSlide chainId={strategy.chainId} address={strategy.address} className="sm:-mr-3" />
       </LabelValueRow>
 
       <LabelValueRow labelClassName="text-lg" label="Last report to vault">
@@ -160,17 +160,25 @@ function StrategyDetailContent() {
       </LabelValueRow>
 
       <LabelValueRow labelClassName="text-lg" label="Target debt ratio" infoKey="target-debt-ratio" theme={update.debtRatio === 0n && 'warning'}>
-        <div className="flex items-center gap-4 sm:gap-6">
-          <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-56 sm:w-64" />
-          <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
-        </div>
+        {authorized ? (
+          <div className="sm:-mr-3 flex items-center gap-4 sm:gap-6">
+            <InputBps bps={Number(update.debtRatio)} onChange={onChange} isValid={true} className="w-56 sm:w-64" />
+            <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="w-12">Set</Button>
+          </div>
+        ) : (
+          <ViewBps bps={Number(update.debtRatio)} className="sm:-mr-3" />
+        )}
       </LabelValueRow>
       <LabelValueRow labelClassName="text-lg" label="Effective debt ratio" infoKey="effective-debt-ratio">
-        <ViewBps bps={effectiveDebtRatioBps} />
+        <ViewBps bps={effectiveDebtRatioBps} className="sm:-mr-3" />
       </LabelValueRow>
 
       <LabelValueRow labelClassName="text-lg" label="Max debt" infoKey="max-debt" theme={strategyParams.maxDebt === 0n && 'warning'}>
-        <SetMaxDebt strategy={strategy.address} />
+        {authorized ? (
+          <SetMaxDebt strategy={strategy.address} className="sm:-mr-3" />
+        ) : (
+          <ViewGeneric>{strategyParams.maxDebt === maxUint256 ? 'MAX' : fTokens(strategyParams.maxDebt, vault?.asset.decimals ?? 0)}</ViewGeneric>
+        )}
       </LabelValueRow>
 
       <LabelValueRow labelClassName="text-lg" label="Current debt">
@@ -192,7 +200,7 @@ function StrategyDetailContent() {
 function StrategyDetailSkeleton() {
   return (
     <div className="w-full flex flex-col items-start px-8 pb-8 space-y-4">
-      <LabelValueRow labelClassName="py-2 text-lg text-primary-400" label="Actions ⚡">
+      <LabelValueRow labelClassName="py-2 text-lg text-primary-400" label="">
         <div className="flex gap-3">
           <Skeleton className="w-24 h-6 rounded" />
           <Skeleton className="w-24 h-6 rounded" />

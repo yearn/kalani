@@ -6,7 +6,7 @@ import { parseAbi } from 'viem'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
 import { Switch } from '../../../../../components/shadcn/switch'
-import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import Skeleton from '../../../../../components/Skeleton'
 
 function useAutoAllocate(vault: Vault) {
@@ -35,7 +35,7 @@ function useSetAutoAllocate(vault: Vault, autoAllocate: boolean, enabled: boolea
 function Suspender({ vault }: { vault: Vault }) {
   const { autoAllocate } = useAutoAllocate(vault)
   const [checked, setChecked] = useState(autoAllocate)
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { simulation, write, confirmation, resolveToast } = useSetAutoAllocate(vault, !checked, authorized)
 
   useEffect(() => setChecked(autoAllocate), [autoAllocate, setChecked])

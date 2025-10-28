@@ -90,7 +90,7 @@ export function AddStrategy() {
       <div className="">
         <SelectStrategy
           vault={vault}
-          placeholder="+ Add strategy by name or address"
+          placeholder="+ Find strategies by name or address"
           selected={selectedStrategy}
           onSelect={setSelectedStrategy}
         />

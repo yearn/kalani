@@ -7,7 +7,7 @@ import { EvmAddress } from '@kalani/lib/types'
 import { fBps, fPercent } from '@kalani/lib/format'
 import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
 import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
-import { useHasDebtManagerRole } from './useHasDebtManagerRole'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { AddStrategyButton } from './NoStrategies'
 import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 import Section from '../../../../../components/Section'
@@ -20,7 +20,7 @@ import { useTotalAssets } from './useEffectiveDebtRatioBps'
 
 function EstimatedApy() {
   const { vault } = useVaultFromParams()
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { items } = useFinderItems()
   const { updates } = useDebtRatioUpdates({ vault })
   const isDirty = useMemo(() => updates.some(a => a.isDirty), [updates])
@@ -49,7 +49,7 @@ function EstimatedApy() {
 }
 
 function TotalAllocation() {
-  const authorized = useHasDebtManagerRole()
+  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { setting: bpsSetting } = useInputBpsSettings()
   const { totalDebtRatio, isDirty } = useTotalDebtRatioUpdates()
   const { next } = useInputBpsSettings()

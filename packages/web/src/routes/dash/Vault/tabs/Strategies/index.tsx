@@ -15,6 +15,7 @@ import Info from '../../../../../components/Info'
 import { AddStrategy } from './AddStrategy'
 import { useEffectiveDebtRatios } from './useEffectiveDebtRatios'
 import { AllocatorPanel } from './AllocatorPanel'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 
 function StrategyTableHeader() {
   return (
@@ -32,6 +33,7 @@ function StrategyTableHeader() {
 }
 
 function Suspender() {
+  const authorized = useHasRolesOnChain(ROLES.QUEUE_MANAGER)
   const { defaultQueue } = useDefaultQueueComposite()
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
@@ -91,15 +93,17 @@ function Suspender() {
         <Reorder.Group axis="y" values={orderedStrategies} onReorder={setOrderedStrategies} className="space-y-8">
           {orderedStrategies.map((strategy, index) => {
             const isOpen = expandedStrategies.has(strategy.address)
-            return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} />
+            return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} authorized={authorized} />
           })}
         </Reorder.Group>
-        <div className="mt-8">
-          <AddStrategy />
-        </div>
-        <div className="flex items-center justify-end mt-12 mb-2">
-          <SetDefaultQueue orderedStrategies={orderedStrategies} />
-        </div>
+        {authorized && <>
+          <div className="mt-8">
+            <AddStrategy />
+          </div>
+          <div className="flex items-center justify-end mt-12 mb-2">
+            <SetDefaultQueue orderedStrategies={orderedStrategies} />
+          </div>        
+        </>}
       </div>
 
       <AllocatorPanel />
@@ -108,7 +112,7 @@ function Suspender() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function StrategyItem({ strategy, index, isOpen, toggleExpand }: { strategy: any, index: number, isOpen: boolean, toggleExpand: (address: string) => void }) {
+function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { strategy: any, index: number, isOpen: boolean, toggleExpand: (address: string) => void, authorized: boolean }) {
   const dragControls = useDragControls()
 
   return (
@@ -117,7 +121,7 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand }: { strategy: any
       value={strategy}
       className="flex flex-col"
       layout="position"
-      transition={springs.roll}
+      transition={{ type: 'spring', stiffness: 4200, damping: 128 }}
       dragTransition={{ bounceStiffness: springs.roll.stiffness, bounceDamping: springs.roll.damping }}
       dragListener={false}
       dragControls={dragControls}
@@ -133,12 +137,16 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand }: { strategy: any
         <div className="flex items-center text-xl">#{index} {strategy.name}</div>
         <div className="text-right text-2xl">{fPercent(strategy.apy)}</div>
         <div className="text-right text-2xl">{fPercent(strategy.effectiveDebtRatio, { padding: { length: 2, fill: '0' } })}</div>
-        <div
-          className="flex items-center justify-center text-right cursor-grab active:cursor-grabbing"
-          onPointerDown={(e) => dragControls.start(e)}
-        >
-          <PiDotsSixVertical className="text-2xl" />
-        </div>
+        {authorized ? (
+          <div
+            className="flex items-center justify-center text-right cursor-grab active:cursor-grabbing"
+            onPointerDown={(e) => dragControls.start(e)}
+          >
+            <PiDotsSixVertical className="text-2xl" />
+          </div>
+        ) : (
+          <div className="w-6"></div>
+        )}
       </div>
 
       <motion.div

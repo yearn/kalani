@@ -1,15 +1,15 @@
 import FlyInFromBottom from '../../../../../components/motion/FlyInFromBottom'
 import { useMounted } from '../../../../../hooks/useMounted'
-import { useVaultParams } from '../../../../../hooks/useVault'
 import { useMinimumChange } from '../../../Vault/useAllocator'
 import StrategiesByAddress from './StrategiesByAddress'
-import { ROLES } from '@kalani/lib/types'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { VaultSelector } from './Selector'
 import { SetMinimumChange } from '../../../Vault/tabs/Allocator/SetMinimumChange'
 import DepositWithdraw from '../../../../../components/DepositWithdraw'
 import String from '../../../../../strings/String'
 import { useMemo } from 'react'
+import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
+import { zeroAddress } from 'viem'
 
 function SetMinimumChangeNotification() {
   return <div className="p-8 flex flex-col gap-8 border-primary border-warn-950 rounded-primary text-warn-400">
@@ -24,14 +24,12 @@ function SetMinimumChangeNotification() {
 }
 
 export default function Allocator() {
-  const { chainId, address: vault } = useVaultParams()
-  const authorizedAddStrategy = useHasRoles({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
+  const { vault } = useVaultFromParams()
+  const authorizedAddStrategy = useHasRolesOnChain(ROLES.ADD_STRATEGY_MANAGER)
   const { minimumChange } = useMinimumChange()
   const mounted = useMounted()
 
-  const authorizedDebtManager = useHasRoles({
-    chainId, vault, roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorizedDebtManager = useHasRolesOnChain(ROLES.DEBT_MANAGER)
 
   const showMinChangeNotification = useMemo(() => {
     return (minimumChange < 1) && authorizedDebtManager
@@ -45,7 +43,7 @@ export default function Allocator() {
     <FlyInFromBottom _key="aside-allocator" parentMounted={mounted} exit={1} className="flex flex-col gap-12">
       {authorizedAddStrategy && <VaultSelector />}
       {authorizedAddStrategy && <StrategiesByAddress />}
-      {!authorizedAddStrategy && <DepositWithdraw chainId={chainId} vault={vault} />}
+      {!authorizedAddStrategy && <DepositWithdraw chainId={vault?.chainId ?? 0} vault={vault?.address ?? zeroAddress} />}
     </FlyInFromBottom>
     )
   }

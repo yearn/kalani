@@ -3,9 +3,8 @@ import { PiCalculator, PiScales } from 'react-icons/pi'
 import { useAllocator } from '../../Vault/useAllocator'
 import { useVaultFromParams } from '../../../../hooks/useVault/withVault'
 import { zeroAddress } from 'viem'
-import { ROLES } from '@kalani/lib/types'
 import { FixItNotification } from '../Notification'
-import { useHasRoles } from '../../../../hooks/useHasRoles'
+import { useHasRolesOnChain, ROLES } from '../../../../hooks/useHasRolesOnChain'
 import DepositWithdraw from '../../../../components/DepositWithdraw'
 import { useMemo } from 'react'
 
@@ -13,8 +12,8 @@ function useNotifications() {
   const { vault } = useVaultFromParams()
   const { allocator } = useAllocator()
 
-  const isAccountantManager = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.ACCOUNTANT_MANAGER })
-  const isDebtManager = useHasRoles({ chainId: vault?.chainId ?? 0, vault: vault?.address ?? zeroAddress, roleMask: ROLES.DEBT_MANAGER })
+  const isAccountantManager = useHasRolesOnChain(ROLES.ACCOUNTANT_MANAGER)
+  const isDebtManager = useHasRolesOnChain(ROLES.DEBT_MANAGER)
 
   return useMemo(() => {
     const result: React.ReactNode[] = []
