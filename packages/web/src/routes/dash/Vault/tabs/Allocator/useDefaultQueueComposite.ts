@@ -28,7 +28,8 @@ function useOnChainDefaultQueue(chainId: number, vault: EvmAddress) {
     address: vault,
     functionName: 'get_default_queue'
   }))
-  return { ...query, defaultQueue: query.data.map(a => EvmAddressSchema.parse(a)) }
+  const defaultQueue = useMemo(() => query.data.map(a => EvmAddressSchema.parse(a)), [query.data])
+  return { ...query, defaultQueue }
 }
 
 export function useDefaultQueueComposite() {

@@ -46,6 +46,7 @@ function Suspender() {
   const { chainId } = useAccount()
 
   const strategies = useMemo(() => {
+    // console.log('defaultQueue', defaultQueue)
     return defaultQueue.map((strategy) => {
       // Find the target ratio for this strategy (returns bigint in basis points)
       const targetRatioBps = onChainTargetRatios.find(a =>
@@ -119,6 +120,7 @@ function Suspender() {
         <StrategyTableHeader />
         <Reorder.Group axis="y" values={orderedAddresses} onReorder={setOrderedAddresses} className="space-y-8">
           {orderedStrategies.map((strategy, index) => {
+            if (!strategy) return null
             const isOpen = expandedStrategies.has(strategy.address)
             return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} authorized={authorized} />
           })}

@@ -15,7 +15,7 @@ export function AddStrategy() {
   const { vault, query } = useVaultFromParams()
   const [selectedStrategy, setSelectedStrategy] = useState<FinderItem | undefined>(undefined)
   const { setLocalVaultStrategies } = useLocalVaultStrategies()
-  const { refetch: refetchDefaultQueue } = useDefaultQueueComposite()
+  const { refetch: refetchDefaultQueueComposite } = useDefaultQueueComposite()
 
   const parameters = useMemo<SimulateContractParameters>(() => ({
     abi: abis.vault,
@@ -27,7 +27,7 @@ export function AddStrategy() {
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
 
   const buttonTitle = useMemo(() => {
     if (!selectedStrategy) return 'Select strategy'
@@ -63,6 +63,7 @@ export function AddStrategy() {
   useEffect(() => {
     if (confirmation.isSuccess && selectedStrategy) {
       resolveToast()
+      write.reset()
       const vaultStrategy = {
         chainId: selectedStrategy.chainId,
         vault: vault?.address ?? zeroAddress,
@@ -77,11 +78,12 @@ export function AddStrategy() {
         )) return strategies
         return [...strategies, vaultStrategy]
       })
+
       query.refetch()
-      refetchDefaultQueue()
+      refetchDefaultQueueComposite()
       setSelectedStrategy(undefined)
     }
-  }, [confirmation.isSuccess, resolveToast, setLocalVaultStrategies, selectedStrategy, query, vault, refetchDefaultQueue])
+  }, [confirmation.isSuccess, resolveToast, write, setLocalVaultStrategies, selectedStrategy, vault, query, refetchDefaultQueueComposite, setSelectedStrategy])
 
   if (!vault) return null
 
