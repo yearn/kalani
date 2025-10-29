@@ -57,7 +57,7 @@ export const useVaultFormData = create<VaultFormData>(set => ({
 }))
 
 export function useVaultFormValidation() {
-  const { asset, category, name, symbol, newAddress } = useVaultFormData()
+  const { asset, category, name, symbol, newAddress, inceptBlock, inceptTime } = useVaultFormData()
   const { selectedProject } = useSelectedProject()
 
   const projectIdValidation = useMemo(() => {
@@ -104,8 +104,8 @@ export function useVaultFormValidation() {
   }, [projectIdValidation, assetValidation, categoryValidation, nameValidation, symbolValidation])
 
   const isDeployed = useMemo(() => {
-    return isSomething(newAddress)
-  }, [newAddress])
+    return isSomething(newAddress) && inceptBlock !== undefined && inceptTime !== undefined
+  }, [newAddress, inceptBlock, inceptTime])
 
   return {
     projectIdValidation,
