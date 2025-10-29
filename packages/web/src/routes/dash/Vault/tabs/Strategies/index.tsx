@@ -17,6 +17,9 @@ import { useOnChainTargetRatios } from '../Allocator/useOnChainTargetRatios'
 import { AllocatorPanel } from './AllocatorPanel'
 import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import bmath from '@kalani/lib/bmath'
+import { useMinimumChange } from '../../useAllocator'
+import { useAccount } from 'wagmi'
+import Section from '../../../../../components/Section'
 
 function StrategyTableHeader() {
   return (
@@ -39,6 +42,8 @@ function Suspender() {
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
   const { onChainTargetRatios } = useOnChainTargetRatios()
+  const { minimumChange } = useMinimumChange()
+  const { chainId } = useAccount()
 
   const strategies = useMemo(() => {
     return defaultQueue.map((strategy) => {
@@ -94,6 +99,18 @@ function Suspender() {
       }
       return next
     })
+  }
+
+  // Show warning if minimum change is 0
+  if ((chainId === vault?.chainId) && minimumChange < 1 && authorized) {
+    return (
+      <>
+        <Section>
+          <p className="text-xl text-center text-warn-600">Set a minimum change greater than 0!</p>
+        </Section>
+        <AllocatorPanel />
+      </>
+    )
   }
 
   return (
