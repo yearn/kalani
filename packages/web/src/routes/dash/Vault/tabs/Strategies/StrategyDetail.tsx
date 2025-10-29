@@ -110,7 +110,7 @@ function StrategyDetailContent() {
         refetchOnChainTargetRatios()
       }, 10)
     }
-  }, [confirmation, resolveToast, refetchTotalDebtRatio, refetchOnChainTargetRatios])
+  }, [confirmation.isSuccess, resolveToast, refetchTotalDebtRatio, refetchOnChainTargetRatios])
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newRatio = BigInt(e.target.value)

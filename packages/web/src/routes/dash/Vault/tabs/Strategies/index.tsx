@@ -13,9 +13,10 @@ import Skeleton from '../../../../../components/Skeleton'
 import { SetDefaultQueue } from './SetDefaultQueue'
 import Info from '../../../../../components/Info'
 import { AddStrategy } from './AddStrategy'
-import { useEffectiveDebtRatios } from './useEffectiveDebtRatios'
+import { useOnChainTargetRatios } from '../Allocator/useOnChainTargetRatios'
 import { AllocatorPanel } from './AllocatorPanel'
 import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
+import bmath from '@kalani/lib/bmath'
 
 function StrategyTableHeader() {
   return (
@@ -26,7 +27,7 @@ function StrategyTableHeader() {
         <Info _key="strategy-queue" size={16} />
       </h2>
       <h2 className="font-semibold text-neutral-400 text-right flex items-center justify-end">APY</h2>
-      <h2 className="font-semibold text-neutral-400 text-right flex items-center justify-end">Allocation</h2>
+      <h2 className="font-semibold text-neutral-400 text-right flex items-center justify-end">Debt ratio</h2>
       <div className="w-6"></div>
     </div>
   )
@@ -37,42 +38,51 @@ function Suspender() {
   const { defaultQueue } = useDefaultQueueComposite()
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
-  const { effectiveDebtRatios } = useEffectiveDebtRatios(
-    vault?.chainId ?? 0,
-    vault?.address ?? '0x0000000000000000000000000000000000000000',
-    defaultQueue
-  )
+  const { onChainTargetRatios } = useOnChainTargetRatios()
 
   const strategies = useMemo(() => {
     return defaultQueue.map((strategy) => {
-      const effectiveDebtRatio = effectiveDebtRatios[strategy.address] ?? 0
+      // Find the target ratio for this strategy (returns bigint in basis points)
+      const targetRatioBps = onChainTargetRatios.find(a =>
+        compareEvmAddresses(a.strategy, strategy.address)
+      )?.debtRatio ?? 0n
+
+      // Convert from basis points (0-10000) to decimal (0-1)
+      const targetDebtRatio = Number(bmath.div(targetRatioBps, 10_000n))
 
       const item = items.find(a => compareEvmAddresses(a.address, strategy.address))
       const apy = item?.apy ?? 0
 
       return {
         ...strategy,
-        effectiveDebtRatio,
+        targetDebtRatio,
         apy
       }
     })
-  }, [defaultQueue, effectiveDebtRatios, items])
+  }, [defaultQueue, onChainTargetRatios, items])
 
-  const [orderedStrategies, setOrderedStrategies] = useState(() => strategies)
+  const [orderedAddresses, setOrderedAddresses] = useState(() => strategies.map(s => s.address))
   const [expandedStrategies, setExpandedStrategies] = useState<Set<string>>(new Set())
 
+  // Derive ordered strategies from the order array and latest strategies data
+  const orderedStrategies = useMemo(() => {
+    return orderedAddresses
+      .map(address => strategies.find(s => compareEvmAddresses(s.address, address)))
+      .filter(Boolean)
+  }, [orderedAddresses, strategies])
+
   useEffect(() => {
-    const currentAddresses = new Set(orderedStrategies.map(s => s.address))
+    const currentAddresses = new Set(orderedAddresses)
     const newAddresses = new Set(strategies.map(s => s.address))
 
     const hasChanged = currentAddresses.size !== newAddresses.size ||
       [...newAddresses].some(addr => !currentAddresses.has(addr))
 
     if (hasChanged) {
-      setOrderedStrategies(strategies)
+      setOrderedAddresses(strategies.map(s => s.address))
     }
 
-  }, [strategies, orderedStrategies])
+  }, [strategies, orderedAddresses])
 
   const toggleExpand = (address: string) => {
     setExpandedStrategies(prev => {
@@ -90,7 +100,7 @@ function Suspender() {
     <>
       <div className="w-full px-12">
         <StrategyTableHeader />
-        <Reorder.Group axis="y" values={orderedStrategies} onReorder={setOrderedStrategies} className="space-y-8">
+        <Reorder.Group axis="y" values={orderedAddresses} onReorder={setOrderedAddresses} className="space-y-8">
           {orderedStrategies.map((strategy, index) => {
             const isOpen = expandedStrategies.has(strategy.address)
             return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} authorized={authorized} />
@@ -102,7 +112,7 @@ function Suspender() {
           </div>
           <div className="flex items-center justify-end mt-12 mb-2">
             <SetDefaultQueue orderedStrategies={orderedStrategies} />
-          </div>        
+          </div>
         </>}
       </div>
 
@@ -118,7 +128,7 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { s
   return (
     <Reorder.Item
       key={strategy.address}
-      value={strategy}
+      value={strategy.address}
       className="flex flex-col"
       layout="position"
       transition={{ type: 'spring', stiffness: 4200, damping: 128 }}
@@ -126,23 +136,23 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { s
       dragListener={false}
       dragControls={dragControls}
     >
-      <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 select-none">
+      <div className="group grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 select-none" data-zerodebt={strategy.targetDebtRatio === 0}>
         <button
           data-open={isOpen}
-          className="group !px-0 flex items-center justify-center"
+          className="!px-0 flex items-center justify-center group-data-[zerodebt=true]:text-neutral-400"
           onClick={() => toggleExpand(strategy.address)}
         >
-          <PiCaretDownBold className="group-data-[open=true]:rotate-180 text-2xl" />
+          <PiCaretDownBold className="data-[open=true]:rotate-180 text-2xl group-data-[zerodebt=true]:text-neutral-400" />
         </button>
-        <div className="flex items-center text-xl">#{index} {strategy.name}</div>
-        <div className="text-right text-2xl">{fPercent(strategy.apy)}</div>
-        <div className="text-right text-2xl">{fPercent(strategy.effectiveDebtRatio, { padding: { length: 2, fill: '0' } })}</div>
+        <div className="flex items-center text-xl group-data-[zerodebt=true]:text-neutral-400">#{index} {strategy.name}</div>
+        <div className="text-right text-2xl group-data-[zerodebt=true]:text-neutral-400">{fPercent(strategy.apy)}</div>
+        <div className="text-right text-2xl group-data-[zerodebt=true]:text-neutral-400">{fPercent(strategy.targetDebtRatio, { padding: { length: 2, fill: '0' } })}</div>
         {authorized ? (
           <div
             className="flex items-center justify-center text-right cursor-grab active:cursor-grabbing"
             onPointerDown={(e) => dragControls.start(e)}
           >
-            <PiDotsSixVertical className="text-2xl" />
+            <PiDotsSixVertical className="text-2xl group-data-[zerodebt=true]:text-neutral-400" />
           </div>
         ) : (
           <div className="w-6"></div>
