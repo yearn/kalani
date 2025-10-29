@@ -4,6 +4,7 @@ import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useOnChainStrategyParams } from '../Allocator/useOnChainStrategyParams'
 import { useOnChainEstimatedAssets } from '../Allocator/useOnChainEstimatedAssets'
 import { useOnChainTargetRatio, useOnChainTargetRatios } from '../Allocator/useOnChainTargetRatios'
+import { useEffectiveDebtRatioBps } from '../Allocator/useEffectiveDebtRatioBps'
 import { useDebtRatioUpdates } from '../Allocator/useDebtRatioUpdates'
 import { useTotalDebtRatioUpdates } from '../Allocator/useTotalDebtRatioUpdates'
 import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
@@ -63,7 +64,7 @@ function StrategyDetailContent() {
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { estimatedAssets } = useOnChainEstimatedAssets(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
-  const effectiveDebtRatioBps = Math.floor((strategy.effectiveDebtRatio ?? 0) * 10_000)
+  const { effectiveDebtRatioBps } = useEffectiveDebtRatioBps(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
   const { getHrefFor } = useFinderUtils()
 
   const { refetch: refetchTotalDebtRatio } = useTotalDebtRatio()

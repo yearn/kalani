@@ -138,11 +138,10 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { s
     >
       <div className="group grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 select-none" data-zerodebt={strategy.targetDebtRatio === 0}>
         <button
-          data-open={isOpen}
           className="!px-0 flex items-center justify-center group-data-[zerodebt=true]:text-neutral-400"
           onClick={() => toggleExpand(strategy.address)}
         >
-          <PiCaretDownBold className="data-[open=true]:rotate-180 text-2xl group-data-[zerodebt=true]:text-neutral-400" />
+          <PiCaretDownBold data-open={isOpen} className="data-[open=true]:rotate-180 text-2xl group-data-[zerodebt=true]:text-neutral-400" />
         </button>
         <div className="flex items-center text-xl group-data-[zerodebt=true]:text-neutral-400">#{index} {strategy.name}</div>
         <div className="text-right text-2xl group-data-[zerodebt=true]:text-neutral-400">{fPercent(strategy.apy)}</div>
