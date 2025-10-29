@@ -77,7 +77,7 @@ function Suspender({ vault, strategy }: { vault: EvmAddress, strategy: EvmAddres
         return newStrategies
       })
     }
-  }, [chainId, confirmation, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets, refetchDefaultQueueComposite, setLocalVaultStrategies, strategy])
+  }, [chainId, confirmation.isSuccess, resolveToast, write, refetchEffectiveDebtRatioBps, refetchStrategyParams, refetchEstimatedAssets, refetchDefaultQueueComposite, setLocalVaultStrategies, strategy])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }

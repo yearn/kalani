@@ -90,7 +90,7 @@ export function SetDefaultQueue({ orderedStrategies, className }: SetDefaultQueu
       refetchVault()
       refetchDefaultQueue()
     }
-  }, [confirmation, resolveToast, write, refetchVault, refetchDefaultQueue])
+  }, [confirmation.isSuccess, resolveToast, write, refetchVault, refetchDefaultQueue])
 
   return (
     <Button

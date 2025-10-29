@@ -116,8 +116,9 @@ function CustomStrategy({ vault, address, onClick }: { vault: Vault, address: Ev
     [assetAddress, vault.asset.address]
   )
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     if (!isValid || !name) return
+    e.stopPropagation()
     onClick?.({
       chainId: vault.chainId,
       address,

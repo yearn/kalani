@@ -81,7 +81,7 @@ export function AddStrategy() {
       refetchDefaultQueue()
       setSelectedStrategy(undefined)
     }
-  }, [confirmation, resolveToast, setLocalVaultStrategies, selectedStrategy, query, vault, refetchDefaultQueue])
+  }, [confirmation.isSuccess, resolveToast, setLocalVaultStrategies, selectedStrategy, query, vault, refetchDefaultQueue])
 
   if (!vault) return null
 
