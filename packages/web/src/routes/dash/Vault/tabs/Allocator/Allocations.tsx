@@ -1,108 +1,18 @@
 import Allocation from './Allocation'
-import { useFinderItems } from '../../../../../components/Finder/useFinderItems'
-import { useDebtRatioUpdates } from './useDebtRatioUpdates'
-import { useMemo } from 'react'
-import { compareEvmAddresses } from '@kalani/lib/strings'
-import { EvmAddress } from '@kalani/lib/types'
-import { fBps, fPercent } from '@kalani/lib/format'
-import { useTotalDebtRatioUpdates } from './useTotalDebtRatioUpdates'
-import { useInputBpsSettings } from '../../../../../components/elements/InputBps'
-import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { AddStrategyButton } from './NoStrategies'
 import { useDefaultQueueComposite } from './useDefaultQueueComposite'
 import Section from '../../../../../components/Section'
 import AllocationsPie from './AllocationsPie'
-import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useMounted } from '../../../../../hooks/useMounted'
-import bmath from '@kalani/lib/bmath'
-import { zeroAddress } from 'viem'
-import { useTotalAssets } from './useEffectiveDebtRatioBps'
-
-function EstimatedApy() {
-  const { vault } = useVaultFromParams()
-  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
-  const { items } = useFinderItems()
-  const { updates } = useDebtRatioUpdates({ vault })
-  const isDirty = useMemo(() => updates.some(a => a.isDirty), [updates])
-
-  const apys = useMemo(() => {
-    const result: { strategy: EvmAddress, apy: number | null | undefined, debtRatio: bigint }[] = []
-    for (const update of updates) {
-      const item = items.find(a => compareEvmAddresses(a.address, update.strategy))
-      if (item) { result.push({ strategy: update.strategy, apy: item.apy, debtRatio: update.debtRatio }) }
-      else { result.push({ strategy: update.strategy, apy: undefined, debtRatio: update.debtRatio }) }
-    }
-    return result
-  }, [updates, items])
-
-  const weightedApy = useMemo(() => {
-    if (apys.every(a => a.apy === undefined || a.apy === null)) return undefined
-    return apys.reduce((acc, a) => {
-      if (a.apy === undefined || a.apy === null) { return acc }
-      return (acc ?? 0) + ((a.apy ?? 0) * Number(a.debtRatio))
-    }, 0) / 10_000
-  }, [apys])
-
-  return <div className={`text-2xl font-bold ${authorized && isDirty ? 'text-primary-400' : ''}`}>
-    {fPercent(weightedApy) ?? '-.--%'}
-  </div>
-}
-
-function TotalAllocation() {
-  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
-  const { setting: bpsSetting } = useInputBpsSettings()
-  const { totalDebtRatio, isDirty } = useTotalDebtRatioUpdates()
-  const { next } = useInputBpsSettings()
-  return <div onClick={authorized ? next : undefined} 
-    className={`pl-4 text-2xl font-bold cursor-pointer ${(authorized && isDirty) ? 'text-primary-400' : ''}`}>
-    {fBps(Number(totalDebtRatio), { percent: bpsSetting === '%' })}
-  </div>
-}
+import EstimatedApy from '../Strategies/EstimatedApy'
+import TotalAllocation from '../Strategies/TotalAllocation'
+import { useTargetDebtPieData, useRealDebtPieData } from '../Strategies/useAllocationsPieData'
 
 export default function Allocations() {
   const mounted = useMounted()
-  const { defaultQueue, colors } = useDefaultQueueComposite()
-  const { vault } = useVaultFromParams()
-  const { updates: debtRatios } = useDebtRatioUpdates({ vault })
-  const { totalDebtRatio } = useTotalDebtRatioUpdates()
-  const { totalAssets } = useTotalAssets(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
-
-  const targetDebtPieData = useMemo(() => {
-    const result: { label: string, value: number, color: string }[] = [
-      { label: 'idle', value: Number(10_000n - totalDebtRatio), color: '#000000' },
-    ]
-
-    defaultQueue.map((strategy, index) => {
-      const debtRatio = debtRatios.find(a => compareEvmAddresses(a.strategy, strategy.address))
-      if (debtRatio) {
-        result.push({ label: debtRatio.strategy, value: Number(debtRatio.debtRatio), color: colors[index] })
-      } else {
-        console.error('default queue strategy not found in debt ratios', strategy.address)
-      }
-    })
-
-    return result.filter(a => a.value > 0)
-  }, [debtRatios, totalDebtRatio, colors, defaultQueue])
-
-  const realDebtPieData = useMemo(() => {
-    if (totalAssets === 0n) return []
-    const totalDebt = vault?.totalDebt ?? 0n
-    const idle = bmath.div(totalAssets - totalDebt, totalAssets)
-    const idleBps = Math.round(Number(idle) * 10_000)
-
-    const result: { label: string, value: number, color: string }[] = [
-      { label: 'idle', value: idleBps, color: '#000000' },
-    ]
-
-    defaultQueue.map((strategy, index) => {
-      const currentDebt = strategy.currentDebt ?? 0n
-      const realDeptRatio = bmath.div(currentDebt, totalAssets)
-      const realDeptRatioBps = Math.round(Number(realDeptRatio) * 10_000)
-      result.push({ label: strategy.address, value: realDeptRatioBps, color: colors[index] })
-    })
-
-    return result.filter(a => a.value > 0)
-  }, [vault, colors, defaultQueue, totalAssets])
+  const { defaultQueue } = useDefaultQueueComposite()
+  const targetDebtPieData = useTargetDebtPieData()
+  const realDebtPieData = useRealDebtPieData()
 
   return <div className="w-full flex flex-col gap-primary">
 
