@@ -74,7 +74,7 @@ function Suspender() {
   const orderedStrategies = useMemo(() => {
     return orderedAddresses
       .map(address => strategies.find(s => compareEvmAddresses(s.address, address)))
-      .filter(Boolean)
+      .filter((s): s is NonNullable<typeof s> => s !== undefined)
   }, [orderedAddresses, strategies])
 
   useEffect(() => {
