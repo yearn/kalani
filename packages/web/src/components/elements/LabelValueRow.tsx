@@ -9,24 +9,26 @@ export default function LabelValueRow({
   infoKey,
   theme,
   className,
+  labelClassName,
   children
 }: {
   label: string,
   infoKey?: string,
   theme?: ThemeName | false,
   className?: string,
+  labelClassName?: string,
   children: React.ReactNode
 }) {
   return <div className={cn(`
     px-2 sm:px-6 py-2 w-full flex flex-wrap gap-3 items-center
-    text-xl xl:text-2xl rounded-primary even:bg-secondary-1500
+    text-xl xl:text-2xl rounded-primary even:bg-secondary-1000
     border-primary border-transparent`,
     theme === 'warning' && 'border-warn-400/20 border-dashed',
     theme === 'warning' && 'text-warn-400',
     className
   )}>
     <div className={cn('flex gap-2 items-center', isNothing(label) && 'hidden')}>
-      <span className="max-w-[180px] sm:max-w-none">{label}</span>
+      <span className={cn('max-w-[180px] sm:max-w-none', labelClassName)}>{label}</span>
       {infoKey && <Info _key={infoKey} />}
     </div>
     <div className="flex-1 flex justify-end break-all">{children}</div>

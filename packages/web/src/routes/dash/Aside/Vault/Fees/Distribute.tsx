@@ -28,24 +28,26 @@ function useDistribute({ disabled }: { disabled: boolean }) {
 
 export default function Distribute({ className }: { className?: string }) {
   const { vault } = useVaultFromParams()
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { snapshot: accountant } = useAccountantForVaultFromParams()
   const isFeeManager = useMemo(() => compareEvmAddresses(address, accountant.feeManager), [address, accountant])
-  const { simulation, write, confirmation, resolveToast } = useDistribute({ disabled: !isFeeManager })
+  const isOnSameChain = useMemo(() => chainId === vault?.chainId, [chainId, vault?.chainId])
+  const authorized = useMemo(() => isFeeManager && isOnSameChain, [isFeeManager, isOnSameChain])
+  const { simulation, write, confirmation, resolveToast } = useDistribute({ disabled: !authorized })
 
-  const { data: balance, refetch: refetchBalance } = useBalance({ 
+  const { data: balance, refetch: refetchBalance } = useBalance({
     address: vault?.accountant ?? zeroAddress,
     token: vault?.asset.address ?? zeroAddress
   })
 
   const disabled = useMemo(() => {
-    return !isFeeManager
+    return !authorized
     || balance?.value === 0n
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [isFeeManager, balance, simulation, write, confirmation])
+  }, [authorized, balance, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'

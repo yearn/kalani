@@ -29,6 +29,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
   const type = useMemo(() => {
     if (vault.yearn) { return 'Yearn Allocator' }
     if (vault.projectName) { return `${vault.projectName} Allocator` }
+    if (vault.origin) { return `${vault.origin} Allocator` }
     return 'Unknown'
   }, [vault])
 
@@ -63,7 +64,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
         </LabelValueRow>
 
         <LabelValueRow label="Type">
-          <ViewGeneric className="flex items-center gap-4">
+          <ViewGeneric className="flex items-center gap-4 capitalize">
             {type}
           </ViewGeneric>
         </LabelValueRow>

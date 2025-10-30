@@ -1,17 +1,14 @@
-import { ROLES } from '@kalani/lib/types'
 import Dialog from '../../../../../components/Dialog'
 import { useDialog } from '../../../../../components/Dialog/useDialog'
 import AButton from '../../../../../components/elements/AButton'
 import { useBreakpoints } from '../../../../../hooks/useBreakpoints'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { useVaultParams } from '../../../../../hooks/useVault'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import { VaultSelector } from '../../../Aside/Vault/Allocator/Selector'
 import StrategiesByAddress from '../../../Aside/Vault/Allocator/StrategiesByAddress'
 
 export function AddStrategyButton() {
   const dialog = useDialog('add-strategy')
-  const { chainId, address: vault } = useVaultParams()
-  const authorizedAddStrategy = useHasRoles({ chainId, vault, roleMask: ROLES.ADD_STRATEGY_MANAGER })
+  const authorizedAddStrategy = useHasRolesOnChain(ROLES.ADD_STRATEGY_MANAGER)
 
   if (!authorizedAddStrategy) return <></>
 

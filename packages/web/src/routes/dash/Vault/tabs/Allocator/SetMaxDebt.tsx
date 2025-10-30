@@ -3,8 +3,8 @@ import Button from '../../../../../components/elements/Button'
 import { cn } from '../../../../../lib/shadcn'
 import { InputTokenAmount } from '../../../../../components/elements/InputTokenAmount'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { EvmAddress, ROLES } from '@kalani/lib/types'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
+import { EvmAddress } from '@kalani/lib/types'
 import { formatUnits, maxUint256, parseUnits, zeroAddress } from 'viem'
 import { useSetMaxDebt } from './useSetMaxDebt'
 import { useOnChainStrategyParams } from './useOnChainStrategyParams'
@@ -20,11 +20,7 @@ export function SetMaxDebt({ strategy, className }: { strategy: EvmAddress, clas
 
   const { simulation, write, confirmation, resolveToast } = useSetMaxDebt(strategy, maxDebt)
   const dirty = useMemo(() => maxDebt !== onChainMaxDebt, [maxDebt, onChainMaxDebt])
-  const authorizedDebtManager = useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorizedDebtManager = useHasRolesOnChain(ROLES.DEBT_MANAGER)
 
   useEffect(() => {
     if (onChainMaxDebt === maxUint256) {

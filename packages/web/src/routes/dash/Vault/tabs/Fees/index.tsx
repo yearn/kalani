@@ -15,10 +15,12 @@ import { AcceptFutureFeeManager } from '../../../Aside/Vault/Fees/AcceptFutureFe
 import ClaimFees from '../../../Aside/Vault/Fees/ClaimFees'
 
 function Suspender() {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { vault } = useVaultFromParams()
   const { snapshot: accountant } = useAccountantForVaultFromParams()
   const isFeeManager = useMemo(() => compareEvmAddresses(address, accountant.feeManager), [address, accountant])
+  const isOnSameChain = useMemo(() => chainId === vault?.chainId, [chainId, vault?.chainId])
+  const authorized = useMemo(() => isFeeManager && isOnSameChain, [isFeeManager, isOnSameChain])
   const [managementFee, setManagementFee] = useState(vault?.fees?.managementFee ?? 0)
   const [performanceFee, setPerformanceFee] = useState(vault?.fees?.performanceFee ?? 0)
   const { sm } = useBreakpoints()
@@ -52,21 +54,21 @@ function Suspender() {
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
         <LabelValueRow label="Management Fee">
-          {!isFeeManager && <ViewBps bps={managementFee} />}
-          {isFeeManager && <InputBps bps={managementFee} isValid={true} className="w-64" onChange={onChangeManagementFee} />}
+          {!authorized && <ViewBps bps={managementFee} />}
+          {authorized && <InputBps bps={managementFee} isValid={true} className="w-64" onChange={onChangeManagementFee} />}
         </LabelValueRow>
 
         <LabelValueRow label="Performance Fee">
-          {!isFeeManager && <ViewBps bps={performanceFee} />}
-          {isFeeManager && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
+          {!authorized && <ViewBps bps={performanceFee} />}
+          {authorized && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
         </LabelValueRow>
 
-        {!isFeeManager && <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
+        {!authorized && <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
           <div>• Management fees are charged continuously on the total assets under management</div>
           <div>• Performance fees are only charged on realized profits</div>
         </div>}
 
-        {isFeeManager && <div className="px-8 pt-6 flex justify-end">
+        {authorized && <div className="px-8 pt-6 flex justify-end">
           <SetCustomConfig feeConfig={{
             vault: vault.address,
             managementFee,

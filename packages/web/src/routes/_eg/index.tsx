@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, Suspense } from 'react'
 import Button from '../../components/elements/Button'
 import { toast } from 'sonner'
 import Addresses from '../../components/elements/Addresses'
@@ -17,6 +17,23 @@ import Info from '../../components/Info'
 import { InputTokenAmount } from '../../components/elements/InputTokenAmount'
 import { parseUnits } from 'viem'
 import TokenImg from '../../components/TokenImg'
+import SelectStrategy from '../../components/SelectStrategy'
+import { useVault } from '../../hooks/useVault'
+import Skeleton from '../../components/Skeleton'
+import { FinderItem } from '../../components/Finder/useFinderItems'
+
+function SelectStrategyExample() {
+  const [selectedStrategy, setSelectedStrategy] = useState<FinderItem | undefined>(undefined)
+  const { vault } = useVault({ chainId: 1, address: '0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204' })
+
+  const handleSelect = useCallback((item: FinderItem | undefined) => {
+    setSelectedStrategy(item)
+    toast(item?.name ?? 'what strategy?')
+  }, [])
+
+  if (!vault) return null
+  return <SelectStrategy vault={vault} placeholder="Find strategy by name or address" selected={selectedStrategy} onSelect={handleSelect} />
+}
 
 export default function Eg() {
   const [toaston, setToaston] = useState(false)
@@ -97,6 +114,12 @@ export default function Eg() {
 
       <div>
         <SelectErc20 chainId={1} placeholder="Find asset by name or address" onSelect={item => toast(item?.name ?? 'what token?')} />
+      </div>
+
+      <div>
+        <Suspense fallback={<Skeleton className="w-full h-12 rounded-primary" />}>
+          <SelectStrategyExample />
+        </Suspense>
       </div>
 
       <div className="flex flex-wrap items-center gap-6">

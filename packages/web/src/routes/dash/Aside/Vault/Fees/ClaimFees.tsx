@@ -1,9 +1,8 @@
-import { zeroAddress } from 'viem'
+import { formatUnits, zeroAddress } from 'viem'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useAccount, useConfig } from 'wagmi'
-import { fTokens } from '@kalani/lib/format'
 import abis from '@kalani/lib/abis'
 import { useCallback, useEffect, useMemo } from 'react'
 import Button from '../../../../../components/elements/Button'
@@ -16,11 +15,11 @@ import Distribute from './Distribute'
 import Odometer from 'react-odometerjs'
 
 function AsTokens({ balance, decimals, symbol }: { balance: bigint, decimals: number, symbol: string }) {
-  return <div className="flex items-center justify-start gap-3">
+  return <div className="flex flex-col items-end justify-start gap-3">
     <div className="text-4xl">
-      <Odometer value={Number(fTokens(balance, decimals, { fixed: 6 }))} format="(,ddd).dddddd" />
+      <Odometer value={Number(formatUnits(balance, decimals))} format="(,ddd).dddddd" />
     </div>
-    <div className="text-4xl text-neutral-400 whitespace-nowrap">{symbol}</div>
+    <div className="text-xl text-neutral-400 whitespace-nowrap">{symbol}</div>
   </div>
 }
 
@@ -37,25 +36,28 @@ function AsAssets({ balance }: { balance: bigint }) {
     }),
     refetchInterval: 5000
   })
-  const decimals = vault?.asset.decimals ?? 12
+  const decimals = vault?.asset.decimals ?? 18
   return <AsTokens balance={toAssetsQuery.data} decimals={decimals} symbol={vault?.asset.symbol ?? ''} />
 }
 
 export default function ClaimFees() {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { vault } = useVaultFromParams()
   const { snapshot: accountant } = useAccountantForVaultFromParams()
   const isFeeRecipient = useMemo(() => compareEvmAddresses(address, accountant.feeRecipient), [address, accountant])
+  const isOnSameChain = useMemo(() => chainId === vault?.chainId, [chainId, vault?.chainId])
+  const authorized = useMemo(() => isFeeRecipient && isOnSameChain, [isFeeRecipient, isOnSameChain])
   const claimable = useClaimable()
   const { simulation, write, confirmation, resolveToast } = useClaim()
 
   const disabled = useMemo(() => {
-    return (claimable.data === 0n)
+    return !authorized
+    || (claimable.data === 0n)
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [claimable, simulation, write, confirmation])
+  }, [authorized, claimable, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -91,17 +93,17 @@ export default function ClaimFees() {
 
   return <div className="flex flex-col gap-12 sm:border-primary border-black rounded-primary px-8 py-6">
     <div className="flex flex-col gap-6">
-      <div className="text-sm text-neutral-400">Claimable Fees</div>
+      <div className="text-sm text-neutral-400">Claimable fees</div>
       <ErrorBoundary fallback={<AsTokens balance={claimable.data ?? 0n} decimals={vault.asset.decimals} symbol={vault.symbol} />}>
         <AsAssets balance={claimable.data ?? 0n} />
       </ErrorBoundary>
-      {isFeeRecipient && <div className="flex flex-col gap-2">
+      {authorized && <div className="flex flex-col gap-2">
         <Button disabled={disabled} theme={buttonTheme} onClick={onClick}>Claim</Button>
         <div data-visible={!!simError} className="data-[visible=false]:invisible px-4 text-xs text-error-400 text-right">{simError ?? 'error'}</div>
       </div>}
-      <SetMaxLoss />
+      {authorized && <SetMaxLoss />}
     </div>
 
-    <Distribute />
+    {authorized && <Distribute />}
   </div>
 }

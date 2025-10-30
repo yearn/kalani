@@ -43,14 +43,17 @@ function useSetMaxLoss({ maxLoss, disabled }: { maxLoss: bigint, disabled: boole
 }
 
 export default function SetMaxLoss({ className }: { className?: string }) {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
+  const { vault } = useVaultFromParams()
   const { snapshot: accountant } = useAccountantForVaultFromParams()
   const isFeeManager = useMemo(() => compareEvmAddresses(address, accountant.feeManager), [address, accountant])
+  const isOnSameChain = useMemo(() => chainId === vault?.chainId, [chainId, vault?.chainId])
+  const authorized = useMemo(() => isFeeManager && isOnSameChain, [isFeeManager, isOnSameChain])
   const { data: onchainMaxLoss, refetch } = useMaxLoss()
   const { simulation: claimSimulation } = useClaim()
   const claimRefetch = useMemo(() => claimSimulation.refetch, [claimSimulation.refetch])
   const [maxLoss, setMaxLoss] = useState<number | undefined>(Number(onchainMaxLoss))
-  const { simulation, write, confirmation, resolveToast } = useSetMaxLoss({ maxLoss: BigInt(maxLoss ?? 0), disabled: !isFeeManager })
+  const { simulation, write, confirmation, resolveToast } = useSetMaxLoss({ maxLoss: BigInt(maxLoss ?? 0), disabled: !authorized })
   const dirty = useMemo(() => maxLoss !== Number(onchainMaxLoss), [maxLoss, onchainMaxLoss])
 
   useEffect(() => {
@@ -58,13 +61,13 @@ export default function SetMaxLoss({ className }: { className?: string }) {
   }, [onchainMaxLoss])
 
   const disabled = useMemo(() => {
-    return !isFeeManager
+    return !authorized
     || !dirty
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [isFeeManager, dirty, simulation, write, confirmation])
+  }, [authorized, dirty, simulation, write, confirmation])
 
   const buttonTheme = useMemo(() => {
     if (!dirty) return 'default'
@@ -93,7 +96,7 @@ export default function SetMaxLoss({ className }: { className?: string }) {
 
   return <div className={cn('w-full flex flex-col items-end justify-center gap-3', className)}>
     <div className="w-full px-2 text-sm text-neutral-400 ">Max Loss</div>
-    <InputBps isValid={(maxLoss ?? 0) >= 0} bps={maxLoss} onChange={e => setMaxLoss(Number(e.target.value))} disabled={!isFeeManager} outerClassName="w-full" />
+    <InputBps isValid={(maxLoss ?? 0) >= 0} bps={maxLoss} onChange={e => setMaxLoss(Number(e.target.value))} disabled={!authorized} outerClassName="w-full" />
     <Button onClick={onSet} disabled={disabled} theme={buttonTheme} className="">Set Max Loss</Button>
   </div>
 }

@@ -24,9 +24,12 @@ function useAcceptFutureFeeManager() {
 }
 
 export function AcceptFutureFeeManager() {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
+  const { vault } = useVaultFromParams()
   const { simulation, write, confirmation, resolveToast } = useAcceptFutureFeeManager()
   const { refetch: refetchAccountant } = useAccountantForVaultFromParams()
+
+  const isOnSameChain = useMemo(() => chainId === vault?.chainId, [chainId, vault?.chainId])
 
   const buttonTheme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -37,11 +40,12 @@ export function AcceptFutureFeeManager() {
   }, [simulation, write, confirmation])
 
   const disabled = useMemo(() => {
-    return simulation.isFetching
+    return !isOnSameChain
+    || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [simulation, write, confirmation])
+  }, [isOnSameChain, simulation, write, confirmation])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }

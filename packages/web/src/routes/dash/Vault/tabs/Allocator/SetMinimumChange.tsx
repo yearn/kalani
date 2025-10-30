@@ -5,9 +5,8 @@ import { cn } from '../../../../../lib/shadcn'
 import { useSetMinimumChange } from './useSetMinimumChange'
 import { InputTokenAmount } from '../../../../../components/elements/InputTokenAmount'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
-import { ROLES } from '@kalani/lib/types'
-import { formatUnits, parseUnits, zeroAddress } from 'viem'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
+import { formatUnits, parseUnits } from 'viem'
 
 export function SetMinimumChange({ className }: { className?: string }) {
   const { vault } = useVaultFromParams()
@@ -17,11 +16,7 @@ export function SetMinimumChange({ className }: { className?: string }) {
   const [minimumChange, setMinimumChange] = useState<bigint | undefined>(onchainMinimumChange)
   const { simulation, write, confirmation, resolveToast } = useSetMinimumChange(minimumChange)
   const dirty = useMemo(() => minimumChange !== onchainMinimumChange, [minimumChange, onchainMinimumChange])
-  const authorizedDebtManager = useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.DEBT_MANAGER
-  })
+  const authorizedDebtManager = useHasRolesOnChain(ROLES.DEBT_MANAGER)
 
   useEffect(() => {
     setFormattedMinimumChange(formatUnits(onchainMinimumChange, decimals))

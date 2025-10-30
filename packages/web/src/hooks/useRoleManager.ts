@@ -12,7 +12,7 @@ export function useRoleManager(vault: { chainId: number, address: EvmAddress }) 
 }
 
 export function useIsRoleManager(vault: { chainId: number, address: EvmAddress }) {
-  const { isConnected, chainId:_chainId, address } = useAccount()
+  const { isConnected, address } = useAccount()
   const roleManager = useRoleManager(vault)
   return useMemo(() => 
     isConnected && address && address === roleManager, 

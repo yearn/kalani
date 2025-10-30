@@ -4,18 +4,13 @@ import { Vault } from '../../../../../hooks/useVault'
 import { useVaultFromParams } from '../../../../../hooks/useVault/withVault'
 import Button from '../../../../../components/elements/Button'
 import { useSimulateContract, UseSimulateContractParameters, useWaitForTransactionReceipt } from 'wagmi'
-import { parseAbi, zeroAddress } from 'viem'
+import { parseAbi } from 'viem'
 import { useWriteContract } from '../../../../../hooks/useWriteContract'
-import { EvmAddress, ROLES } from '@kalani/lib/types'
-import { useHasRoles } from '../../../../../hooks/useHasRoles'
+import { EvmAddress } from '@kalani/lib/types'
+import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 
 function useHasReportManagerRole() {
-  const { vault } = useVaultFromParams()
-  return useHasRoles({
-    chainId: vault?.chainId ?? 0,
-    vault: vault?.address ?? zeroAddress,
-    roleMask: ROLES.REPORTING_MANAGER
-  })
+  return useHasRolesOnChain(ROLES.REPORTING_MANAGER)
 }
 
 function useProcessReport(vault: Vault, strategy: EvmAddress, enabled: boolean) {
@@ -28,7 +23,7 @@ function useProcessReport(vault: Vault, strategy: EvmAddress, enabled: boolean) 
   }), [vault, strategy, enabled])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
   return { simulation, write, confirmation, resolveToast }
 }
 
@@ -67,7 +62,7 @@ function Suspender({ vault, strategy }: { vault: Vault, strategy: EvmAddress }) 
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
-  return <Button theme={theme} disabled={disabled} onClick={onClick}>
+  return <Button theme={theme} disabled={disabled} onClick={onClick} className="!py-2">
     Report to vault
   </Button>
 }

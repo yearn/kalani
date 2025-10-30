@@ -9,23 +9,23 @@ import { Switch } from '../../../../../components/shadcn/switch'
 import { useHasRolesOnChain, ROLES } from '../../../../../hooks/useHasRolesOnChain'
 import Skeleton from '../../../../../components/Skeleton'
 
-function useAutoAllocate(vault: Vault) {
+function useUseDefaultQueue(vault: Vault) {
   const query = useReadContract({
-    abi: parseAbi(['function auto_allocate() external view returns (bool)']),
+    abi: parseAbi(['function use_default_queue() external view returns (bool)']),
     chainId: vault.chainId, address: vault.address,
-    functionName: 'auto_allocate'
+    functionName: 'use_default_queue'
   })
-  return { ...query, autoAllocate: query.data ?? false }
+  return { ...query, useDefaultQueue: query.data ?? false }
 }
 
-function useSetAutoAllocate(vault: Vault, autoAllocate: boolean, enabled: boolean) {
+function useSetUseDefaultQueue(vault: Vault, useDefaultQueue: boolean, enabled: boolean) {
   const parameters = useMemo<UseSimulateContractParameters>(() => ({
-    abi: parseAbi(['function set_auto_allocate(bool) external view returns ()']),
+    abi: parseAbi(['function set_use_default_queue(bool) external view returns ()']),
     address: vault.address,
-    functionName: 'set_auto_allocate',
-    args: [autoAllocate],
+    functionName: 'set_use_default_queue',
+    args: [useDefaultQueue],
     query: { enabled }
-  }), [vault, autoAllocate, enabled])
+  }), [vault, useDefaultQueue, enabled])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
   const confirmation = useWaitForTransactionReceipt({ hash: write.data })
@@ -33,12 +33,12 @@ function useSetAutoAllocate(vault: Vault, autoAllocate: boolean, enabled: boolea
 }
 
 function Suspender({ vault }: { vault: Vault }) {
-  const { autoAllocate } = useAutoAllocate(vault)
-  const [checked, setChecked] = useState(autoAllocate)
-  const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
-  const { simulation, write, confirmation, resolveToast } = useSetAutoAllocate(vault, !checked, authorized)
+  const { useDefaultQueue } = useUseDefaultQueue(vault)
+  const [checked, setChecked] = useState(useDefaultQueue)
+  const authorized = useHasRolesOnChain(ROLES.QUEUE_MANAGER)
+  const { simulation, write, confirmation, resolveToast } = useSetUseDefaultQueue(vault, !checked, authorized)
 
-  useEffect(() => setChecked(autoAllocate), [autoAllocate, setChecked])
+  useEffect(() => setChecked(useDefaultQueue), [useDefaultQueue, setChecked])
 
   const theme = useMemo(() => {
     if (write.isSuccess && confirmation.isPending) return 'confirm'
@@ -49,7 +49,7 @@ function Suspender({ vault }: { vault: Vault }) {
   }, [simulation, write, confirmation])
 
   const disabled = useMemo(() => {
-    return !authorized 
+    return !authorized
     || simulation.isFetching
     || !simulation.isSuccess
     || write.isPending
@@ -85,5 +85,5 @@ function Component({ vault }: { vault: Vault }) {
   </ErrorBoundary>
 }
 
-const AutoAllocate = withVault(Component)
-export default AutoAllocate
+const UseDefaultQueue = withVault(Component)
+export default UseDefaultQueue

@@ -28,7 +28,8 @@ function useOnChainDefaultQueue(chainId: number, vault: EvmAddress) {
     address: vault,
     functionName: 'get_default_queue'
   }))
-  return { ...query, defaultQueue: query.data.map(a => EvmAddressSchema.parse(a)) }
+  const defaultQueue = useMemo(() => query.data.map(a => EvmAddressSchema.parse(a)), [query.data])
+  return { ...query, defaultQueue }
 }
 
 export function useDefaultQueueComposite() {
@@ -42,14 +43,14 @@ export function useDefaultQueueComposite() {
   }, [vault, onChainDefaultQueue])
 
   const colors = useMemo(() => {
+    // Sort addresses alphabetically to assign stable colors
+    const sortedAddresses = [...defaultQueue.map(s => s.address)].sort()
+
     const result: string[] = []
     for (const [index, strategy] of defaultQueue.entries()) {
-      // Create a hash from address and index
-      const hashInput = `${strategy.address}-${index}`
-      const hash = Array.from(hashInput).reduce((acc, char) => ((acc << 5) - acc) + char.charCodeAt(0), 0)
-
-      // Use positive modulo to get a color index
-      const colorIndex = ((hash % COLORS.length) + COLORS.length) % COLORS.length
+      // Find position in sorted array to determine color
+      const sortedIndex = sortedAddresses.indexOf(strategy.address)
+      const colorIndex = sortedIndex % COLORS.length
       result[index] = COLORS[colorIndex]
     }
     return result
