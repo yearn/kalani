@@ -2,12 +2,13 @@ import Input from '../elements/Input'
 import React, { useState, useRef, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { PiX } from 'react-icons/pi'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { fEvmAddress } from '@kalani/lib/format'
+import { fEvmAddress, fUSD, fPercent } from '@kalani/lib/format'
 import { isNothing } from '@kalani/lib/strings'
 import { ScrollArea } from '../shadcn/scroll-area'
 import { useNavigate } from 'react-router-dom'
 import { FinderItem, useFinderItems } from './useFinderItems'
 import ChainImg from '../ChainImg'
+import TokenImg from '../TokenImg'
 import Skeleton from '../Skeleton'
 import { cn } from '../../lib/shadcn'
 import { useHashNav } from '../../hooks/useHashNav'
@@ -16,6 +17,7 @@ import FlyInFromBottom from '../motion/FlyInFromBottom'
 import { useFinderOptions } from './useFinderOptions'
 
 const MAX_ITEMS = 100
+const tokenBgClassName = 'bg-neutral-950 border-primary border-neutral-800 border-dashed'
 
 interface FinderProps {
   placeholder?: string,
@@ -180,33 +182,46 @@ const Suspender: React.FC<FinderProps> = ({ placeholder, className, inputClassNa
     {!disableSuggestions && nav.isOpen && filteredItems.length > 0 && (
       <div className={cn(suggestionsClassName, breakpoints.sm ? 'saber-glow' : '')}>
         <ScrollArea className={scrollAreaClassName}>
-          <table className="table-fixed w-full text-neutral-200">
-            <tbody>
-              {filteredItems.map((item, index) => (
-                <tr
-                  key={`${index}-${item.address}`}
-                  onClick={() => handleItemClick(item)}
-                  onMouseOver={() => setSelectedIndex(index)}
-                  className={`
-                    cursor-pointer
-                    hover:bg-black hover:text-secondary-200
-                    ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
-                    ${index === 0 ? 'sm:rounded-t-primary' : ''}
-                    ${index === filteredItems.length - 1 ? 'sm:rounded-b-primary' : ''}
-                  `}
-                >
-                  <td className="w-20 px-4 py-4 text-xs text-center">
-                    <ChainImg chainId={item.chainId} />
-                  </td>
-                  <td className="hidden sm:table-cell w-20 py-4 text-xs">{getViewName(item)}</td>
-                  <td className="w-20 sm:w-36 py-4">{fEvmAddress(item.address, !breakpoints.sm)}</td>
-                  <td className="max-w-0 px-4 py-4 truncate">
+          <div className="w-full flex flex-col gap-3 text-neutral-200">
+            {filteredItems.map((item, index) => (
+              <div
+                key={`${item.chainId}-${item.address}`}
+                onClick={() => handleItemClick(item)}
+                onMouseOver={() => setSelectedIndex(index)}
+                className={`
+                  px-4 py-3 flex items-center justify-between gap-4 cursor-pointer
+                  hover:bg-black hover:text-secondary-200
+                  ${index === selectedIndex ? 'bg-black text-secondary-200' : ''}
+                  ${index === 0 ? 'sm:rounded-t-primary' : ''}
+                  ${index === filteredItems.length - 1 ? 'sm:rounded-b-primary' : ''}
+                `}>
+                <div className="flex items-center gap-6">
+                  <div className="size-12 flex-shrink-0">
+                    <TokenImg size={48} chainId={item.chainId} address={item.token?.address ?? item.address} showChain={true} bgClassName={tokenBgClassName} />
+                  </div>
+                  <div className="flex-1 min-w-0 max-w-[320px] truncate">
                     {isNothing(item.name) ? item.label : item.name}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+                <div className="flex items-center justify-end gap-4 flex-shrink-0">
+                  {!isNothing(item.origin) && (
+                    <div className={cn(
+                      'px-2 py-1 text-xs text-neutral-400 rounded whitespace-nowrap',
+                      item.origin?.toLowerCase() === 'yearn' ? 'bg-indigo-600 text-white' : 'bg-neutral-800'
+                    )}>
+                      {item.origin}
+                    </div>
+                  )}
+                  <div className="w-16 px-2 py-1 text-right text-xs text-neutral-400 bg-neutral-800 rounded whitespace-nowrap">
+                    {fUSD(item.tvl ?? 0, { fixed: 0 })}
+                  </div>
+                  <div className="w-[60px] px-2 py-1 text-right text-xs text-neutral-400 bg-neutral-800 rounded whitespace-nowrap">
+                    {fPercent(item.apy ?? 0)}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </ScrollArea>
       </div>
     )}

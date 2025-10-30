@@ -22,7 +22,7 @@ export default function Header({
     <div className="mx-auto w-full h-20 pl-32 pr-6 flex items-center justify-between gap-4">
       <div className="grow flex items-center justify-start">
         <Finder
-          className="!w-[32rem]"
+          className="!w-[42rem]"
           inputClassName="px-4 py-2 border-transparent"
           placeholder="Vault / Token / 0x"
           disableSuggestions={disableSuggestions}
