@@ -134,7 +134,7 @@ function StrategyDetailContent() {
   return (
     <div className="w-full flex flex-col items-start px-8 py-4 pb-8 space-y-2">
       {authorized && <LabelValueRow labelClassName="py-4 text-lg text-primary-400" label="">
-        {sm && <div className="w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
+        {sm && <div className="py-3 w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
           <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
           <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={0n} />
           <ProcessReport strategy={strategy.address} />

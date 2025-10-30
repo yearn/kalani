@@ -23,7 +23,7 @@ function useProcessReport(vault: Vault, strategy: EvmAddress, enabled: boolean) 
   }), [vault, strategy, enabled])
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
   return { simulation, write, confirmation, resolveToast }
 }
 

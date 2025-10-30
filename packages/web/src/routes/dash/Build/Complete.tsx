@@ -64,7 +64,7 @@ export default function Complete() {
         performanceFee: accountantSnapshot.feeConfig.performanceFee
       }
     })
-    navigate(`/vault/${vaultSnapshot.chainId}/${vaultSnapshot.address}?allocator`, { replace: true })
+    navigate(`/vault/${vaultSnapshot.chainId}/${vaultSnapshot.address}?strategies`, { replace: true })
     setTimeout(reset, 1000)
   }, [upsertLocalVault, navigate, vaultSnapshot, projectSnapshot, reset, accountantSnapshot])
 
