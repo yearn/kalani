@@ -211,7 +211,16 @@ async function fetchVault({ chainId, address }: { chainId: number, address: EvmA
     throw new Error(`HTTP error! status: ${response.status}`)
   }
 
-  return response.json()
+  const text = await response.text()
+  // Replace scientific notation strings with regular integer strings
+  const sanitized = text.replace(/"([+-]?\d+\.?\d*e[+-]?\d+)"/gi, (match, num) => {
+    const numVal = Number(num)
+    // Convert to full integer string without scientific notation
+    const str = numVal.toLocaleString('fullwide', { useGrouping: false, maximumFractionDigits: 0 })
+    return `"${str}"`
+  })
+
+  return JSON.parse(sanitized)
 }
 
 function useVaultQuery({ chainId, address }: { chainId: number, address: EvmAddress }) {
