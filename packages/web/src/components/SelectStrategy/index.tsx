@@ -334,7 +334,10 @@ const Suspender: React.FC<SelectStrategyProps> = ({
                 </div>
                 <div className="flex items-center justify-end gap-4 flex-shrink-0">
                   {!isNothing(item.origin) && (
-                    <div className="px-2 py-1 text-xs text-neutral-400 bg-neutral-800 rounded whitespace-nowrap">
+                    <div className={cn(
+                      'px-2 py-1 text-xs text-neutral-400 rounded whitespace-nowrap',
+                      item.origin?.toLowerCase() === 'yearn' ? 'bg-indigo-600 text-white' : 'bg-neutral-800'
+                    )}>
                       {item.origin}
                     </div>
                   )}
