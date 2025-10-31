@@ -75,7 +75,7 @@ function RightHero() {
         title="Build"
         description=<>Build <Highlight>multi-strategy</Highlight> vaults on Yearn V3, the most trusted yield protocol in DeFi</>
       />
-      <Feature href="/vault/1/0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204?allocator"
+      <Feature href="/vault/1/0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204?strategies"
         icon={<PiScales size={96} />}
         title="Allocate"
         description=<>Allocate your vault's assets to any other <Highlight>4626 vault</Highlight> or strategy</>
