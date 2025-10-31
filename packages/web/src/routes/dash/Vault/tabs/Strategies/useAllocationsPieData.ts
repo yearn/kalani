@@ -46,7 +46,9 @@ export function useRealDebtPieData() {
   const { totalAssets } = useTotalAssets(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
 
   const realDebtPieData = useMemo(() => {
-    if (totalAssets === 0n) return []
+    if (totalAssets === 0n) {
+      return [{ label: 'idle', value: 10_000, color: '#000000' }]
+    }
     const totalDebt = vault?.totalDebt ?? 0n
     const idle = bmath.div(totalAssets - totalDebt, totalAssets)
     const idleBps = Math.round(Number(idle) * 10_000)

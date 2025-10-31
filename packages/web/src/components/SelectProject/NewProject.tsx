@@ -46,7 +46,7 @@ function useWrite(
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
   return { simulation, write, confirmation, resolveToast }
 }
 
@@ -99,7 +99,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
     if (simulation.isFetching) return 'sim'
     if (simulation.isError) return 'error'
     return 'default'
-  }, [simulation, write, confirmation])
+  }, [simulation, write, confirmation.isPending])
 
   const disabled = useMemo(() => {
     return !isFormValid
@@ -107,7 +107,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
     || !simulation.isSuccess
     || write.isPending
     || (write.isSuccess && confirmation.isPending)
-  }, [isFormValid, simulation, write, confirmation])
+  }, [isFormValid, simulation, write, confirmation.isPending])
 
   useEffect(() => {
     if (simulation.isError) { console.error(simulation.error) }
@@ -121,7 +121,7 @@ function Suspender({ dialogId }: { dialogId: string }) {
     if (confirmation.isSuccess) { 
       resolveToast()
     }
-  }, [confirmation, resolveToast])
+  }, [confirmation.isSuccess, resolveToast])
 
   const { setLocalProjects } = useLocalProjects()
   const { setSelectedProject } = useSelectedProject()

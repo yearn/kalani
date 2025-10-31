@@ -1,5 +1,5 @@
 {
-  "new-project-p": "Projects are unique groups of addresses used for deploying and managing your vaults.",
+  "new-project-p": "Projects are groups of 4626 vaults related by common governance and investment goals.",
   "new-project-governance": "Your project's governance addresses \n has full control over vaults created from this project (ie rugging power)",
   "new-project-management": "Your project's management addresses has less authorization and is meant for day-to-day operations. Providing a management address is recommended but optional and cannot be the same as your governance address.",
   "new-vault-category": "Optional. Use categories to..",
