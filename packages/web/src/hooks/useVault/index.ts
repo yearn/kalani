@@ -213,7 +213,7 @@ async function fetchVault({ chainId, address }: { chainId: number, address: EvmA
 
   const text = await response.text()
   // Replace scientific notation strings with regular integer strings
-  const sanitized = text.replace(/"([+-]?\d+\.?\d*e[+-]?\d+)"/gi, (match, num) => {
+  const sanitized = text.replace(/"([+-]?\d+\.?\d*e[+-]?\d+)"/gi, (_match, num) => {
     const numVal = Number(num)
     // Convert to full integer string without scientific notation
     const str = numVal.toLocaleString('fullwide', { useGrouping: false, maximumFractionDigits: 0 })
