@@ -73,17 +73,17 @@ function RightHero() {
       <Feature href="/build"
         icon={<PiVault size={96} />}
         title="Build"
-        description=<>Build <Highlight>vaults</Highlight> on the battle tested Yearn Finance V3 protocol</>
+        description=<>Build <Highlight>multi-strategy</Highlight> vaults on Yearn V3, the most trusted yield protocol in DeFi</>
       />
-      <Feature href="/vault/1/0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204?allocator"
+      <Feature href="/vault/1/0xBe53A109B494E5c9f97b9Cd39Fe969BE68BF6204?strategies"
         icon={<PiScales size={96} />}
         title="Allocate"
-        description=<>Allocate your vault's assets to any <Highlight>4626 vault</Highlight> or strategy</>
+        description=<>Allocate your vault's assets to any other <Highlight>4626 vault</Highlight> or strategy</>
       />
       <Feature href="/vault/1/0xc56413869c6CDf96496f2b1eF801fEDBdFA7dDB0?fees"
         icon={<PiMoneyWavy size={96} />}
         title="Earn"
-        description=<>Earn management <Highlight>fees</Highlight> on your vaults, claim them in the app</>
+        description=<>Earn <Highlight>fees</Highlight> on your vaults. Claim them in the app</>
       />
     </section>
   </div>

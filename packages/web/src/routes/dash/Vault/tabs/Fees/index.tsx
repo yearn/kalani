@@ -53,12 +53,12 @@ function Suspender() {
 
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
-        <LabelValueRow label="Management Fee">
+        <LabelValueRow label="Management Fee" infoKey="management-fee">
           {!authorized && <ViewBps bps={managementFee} />}
           {authorized && <InputBps bps={managementFee} isValid={true} className="w-64" onChange={onChangeManagementFee} />}
         </LabelValueRow>
 
-        <LabelValueRow label="Performance Fee">
+        <LabelValueRow label="Performance Fee" infoKey="performance-fee">
           {!authorized && <ViewBps bps={performanceFee} />}
           {authorized && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
         </LabelValueRow>
@@ -104,11 +104,11 @@ function _Skeleton() {
   return <div className="flex flex-col gap-8">
     <Section>
       <div className="px-4 py-2 flex flex-col gap-primary">
-        <LabelValueRow label="Management Fee">
+        <LabelValueRow label="Management Fee" infoKey="management-fee">
           <Skeleton className="w-24 h-8 rounded-primary" />
         </LabelValueRow>
 
-        <LabelValueRow label="Performance Fee">
+        <LabelValueRow label="Performance Fee" infoKey="performance-fee">
           <Skeleton className="w-24 h-8 rounded-primary" />
         </LabelValueRow>
 

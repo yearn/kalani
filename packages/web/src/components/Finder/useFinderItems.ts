@@ -191,6 +191,7 @@ export function useFinderItems() {
     const result = items.filter((item: FinderItem) => {
       return item.nameLower?.includes(lowerq)
         || (lowerq.length > 6 && item.addressIndex.toLowerCase().includes(lowerq))
+        || item.origin?.toLowerCase().includes(lowerq)
     })
     return sort(result)
   }, [items, q, sort])
