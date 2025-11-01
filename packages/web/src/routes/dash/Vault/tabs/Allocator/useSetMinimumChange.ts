@@ -20,6 +20,6 @@ export function useSetMinimumChange(minimumChange: bigint | undefined) {
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
   return { simulation, write, confirmation, resolveToast }
 }

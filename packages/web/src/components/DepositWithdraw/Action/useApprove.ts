@@ -46,7 +46,7 @@ export function useApprove() {
 
   const simulation = useSimulateContract(parameters)
   const { write, resolveToast } = useWriteContract()
-  const confirmation = useWaitForTransactionReceipt({ hash: write.data })
+  const confirmation = useWaitForTransactionReceipt({ hash: write.data, confirmations: 2 })
 
   return {
     allowanceQuery, needsApproval, simulation, write, confirmation, resolveToast
