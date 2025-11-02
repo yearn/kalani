@@ -63,11 +63,6 @@ function Suspender() {
           {authorized && <InputBps bps={performanceFee} isValid={true} className="w-64" onChange={onChangePerformanceFee} />}
         </LabelValueRow>
 
-        {!authorized && <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
-          <div>• Management fees are charged continuously on the total assets under management</div>
-          <div>• Performance fees are only charged on realized profits</div>
-        </div>}
-
         {authorized && <div className="px-8 pt-6 flex justify-end">
           <SetCustomConfig feeConfig={{
             vault: vault.address,
@@ -112,10 +107,6 @@ function _Skeleton() {
           <Skeleton className="w-24 h-8 rounded-primary" />
         </LabelValueRow>
 
-        <div className="mt-4 text-sm text-neutral-400 flex flex-col gap-2">
-          <div>• Management fees are charged continuously on the total assets under management</div>
-          <div>• Performance fees are only charged on realized profits</div>
-        </div>
       </div>
     </Section>
 

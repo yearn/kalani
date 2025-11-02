@@ -60,6 +60,11 @@ function LeftHero() {
               <CTA>🚀 Let's go</CTA>
             </Button>
           </div>
+          <div className="w-full px-8 sm:px-0">
+            <p className="font-bold text-xl text-secondary-2000">
+              Build single asset, multi-strategy vaults on Yearn V3, the most trusted yield protocol in DeFi
+            </p>
+          </div>
         </div>
       </div>
     </section>
