@@ -317,7 +317,7 @@ const Suspender: React.FC<SelectStrategyProps> = ({
             {filter.map((item, index) => (
               <div
                 key={`${index}-${item.address}`}
-                onClick={() => handleItemClick(item)}
+                onClick={(e) => { e.stopPropagation(); handleItemClick(item); }}
                 onMouseOver={() => setSelectedIndex(index)}
                 className={`
                   px-4 py-3 flex items-center justify-between gap-4 cursor-pointer
