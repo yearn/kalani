@@ -23,7 +23,7 @@ import Section from '../../../../../components/Section'
 
 function StrategyTableHeader() {
   return (
-    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 mb-12">
+    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 mt-4 mb-12">
       <div className="w-6"></div>
       <h2 className="font-bold text-neutral-400 flex items-center gap-2">
         Strategy queue
