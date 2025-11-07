@@ -1,12 +1,58 @@
 import { z } from 'zod'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { KONG_GQL_URL } from '../../lib/env'
+import { KONG_GQL_URL, CDN_URL } from '../../lib/env'
 import { EvmAddressSchema } from '@kalani/lib/types'
 import { useCallback, useMemo } from 'react'
 import { compareEvmAddresses, isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
 import { useLocalVaults } from '../../hooks/useVault'
-import { useVaultsMeta } from '../../hooks/useVaultsMeta'
+import { chains } from '../../lib/chains'
+
+export const VaultMetadataSchema = z.object({
+  chainId: z.number(),
+  address: EvmAddressSchema,
+  name: z.string(),
+  registry: EvmAddressSchema.optional(),
+  type: z.enum(['Yearn Vault', 'Experimental Yearn Vault', 'Automated Yearn Vault', 'Single Strategy', 'None']),
+  kind: z.enum(['Multi Strategy', 'Legacy', 'Single Strategy', 'None']),
+  isRetired: z.boolean(),
+  isHidden: z.boolean(),
+  isAggregator: z.boolean(),
+  isBoosted: z.boolean(),
+  isAutomated: z.boolean(),
+  isHighlighted: z.boolean(),
+  isPool: z.boolean(),
+  shouldUseV2APR: z.boolean(),
+  migration: z.object({
+    available: z.boolean(),
+    target: EvmAddressSchema.optional(),
+    contract: EvmAddressSchema.optional(),
+  }),
+  stability: z.object({
+    stability: z.enum(['Unknown', 'Correlated', 'Stable', 'Volatile', 'Unstable']),
+    stableBaseAsset: z.string().optional(),
+  }),
+  category: z.string().optional(),
+  displayName: z.string().optional(),
+  displaySymbol: z.string().optional(),
+  description: z.string().optional(),
+  sourceURI: z.string().optional(),
+  uiNotice: z.string().optional(),
+  protocols: z.array(z.enum(['Curve', 'BeethovenX', 'Gamma', 'Balancer', 'Yearn'])),
+  inclusion: z.object({
+    isSet: z.boolean(),
+    isYearn: z.boolean(),
+    isYearnJuiced: z.boolean(),
+    isGimme: z.boolean(),
+    isPoolTogether: z.boolean(),
+    isCove: z.boolean(),
+    isMorpho: z.boolean(),
+    isKatana: z.boolean(),
+    isPublicERC4626: z.boolean(),
+  }),
+})
+
+export type VaultMetadata = z.infer<typeof VaultMetadataSchema>
 
 export const FinderItemSchema = z.object({
   label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
@@ -38,7 +84,8 @@ export const FinderItemSchema = z.object({
     tvl: z.array(z.number()),
     apy: z.array(z.number())
   }).optional(),
-  addressIndex: z.string()
+  addressIndex: z.string(),
+  metadata: VaultMetadataSchema.optional()
 })
 
 export type FinderItem = z.infer<typeof FinderItemSchema>
@@ -84,7 +131,7 @@ query Query {
 }
 `
 
-function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant'): FinderItem {
+function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant', metadata?: any): FinderItem {
   return {
     label,
     chainId: parseInt(vault.chainId),
@@ -112,11 +159,12 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
       tvl: vault.sparklines?.tvl?.map((s: any) => s.close) ?? [],
       apy: vault.sparklines?.apy?.map((s: any) => s.close) ?? []
     },
-    addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase()
+    addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase(),
+    metadata
   }
 }
 
-function toFinderItems(data: any): FinderItem[] {
+function toFinderItems(data: any, metadataMap: Map<string, any>): FinderItem[] {
   let results: FinderItem[] = []
 
   // Create a set of strategy addresses for quick lookup
@@ -124,10 +172,14 @@ function toFinderItems(data: any): FinderItem[] {
 
   // Process vaults
   data.vaults.forEach((vault: any) => {
-    const label = vault.yearn 
+    const label = vault.yearn
     ? strategyAddresses.has(vault.address.toLowerCase()) ? 'yStrategy' : 'yVault'
     : vault.v3 ? 'v3' : 'erc4626'
-    const item: FinderItem = vaultToFinderItem(vault, label)
+
+    const metadataKey = `${vault.chainId}-${vault.address.toLowerCase()}`
+    const metadata = metadataMap.get(metadataKey)
+
+    const item: FinderItem = vaultToFinderItem(vault, label, metadata)
     results.push(item)
   })
 
@@ -137,6 +189,7 @@ function toFinderItems(data: any): FinderItem[] {
 }
 
 async function fetchFinderItems(): Promise<FinderItem[]> {
+  // Fetch vault data from GraphQL
   const response = await fetch(KONG_GQL_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -146,7 +199,32 @@ async function fetchFinderItems(): Promise<FinderItem[]> {
   if (!response.ok) { throw new Error(`HTTP error, status ${response.status}`) }
 
   const json = await response.json()
-  return toFinderItems(json.data)
+
+  // Fetch metadata from CDN
+  const metadataPromises = chains.map((chain) =>
+    fetch(`${CDN_URL}vaults/${chain.id}.json`)
+      .then(response => ({ response, chainId: chain.id }))
+      .catch(() => ({ response: null, chainId: chain.id }))
+  )
+  const metadataResults = await Promise.all(metadataPromises)
+
+  const metadataJsonPromises = metadataResults
+    .filter(({ response }) => response?.ok)
+    .map(({ response, chainId }) =>
+      response!.json().then(json => ({ json, chainId }))
+    )
+  const metadataJsonResults = await Promise.all(metadataJsonPromises)
+
+  // Build metadata map
+  const metadataMap = new Map<string, any>()
+  metadataJsonResults.forEach(({ json }) => {
+    json.forEach((meta: any) => {
+      const key = `${meta.chainId}-${meta.address.toLowerCase()}`
+      metadataMap.set(key, meta)
+    })
+  })
+
+  return toFinderItems(json.data, metadataMap)
 }
 
 export function useFinderItems() {
@@ -157,8 +235,6 @@ export function useFinderItems() {
     queryFn: fetchFinderItems,
     staleTime: 1000 * 60 * 5
   })
-
-  const { vaultsMetaMap } = useVaultsMeta()
 
   const sort = useCallback((items: FinderItem[]) => {
     const result = [...items]
@@ -188,14 +264,13 @@ export function useFinderItems() {
 
     // Filter out hidden or retired vaults
     return allItems.filter(item => {
-      const metadata = vaultsMetaMap.get(`${item.chainId}-${item.address.toLowerCase()}`)
       // If metadata exists and vault is hidden or retired, filter it out
-      if (metadata && (metadata.isHidden || metadata.isRetired)) {
+      if (item.metadata && (item.metadata.isHidden || item.metadata.isRetired)) {
         return false
       }
       return true
     })
-  }, [query.data, localVaults, vaultsMetaMap])
+  }, [query.data, localVaults])
 
   const filter = useMemo(() => {
     if (isNothing(q)) { return sort(items) }

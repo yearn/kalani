@@ -21,7 +21,6 @@ import abis from '@kalani/lib/abis'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { parseAbi } from 'viem'
-import { useVaultsMeta } from '../../hooks/useVaultsMeta'
 
 interface SelectStrategyProps {
   vault: Vault,
@@ -164,16 +163,11 @@ const Suspender: React.FC<SelectStrategyProps> = ({
 
   const { items } = useFinderItems()
   const { defaultQueue } = useOnChainDefaultQueue(vault.chainId, vault.address)
-  const { vaultsMetaMap } = useVaultsMeta()
-
   const strategies = useMemo(() => {
     return items
       .filter(item => {
-        // O(1) lookup instead of O(n) find
-        const metadata = vaultsMetaMap.get(`${item.chainId}-${item.address.toLowerCase()}`)
-
         // Filter out hidden or retired vaults
-        if (metadata && (metadata.isHidden || metadata.isRetired)) {
+        if (item.metadata && (item.metadata.isHidden || item.metadata.isRetired)) {
           return false
         }
 
@@ -195,7 +189,7 @@ const Suspender: React.FC<SelectStrategyProps> = ({
         // Both have APY or both don't have APY, sort by TVL
         return (b.tvl ?? 0) - (a.tvl ?? 0)
       })
-  }, [items, vault.chainId, vault.asset.address, vault.address, defaultQueue, vaultsMetaMap])
+  }, [items, vault.chainId, vault.asset.address, vault.address, defaultQueue])
 
   const filter = useMemo(() => {
     if (isQueryAddress) { return [] }
