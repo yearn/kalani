@@ -9,7 +9,7 @@ import Skeleton from '../../../../../components/Skeleton'
 import EstimatedApy from '../../../Vault/tabs/Strategies/EstimatedApy'
 import TotalAllocation from '../../../Vault/tabs/Strategies/TotalAllocation'
 import AllocationsPie from '../../../Vault/tabs/Allocator/AllocationsPie'
-import { useTargetDebtPieData } from '../../../Vault/tabs/Strategies/useAllocationsPieData'
+import { useRealDebtPieData, useTargetDebtPieData } from '../../../Vault/tabs/Strategies/useAllocationsPieData'
 
 function SetMinimumChangeNotification() {
   return <div className="p-8 flex flex-col gap-8 border-primary border-warn-950 rounded-primary text-warn-400">
@@ -28,7 +28,7 @@ export default function Strategies() {
   const mounted = useMounted()
   const authorizedDebtManager = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const targetDebtPieData = useTargetDebtPieData()
-  // const realDebtPieData = useRealDebtPieData()
+  const realDebtPieData = useRealDebtPieData()
 
   const showMinChangeNotification = useMemo(() => {
     return (minimumChange < 1) && authorizedDebtManager
@@ -68,12 +68,12 @@ export default function Strategies() {
           </div>
         </Suspense>
 
-        {/* <Suspense fallback={<Skeleton className="w-24 h-24 rounded-full" />}>
+        <Suspense fallback={<Skeleton className="w-24 h-24 rounded-full" />}>
           <div className="flex flex-col items-center gap-2">
             <AllocationsPie data={realDebtPieData} size={180} animate={false} />
             <div className="text-xs text-neutral-400">Effective Ratios</div>
           </div>
-        </Suspense> */}
+        </Suspense>
       </div>
     </div>
   )
