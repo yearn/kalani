@@ -21,6 +21,7 @@ import abis from '@kalani/lib/abis'
 import { readContractQueryOptions } from 'wagmi/query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { parseAbi } from 'viem'
+import { useVaultsMeta } from '../../hooks/useVaultsMeta'
 
 interface SelectStrategyProps {
   vault: Vault,
@@ -163,15 +164,36 @@ const Suspender: React.FC<SelectStrategyProps> = ({
 
   const { items } = useFinderItems()
   const { defaultQueue } = useOnChainDefaultQueue(vault.chainId, vault.address)
+  const { vaults: vaultsMeta } = useVaultsMeta()
+
+  // Create a lookup map for O(1) access instead of O(n) find operations
+  const vaultsMetaMap = useMemo(() => {
+    const map = new Map()
+    vaultsMeta.forEach(meta => {
+      const key = `${meta.chainId}-${meta.address.toLowerCase()}`
+      map.set(key, meta)
+    })
+    return map
+  }, [vaultsMeta])
 
   const strategies = useMemo(() => {
     return items
-      .filter(item =>
-        item.chainId === vault.chainId &&
-        compareEvmAddresses(item.token?.address ?? '', vault.asset.address) &&
-        !compareEvmAddresses(item.address, vault.address) &&
-        !defaultQueue.some(strategyAddress => compareEvmAddresses(strategyAddress, item.address))
-      )
+      .filter(item => {
+        // O(1) lookup instead of O(n) find
+        const metadata = vaultsMetaMap.get(`${item.chainId}-${item.address.toLowerCase()}`)
+
+        // Filter out hidden or retired vaults
+        if (metadata && (metadata.isHidden || metadata.isRetired)) {
+          return false
+        }
+
+        return (
+          item.chainId === vault.chainId &&
+          compareEvmAddresses(item.token?.address ?? '', vault.asset.address) &&
+          !compareEvmAddresses(item.address, vault.address) &&
+          !defaultQueue.some(strategyAddress => compareEvmAddresses(strategyAddress, item.address))
+        )
+      })
       .sort((a, b) => {
         const aHasApy = (a.apy ?? 0) > 0
         const bHasApy = (b.apy ?? 0) > 0
@@ -183,7 +205,7 @@ const Suspender: React.FC<SelectStrategyProps> = ({
         // Both have APY or both don't have APY, sort by TVL
         return (b.tvl ?? 0) - (a.tvl ?? 0)
       })
-  }, [items, vault.chainId, vault.asset.address, vault.address, defaultQueue])
+  }, [items, vault.chainId, vault.asset.address, vault.address, defaultQueue, vaultsMetaMap])
 
   const filter = useMemo(() => {
     if (isQueryAddress) { return [] }
