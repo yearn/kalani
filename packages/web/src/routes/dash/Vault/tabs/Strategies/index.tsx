@@ -23,7 +23,7 @@ import Section from '../../../../../components/Section'
 
 function StrategyTableHeader() {
   return (
-    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 mb-12">
+    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-x-8 mt-4 mb-12">
       <div className="w-6"></div>
       <h2 className="font-bold text-neutral-400 flex items-center gap-2">
         Strategy queue
@@ -38,7 +38,7 @@ function StrategyTableHeader() {
 
 function Suspender() {
   const authorized = useHasRolesOnChain(ROLES.QUEUE_MANAGER)
-  const { defaultQueue } = useDefaultQueueComposite()
+  const { defaultQueue, colors } = useDefaultQueueComposite()
   const { vault } = useVaultFromParams()
   const { items } = useFinderItems()
   const { onChainTargetRatios } = useOnChainTargetRatios()
@@ -122,7 +122,7 @@ function Suspender() {
           {orderedStrategies.map((strategy, index) => {
             if (!strategy) return null
             const isOpen = expandedStrategies.has(strategy.address)
-            return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} authorized={authorized} />
+            return <StrategyItem key={strategy.address} strategy={strategy} index={index} isOpen={isOpen} toggleExpand={toggleExpand} authorized={authorized} color={colors[index]} />
           })}
         </Reorder.Group>
         {authorized && <>
@@ -141,7 +141,7 @@ function Suspender() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { strategy: any, index: number, isOpen: boolean, toggleExpand: (address: string) => void, authorized: boolean }) {
+function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized, color }: { strategy: any, index: number, isOpen: boolean, toggleExpand: (address: string) => void, authorized: boolean, color: string }) {
   const dragControls = useDragControls()
 
   return (
@@ -162,7 +162,15 @@ function StrategyItem({ strategy, index, isOpen, toggleExpand, authorized }: { s
         >
           <PiCaretDownBold data-open={isOpen} className="data-[open=true]:rotate-180 text-2xl group-data-[zerodebt=true]:text-neutral-400" />
         </button>
-        <div className="flex items-center text-xl group-data-[zerodebt=true]:text-neutral-400">#{index} {strategy.name}</div>
+        <div className="flex items-center gap-3 text-xl group-data-[zerodebt=true]:text-neutral-400">
+          <span
+            className="inline-flex items-center justify-center w-7 h-7 rounded text-sm font-bold text-neutral-900"
+            style={{ backgroundColor: color }}
+          >
+            {index}
+          </span>
+          {strategy.name}
+        </div>
         <div className="text-right text-2xl group-data-[zerodebt=true]:text-neutral-400">{fPercent(strategy.apy)}</div>
         <div className="text-right text-2xl group-data-[zerodebt=true]:text-neutral-400">{fPercent(strategy.targetDebtRatio, { padding: { length: 2, fill: '0' } })}</div>
         {authorized ? (

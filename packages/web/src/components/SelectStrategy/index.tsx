@@ -163,15 +163,21 @@ const Suspender: React.FC<SelectStrategyProps> = ({
 
   const { items } = useFinderItems()
   const { defaultQueue } = useOnChainDefaultQueue(vault.chainId, vault.address)
-
   const strategies = useMemo(() => {
     return items
-      .filter(item =>
-        item.chainId === vault.chainId &&
-        compareEvmAddresses(item.token?.address ?? '', vault.asset.address) &&
-        !compareEvmAddresses(item.address, vault.address) &&
-        !defaultQueue.some(strategyAddress => compareEvmAddresses(strategyAddress, item.address))
-      )
+      .filter(item => {
+        // Filter out hidden or retired vaults
+        if (item.metadata && (item.metadata.isHidden || item.metadata.isRetired)) {
+          return false
+        }
+
+        return (
+          item.chainId === vault.chainId &&
+          compareEvmAddresses(item.token?.address ?? '', vault.asset.address) &&
+          !compareEvmAddresses(item.address, vault.address) &&
+          !defaultQueue.some(strategyAddress => compareEvmAddresses(strategyAddress, item.address))
+        )
+      })
       .sort((a, b) => {
         const aHasApy = (a.apy ?? 0) > 0
         const bHasApy = (b.apy ?? 0) > 0
@@ -317,7 +323,7 @@ const Suspender: React.FC<SelectStrategyProps> = ({
             {filter.map((item, index) => (
               <div
                 key={`${index}-${item.address}`}
-                onClick={() => handleItemClick(item)}
+                onClick={(e) => { e.stopPropagation(); handleItemClick(item); }}
                 onMouseOver={() => setSelectedIndex(index)}
                 className={`
                   px-4 py-3 flex items-center justify-between gap-4 cursor-pointer
