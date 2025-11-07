@@ -164,17 +164,7 @@ const Suspender: React.FC<SelectStrategyProps> = ({
 
   const { items } = useFinderItems()
   const { defaultQueue } = useOnChainDefaultQueue(vault.chainId, vault.address)
-  const { vaults: vaultsMeta } = useVaultsMeta()
-
-  // Create a lookup map for O(1) access instead of O(n) find operations
-  const vaultsMetaMap = useMemo(() => {
-    const map = new Map()
-    vaultsMeta.forEach(meta => {
-      const key = `${meta.chainId}-${meta.address.toLowerCase()}`
-      map.set(key, meta)
-    })
-    return map
-  }, [vaultsMeta])
+  const { vaultsMetaMap } = useVaultsMeta()
 
   const strategies = useMemo(() => {
     return items

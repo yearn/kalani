@@ -96,9 +96,20 @@ export function useVaultsMeta() {
     })
   }, [vaults])
 
+  // Create a lookup map for O(1) access
+  const vaultsMetaMap = useMemo(() => {
+    const map = new Map()
+    vaults.forEach(meta => {
+      const key = `${meta.chainId}-${meta.address.toLowerCase()}`
+      map.set(key, meta)
+    })
+    return map
+  }, [vaults])
+
   return {
     ...query,
     vaults: sortedVaults,
+    vaultsMetaMap,
     rawJsonChainMap: query.data.rawJsonChainMap,
   }
 }

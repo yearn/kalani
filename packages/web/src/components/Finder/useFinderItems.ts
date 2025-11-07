@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { compareEvmAddresses, isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
 import { useLocalVaults } from '../../hooks/useVault'
+import { useVaultsMeta } from '../../hooks/useVaultsMeta'
 
 export const FinderItemSchema = z.object({
   label: z.enum(['yVault', 'yStrategy', 'v3', 'erc4626', 'accountant']),
@@ -157,6 +158,8 @@ export function useFinderItems() {
     staleTime: 1000 * 60 * 5
   })
 
+  const { vaultsMetaMap } = useVaultsMeta()
+
   const sort = useCallback((items: FinderItem[]) => {
     const result = [...items]
     if (sortKey === 'tvl' && sortDirection === 'asc') {
@@ -178,11 +181,21 @@ export function useFinderItems() {
       )
     )
 
-    return [
-      ...query.data, 
+    const allItems = [
+      ...query.data,
       ...uniqueLocalVaultFinderItems
     ]
-  }, [query.data, localVaults])
+
+    // Filter out hidden or retired vaults
+    return allItems.filter(item => {
+      const metadata = vaultsMetaMap.get(`${item.chainId}-${item.address.toLowerCase()}`)
+      // If metadata exists and vault is hidden or retired, filter it out
+      if (metadata && (metadata.isHidden || metadata.isRetired)) {
+        return false
+      }
+      return true
+    })
+  }, [query.data, localVaults, vaultsMetaMap])
 
   const filter = useMemo(() => {
     if (isNothing(q)) { return sort(items) }
