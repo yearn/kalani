@@ -19,7 +19,7 @@ export function fPercent(amount: number | undefined | null, options?: { fixed?: 
   const { fixed, padding } = options ?? {}
 
   let result = ''
-  if ((amount * 100) > 999) { result = `999% +` }
+  if ((amount * 100) > 999) { result = `999.99%` }
   else { result = `${(amount * 100).toFixed(fixed ?? 2)}%` }
 
   if (padding) {
