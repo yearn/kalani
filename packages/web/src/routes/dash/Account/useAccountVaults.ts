@@ -169,8 +169,8 @@ export function useAccountVaults(account?: EvmAddress | undefined) {
       address: account,
       vaults: vaults.map(vault => {
         const roleMask = roles.find(role => compareEvmAddresses(role.vault, vault.address))?.roleMask ?? 0n
-        return { 
-          ...vault, 
+        return {
+          ...vault,
           roleMask,
           roles: getRoles(roles.find(role => compareEvmAddresses(role.vault, vault.address))?.roleMask ?? 0n),
           roleManager: (PSEUDO_ROLES.ROLE_MANAGER & roleMask) === PSEUDO_ROLES.ROLE_MANAGER,

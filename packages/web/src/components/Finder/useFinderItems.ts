@@ -7,6 +7,9 @@ import { compareEvmAddresses, isNothing } from '@kalani/lib/strings'
 import { useFinderOptions } from './useFinderOptions'
 import { useLocalVaults } from '../../hooks/useVault'
 import { chains } from '../../lib/chains'
+import { useAccount } from 'wagmi'
+import { useAccountVaults } from '../../routes/dash/Account/useAccountVaults'
+import { zeroAddress } from 'viem'
 
 export const VaultMetadataSchema = z.object({
   chainId: z.number(),
@@ -229,6 +232,8 @@ async function fetchFinderItems(): Promise<FinderItem[]> {
 
 export function useFinderItems() {
   const { query: q, sortKey, sortDirection } = useFinderOptions()
+  const { address } = useAccount()
+  const userVaults = useAccountVaults(address ?? zeroAddress)
 
   const query = useSuspenseQuery({
     queryKey: ['useFinderItems'],
@@ -262,15 +267,24 @@ export function useFinderItems() {
       ...uniqueLocalVaultFinderItems
     ]
 
-    // Filter out hidden or retired vaults
+    // Filter out hidden or retired vaults, UNLESS the connected wallet owns them
     return allItems.filter(item => {
-      // If metadata exists and vault is hidden or retired, filter it out
+      // If metadata exists and vault is hidden or retired
       if (item.metadata && (item.metadata.isHidden || item.metadata.isRetired)) {
-        return false
+        // If no wallet is connected, filter out hidden/retired vaults
+        if (!address) {
+          return false
+        }
+        // Check if the connected wallet has any roles on this vault
+        const hasRoles = userVaults.vaults.some(vault =>
+          vault.chainId === item.chainId && compareEvmAddresses(vault.address, item.address)
+        )
+        // Only show if user has roles on the vault
+        return hasRoles
       }
       return true
     })
-  }, [query.data, localVaults])
+  }, [query.data, localVaults, userVaults, address])
 
   const filter = useMemo(() => {
     if (isNothing(q)) { return sort(items) }
