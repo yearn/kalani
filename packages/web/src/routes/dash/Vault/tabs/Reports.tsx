@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
-import { Suspense, useMemo } from 'react'
+import { Suspense, useMemo, useState, useCallback, useEffect } from 'react'
 import { fPercent, fNumber } from '@kalani/lib/format'
 import { formatUnits } from 'viem'
 import Skeleton from '../../../../components/Skeleton'
@@ -13,6 +13,9 @@ import StrategyChipSlide from '../../../../components/ChipSlide/StrategyChipSlid
 import { useDefaultQueueComposite } from './Allocator/useDefaultQueueComposite'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import ScrollContainer from 'react-indiana-drag-scroll'
+import InfiniteScroll from 'react-infinite-scroll-component'
+
+const FRAME_SIZE = 20
 
 export const ReportSchema = z.object({
   chainId: z.number(),
@@ -135,8 +138,24 @@ function DisplayTokens({ amount, decimals, symbol, className }: { amount: number
 
 function Suspender() {
   const { vault } = useVaultFromParams()
-  const { reports } = useReports(vault?.chainId, vault?.address)
+  const { reports: allReports } = useReports(vault?.chainId, vault?.address)
   const { defaultQueue, colors } = useDefaultQueueComposite()
+
+  const [displayedReports, setDisplayedReports] = useState(allReports?.slice(0, FRAME_SIZE))
+
+  useEffect(() => {
+    setDisplayedReports(allReports?.slice(0, FRAME_SIZE))
+  }, [allReports])
+
+  const hasMoreFrames = useMemo(() =>
+    displayedReports.length < allReports.length,
+    [displayedReports, allReports]
+  )
+
+  const fetchFrame = useCallback(() => {
+    const nextReports = allReports?.slice(displayedReports.length, displayedReports.length + FRAME_SIZE)
+    setDisplayedReports(prevReports => [...prevReports, ...nextReports])
+  }, [allReports, displayedReports])
 
   const colorMap = useMemo(() => {
     const map = new Map<string, string>()
@@ -154,50 +173,57 @@ function Suspender() {
   if (!vault) return <></>
 
   return <div className="flex flex-col gap-2">
-    <table className="border-separate border-spacing-4">
-      <thead>
-        <tr className="text-neutral-400">
-          <th className="w-52 text-left">TX</th>
-          <th className="text-left">Strategy</th>
-          <th className="text-left">Date</th>
-          <th className="text-left">Profit</th>
-          <th className="text-left">Loss</th>
-          <th className="text-left">APR</th>
-        </tr>
-      </thead>
-      <tbody>
-        {reports.map((report, index) => (
-          <tr key={index}>
-            <td>
-              <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} />
-            </td>
-            <td>
-              <StrategyChipSlide
-                chainId={report.chainId}
-                address={report.strategy}
-                className={'text-black'}
-                style={(() => {
-                  const c = colorFor(report.strategy)
-                  return c ? { backgroundColor: c } : { backgroundColor: '#333' }
-                })()}
-              />
-            </td>
-            <td>
-              <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
-            </td>
-            <td>
-              <DisplayTokens amount={report.gain} decimals={vault.asset.decimals} symbol={vault.asset.symbol} />
-            </td>
-            <td>
-              <DisplayTokens amount={report.loss} decimals={vault.asset.decimals} symbol={vault.asset.symbol} />
-            </td>
-            <td className={classNameFor(report.apr?.net ?? 0)}>
-              <DisplayPercent percent={report.apr?.net ?? 0} />
-            </td>
+    <InfiniteScroll
+      className="!overflow-hidden"
+      dataLength={displayedReports.length}
+      next={fetchFrame}
+      hasMore={hasMoreFrames}
+      loader={<></>}>
+      <table className="border-separate border-spacing-4">
+        <thead>
+          <tr className="text-neutral-400">
+            <th className="w-52 text-left">TX</th>
+            <th className="text-left">Strategy</th>
+            <th className="text-left">Date</th>
+            <th className="text-left">Profit</th>
+            <th className="text-left">Loss</th>
+            <th className="text-left">APR</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {displayedReports.map((report, index) => (
+            <tr key={index}>
+              <td>
+                <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} />
+              </td>
+              <td>
+                <StrategyChipSlide
+                  chainId={report.chainId}
+                  address={report.strategy}
+                  className={'text-black'}
+                  style={(() => {
+                    const c = colorFor(report.strategy)
+                    return c ? { backgroundColor: c } : { backgroundColor: '#333' }
+                  })()}
+                />
+              </td>
+              <td>
+                <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
+              </td>
+              <td>
+                <DisplayTokens amount={report.gain} decimals={vault.asset.decimals} symbol={vault.asset.symbol} />
+              </td>
+              <td>
+                <DisplayTokens amount={report.loss} decimals={vault.asset.decimals} symbol={vault.asset.symbol} />
+              </td>
+              <td className={classNameFor(report.apr?.net ?? 0)}>
+                <DisplayPercent percent={report.apr?.net ?? 0} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </InfiniteScroll>
   </div>
 }
 
