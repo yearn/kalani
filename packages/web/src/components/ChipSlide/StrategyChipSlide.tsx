@@ -11,11 +11,13 @@ import Link from '../elements/Link'
 export default function StrategyChipSlide({
   chainId,
   address,
-  className
+  className,
+  style
 }: {
   chainId: number
   address: EvmAddress
   className?: string
+  style?: React.CSSProperties
 }) {
   const chain = getChain(chainId)
   const href = useMemo(() => {
@@ -23,11 +25,14 @@ export default function StrategyChipSlide({
     return `${explorer.url}/address/${address}`
   }, [chain, address])
 
+
   const slide = <div className="h-full flex items-center gap-4">
     <Copy text={address} />
     <A href={href} target="_blank" rel="noreferrer"><PiArrowSquareOutBold /></A>
     <Link to={`/strategy/${chainId}/${address}`}><PiArrowRight /></Link>
   </div>
 
-  return <ChipSlide className={className} slide={slide}>{fEvmAddress(address)}</ChipSlide>
+  return <ChipSlide className={className} style={style} slide={slide}>
+    {fEvmAddress(address)}
+  </ChipSlide>
 }
