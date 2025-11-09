@@ -32,6 +32,8 @@ import { EvmAddress } from '@kalani/lib/types'
 import { PiArrowRightBold } from 'react-icons/pi'
 import LinkButton from '../../../../../components/elements/LinkButton'
 import Skeleton from '../../../../../components/Skeleton'
+import bmath from '@kalani/lib/bmath'
+import { useOnChainVault } from '../../../../../hooks/useOnChainVault'
 
 function useSetStrategyDebtRatio(strategy: EvmAddress, ratio: bigint, enabled: boolean) {
   const { allocator } = useAllocator()
@@ -60,6 +62,7 @@ function useDebtRatioUpdate(strategy: EvmAddress) {
 function StrategyDetailContent() {
   const { strategy } = useStrategyDetail()
   const { vault } = useVaultFromParams()
+  const { vault: __vault } = useOnChainVault(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
   const authorized = useHasRolesOnChain(ROLES.DEBT_MANAGER)
   const { sm } = useBreakpoints()
   const { strategyParams } = useOnChainStrategyParams(strategy.chainId, vault?.address ?? zeroAddress, strategy.address)
@@ -131,19 +134,26 @@ function StrategyDetailContent() {
     write.writeContract(simulation.data!.request)
   }, [write, simulation])
 
+  const targetDebt = useMemo(() => {
+    if (update.debtRatio === 0n) { return 0n }
+    const debtRatioDecimal = bmath.div(update.debtRatio, 10_000n)
+    const debt = bmath.mul(__vault.totalAssets, debtRatioDecimal)
+    return bmath.min(BigInt(Math.floor(debt)), strategyParams.maxDebt)
+  }, [update.debtRatio, strategyParams.maxDebt, strategyParams.currentDebt, __vault.totalAssets, strategy.address])
+
   return (
     <div className="w-full flex flex-col items-start px-8 py-4 pb-8 space-y-2">
       {authorized && <LabelValueRow labelClassName="py-4 text-lg text-primary-400" label="">
         {sm && <div className="py-3 w-full flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
           <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
-          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={0n} />
+          <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />
           <ProcessReport strategy={strategy.address} />
         </div>}
 
         {!sm && <ScrollContainer horizontal className="w-full" style={{ maxWidth: '86vw' }}>
           <div className="relative flex items-center justify-start sm:justify-end gap-3 sm:gap-6">
             <ProcessReport strategy={strategy.address} />
-            <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={0n} />
+            <UpdateDebt vault={vault?.address ?? zeroAddress} strategy={strategy.address} targetDebt={targetDebt} />
             <Revoke vault={vault?.address ?? zeroAddress} strategy={strategy.address} />
             <div className="sticky z-10 top-0 right-0 min-w-2 h-12 bg-neutral-950/20"></div>
           </div>
