@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { EvmAddressSchema, HexStringSchema } from '@kalani/lib/types'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { KONG_GQL_URL } from '../../../../lib/env'
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import { fPercent, fNumber } from '@kalani/lib/format'
 import { formatUnits } from 'viem'
 import Skeleton from '../../../../components/Skeleton'
@@ -10,6 +10,7 @@ import { useVaultFromParams } from '../../../../hooks/useVault/withVault'
 import { cn } from '../../../../lib/shadcn'
 import TxChipSlide from '../../../../components/ChipSlide/TxChipSlide'
 import StrategyChipSlide from '../../../../components/ChipSlide/StrategyChipSlide'
+import { useDefaultQueueComposite } from './Allocator/useDefaultQueueComposite'
 import ViewDateOrBlock from '../../../../components/elements/ViewDateOrBlock'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
@@ -135,6 +136,20 @@ function DisplayTokens({ amount, decimals, symbol, className }: { amount: number
 function Suspender() {
   const { vault } = useVaultFromParams()
   const { reports } = useReports(vault?.chainId, vault?.address)
+  const { defaultQueue, colors } = useDefaultQueueComposite()
+
+  const colorMap = useMemo(() => {
+    const map = new Map<string, string>()
+    defaultQueue.forEach((s, i) => {
+      const color = colors[i]
+      if (color) {
+        map.set(s.address.toLowerCase(), color)
+      }
+    })
+    return map
+  }, [defaultQueue, colors])
+
+  const colorFor = (strategy: string) => colorMap.get(strategy.toLowerCase())
 
   if (!vault) return <></>
 
@@ -157,7 +172,15 @@ function Suspender() {
               <TxChipSlide chainId={report.chainId} txhash={report.transactionHash} />
             </td>
             <td>
-              <StrategyChipSlide chainId={report.chainId} address={report.strategy} />
+              <StrategyChipSlide
+                chainId={report.chainId}
+                address={report.strategy}
+                className={'text-black'}
+                style={(() => {
+                  const c = colorFor(report.strategy)
+                  return c ? { backgroundColor: c } : { backgroundColor: '#333' }
+                })()}
+              />
             </td>
             <td>
               <ViewDateOrBlock timestamp={report.blockTime} block={report.blockNumber} />
