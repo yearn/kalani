@@ -7,6 +7,7 @@ import { compareEvmAddresses } from '@kalani/lib/strings'
 import { useTotalAssets } from '../Allocator/useEffectiveDebtRatioBps'
 import { zeroAddress } from 'viem'
 import bmath from '@kalani/lib/bmath'
+import { useOnChainVitals } from '../Vitals/useOnCainVitals'
 
 export type PieData = {
   label: string
@@ -44,12 +45,13 @@ export function useRealDebtPieData() {
   const { vault } = useVaultFromParams()
   const { defaultQueue, colors } = useDefaultQueueComposite()
   const { totalAssets } = useTotalAssets(vault?.chainId ?? 0, vault?.address ?? zeroAddress)
+  const { totalDebt : totalDebtOnChain } = useOnChainVitals()
 
   const realDebtPieData = useMemo(() => {
     if (totalAssets === 0n) {
       return [{ label: 'idle', value: 10_000, color: '#000000' }]
     }
-    const totalDebt = vault?.totalDebt ?? 0n
+    const totalDebt = totalDebtOnChain ?? 0n
     const idle = bmath.div(totalAssets - totalDebt, totalAssets)
     const idleBps = Math.round(Number(idle) * 10_000)
 

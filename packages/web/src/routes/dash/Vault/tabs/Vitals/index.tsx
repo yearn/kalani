@@ -19,9 +19,9 @@ import Skeleton from '../../../../../components/Skeleton'
 import { useOnChainVitals } from './useOnCainVitals'
 
 function VitalsComponent({ vault }: { vault: Vault }) {
-  const { totalAssets } = useOnChainVitals()
+  const { totalAssets, totalDebt } = useOnChainVitals()
 
-  const idle = useMemo(() => (totalAssets ?? 0n) - (vault?.totalDebt ?? 0n), [vault, totalAssets])
+  const idle = useMemo(() => (totalAssets ?? 0n) - (totalDebt ?? 0n), [vault, totalAssets])
   const { totalDebtRatio } = useTotalDebtRatio()
   const { allocator } = useAllocator()
   const { sm } = useBreakpoints()
@@ -35,9 +35,9 @@ function VitalsComponent({ vault }: { vault: Vault }) {
 
   const deployed = useMemo(() => {
     if (!totalDebtRatio) { return 0 }
-    if (!vault?.totalDebt) { return 0 }
+    if (!totalDebt) { return 0 }
     const totalAllocated = mulb(vault?.totalAssets ?? 0n, Number(totalDebtRatio) / 10_000)
-    return Math.floor(Number(div(vault?.totalDebt ?? 0n, totalAllocated)) * 10_000)
+    return Math.floor(Number(div(totalDebt ?? 0n, totalAllocated)) * 10_000)
   }, [vault, totalDebtRatio])
 
   return <div className="flex flex-col gap-primary">
@@ -103,7 +103,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
         </LabelValueRow>
 
         <LabelValueRow label="Total assets">
-          <ViewGeneric className="text-3xl font-bold">{fTokens(totalAssets, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
+          <ViewGeneric className="text-3xl font-bold">{fTokens(totalAssets ?? 0n, vault.asset.decimals, { truncate: !sm })}</ViewGeneric>
         </LabelValueRow>
 
         <LabelValueRow label="TVL">
