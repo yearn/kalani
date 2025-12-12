@@ -30,7 +30,7 @@ export function Combo({
     })
   }, [options, query])
 
-  const onSelect = useCallback((value: EvmAddress | null) => {
+  const onSelect = useCallback((value: string | null) => {
     if (value) {
       setQuery(value)
       setNext(value)
