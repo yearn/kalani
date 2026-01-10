@@ -179,7 +179,7 @@ function Suspender() {
       next={fetchFrame}
       hasMore={hasMoreFrames}
       loader={<></>}>
-      <table className="border-separate border-spacing-4">
+      <table className="w-full border-separate border-spacing-4">
         <thead>
           <tr className="text-neutral-400">
             <th className="w-52 text-left">TX</th>
