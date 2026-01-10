@@ -84,7 +84,7 @@ export default function Launcher({
       <div className="contents">
         <div className="flex items-center justify-center gap-4">
           <LauncherIconButton href="https://ycrv.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
+            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="yCRV" src="https://assets.smold.app/api/token/1/0xFCc5c47bE19d06BF83eB04298b026F81069ff65b/logo-128.png" />
             yCRV
           </LauncherIconButton>
 
@@ -94,10 +94,6 @@ export default function Launcher({
         </div>
 
         <div className="flex items-center justify-center gap-4">
-          <LauncherIconButton href="https://yeth.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="yETH" src="https://assets.smold.app/api/token/1/0x1BED97CBC3c24A4fb5C069C6E311a967386131f7/logo-128.png" />
-            yETH
-          </LauncherIconButton>
           <LauncherIconButton href="https://resupply.fi/" target="_blank" rel="noreferrer">
             <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Resupply" src="/resupply.png" />
             Resupply
@@ -105,11 +101,6 @@ export default function Launcher({
         </div>
 
         <div className="flex items-center justify-center gap-4">
-          <LauncherIconButton href="https://veyfi.yearn.fi/" target="_blank" rel="noreferrer">
-            <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="veYFI" src="https://assets.smold.app/api/token/1/0x41252E8691e964f7DE35156B68493bAb6797a275/logo-128.png" />
-            veYFI
-          </LauncherIconButton>
-
           <LauncherIconButton href="https://bearn.sucks/" target="_blank" rel="noreferrer">
             <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Bearn" src="/bearn.png" />
             Bearn
