@@ -98,9 +98,7 @@ export default function Launcher({
             <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Resupply" src="/resupply.png" />
             Resupply
           </LauncherIconButton>
-        </div>
 
-        <div className="flex items-center justify-center gap-4">
           <LauncherIconButton href="https://bearn.sucks/" target="_blank" rel="noreferrer">
             <img className="group-hover/button:contrast-200 group-hover/button:grayscale" width={32} height={32} alt="Bearn" src="/bearn.png" />
             Bearn
