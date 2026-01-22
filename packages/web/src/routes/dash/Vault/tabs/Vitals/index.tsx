@@ -21,15 +21,17 @@ import { useOnChainVitals } from './useOnCainVitals'
 function VitalsComponent({ vault }: { vault: Vault }) {
   const { totalAssets, totalDebt } = useOnChainVitals()
 
-  const idle = useMemo(() => (totalAssets ?? 0n) - (totalDebt ?? 0n), [vault, totalAssets])
+  const idle = useMemo(() => (totalAssets ?? 0n) - (totalDebt ?? 0n), [totalAssets, totalDebt])
   const { totalDebtRatio } = useTotalDebtRatio()
   const { allocator } = useAllocator()
   const { sm } = useBreakpoints()
 
   const type = useMemo(() => {
+    console.log('vault', vault)
     if (vault.yearn) { return 'Yearn Allocator' }
     if (vault.projectName) { return `${vault.projectName} Allocator` }
     if (vault.origin) { return `${vault.origin} Allocator` }
+    if (vault.v3 && (vault.defaultQueue?.length ?? -1) >= 0) { return 'Allocator' }
     return 'Unknown'
   }, [vault])
 
@@ -38,7 +40,7 @@ function VitalsComponent({ vault }: { vault: Vault }) {
     if (!totalDebt) { return 0 }
     const totalAllocated = mulb(vault?.totalAssets ?? 0n, Number(totalDebtRatio) / 10_000)
     return Math.floor(Number(div(totalDebt ?? 0n, totalAllocated)) * 10_000)
-  }, [vault, totalDebtRatio])
+  }, [vault, totalDebtRatio, totalDebt])
 
   return <div className="flex flex-col gap-primary">
     <div className="hidden sm:flex flex-row gap-primary px-8 text-2xl xl:text-4xl">
