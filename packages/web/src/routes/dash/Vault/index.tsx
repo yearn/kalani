@@ -9,7 +9,6 @@ import { Tabs, Tab, TabContent } from '../../../components/Tabs'
 import TokenImg from '../../../components/TokenImg'
 import { Suspense } from 'react'
 import Skeleton, { SkeletonTab } from '../../../components/Skeleton'
-import { useAllocator } from './useAllocator'
 import Fees from './tabs/Fees'
 import { EvmAddress } from '@kalani/lib/types'
 import { useBreakpoints } from '../../../hooks/useBreakpoints'
@@ -71,7 +70,6 @@ export function VaultHero({
 
 function Hero() {
   const { vault } = useVaultFromParams()
-  const { allocator } = useAllocator()
   const { sm } = useBreakpoints()
 
   if (!vault) return <></>
@@ -86,7 +84,7 @@ function Hero() {
     inset={<Tabs className="w-full pb-3 pl-2 sm:pl-0">
       {!sm && <Tab id="deposits" isDefault={true} className={tabClassName}>Deposit</Tab>}
       <Tab id="vitals" isDefault={sm} className={tabClassName}>Vitals</Tab>
-      {allocator && <Tab id="strategies" className={tabClassName}>Strategies</Tab>}
+      {vault.v3 && (vault.defaultQueue?.length ?? -1) >= 0 && <Tab id="strategies" className={tabClassName}>Strategies</Tab>}
       <Tab id="fees" className={tabClassName}>Fees</Tab>
       <Tab id="reports" className={tabClassName}>Reports</Tab>
       <Tab id="roles" className={tabClassName}>Roles</Tab>
