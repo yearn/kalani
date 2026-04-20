@@ -35,11 +35,6 @@ export const TOKENS: Record<number, Erc20[]> = {
     { chainId: 8453, address: '0x820C137fa70C8691f0e44Dc420a5e53c168921Dc', name: 'USDS Stablecoin', symbol: 'USDS', decimals: 18 }
   ],
 
-  [34443]: [
-    { chainId: 34443, address: '0x4200000000000000000000000000000000000006', name: 'Wrapper ETH', symbol: 'WETH', decimals: 18 },
-    { chainId: 34443, address: '0xd988097fb8612cc24eeC14542bC03424c656005f', name: 'USDC', symbol: 'USDC', decimals: 6 }
-  ],
-
   [42161]: [
     { chainId: 42161, address: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb', name: 'Dai', symbol: 'DAI', decimals: 18 },
     { chainId: 42161, address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', name: 'USDC', symbol: 'USDC', decimals: 6 }

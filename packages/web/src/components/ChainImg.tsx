@@ -3,7 +3,6 @@ import { cn } from '../lib/shadcn'
 
 const customs: Record<number, string> = {
   146: 's.png',
-  34443: 'mode.png',
   80094: 'bera.png'
 } as const
 
