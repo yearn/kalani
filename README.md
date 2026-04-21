@@ -3,8 +3,8 @@ Yearn vault super center
 
 ## lfg
 ```sh
-cp .env.example .env
-# configure .env
+cp packages/web/.env.example packages/web/.env
+# configure packages/web/.env
 bun i
 bun dev
 ```
@@ -15,7 +15,6 @@ bun dev
 |---------|-------------|
 | `bun i` | Install project dependencies |
 | `bun dev` | Start frontend dev server |
-| `bun dev:api` | Start API dev server |
 | `bun test` | Run tests |
 | `bun run build` | Build for production |
 
