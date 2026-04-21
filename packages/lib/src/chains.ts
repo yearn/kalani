@@ -1,5 +1,5 @@
 import { Chain, defineChain } from 'viem'
-import { mainnet, polygon, sonic, gnosis, mode, arbitrum, base, berachain } from 'viem/chains'
+import { mainnet, polygon, sonic, gnosis, arbitrum, base, berachain } from 'viem/chains'
 
 const testnet = Boolean(process.env.TESTNET ?? false)
 
@@ -43,7 +43,6 @@ export const chains: Record<number, Chain> = {
   [polygon.id]: polygon,
   [sonic.id]: sonic,
   [base.id]: base,
-  [mode.id]: mode,
   [arbitrum.id]: arbitrum,
   [berachain.id]: berachain,
   [customChains.katana.id]: customChains.katana,
