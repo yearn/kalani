@@ -135,6 +135,11 @@ query Query {
 `
 
 function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'erc4626' | 'accountant', metadata?: any): FinderItem {
+  const sparklines = {
+    tvl: vault.sparklines?.tvl?.map((s: any) => s.close).reverse() ?? [],
+    apy: vault.sparklines?.apy?.map((s: any) => s.close).reverse() ?? []
+  }
+
   return {
     label,
     chainId: parseInt(vault.chainId),
@@ -158,10 +163,7 @@ function vaultToFinderItem(vault: any, label: 'yVault' | 'yStrategy' | 'v3' | 'e
     },
     tvl: vault.tvl?.close,
     apy: vault.apy?.net,
-    sparklines: {
-      tvl: vault.sparklines?.tvl?.map((s: any) => s.close) ?? [],
-      apy: vault.sparklines?.apy?.map((s: any) => s.close) ?? []
-    },
+    sparklines,
     addressIndex: [vault.address, ...(vault.strategies ?? []), vault.asset.address].join(' ').toLowerCase(),
     metadata
   }
