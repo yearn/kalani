@@ -32,7 +32,7 @@
     "eslint-config-next": "14.2.6",
     "leven": "4.1.0",
     "mocha": "10.8.2",
-    "postcss": "8.5.6",
+    "postcss": "8.5.18",
     "tailwindcss": "3.4.19",
     "typescript": "5.9.3"
   }
