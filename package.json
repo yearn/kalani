@@ -10,7 +10,7 @@
     "build:api": "(cd packages/api && next build)"
   },
   "overrides": {
-    "postcss": "8.5.18"
+    "postcss": "8.5.23"
   },
   "workspaces": ["packages/*"]
 }
