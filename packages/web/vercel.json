@@ -5,5 +5,8 @@
       "destination": "/index.html"
     }
   ],
-  "installCommand": "bun install --frozen-lockfile"
+  "installCommand": "bun install --frozen-lockfile",
+  "git": {
+    "deploymentEnabled": false
+  }
 }
