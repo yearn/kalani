@@ -4,6 +4,5 @@
   "compatibility_date": "2026-11-10",
   "assets": { "directory": "dist", "not_found_handling": "single-page-application" },
   "workers_dev": true,
-  "routes": [{ "pattern": "kalani.yearn.fi/*", "zone_name": "yearn.fi" }],
-  "env": { "preview": { "workers_dev": true, "routes": [] } }
+  "env": { "preview": { "workers_dev": true } }
 }
